@@ -1,0 +1,200 @@
+package pl.emag.infomat.btserver;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.bluetooth.DeviceClass;
+import javax.bluetooth.DiscoveryAgent;
+import javax.bluetooth.DiscoveryListener;
+import javax.bluetooth.LocalDevice;
+import javax.bluetooth.RemoteDevice;
+import javax.bluetooth.ServiceRecord;
+import javax.bluetooth.UUID;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+public class BTDevicesManager implements DiscoveryListener, Runnable {
+
+   public static final int BLUETOOTH_TIMEOUT = 20000;
+
+   private static final Log log = LogFactory.getLog(BTDevicesManager.class);
+
+   private ArrayList<RemoteDevice> btDevicesFound = new ArrayList<RemoteDevice>();
+
+   private ArrayList<ServiceRecord> btServicesFound = new ArrayList<ServiceRecord>();
+
+   private boolean isBTSearchComplete;
+   
+   public boolean pleaseFind = false;   
+      
+   public BTDevicesManager()
+   {
+	   new Thread(this).start();
+   }
+   
+   /**
+    * Finds bluetooth devices
+    * 
+    * @param aServices,
+    *           an array with the service UUID identifiers you want to search
+    * @returns the number of devices found
+    */
+   public int find() {
+	  UUID[] aServices = getRFCOMM_UUID();
+      findDevices();
+      findServices(aServices);
+      return btDevicesFound.size();
+   }
+   
+   private UUID[] getRFCOMM_UUID() {
+      UUID[] uuidSet;
+      UUID RFCOMM_UUID = new UUID(0x1101); // RFCOMM service
+      uuidSet = new UUID[1];
+      uuidSet[0] = RFCOMM_UUID;
+
+      return uuidSet;
+   }
+   
+   
+   public void run()
+   {
+	   if(pleaseFind==true)
+	   {
+		   find();
+		   pleaseFind = false;
+	   }
+	   else
+	   {
+		   try {
+			Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+	   }
+   }
+   
+   
+   private void findDevices() {
+      try {
+         // cleans previous elements
+         btDevicesFound.clear();
+         isBTSearchComplete = false;
+         LocalDevice local = LocalDevice.getLocalDevice();
+         DiscoveryAgent discoveryAgent = local.getDiscoveryAgent();
+         // discover new devices
+         discoveryAgent.startInquiry(DiscoveryAgent.GIAC, this);
+         while ((!isBTSearchComplete)) {
+            // waits for a fixed time, to avoid long search
+            synchronized (this) {
+               this.wait(BTDevicesManager.BLUETOOTH_TIMEOUT);
+            }
+            // check if search is completed
+            if (!isBTSearchComplete) {
+               // search no yet completed so let's cancel it
+               discoveryAgent.cancelInquiry(this);
+            }
+         }
+      } catch (Exception e) {
+         //log.warn("",e);
+    	  //System.out.println("Błąd w findDevices \n");
+    	  //System.out.println(e.toString());
+    	  //System.out.println(e.getMessage());
+      }      
+   }
+   
+   private void findServices(UUID[] aServices) {
+      // cleans previous elements
+      btServicesFound.clear();
+      try {
+         LocalDevice local = LocalDevice.getLocalDevice();
+         DiscoveryAgent discoveryAgent = local.getDiscoveryAgent();
+         // discover services
+         if (btDevicesFound.size() > 0) {
+            for (int i = 0; i < btDevicesFound.size(); i++) {
+               isBTSearchComplete = false;
+               // adds a null element in case we don't found service
+               btServicesFound.add(null);
+               int transID = discoveryAgent.searchServices(null, aServices,
+                     btDevicesFound.get(i), this);
+               // wait for service discovery ends
+               synchronized (this) {
+                  this.wait(BTDevicesManager.BLUETOOTH_TIMEOUT);
+               }
+               if (!isBTSearchComplete) {
+                  discoveryAgent.cancelServiceSearch(transID);
+               }
+            }
+         }
+         
+         for(int i=0; i<btServicesFound.size(); i++)
+         {
+        	 if(btServicesFound.get(i)==null)
+        	 {
+        		 btServicesFound.remove(i);
+        		 i--;
+        	 }
+        	 else if(btServicesFound.get(i).getConnectionURL(ServiceRecord.NOAUTHENTICATE_NOENCRYPT, false)==null)
+        	 {
+        		 btServicesFound.remove(i);
+        		 i--;	 
+        	 }
+         }
+         
+      } catch (Exception e) {
+         //log.warn("",e);
+    	  //System.out.println("Błąd w findServices");
+      }
+   }
+
+   public void deviceDiscovered(RemoteDevice remoteDevice,
+         DeviceClass deviceClass) 
+   {
+	   try {
+		if(remoteDevice.getFriendlyName(false).equalsIgnoreCase("Bluetooth Device")==false)
+		  btDevicesFound.add(remoteDevice);
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+   }
+
+   public void inquiryCompleted(int param) {
+      isBTSearchComplete = true;
+      // notifies and wake main thread that device search is completed
+      synchronized (this) {
+         this.notify();
+      }
+   }
+   
+   public void servicesDiscovered(int param, ServiceRecord[] serviceRecord) {
+      int index = btServicesFound.size() - 1;
+      for (int i = 0; i < serviceRecord.length; i++) {
+         btServicesFound.add(index, serviceRecord[i]);
+      }
+   }
+
+   public void serviceSearchCompleted(int transID, int respCode) {
+      isBTSearchComplete = true;
+      // notifies and wake mains thread that service search is completed
+      synchronized (this) {
+         this.notify();
+      }
+   }
+   
+   /**
+    *	Metoda dostępowa do pola btDevicesFound
+    * @return zwraca pole btDevicesFound
+    */
+   public ArrayList<RemoteDevice> getBtDevicesFound() {
+      return btDevicesFound;
+   }
+
+   /**
+    *	Metoda dostępowa do pola btServicesFound
+    * @return zwraca pole btServicesFound
+    */
+   public ArrayList<ServiceRecord> getBtServicesFound() {
+      return btServicesFound;
+   }
+
+}

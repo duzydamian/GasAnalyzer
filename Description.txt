@@ -1,0 +1,8 @@
+Struktura folderów wraz z opisem zawartości:
+
+Analyzes - Miejsce na analizę i dokumenty z tym związane.
+Database - Wszystkie pliki związane z BD, tj. projekt bazy danych, skrypt sql itd.
+Documentations - Wszelkiego typu dokumentacje do urządzeń, protokołów itp.
+Extras - Wszystkie dodatkowe narzędzia wykorzystywane w tworzeniu projektu np. instalatory dodatkowych programów.
+Implementation - Folder z implementacją tworzonego projektu.
+Report - Miejsce na dokumentacje końcową.

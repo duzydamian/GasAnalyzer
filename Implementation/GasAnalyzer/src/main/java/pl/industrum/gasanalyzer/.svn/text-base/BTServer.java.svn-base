@@ -1,0 +1,172 @@
+package pl.emag.infomat.btserver;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.bluetooth.RemoteDevice;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+public class BTServer implements Runnable {  
+
+	private static final Log log = LogFactory.getLog(BTServer.class);
+
+	private BTDevicesManager btDevicesManager;
+
+	private ArrayList<BTDeviceConnection> workingDevices = new ArrayList<BTDeviceConnection>();
+
+	private boolean finishedWork;
+
+	private String host;
+	private String domain;
+	private String name;
+
+	public void serverStop() throws IOException {
+		for (int i = 0; i < workingDevices.size(); i++) {
+			BTDeviceConnection curr = workingDevices.get(i);
+			curr.disconnect();
+		}
+		workingDevices.clear();
+		finishedWork = true;
+	}
+
+	public static void serverStart(String host, String domain, String name) {
+		new BTServer(host, domain, name);
+	}
+
+	private BTServer(String host, String domain, String name) {
+		this.host = host;
+		this.domain = domain;
+		this.name = name;
+		finishedWork = false;
+		Thread t = new Thread(this, "BTServer-Thread");
+		t.start();
+		System.out.println("Host: " + host);
+		System.out.println("Domena: " + domain);
+		System.out.println("Nazwa serwera: " + name);
+	}
+
+	public void run() {
+		btDevicesManager = new BTDevicesManager();
+		while (!finishedWork) {
+			//System.out.println("Szukam klientow...");
+			lookForClients();
+			//System.out.println("Sprawdzam działanie klientów...");
+			checkDevices();
+			//System.out.println("Skonczylem szukac");
+			//System.out.println("Pracujacych infomatow: " + countInfomatDevices());
+			}						
+		}
+
+
+	private void checkDevices() {
+		for (int i = 0; i < workingDevices.size(); i++) {
+			BTDeviceConnection fDeviceConnection = workingDevices.get(i);
+			if (fDeviceConnection.canBeDeleted) {
+				RemoteDevice remoteDevice = fDeviceConnection.getDevice();
+				try {
+					System.out.println("Usuwam z listy komunikacji: "
+							+ remoteDevice.getFriendlyName(false));
+				} catch (IOException e) {
+				}
+				workingDevices.remove(i);
+				i--;
+			}
+		}
+	}
+
+	private void lookForClients() {
+		for (int i = 0; i < workingDevices.size(); i++) {
+			BTDeviceConnection fDeviceConnection = workingDevices.get(i);
+			if (fDeviceConnection.isInfomatDevice() == false && fDeviceConnection.isFinishDevice() == true) {
+				workingDevices.remove(i);
+				i--;
+			}
+		}
+		btDevicesManager.pleaseFind = true;
+		btDevicesManager.find();
+
+		//System.out.println("Znaleziono Serviceow :"
+				//+ 
+				String.valueOf(btDevicesManager.getBtServicesFound().size());//);
+
+		// Sprawdzamy ktore z Device'ow mamy juz na liscie w trybie komunikacji
+		for (int j = 0; j < btDevicesManager.getBtDevicesFound().size(); j++) {
+			boolean canAdd = true;
+			for (int i = 0; i < workingDevices.size(); i++) {
+				canAdd = true;
+				BTDeviceConnection fDeviceConnection = workingDevices.get(i);
+				RemoteDevice remoteDevice = fDeviceConnection.getDevice();
+
+				if (remoteDevice != null && btDevicesManager.getBtDevicesFound().get(j) != null) {
+					if (btDevicesManager.getBtDevicesFound().get(j).equals(remoteDevice) && fDeviceConnection.isInfomatDevice()) {
+						canAdd = false;
+						break;
+					}
+				}
+			}
+
+			if (canAdd) {
+
+				int servIndex = -1;
+				for (int g = 0; g < btDevicesManager.getBtServicesFound().size(); g++) {
+					if (btDevicesManager.getBtServicesFound().get(g) != null) {
+						if (btDevicesManager.getBtDevicesFound().get(j) == btDevicesManager
+								.getBtServicesFound().get(g).getHostDevice()) {
+							servIndex = g;
+							break;
+						}
+					}
+				}				
+				if (servIndex != -1) {
+					BTDeviceConnection dev = new BTDeviceConnection(
+							btDevicesManager.getBtServicesFound()
+									.get(servIndex), btDevicesManager
+									.getBtDevicesFound().get(j), 
+                                    this, host, domain, name);
+					workingDevices.add(dev);
+					try {
+						System.out.println("Znalezione urzadzenie: "
+								+ dev.getDevice().getFriendlyName(false));
+					} catch (IOException e) {
+						System.out.println("Błąd w getFriendlyName ");
+					}
+
+				} else {
+					try {
+						System.out.println("Brak Service dla : "
+								+ btDevicesManager.getBtDevicesFound().get(j)
+										.getFriendlyName(false));
+					} catch (IOException e) {
+						System.out.println("Błąd w getFriendlyName");
+					}
+				}
+
+			}
+		}
+
+	}
+
+	private int countInfomatDevices() {
+		int counter = 0;
+		for (int i = 0; i < workingDevices.size(); i++) {
+			BTDeviceConnection dev = workingDevices.get(i);
+			if (dev.isInfomatDevice())
+				counter++;
+		}
+		return counter;
+	}
+
+	public static void main(String[] args) {
+		try{
+		BTServer.serverStart(args[0], args[1], args[2]);
+		}catch(ArrayIndexOutOfBoundsException e){
+			System.out.println("Za malo parametrow wejsciowych. Nalezy podac hosta, domene i nazwe serwera");
+			System.out.println("Np. merkury.emag.local katowice UM_Katowice");
+			System.out.println("Podane przez Ciebie parametry to:");
+			for (String elem: args)
+				System.out.println(elem);
+		}
+	}
+}

@@ -1,0 +1,444 @@
+package pl.emag.infomat.btserver;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.List;
+
+import javax.bluetooth.RemoteDevice;
+import javax.bluetooth.ServiceRecord;
+import javax.microedition.io.Connector;
+import javax.microedition.io.StreamConnection;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import pl.emag.cms.jsonclient.CmsCommonElement;
+import pl.emag.cms.jsonclient.CmsJsonClient;
+
+public class BTDeviceConnection implements Runnable {
+
+   private static final Log log = LogFactory.getLog(BTDeviceConnection.class);
+
+   private ServiceRecord service;
+
+   private RemoteDevice device;
+
+   private boolean infomatDevice = false;
+   
+   private boolean finishDevice = false;
+
+   public boolean initailized = false;
+
+   private boolean finished = false;
+
+   private DataInputStream mainInput;
+
+   private DataOutputStream mainOutput;
+
+	private String host;
+	private String domain;
+
+   private StreamConnection streamConn;
+
+   private BTServer btMain;
+   
+   private boolean ServerCommError = false;
+   private String lastPreErrorQuery = "";
+   
+   private String currUris="";
+   private String currNames="";
+   private String currDescr="";
+   private int currRespType=-1;
+   private int currMessType = -1;
+   public boolean canBeDeleted = false;
+   private String name;
+   public Thread t;
+   
+
+   public BTDeviceConnection(ServiceRecord service, RemoteDevice device,
+         BTServer btMain, String host, String domain, String name) {
+      this.device = device;
+      this.service = service;
+      this.btMain = btMain;
+ 		this.host = host;
+		this.domain = domain;
+		this.name= name;
+     
+      startConnection() ;
+
+   }
+
+   public void startConnection() 
+   {
+	   try {
+		t = new Thread(this, "BTDeviceConnection-Thread: "+device.getFriendlyName(true));
+	      t.start();
+	      initailized = true;
+	} catch (IOException e) {
+		
+		System.out.println("Błąd inicjalizacji");
+		initailized = false;
+	}
+   }
+
+   public boolean isConnectionInitialized() {
+      return initailized;
+   }
+/*
+   private String getTopic(int topicNumber) {
+      String mess = "";
+
+   
+      return mess;
+   }
+*/
+   public void disconnect() throws IOException {
+      finished = true;
+      if (mainInput != null) {
+         mainInput.close();
+         mainOutput.writeUTF(">FINISH>");
+         mainOutput.flush();
+         mainOutput.close();
+      }
+   }
+   
+   
+   private String GetInfomatTopics(String query, String lang)
+   {
+	   String response = ">INFOMAT>ERROR";
+	   lastPreErrorQuery = query;
+	   CmsJsonClient connector = new CmsJsonClient(host, domain, "bluetooth");
+	   	   	   
+	   try
+	   {	   
+		   List<CmsCommonElement> ret = null;	
+		   
+		   if(query==">FIRST<")		// pytamy o glowny katalog kategorii
+		   {
+			   ret = connector.listDescriptions(null, lang);
+			   if(ret!=null && !ret.isEmpty()){
+			   	
+			   	CmsCommonElement first = ret.get(0);
+			   	
+			   	if(first.getType().endsWith("category"))	// lista kategorii
+			   	{
+			   		response = ">1>";
+			   		for (CmsCommonElement e : ret)
+			   		{
+			   			response+=e.getUri()+"["+e.getName()+"]>";
+			   		}
+			   		response+="ENDL";			   					   		
+			   	}
+			   	else if(first.getType().endsWith("description"))	// lista opisow
+			   	{
+			   		response = ">2>";
+			   		for (CmsCommonElement e : ret)
+			   		{
+			   			response+=e.getUri()+"["+e.getName()+"]>";
+			   		}
+			   		response+="ENDL";		   		
+			   	}
+		   } }
+		   else						// pytamy o reszte
+		   {
+			   if(query.charAt(1)=='4')	// czyli mamy zapytanie o kategorie
+			   {
+				   String shResp = "", catUri = "";
+				   catUri = query.substring(3);
+
+				   try{
+				   ret = connector.listDescriptions(catUri, lang);
+				   }catch(IOException ioex){
+					   ret = null;					   
+					   //magicznie przydkie rozwiązanie przy wyjątku połączeie wciąż zaalokowane dlatego serwer nie odpowie na zapytanie z lini 187 				   content = connector.getDescriptionContent(descUri, lang);
+					   connector = new CmsJsonClient(host, domain, "bluetooth");
+				   }
+				   	if(ret!=null && !ret.isEmpty()){
+				   	
+				   	CmsCommonElement first = ret.get(0);
+				   	
+	/*		   	if(first.getType().endsWith("category"))	// lista kategorii
+				   	{
+				   		response = ">1>";
+				   		for (CmsCommonElement e : ret)
+				   		{
+				   			response+=e.getUri()+"["+e.getName()+"]>";
+				   		}
+				   		response+="ENDL";
+				   		
+				   		
+				   	}
+				   	else if(first.getType().endsWith("description"))	// lista opisow
+				   	{*/
+				   		response = ">2>";
+				   		for (CmsCommonElement e : ret)
+				   		{
+				   			response+=e.getUri()+"["+e.getName()+"]>";
+				   		}
+				   		response+="ENDL";		   		
+				   	//}				   
+				   
+			   }}
+			   if (query.charAt(1)=='4' && response==">INFOMAT>ERROR")	// czyli mamy zapytanie o konkretny description
+			   {
+				   String descUri = "", content="";
+				   descUri = query.substring(3);
+
+				   content = connector.getDescriptionContent(descUri, lang);
+				   response = ">3>"+content;
+				   response+="ENDL";				   				   
+			   }
+		   }
+		   ServerCommError = false;		   		 
+	   }
+	   catch(Exception ex) 
+	   {
+		   response = ">INFOMAT>ERROR";
+		   ServerCommError = true;
+	   };
+
+	   return response;
+   }
+   /*
+	public String GetTopicUri(int index)
+	{
+		String ret = "";
+		String cpy = currUris;
+		int beg=0,end=0;
+		boolean stop = false;
+		while(index>0)
+		{
+			cpy = cpy.substring(cpy.indexOf('\n')+1);
+			index--;
+		}
+		
+		ret = cpy.substring(0, cpy.indexOf('\n'));
+		return ret;
+	}
+   
+   public String ReadServerResponse(String resp)
+	{
+		String ret = null;
+		
+		
+		String content = "";
+		String subContent = "";
+		String uri="", name="";
+		
+		currUris="";
+		currNames="";
+		currRespType=-1;
+		
+		if(resp.charAt(1)!='2') // przyszły kategorie lub lista konkretnych descript
+		{
+			content = resp.substring(3,resp.indexOf("ENDL")-1);
+			
+			boolean endOfContent = false;
+			int contIndex = 0;
+
+			
+			if(resp.charAt(1)!='0')
+				currMessType = 0;
+			else if(resp.charAt(1)!='1')
+				currMessType = 1;
+			
+			while(!endOfContent)
+			{
+				currRespType = 0; // czyli kategorie lub opisy
+				int index = content.indexOf(">");
+				if(index!=-1)
+				{
+					subContent = content.substring(0,index);
+					uri = subContent.substring(0, subContent.indexOf("["));
+					name = subContent.substring(subContent.indexOf("[")+1, subContent.indexOf("]"));
+					content = content.substring(index+1);
+					resp = resp.substring(index);
+					
+					currUris+=uri+"\n";
+					currNames+=name+"\n";
+					
+					contIndex++;
+					index = content.indexOf(">");
+				}
+				else
+				{
+					endOfContent = true;
+				}				
+			}
+		}
+		else		// konkretny description
+		{
+			currRespType = 1; // czyli konkretny opis
+			content = resp.substring(3,resp.indexOf("ENDL")-2);
+			currDescr = content;
+			ret = content;
+			currMessType = 2;
+		}		
+		return ret;
+	}
+   
+   */
+   
+   public void run() {
+String lang = null;
+      try {
+    	  System.out.println(device.getFriendlyName(false)+": Tworzę połączenie...");
+         createConnectionAsClient();
+         
+         System.out.println(device.getFriendlyName(false)+": Tworzenie połączenia zakończone sukcesem");
+         System.out.println(device.getFriendlyName(false)+": Wysyłam zaczepkę");         
+         mainOutput.writeUTF(name+">INFOMAT SERVER>");         
+         mainOutput.flush();
+         System.out.println(device.getFriendlyName(false)+":"+name+">INFOMAT SERVER>");
+         System.out.println(device.getFriendlyName(false)+": Czekam na odpowiedź");
+         String response = mainInput.readUTF();
+         
+         if (response.endsWith(">LANG")) {
+        	lang =  response.substring(1, response.indexOf(">LANG"));        	
+            mainOutput.writeUTF("CHANGED");
+            System.out.println(device.getFriendlyName(false)+": Ustawiono język: "+lang);
+            mainOutput.flush();    
+         }
+         
+         String lastMessage=name+">INFOMAT SERVER>";
+         while (!response.endsWith(">TOPIC>ALL")) {         
+         response = mainInput.readUTF();
+         }
+         
+         if (response.endsWith(">TOPIC>ALL")) {
+            infomatDevice = true;
+            finishDevice = true;
+            while (!finished) 
+            {
+            	System.out.println(device.getFriendlyName(false)+": Odebrane: "+response);
+            	if (response.endsWith(">TOPIC>ALL"))  //czyli pobieramy wszystkie
+            	{
+            		String mess = GetInfomatTopics(">FIRST<",lang);
+            		lastMessage = mess;
+                    mainOutput.writeUTF(mess);
+                    System.out.println(device.getFriendlyName(false)+": Wysłane: "+mess);
+                    mainOutput.flush();
+            	}
+            	else if (response.endsWith(">FINISH>")) // czy nie koniec zabawy
+            	{
+                    finished = true;
+                    mainOutput.writeUTF(">FINISH>");
+            		System.out.println(device.getFriendlyName(false)+": Wysłane: >FINISH>");
+            		mainOutput.flush();
+                    
+            	}
+               	else if (response.indexOf(">FINISH>ERROR")!=-1) // czy nie koniec zabawy
+            	{
+                    finished = true;
+            		System.out.println(device.getFriendlyName(false)+": Odebrane: "+response);
+                    
+            	}
+            	else if (response.endsWith(">REPEAT>")) // powtarzamy ostatni przekaz
+            	{
+            		System.out.println(">REPEAT>");
+            		mainOutput.writeUTF(lastMessage);
+            		System.out.println(device.getFriendlyName(false)+": Wysłane: "+lastMessage);
+                    mainOutput.flush();
+                    
+            	}
+            	else if (response.endsWith(">INFOMAT>PING")) // klient pyta czy dziala serwer
+            	{
+            		System.out.println(device.getFriendlyName(false)+": Odebrane: >INFOMAT>PING");
+            		String mess = GetInfomatTopics(lastPreErrorQuery,lang);
+            		mainOutput.writeUTF(mess);
+            		mainOutput.flush();
+            		
+            		System.out.println(device.getFriendlyName(false)+": Wysłane: "+mess);
+            	}
+            	else	// pobieramy kategorie lub opis
+            	{
+            		String mess = GetInfomatTopics(response,lang);
+            		            		
+            		if(mess.length()==0)
+            		{
+            			mess = ">REPEAT>";
+            		}
+                    mainOutput.writeUTF(mess);
+                    System.out.println(device.getFriendlyName(false)+": Wysłane: "+mess);
+                    mainOutput.flush();
+            			
+            	}            	          	
+            	response = mainInput.readUTF();	          	
+             }
+         }
+         canBeDeleted = true;
+         mainOutput.close();
+         mainInput.close();
+      } catch (IOException ex) {
+    	  System.out.println("Blad w glownej petli watku:");
+    	  //System.out.println(ex.toString());
+    	  canBeDeleted = true;
+      }
+
+   }
+
+   private void createConnectionAsClient() throws IOException {
+      try
+      {
+	   
+	   String url = service.getConnectionURL(
+            ServiceRecord.NOAUTHENTICATE_NOENCRYPT, false);
+      streamConn = (StreamConnection) Connector.open(url);
+      mainInput = streamConn.openDataInputStream();
+      mainOutput = streamConn.openDataOutputStream();
+      }
+      catch(Exception ex)
+      {
+    	  log.warn("", ex);
+    	  //System.out.println(ex.toString());
+    	  finished = true;
+      }
+   }
+
+   /**
+    * Metoda dostępowa do pola service
+    * 
+    * @return zwraca pole service
+    */
+   public ServiceRecord getService() {
+      return service;
+   }
+
+   /**
+    * Metoda dostępowa do pola device
+    * 
+    * @return zwraca pole device
+    */
+   public RemoteDevice getDevice() {
+      return device;
+   }
+
+   /**
+    * Metoda dostępowa do pola infomatDevice
+    * 
+    * @return zwraca pole infomatDevice
+    */
+   public boolean isInfomatDevice() {
+      return infomatDevice;
+   }
+
+   /**
+    * Metoda dostępowa do pola finishDevice
+    * 
+    * @return zwraca pole finishDevice
+    */
+   public boolean isFinishDevice() {
+      return finishDevice;
+   }
+   
+   /**
+    * Metoda dostępowa do pola finish
+    * 
+    * @return zwraca pole finish
+    */
+   public boolean isFinished() {
+      return finished;
+   }
+
+}
