@@ -116,7 +116,7 @@ public class ELANConnection {
         }     
     }
 	
-	 static void listPorts()
+	 public static void listPorts()
 	    {
 	        java.util.Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
 	        while ( portEnum.hasMoreElements() ) 
