@@ -1,0 +1,2 @@
+Przy okazji znalazłem: http://poi.apache.org/spreadsheet/index.html .
+Ta biblioteka w pełni obsługuje arkusze kalkulacyjne :)
