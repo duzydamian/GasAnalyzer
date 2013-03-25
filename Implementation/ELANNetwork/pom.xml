@@ -6,7 +6,12 @@
 	<name>ELAN Network</name>
 	<version>0.0.1</version>
 	<description>Aplikacja dostępowa do sieci analizatorów składu gazów.</description>		
-	<dependencies>			
+	<dependencies>		
+	<dependency>
+		<groupId>org.rxtx</groupId>
+		<artifactId>rxtx</artifactId>
+		<version>2.1.7</version>
+	</dependency>
 	</dependencies>
 	<build>
 		<plugins>
