@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.industrum.gasanalyzer.elan;
+package pl.industrum.gasanalyzer.communication;
 
 import gnu.io.CommPort;
 import gnu.io.CommPortIdentifier;
