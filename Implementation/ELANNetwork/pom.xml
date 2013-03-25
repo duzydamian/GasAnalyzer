@@ -1,11 +1,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>pl.industrum.gasanalyzer</groupId>
 	<artifactId>ELANNetwork</artifactId>
-	<name>ELAN Network</name>
 	<version>0.0.1</version>
-	<description>Aplikacja dostępowa do sieci analizatorów składu gazów.</description>		
+	<packaging>jar</packaging>
+	<name>ELAN Network</name>
+	<description>Aplikacja dostępowa do sieci analizatorów składu gazów.</description>
+	
+	<parent>
+		<groupId>pl.industrum.gasanalyzer</groupId>
+		<artifactId>GasAnalyzer</artifactId>
+		<version>0.0.1</version>
+	</parent>		
+	
+	<properties>
+    <gasanalyzer.version>${project.parent.version}</gasanalyzer.version>
+    <gasanalyzer.config.path>${project.parent.basedir}</gasanalyzer.config.path>
+    </properties>
+    
 	<dependencies>		
 	<dependency>
 		<groupId>org.rxtx</groupId>
@@ -13,56 +25,4 @@
 		<version>2.1.7</version>
 	</dependency>
 	</dependencies>
-	<build>
-		<plugins>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <version>2.3.1</version>
-            <configuration>
-               <archive>
-                  <manifest>
-                     <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                  </manifest>
-                  <manifestEntries>
-                     <Implementation-Build>${buildNumber}</Implementation-Build>
-                     <Project-Version>${parent.version}</Project-Version>
-                  </manifestEntries>
-               </archive>
-            </configuration>
-         </plugin>			
-            <plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>make-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>attached</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>					
-					<archive>
-						<manifest>
-							<mainClass>
-								pl.industrum.gasanalyzer.gui.GasAnalyzerGUI
-							</mainClass>
-                     <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-						</manifest>
-                    <manifestEntries>
-                        <Implementation-Build>${buildNumber}</Implementation-Build>
-                        <Project-Version>${parent.version}</Project-Version>
-                    </manifestEntries>
-					</archive>
-					<descriptorRefs>
-						<descriptorRef>
-							jar-with-dependencies
-						</descriptorRef>
-					</descriptorRefs>
-					<finalName>GasAnalyzer</finalName>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>
