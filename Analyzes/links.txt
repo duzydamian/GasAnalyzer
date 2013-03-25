@@ -1,2 +1,5 @@
 Przy okazji znalazłem: http://poi.apache.org/spreadsheet/index.html .
 Ta biblioteka w pełni obsługuje arkusze kalkulacyjne :)
+
+RS:
+http://blog.milczarek.it/2011/09/java-programowanie-rs232-rxtx/
