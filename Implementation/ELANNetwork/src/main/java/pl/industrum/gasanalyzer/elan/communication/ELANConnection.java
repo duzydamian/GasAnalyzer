@@ -90,8 +90,8 @@ public class ELANConnection {
                 	//String response = is.readLine(); // if you sent "AT" then response == "OK"
                 	//System.out.println(response);
                 	
-                	System.out.println("Write to port");  
-                	os.print("test");                	
+                	//System.out.println("Write to port");  
+                	//os.print("test");                	
 
                 	System.out.println("Read frame from port");
                 	int previousCharacter = -1;
