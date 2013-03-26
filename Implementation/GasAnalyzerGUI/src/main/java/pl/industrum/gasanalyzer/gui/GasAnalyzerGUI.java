@@ -3,17 +3,18 @@
  */
 package pl.industrum.gasanalyzer.gui;
 
+import pl.industrum.gasanalyzer.communication.ELANConnection;
+
 /**
  * @author duzydamian
  *
  */
 public class GasAnalyzerGUI {
 
-	ELANConnection elanConnection;
+	
 	
 	public GasAnalyzerGUI() {
-		super();
-		elanConnection = new ELANConnection();
+		super();		
 	}
 	/**
 	 * @param args
@@ -21,6 +22,9 @@ public class GasAnalyzerGUI {
 	public static void main(String[] args) {
 		System.out.println("Gas Analyzer");
         
+		ELANConnection elanConnection;
+		elanConnection = new ELANConnection();
+		
 		elanConnection.listPorts();
         
         try

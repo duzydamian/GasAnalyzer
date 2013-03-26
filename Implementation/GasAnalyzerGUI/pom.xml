@@ -6,8 +6,7 @@
 	<name>Gas Analyzer GUI</name>
 	<version>0.0.1</version>
 	<description>Aplikacja dostępowa do sieci analizatorów składu gazów.</description>		
-	<dependencies>			
-	</dependencies>
+
 	<build>
 	<plugins>
          <plugin>
@@ -60,4 +59,11 @@
 			</plugin>
 		</plugins>
 	</build>
+	<dependencies>
+		<dependency>
+			<groupId>pl.industrum.gasanalyzer</groupId>
+			<artifactId>ELANNetwork</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+	</dependencies>
 </project>
