@@ -37,10 +37,11 @@ public class ELANConnection {
         }
         else
         {
-            CommPort commPort = portIdentifier.open(this.getClass().getName(),2000);
+            CommPort commPort = portIdentifier.open(this.getClass().getName(),2000);            
             
             if ( commPort instanceof SerialPort )
             {
+            	System.out.println("Port " + portName + " successfull open.");
                 SerialPort serialPort = (SerialPort) commPort;
                // serialPort.setSerialPortParams(9600,SerialPort.DATABITS_8,SerialPort.STOPBITS_1,SerialPort.PARITY_NONE);
                 
@@ -89,14 +90,29 @@ public class ELANConnection {
                 	//String response = is.readLine(); // if you sent "AT" then response == "OK"
                 	//System.out.println(response);
                 	
-                	os.print("test");
-                	
+                	System.out.println("Write to port");  
+                	os.print("test");                	
 
-                	int test = is.read();
-            		System.out.print(Integer.toHexString(test)+"H ");                	
-                	while(test !=-1){
-                		test = is.read();                		
-                		System.out.print(Integer.toHexString(test)+"H ");                	         	            	
+                	System.out.println("Read frame from port");
+                	int previousCharacter = -1;
+                	//Read first character from new frame
+                	int courentCharacter = is.read();            	                
+                	while(courentCharacter!=-1){
+                		String frame = "";
+                		//Add current character to collected frame
+                		frame += Integer.toHexString(courentCharacter)+"H ";
+                		do{   
+                			previousCharacter = courentCharacter;  
+                			//Read next character from new frame
+                			courentCharacter = is.read();	
+                			//Add current character to collected frame
+                			frame += Integer.toHexString(courentCharacter)+"H "; 
+                		} while (!((previousCharacter==16) & (courentCharacter==3)));
+                		//Add CRC16 to frame
+            			frame += Integer.toHexString(is.read())+"H "+Integer.toHexString(is.read())+"H ";
+                		System.out.println(frame);
+                		//Read first character from next frame 
+                		courentCharacter = is.read();
                 	}
                 	
                 	
@@ -116,7 +132,8 @@ public class ELANConnection {
         }     
     }
 	
-	 public static void listPorts()
+	 @SuppressWarnings("unchecked")
+	public void listPorts()
 	    {
 	        java.util.Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
 	        while ( portEnum.hasMoreElements() ) 
