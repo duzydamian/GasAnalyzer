@@ -21,6 +21,8 @@ public class GasAnalyzerGUI {
 	 */
 	public static void main(String[] args) {
 		System.out.println("Gas Analyzer");
+		System.out.println("Teoretycznie proste GUI");
+		
         
 		ELANConnection elanConnection;
 		elanConnection = new ELANConnection();
