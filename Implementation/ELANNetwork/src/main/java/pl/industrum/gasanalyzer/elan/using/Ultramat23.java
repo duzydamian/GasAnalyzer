@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.industrum.gasanalyzer.using;
+package pl.industrum.gasanalyzer.elan.using;
 
 /**
  * @author duzydamian
