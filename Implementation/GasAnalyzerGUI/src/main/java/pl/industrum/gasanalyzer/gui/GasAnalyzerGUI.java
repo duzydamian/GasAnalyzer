@@ -3,7 +3,7 @@
  */
 package pl.industrum.gasanalyzer.gui;
 
-import pl.industrum.gasanalyzer.communication.ELANConnection;
+import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
 
 /**
  * @author duzydamian
@@ -29,8 +29,8 @@ public class GasAnalyzerGUI {
         
         try
         {
-            //(new TwoWaySerialComm()).connect("/dev/ttyUSB0");
-        	elanConnection.connect("/dev/ttyS0");
+        	elanConnection.connect("/dev/ttyUSB0");
+        	//elanConnection.connect("/dev/ttyS0");
         }
         catch ( Exception e )
         {
