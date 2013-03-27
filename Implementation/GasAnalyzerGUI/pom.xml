@@ -4,9 +4,15 @@
 	<groupId>pl.industrum.gasanalyzer</groupId>
 	<artifactId>GasAnalyzerGUI</artifactId>
 	<name>Gas Analyzer GUI</name>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<description>Aplikacja dostępowa do sieci analizatorów składu gazów.</description>		
 
+	<parent>
+		<groupId>pl.industrum.gasanalyzer</groupId>
+		<artifactId>GasAnalyzer</artifactId>
+		<version>0.0.1</version>
+	</parent>
+	
 	<build>
 	<plugins>
          <plugin>
@@ -65,5 +71,17 @@
 			<artifactId>ELANNetwork</artifactId>
 			<version>0.0.2</version>
 		</dependency>
+		<dependency>
+	        <groupId>org.eclipse.swt</groupId>
+	        <artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
+	        <version>4.2.1</version>
+    	</dependency>
 	</dependencies>
+	
+	<repositories>
+	    <repository>
+	        <id>swt-repo</id>
+	        <url>https://swt-repo.googlecode.com/svn/repo/</url>
+	    </repository>
+	</repositories>
 </project>

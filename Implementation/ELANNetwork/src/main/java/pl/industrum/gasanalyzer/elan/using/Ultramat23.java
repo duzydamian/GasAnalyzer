@@ -4,7 +4,8 @@
 package pl.industrum.gasanalyzer.elan.using;
 
 /**
- * @author duzydamian
+ * 
+ * @author duzydamian(Damian Karbowiak)
  *
  */
 public class Ultramat23 {
