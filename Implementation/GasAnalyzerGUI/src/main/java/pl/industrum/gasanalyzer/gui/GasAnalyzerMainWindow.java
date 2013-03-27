@@ -1,7 +1,15 @@
 package pl.industrum.gasanalyzer.gui;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
@@ -14,6 +22,12 @@ public class GasAnalyzerMainWindow {
 
 	protected Shell shell;
 	ELANConnection elanConnection;
+	
+	
+	/**
+	 * GUI Element's 
+	 */
+	StyledText styledText;
 	
 
 	public GasAnalyzerMainWindow() {
@@ -72,7 +86,7 @@ public class GasAnalyzerMainWindow {
 		MenuItem mntmO = new MenuItem(menu_3, SWT.NONE);
 		mntmO.setText("O programie");
 		
-		CCombo combo = new CCombo(shell, SWT.BORDER);
+		final CCombo combo = new CCombo(shell, SWT.BORDER);
 		combo.setBounds(46, 10, 85, 29);
 		
 		for (String port: elanConnection.vectorPorts()) {
@@ -82,20 +96,41 @@ public class GasAnalyzerMainWindow {
 		Label lblNewLabel = new Label(shell, SWT.NONE);
 		lblNewLabel.setBounds(10, 10, 30, 17);
 		lblNewLabel.setText("Port:");
+        //System.setErr();
+        System.setOut(new PrintStream(new OutputStream() {
+			
+			@Override
+			public void write(int arg0) throws IOException {				
+				//if(arg0<100){
+					byte[] character = new byte[1];
+					character[0] = (byte) arg0;
+					styledText.setText(styledText.getText()+new String(character));
+				//}								
+			}
+		}));
 		
+		Button btnPocz = new Button(shell, SWT.NONE);
+		btnPocz.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+		        try
+		        {
+		        	elanConnection.connect(combo.getItem(combo.getSelectionIndex()));
+		        }
+		        catch ( Exception e )
+		        {
+		            e.printStackTrace();
+		        }
+			}
+		});
 		
+		btnPocz.setBounds(137, 10, 88, 29);
+		btnPocz.setText("Połącz");
 		
+		styledText = new StyledText(shell, SWT.BORDER);
+		styledText.setBounds(10, 45, 428, 186);
+						
 		elanConnection.listPorts();
         
-        try
-        {
-        	elanConnection.connect("/dev/ttyUSB0");
-        	//elanConnection.connect("/dev/ttyS0");
-        }
-        catch ( Exception e )
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
 	}
 }

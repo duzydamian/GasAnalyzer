@@ -4,9 +4,15 @@
 	<groupId>pl.industrum.gasanalyzer</groupId>
 	<artifactId>GasAnalyzerGUI</artifactId>
 	<name>Gas Analyzer GUI</name>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<description>Aplikacja dostępowa do sieci analizatorów składu gazów.</description>		
 
+	<parent>
+		<groupId>pl.industrum.gasanalyzer</groupId>
+		<artifactId>GasAnalyzer</artifactId>
+		<version>0.0.1</version>
+	</parent>
+	
 	<build>
 	<plugins>
          <plugin>
