@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 
 /**
- * @author duzydamian
+ * @author duzydamian(Damian Karbowiak)
  *
  */
 public class ELANConnection {

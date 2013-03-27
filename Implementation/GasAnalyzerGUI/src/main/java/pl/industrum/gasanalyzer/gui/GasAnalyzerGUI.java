@@ -6,7 +6,7 @@ package pl.industrum.gasanalyzer.gui;
 import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
 
 /**
- * @author duzydamian
+ * @author duzydamian(Damian Karbowiak)
  *
  */
 public class GasAnalyzerGUI {
