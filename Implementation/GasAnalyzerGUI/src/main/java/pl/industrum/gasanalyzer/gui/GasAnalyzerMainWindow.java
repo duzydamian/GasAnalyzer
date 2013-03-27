@@ -20,9 +20,7 @@ import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
 
 public class GasAnalyzerMainWindow {
 
-	protected Shell shell;
-	ELANConnection elanConnection;
-	
+	protected Shell shell;	
 	
 	/**
 	 * GUI Element's 
@@ -32,7 +30,6 @@ public class GasAnalyzerMainWindow {
 
 	public GasAnalyzerMainWindow() {
 		super();
-		elanConnection = new ELANConnection();
 	}
 	
 	/**
@@ -89,7 +86,7 @@ public class GasAnalyzerMainWindow {
 		final CCombo combo = new CCombo(shell, SWT.BORDER);
 		combo.setBounds(46, 10, 85, 29);
 		
-		for (String port: elanConnection.vectorPorts()) {
+		for (String port: ELANConnection.vectorPorts()) {
 			combo.add(port);
 		}
 		
@@ -115,7 +112,7 @@ public class GasAnalyzerMainWindow {
 			public void widgetSelected(SelectionEvent arg0) {
 		        try
 		        {
-		        	elanConnection.connect(combo.getItem(combo.getSelectionIndex()));
+		        	ELANConnection.getInstance().connect(combo.getItem(combo.getSelectionIndex()));
 		        }
 		        catch ( Exception e )
 		        {
@@ -130,7 +127,7 @@ public class GasAnalyzerMainWindow {
 		styledText = new StyledText(shell, SWT.BORDER);
 		styledText.setBounds(10, 45, 428, 186);
 						
-		elanConnection.listPorts();
+		ELANConnection.listPorts();
         
 	}
 }
