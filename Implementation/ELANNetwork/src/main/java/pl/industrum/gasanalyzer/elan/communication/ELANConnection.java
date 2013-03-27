@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.util.Vector;
 
 /**
  * @author duzydamian(Damian Karbowiak)
@@ -96,7 +97,7 @@ public class ELANConnection {
                 	System.out.println("Read frame from port");
                 	int previousCharacter = -1;
                 	//Read first character from new frame
-                	int courentCharacter = is.read();            	                
+                	int courentCharacter = is.read();
                 	while(courentCharacter!=-1){
                 		String frame = "";
                 		//Add current character to collected frame
@@ -131,6 +132,19 @@ public class ELANConnection {
             }
         }     
     }
+	
+	@SuppressWarnings("unchecked")
+	public Vector<String> vectorPorts(){
+		
+		Vector<String> ports = new Vector<String>();
+		java.util.Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
+        while ( portEnum.hasMoreElements() ) 
+        {
+            CommPortIdentifier portIdentifier = portEnum.nextElement();
+            ports.add(portIdentifier.getName());            
+        }  
+		return ports;		
+	}
 	
 	 @SuppressWarnings("unchecked")
 	public void listPorts()
