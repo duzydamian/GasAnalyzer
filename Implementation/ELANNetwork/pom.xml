@@ -27,7 +27,9 @@
         <version>2.9</version>
         <configuration>
           <javadocVersion>1.6</javadocVersion>
+          <encoding>UTF-8</encoding>
           <show>private</show>
+          <skip>false</skip>
           <author>true</author>
           <splitindex>true</splitindex>
           <use>true</use>

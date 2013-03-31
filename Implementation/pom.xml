@@ -10,7 +10,7 @@
   
   <organization>
     <name>SKN Industrum</name>
-    <url>industrum.polsl.pl</url>
+    <url>http://industrum.polsl.pl</url>
   </organization>
   
   <properties>
@@ -23,4 +23,16 @@
     <module>GasAnalyzerGUI</module>
   </modules>
 
+	<build>
+	 <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9</version>
+        <configuration>
+			<skip>true</skip>
+        </configuration>
+      </plugin>			
+	 </plugins>
+	</build>
 </project>
