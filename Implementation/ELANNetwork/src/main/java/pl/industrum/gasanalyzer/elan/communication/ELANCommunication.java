@@ -2,6 +2,7 @@ package pl.industrum.gasanalyzer.elan.communication;
 
 /**
  * 
+ * 
  * @author duzydamian (Damian Karbowiak)
  * @see ELANConnection
  */
