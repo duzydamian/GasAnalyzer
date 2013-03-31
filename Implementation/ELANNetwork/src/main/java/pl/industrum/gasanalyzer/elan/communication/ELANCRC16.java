@@ -1,6 +1,3 @@
-/**
- * 
- */
 package pl.industrum.gasanalyzer.elan.communication;
 
 /**

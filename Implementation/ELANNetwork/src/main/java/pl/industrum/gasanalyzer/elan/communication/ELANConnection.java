@@ -1,6 +1,3 @@
-/**
- * 
- */
 package pl.industrum.gasanalyzer.elan.communication;
 
 import gnu.io.CommPort;
@@ -14,8 +11,11 @@ import java.io.PrintStream;
 import java.util.Vector;
 
 /**
- * @author duzydamian(Damian Karbowiak)
- *
+ * Class of connection.
+ * 
+ * @author duzydamian (Damian Karbowiak)
+ * @see gnu.io.CommPort
+ * @see gnu.io.SerialPort
  */
 public class ELANConnection {
 	
@@ -37,6 +37,9 @@ public class ELANConnection {
 	PrintStream os;
 	SerialPort serialPort;
 			
+	/**
+	 * Default constructor
+	 */
 	protected ELANConnection() {
 		super();
 		//
@@ -50,6 +53,9 @@ public class ELANConnection {
 		os = null;
 	}	
 	
+	/**
+	 * @return
+	 */
 	public synchronized static ELANConnection getInstance() {
 		if (instance == null) {
 			instance = new ELANConnection();
@@ -57,6 +63,11 @@ public class ELANConnection {
 		return instance;
 	}
 	
+	/**
+	 * Connect to port given by portName.
+	 * @param portName name of port which you want to connect
+	 * @throws Exception
+	 */
 	public void connect(String portName) throws Exception {
 		CommPortIdentifier portIdentifier = CommPortIdentifier
 				.getPortIdentifier(portName);
