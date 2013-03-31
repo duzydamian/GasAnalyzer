@@ -27,10 +27,22 @@ public class ELANConnection {
 	/**
 	 * Interface Parameters
 	 * Level RS485
+	 */	
+	/**
+	 * ELAN Baud rate
 	 */
 	static int ELAN_BAUD_RATE = 9600;
+	/**
+	 * ELAN Data bits
+	 */
 	static int ELAN_DATA_BITS = SerialPort.DATABITS_8;
+	/**
+	 * ELAN Stop bit
+	 */
 	static int ELAN_STOP_BITS = SerialPort.STOPBITS_1;
+	/**
+	 * ELAN Parity
+	 */
 	static int ELAN_PARITY = SerialPort.PARITY_NONE;
 
 	BufferedReader is; 
@@ -54,7 +66,9 @@ public class ELANConnection {
 	}	
 	
 	/**
-	 * @return
+	 * 
+	 * 
+	 * @return Instance if exsists or new if not
 	 */
 	public synchronized static ELANConnection getInstance() {
 		if (instance == null) {
@@ -64,7 +78,8 @@ public class ELANConnection {
 	}
 	
 	/**
-	 * Connect to port given by portName.
+	 * Connects to port given by portName.
+	 * 
 	 * @param portName name of port which you want to connect
 	 * @throws Exception
 	 */
@@ -126,6 +141,9 @@ public class ELANConnection {
 		}
 	}
 
+	/**
+	 * Disconnects from port. Close connected streams. 
+	 */
 	public void disconnect() {
 		//
 		// It is very important to close input and output streams as well
