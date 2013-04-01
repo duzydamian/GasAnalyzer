@@ -45,8 +45,17 @@ public class ELANConnection {
 	 */
 	static int ELAN_PARITY = SerialPort.PARITY_NONE;
 
+	/**
+	 * Input reader
+	 */
 	BufferedReader is; 
+	/**
+	 * Output stream
+	 */
 	PrintStream os;
+	/**
+	 * Object stores information about port you connect to.
+	 */
 	SerialPort serialPort;
 			
 	/**
@@ -162,6 +171,12 @@ public class ELANConnection {
 		}
 	}
 	
+	/**
+	 * Read one char from input.
+	 * 
+	 * @return The character read, as an integer in the range 0 to 65535 (0x00-0xffff), or -1 if the end of the stream has been reached
+	 * @see BufferedReader 
+	 */
 	public int read() {
 		try {
 			return is.read();
@@ -171,6 +186,11 @@ public class ELANConnection {
 		return -2;
 	}
 
+	/**
+	 * Write one char to stream.
+	 *  
+	 * @param byteToWrite Value need to be send
+	 */
 	public void write(int byteToWrite) {
 		os.write(byteToWrite);
 	}

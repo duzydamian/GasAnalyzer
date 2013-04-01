@@ -8,13 +8,22 @@ package pl.industrum.gasanalyzer.elan.communication;
  */
 public class ELANCommunication {
 
+	/**
+	 * Object stores existing connection.  
+	 */
 	ELANConnection elanConnection;
 	
+	/**
+	 * Crates new object to comunnicate with some device
+	 */
 	public ELANCommunication() {
 		super();
 		elanConnection = ELANConnection.getInstance();
 	}
 	
+	/**
+	 * Read one frame from network
+	 */
 	public void readFrame(){
     	System.out.println("Read frame from port");
     	int previousCharacter = -1;
@@ -39,6 +48,9 @@ public class ELANCommunication {
     	}
 	}
 	
+	/**
+	 * Write one frame to network
+	 */
 	public void writeFrame(){
 		
 	}
