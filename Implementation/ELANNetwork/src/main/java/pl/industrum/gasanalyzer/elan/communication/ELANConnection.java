@@ -93,27 +93,11 @@ public class ELANConnection {
                 	//System.out.println("Write to port");  
                 	//os.print("test");                	
 
-                	System.out.println("Read frame from port");
-                	int previousCharacter = -1;
-                	//Read first character from new frame
-                	int courentCharacter = is.read();            	                
-                	while(courentCharacter!=-1){
-                		String frame = "";
-                		//Add current character to collected frame
-                		frame += Integer.toHexString(courentCharacter)+"H ";
-                		do{   
-                			previousCharacter = courentCharacter;  
-                			//Read next character from new frame
-                			courentCharacter = is.read();	
-                			//Add current character to collected frame
-                			frame += Integer.toHexString(courentCharacter)+"H "; 
-                		} while (!((previousCharacter==16) & (courentCharacter==3)));
-                		//Add CRC16 to frame
-            			frame += Integer.toHexString(is.read())+"H "+Integer.toHexString(is.read())+"H ";
-                		System.out.println(frame);
-                		//Read first character from next frame 
-                		courentCharacter = is.read();
-                	}
+                	System.out.println( "Read frame from port" );
+                	ELANRxBufferObserver rxBufferObserver = new ELANRxBufferObserver();
+                	ELANRxByteBuffer rxThread = new ELANRxByteBuffer( is );
+                	rxThread.addObserver( rxBufferObserver );
+                	new Thread( rxThread ).start();
                 	
                 	
                 	//
