@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
+import pl.industrum.gasanalyzer.elan.communication.ELANCommunication;
 import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
 
 public class GasAnalyzerMainWindow {
@@ -113,6 +114,8 @@ public class GasAnalyzerMainWindow {
 		        try
 		        {
 		        	ELANConnection.getInstance().connect(combo.getItem(combo.getSelectionIndex()));
+		        	ELANCommunication communication = new ELANCommunication();
+		        	communication.readFrame();
 		        }
 		        catch ( Exception e )
 		        {
