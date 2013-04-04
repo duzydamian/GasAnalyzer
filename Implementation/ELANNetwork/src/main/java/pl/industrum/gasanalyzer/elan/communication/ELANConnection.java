@@ -143,6 +143,13 @@ public class ELANConnection {
 
 				// System.out.println("Write to port");
 				// os.print("test");
+				
+				System.out.println( "Read frame from port" );
+            	ELANRxBufferObserver rxBufferObserver = new ELANRxBufferObserver();
+            	ELANRxByteBuffer rxThread = new ELANRxByteBuffer( is );
+            	rxThread.addObserver( rxBufferObserver );
+            	new Thread( rxThread ).start();
+            	
 			} else {
 				System.out
 						.println("Error: Only serial ports are handled by this example.");
