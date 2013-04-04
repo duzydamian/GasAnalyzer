@@ -15,9 +15,9 @@ public class ELANRxBufferObserver implements Observer
 		rxFrameBuffer = new LinkedList<ELANRxFrame>();
 	}
 	
-	@SuppressWarnings( "unchecked" )
+	@SuppressWarnings("unchecked")
 	public void update( Observable obj, Object arg )
-	{
+	{		
 		if( arg instanceof LinkedList<?> )
 		{
 			dataBuffer = ( LinkedList<Integer> )arg;
@@ -33,6 +33,13 @@ public class ELANRxBufferObserver implements Observer
 		{
 			ELANRxFrame rx = ( ELANRxFrame )arg;
 			rxFrameBuffer.add( rx );
+		}
+		else if(arg instanceof String)
+		{
+			System.out.println((String)arg);
+		}
+		else{
+			System.out.println("Z else: "+arg);
 		}
 	}
 }

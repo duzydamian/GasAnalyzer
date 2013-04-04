@@ -24,8 +24,8 @@ public class ELANCommunication {
 	/**
 	 * Read one frame from network
 	 */
-	public void readFrame(){
-    	System.out.println("Read frame from port");
+	public String readFrame(){
+//    	System.out.println("Read frame from port");
     	int previousCharacter = -1;
     	//Read first character from new frame
     	int courentCharacter = elanConnection.read();
@@ -42,10 +42,12 @@ public class ELANCommunication {
     		} while (!((previousCharacter==16) & (courentCharacter==3)));
     		//Add CRC16 to frame
 			frame += Integer.toHexString(elanConnection.read())+"H "+Integer.toHexString(elanConnection.read())+"H ";
-    		System.out.println(frame);
+//    		System.out.println(frame);
     		//Read first character from next frame 
-    		courentCharacter = elanConnection.read();
+    		//courentCharacter = elanConnection.read();
+			return frame;
     	}
+		return "";
 	}
 	
 	/**

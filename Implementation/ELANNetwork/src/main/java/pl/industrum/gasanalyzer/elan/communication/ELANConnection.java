@@ -145,10 +145,11 @@ public class ELANConnection {
 				// os.print("test");
 				
 				System.out.println( "Read frame from port" );
-            	ELANRxBufferObserver rxBufferObserver = new ELANRxBufferObserver();
-            	ELANRxByteBuffer rxThread = new ELANRxByteBuffer( is );
+				ELANRxByteBuffer rxThread = new ELANRxByteBuffer();
+            	ELANRxBufferObserver rxBufferObserver = new ELANRxBufferObserver();            	
             	rxThread.addObserver( rxBufferObserver );
-            	new Thread( rxThread ).start();
+            	Thread thread = new Thread( rxThread );
+            	thread.start();
             	
 			} else {
 				System.out

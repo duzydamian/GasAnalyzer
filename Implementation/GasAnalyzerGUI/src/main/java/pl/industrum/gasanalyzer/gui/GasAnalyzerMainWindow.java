@@ -1,9 +1,5 @@
 package pl.industrum.gasanalyzer.gui;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.StyledText;
@@ -16,7 +12,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
-import pl.industrum.gasanalyzer.elan.communication.ELANCommunication;
 import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
 
 public class GasAnalyzerMainWindow {
@@ -95,17 +90,17 @@ public class GasAnalyzerMainWindow {
 		lblNewLabel.setBounds(10, 10, 30, 17);
 		lblNewLabel.setText("Port:");
         //System.setErr();
-        System.setOut(new PrintStream(new OutputStream() {
-			
-			@Override
-			public void write(int arg0) throws IOException {				
-				//if(arg0<100){
-					byte[] character = new byte[1];
-					character[0] = (byte) arg0;
-					styledText.setText(styledText.getText()+new String(character));
-				//}								
-			}
-		}));
+//        System.setOut(new PrintStream(new OutputStream() {
+//			
+//			@Override
+//			public void write(int arg0) throws IOException {				
+//				//if(arg0<100){
+//					byte[] character = new byte[1];
+//					character[0] = (byte) arg0;
+//					styledText.setText(styledText.getText()+new String(character));
+//				//}								
+//			}
+//		}));
 		
 		Button btnPocz = new Button(shell, SWT.NONE);
 		btnPocz.addSelectionListener(new SelectionAdapter() {
@@ -113,9 +108,7 @@ public class GasAnalyzerMainWindow {
 			public void widgetSelected(SelectionEvent arg0) {
 		        try
 		        {
-		        	ELANConnection.getInstance().connect(combo.getItem(combo.getSelectionIndex()));
-		        	ELANCommunication communication = new ELANCommunication();
-		        	communication.readFrame();
+		        	ELANConnection.getInstance().connect(combo.getItem(combo.getSelectionIndex()));		        	
 		        }
 		        catch ( Exception e )
 		        {
