@@ -6,6 +6,7 @@ import gnu.io.SerialPort;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.Vector;
@@ -48,7 +49,7 @@ public class ELANConnection {
 	/**
 	 * Input reader
 	 */
-	BufferedReader is; 
+	InputStream is; 
 	/**
 	 * Output stream
 	 */
@@ -109,13 +110,12 @@ public class ELANConnection {
 						ELAN_STOP_BITS, ELAN_PARITY);
 
 				try {
-					is = new BufferedReader(new InputStreamReader(
-							serialPort.getInputStream()));
+					is = serialPort.getInputStream();
 				} catch (IOException e) {
 					System.err.println("Can't open input stream: write-only");
 					is = null;
 				}
-
+				
 				//
 				// New Linux systems rely on Unicode, so it might be necessary
 				// to
@@ -148,6 +148,7 @@ public class ELANConnection {
 				ELANRxByteBuffer rxThread = new ELANRxByteBuffer();
             	ELANRxBufferObserver rxBufferObserver = new ELANRxBufferObserver();            	
             	rxThread.addObserver( rxBufferObserver );
+            	
             	Thread thread = new Thread( rxThread );
             	thread.start();
             	
@@ -185,10 +186,13 @@ public class ELANConnection {
 	 * @return The character read, as an integer in the range 0 to 65535 (0x00-0xffff), or -1 if the end of the stream has been reached
 	 * @see BufferedReader 
 	 */
-	public int read() {
-		try {
+	public int read() {		
+		try 
+		{
 			return is.read();
-		} catch (IOException e) {
+		} 
+		catch (IOException e) 
+		{
 			e.printStackTrace();
 		}
 		return -2;
@@ -201,7 +205,7 @@ public class ELANConnection {
 	 */
 	public void write(int byteToWrite) {
 		os.write(byteToWrite);
-	}
+	}	
 	
 	@SuppressWarnings("unchecked")
 	public static Vector<String> vectorPorts() {

@@ -17,7 +17,8 @@ public class ELANRxBufferObserver implements Observer
 	
 	@SuppressWarnings("unchecked")
 	public void update( Observable obj, Object arg )
-	{		
+	{					
+		try{
 		if( arg instanceof LinkedList<?> )
 		{
 			dataBuffer = ( LinkedList<Integer> )arg;
@@ -40,6 +41,9 @@ public class ELANRxBufferObserver implements Observer
 		}
 		else{
 			System.out.println("Z else: "+arg);
+		}
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 	}
 }

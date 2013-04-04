@@ -1,5 +1,9 @@
 package pl.industrum.gasanalyzer.elan.communication;
 
+import java.awt.List;
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * 
  * 
@@ -25,23 +29,29 @@ public class ELANCommunication {
 	 * Read one frame from network
 	 */
 	public String readFrame(){
+		Queue<Integer> data = new LinkedList<Integer>();
 //    	System.out.println("Read frame from port");
-    	int previousCharacter = -1;
+    	int  previousCharacter = -1;
     	//Read first character from new frame
-    	int courentCharacter = elanConnection.read();
+    	int  courentCharacter = elanConnection.read();
     	while(courentCharacter!=-1){
     		String frame = "";
     		//Add current character to collected frame
-    		frame += Integer.toHexString(courentCharacter)+"H ";
+    		frame += Integer.toHexString(courentCharacter)+" ";
+    		data.add(courentCharacter);
     		do{   
     			previousCharacter = courentCharacter;  
     			//Read next character from new frame
     			courentCharacter = elanConnection.read();	
     			//Add current character to collected frame
-    			frame += Integer.toHexString(courentCharacter)+"H "; 
+    			frame += Integer.toHexString(courentCharacter)+" "; 
+    			data.add(courentCharacter);
     		} while (!((previousCharacter==16) & (courentCharacter==3)));
+    		
+    		@SuppressWarnings("unused")
+			int crc = ELANCRC16.calculateCRC16(data);
     		//Add CRC16 to frame
-			frame += Integer.toHexString(elanConnection.read())+"H "+Integer.toHexString(elanConnection.read())+"H ";
+			frame += "  "+Integer.toHexString(elanConnection.read())+" "+Integer.toHexString(elanConnection.read())+" ";
 //    		System.out.println(frame);
     		//Read first character from next frame 
     		//courentCharacter = elanConnection.read();
