@@ -47,8 +47,8 @@ public class ELANCommunication {
     			data.add(courentCharacter);
     		} while (!((previousCharacter==16) & (courentCharacter==3)));
     		
-    		@SuppressWarnings("unused")
-			int crc = ELANCRC16.countCRC16(data);
+    		//@SuppressWarnings("unused")
+			//int crc = ELANCRC16.countCRC16(data);
     		//Add CRC16 to frame
 			frame += "  "+Integer.toHexString(elanConnection.read())+" "+Integer.toHexString(elanConnection.read())+" ";
 //    		System.out.println(frame);
