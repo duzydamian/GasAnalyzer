@@ -21,7 +21,7 @@ public class ELANRxByteBuffer extends Observable implements Runnable
 		{
 			try
 			{				
-	        	String frame = communication.readFrame();
+	        	Queue<Integer> frame = communication.readFrame();
 	        	
 	        		
 	        		//wait for the end of frame... some kind of check here

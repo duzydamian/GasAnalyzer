@@ -11,6 +11,11 @@ public class ELANRxFrame extends ELANFrame {
 		this.timeStamp = new Date();
 	}
 	
+//	public ELANRxFrame( ELANFrame frame ) {
+//		super( frame );
+//		this.timeStamp = new Date();
+//	}
+	
 	public Date getTimeStamp() {
 		return this.timeStamp;
 	}

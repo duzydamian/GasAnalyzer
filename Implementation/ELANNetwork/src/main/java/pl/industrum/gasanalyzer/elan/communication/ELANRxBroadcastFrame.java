@@ -12,6 +12,11 @@ public class ELANRxBroadcastFrame extends ELANRxFrame implements Iterable<ELANMe
 		// TODO Auto-generated constructor stub
 	}
 	
+//	public ELANRxBroadcastFrame( ELANRxFrame frame ) {
+//		super(frame);
+//		// TODO Auto-generated constructor stub
+//	}
+	
 	public Iterator<ELANMeasurement> iterator() {        
         Iterator<ELANMeasurement> imeasurements = measurements.iterator();
         return imeasurements; 

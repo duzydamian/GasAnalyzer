@@ -15,6 +15,12 @@ public class ELANDataParser extends Observable implements Runnable
 		rxFrame = new ELANRxFrame( dataBuffer );
 	}
 	
+//	public ELANDataParser( ELANRxFrame frame )
+//	{
+//		//this.dataBuffer = dataBuffer;
+//		rxFrame = frame;
+//	}	
+	
 	public void run()
 	{
 		Iterator<Integer> dataIterator = dataBuffer.iterator();
