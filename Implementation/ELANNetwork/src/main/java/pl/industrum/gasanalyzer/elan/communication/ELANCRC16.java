@@ -8,7 +8,19 @@ import java.util.Queue;
  * @author duzydamian (Damian Karbowiak)
  * @see
  */
-public class ELANCRC16 {
+public class ELANCRC16
+{
+	public static boolean checkCRC16( Queue<Integer> data, int CRC )
+	{
+		if( countCRC16( data ) == CRC )
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 	
 	public static int countCRC16(Queue<Integer> data)
 	{		
@@ -27,8 +39,7 @@ public class ELANCRC16 {
         		{
         			k0 ^= 0xA001;
         		}
-        	}
-                            
+        	}                 
         }
         return k0;
 	}

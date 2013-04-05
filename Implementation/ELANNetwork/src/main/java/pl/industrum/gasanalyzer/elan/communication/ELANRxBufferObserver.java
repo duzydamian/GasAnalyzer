@@ -8,41 +8,41 @@ import java.util.Queue;
 public class ELANRxBufferObserver implements Observer
 {
 	private Queue<Integer> dataBuffer;
-	private Queue<ELANRxFrame> rxFrameBuffer;
 	
 	public ELANRxBufferObserver()
 	{
-		rxFrameBuffer = new LinkedList<ELANRxFrame>();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void update( Observable obj, Object arg )
 	{					
-		try{
-		if( arg instanceof LinkedList<?> )
+		try
 		{
-			dataBuffer = ( LinkedList<Integer> )arg;
-			
-			if( dataBuffer.size() > 0 )
+			//Receive information and data from ELANRxByteBuffer,
+			//it means that full and correct frame got in.
+			if( arg instanceof LinkedList<?> )
 			{
-            	ELANDataParser rxThread = new ELANDataParser( dataBuffer );
-            	rxThread.addObserver( this );
-            	new Thread( rxThread ).start();
+				dataBuffer = ( LinkedList<Integer> ) arg;
+				
+				//Last time check dataBuffer non-zero size condition.
+				if( dataBuffer.size() > 0 )
+				{
+					//Start data parser thread to avoid frames lost.
+	            	ELANDataParser dataParserThread = new ELANDataParser( dataBuffer );
+	            	ELANFrameCreationObserver dataParserObserver = new ELANFrameCreationObserver();
+	            	dataParserThread.addObserver( dataParserObserver );
+	            	
+	            	Thread thread = new Thread( dataParserThread );
+	            	thread.start();
+				}
+			}
+			else
+			{
+				//ERROR
 			}
 		}
-		else if( arg instanceof ELANRxFrame )
+		catch(Exception e)
 		{
-			ELANRxFrame rx = ( ELANRxFrame )arg;
-			rxFrameBuffer.add( rx );
-		}
-		else if(arg instanceof String)
-		{
-			System.out.println((String)arg);
-		}
-		else{
-			System.out.println("Z else: "+arg);
-		}
-		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
