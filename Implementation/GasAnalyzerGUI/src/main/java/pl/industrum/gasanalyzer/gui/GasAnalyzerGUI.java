@@ -75,16 +75,13 @@ public class GasAnalyzerGUI {
 			data.add(0x0);
 			data.add(0x10);
 			data.add(0x3);
+
+			int crc = ELANCRC16.countCRC16(data);      
+			String s = Integer.toHexString(crc); 
+			System.out.println("CRC16 ramki testowej: "+crc+" ("+s+")");
 			
-			ELANCRC16 elancrc16 = new ELANCRC16();			
-			elancrc16.countCRC16(data);			
-			//String s = Integer.toHexString(crc);
-			//System.out.println("CRC: "+crc+" = "+s);
-			//elancrc16.update_crc_16((char)1);
-			
-			System.out.println("CRC16: "+elancrc16.getCrc_16()+" CRC16_MODBUS: "+elancrc16.getCrc_16_modbus());
-			//GasAnalyzerMainWindow window = new GasAnalyzerMainWindow();
-			//window.open();
+			GasAnalyzerMainWindow window = new GasAnalyzerMainWindow();
+			window.open();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		       
