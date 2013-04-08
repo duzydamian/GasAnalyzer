@@ -1,9 +1,5 @@
 package pl.industrum.gasanalyzer.gui;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.StyledText;
@@ -26,6 +22,8 @@ public class GasAnalyzerMainWindow {
 	 * GUI Element's 
 	 */
 	StyledText styledText;
+	Button connect;
+	CCombo portsList;
 	
 
 	public GasAnalyzerMainWindow() {
@@ -83,13 +81,24 @@ public class GasAnalyzerMainWindow {
 		MenuItem mntmO = new MenuItem(menu_3, SWT.NONE);
 		mntmO.setText("O programie");
 		
-		final CCombo combo = new CCombo(shell, SWT.BORDER);
-		combo.setBounds(46, 10, 85, 29);
+		portsList = new CCombo(shell, SWT.BORDER);
+		portsList.setBounds(46, 10, 85, 29);
 		
-		for (String port: ELANConnection.vectorPorts()) {
-			combo.add(port);
+		for (String port: ELANConnection.vectorPorts()) 
+		{
+			portsList.add(port);
 		}
 		
+		if (portsList.getItemCount()>0)
+		{
+			portsList.select(0);
+		}
+		else
+		{
+			connect.setEnabled(false);
+		}
+			
+
 		Label lblNewLabel = new Label(shell, SWT.NONE);
 		lblNewLabel.setBounds(10, 10, 30, 17);
 		lblNewLabel.setText("Port:");
@@ -106,13 +115,27 @@ public class GasAnalyzerMainWindow {
 //			}
 //		}));
 		
-		Button btnPocz = new Button(shell, SWT.NONE);
-		btnPocz.addSelectionListener(new SelectionAdapter() {
+		connect = new Button(shell, SWT.TOGGLE);
+		connect.setBounds(137, 10, 88, 29);
+		connect.setText("Połącz");
+		connect.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
+				boolean state = connect.getSelection();
 		        try
 		        {
-		        	ELANConnection.getInstance().connect(combo.getItem(combo.getSelectionIndex()));		        	
+		        	if(state)
+		        	{
+			        	ELANConnection.getInstance().connect(portsList.getItem(portsList.getSelectionIndex()));
+			        	portsList.setEnabled(false);
+			        	connect.setText("Rozłącz");
+		        	}
+		        	else
+		        	{
+		        		ELANConnection.getInstance().disconnect();
+			        	portsList.setEnabled(true);	
+			        	connect.setText("Połącz");
+		        	}
 		        }
 		        catch ( Exception e )
 		        {
@@ -120,9 +143,6 @@ public class GasAnalyzerMainWindow {
 		        }
 			}
 		});
-		
-		btnPocz.setBounds(137, 10, 88, 29);
-		btnPocz.setText("Połącz");
 		
 		styledText = new StyledText(shell, SWT.BORDER);
 		styledText.setBounds(10, 45, 428, 186);
