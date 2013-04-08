@@ -27,15 +27,26 @@ public class ELANDataParser extends Observable implements Runnable
 		//...
 		//...
 		//Depending on called function read data
-		Iterator<Integer> dataIterator = dataBuffer.iterator();
+//		Iterator<Integer> dataIterator = dataBuffer.iterator();
 		
-		while( dataIterator.hasNext() )
-		{
-			
-		}
-		
-		setChanged();
-		notifyObservers( rxFrame );
+//		while( dataIterator.hasNext() )
+//		{			
+//			ELANMeasuredVariable[] keys = ELANMeasuredVariable.values();
+//			
+//			switch (keys[1]) {
+//			case CO:
+//									
+//				break;
+//
+//			default:
+//				break;
+//			}
+//		}
+		for (Integer i : dataBuffer)
+			System.out.print(i+", ");
+		System.out.println();
+		//setChanged();
+		//notifyObservers( rxFrame );
 	}
 	
 	public Queue<Integer> trimData( Queue<Integer> data )

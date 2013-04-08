@@ -21,8 +21,11 @@ public class ELANRxByteBuffer extends Observable implements Runnable
 			{				
 				//Read all frames and send every correct frame to ELANRxBufferObserver.
 	        	Queue<Integer> frame = communication.readFrame();
-	        	setChanged();
-	        	notifyObservers( frame );	        	
+	        	if(frame != null)
+	        	{
+		        	setChanged();
+		        	notifyObservers( frame );
+	        	}
 			}
 			catch( Exception e )
 			{

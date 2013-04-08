@@ -28,21 +28,18 @@ public class ELANCommunication {
 	 * Read one frame from network
 	 */
 	public Queue<Integer> readFrame(){
-		ELANFrame frame = new ELANFrame();
 		Queue<Integer> data = new LinkedList<Integer>();
     	int  previousCharacter = -1;
     	//Read first character from new frame
     	int  courentCharacter = elanConnection.read();
     	while(courentCharacter!=-1){
     		//Add current character to collected frame
-    		frame.add(courentCharacter);
     		data.add(courentCharacter);
     		do{   
     			previousCharacter = courentCharacter;  
     			//Read next character from new frame
     			courentCharacter = elanConnection.read();	
     			//Add current character to collected frame
-    			frame.add(courentCharacter);
     			data.add(courentCharacter);
     		} while ( !( (previousCharacter==16) & (courentCharacter==3) ) );
     		
