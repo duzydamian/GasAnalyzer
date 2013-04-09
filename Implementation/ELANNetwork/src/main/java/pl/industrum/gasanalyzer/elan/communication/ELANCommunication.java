@@ -17,7 +17,7 @@ public class ELANCommunication {
 	ELANConnection elanConnection;
 	
 	/**
-	 * Crates new object to comunnicate with some device
+	 * Crates new object to communicate with some device
 	 */
 	public ELANCommunication() {
 		super();
@@ -28,33 +28,30 @@ public class ELANCommunication {
 	 * Read one frame from network
 	 */
 	public Queue<Integer> readFrame(){
-		ELANFrame frame = new ELANFrame();
 		Queue<Integer> data = new LinkedList<Integer>();
     	int  previousCharacter = -1;
     	//Read first character from new frame
     	int  courentCharacter = elanConnection.read();
     	while(courentCharacter!=-1){
     		//Add current character to collected frame
-    		frame.add(courentCharacter);
     		data.add(courentCharacter);
     		do{   
     			previousCharacter = courentCharacter;  
     			//Read next character from new frame
     			courentCharacter = elanConnection.read();	
     			//Add current character to collected frame
-    			frame.add(courentCharacter);
     			data.add(courentCharacter);
-    		} while (!((previousCharacter==16) & (courentCharacter==3)));
+    		} while ( !( (previousCharacter==16) & (courentCharacter==3) ) );
     		
     		//Add CRC16 to frame
-			int readCrcLow = elanConnection.read();
-			int readCrcHigh = elanConnection.read();		
-			int readCrc = (readCrcHigh << 8) + readCrcLow;
+			int CRCLow = elanConnection.read();
+			int CRCHigh = elanConnection.read();		
+			int CRC = ( CRCHigh << 8 ) + CRCLow;
 			
-			//Check if frame is correct and create ready to further use. 
-//			if(frame.checkCRC(readCrc))
-//				return new ELANRxFrame(frame);
-			return data;
+			if( ELANCRC16.checkCRC16( data, CRC ) )
+			{
+				return data;
+			}
     	}
 		return null;
 	}
