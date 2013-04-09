@@ -1,4 +1,4 @@
-package pl.industrum.gasanalyzer.elan.communication;
+package pl.industrum.gasanalyzer.elan.communication.rx;
 
 import java.util.LinkedList;
 import java.util.Observable;

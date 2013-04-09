@@ -1,4 +1,4 @@
-package pl.industrum.gasanalyzer.elan.communication;
+package pl.industrum.gasanalyzer.elan.helpers;
 
 import java.util.Queue;
 

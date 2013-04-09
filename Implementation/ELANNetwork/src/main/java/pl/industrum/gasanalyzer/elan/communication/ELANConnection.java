@@ -7,9 +7,11 @@ import gnu.io.SerialPort;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.Vector;
+
+import pl.industrum.gasanalyzer.elan.communication.rx.ELANRxBufferObserver;
+import pl.industrum.gasanalyzer.elan.communication.rx.ELANRxByteBuffer;
 
 /**
  * Class of connection.

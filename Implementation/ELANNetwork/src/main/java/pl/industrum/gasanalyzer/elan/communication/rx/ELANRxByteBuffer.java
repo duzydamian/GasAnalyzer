@@ -1,7 +1,9 @@
-package pl.industrum.gasanalyzer.elan.communication;
+package pl.industrum.gasanalyzer.elan.communication.rx;
 
 import java.util.Observable;
 import java.util.Queue;
+
+import pl.industrum.gasanalyzer.elan.communication.ELANCommunication;
 
 public class ELANRxByteBuffer extends Observable implements Runnable
 {	

@@ -3,6 +3,8 @@ package pl.industrum.gasanalyzer.elan.communication;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import pl.industrum.gasanalyzer.elan.helpers.ELANCRC16;
+
 /**
  * 
  * 

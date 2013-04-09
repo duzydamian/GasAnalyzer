@@ -1,9 +1,11 @@
-package pl.industrum.gasanalyzer.elan.communication;
+package pl.industrum.gasanalyzer.elan.communication.rx;
 
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Queue;
+
+import pl.industrum.gasanalyzer.elan.frames.ELANRxFrame;
 
 public class ELANFrameCreationObserver implements Observer
 {

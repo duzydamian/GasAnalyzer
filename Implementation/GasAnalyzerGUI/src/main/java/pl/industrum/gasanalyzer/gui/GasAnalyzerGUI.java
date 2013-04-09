@@ -6,7 +6,7 @@ package pl.industrum.gasanalyzer.gui;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import pl.industrum.gasanalyzer.elan.communication.ELANCRC16;
+import pl.industrum.gasanalyzer.elan.helpers.ELANCRC16;
 
 
 /**
