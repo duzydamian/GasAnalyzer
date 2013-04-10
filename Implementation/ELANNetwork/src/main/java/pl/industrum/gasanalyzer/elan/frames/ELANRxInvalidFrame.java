@@ -1,20 +1,22 @@
 package pl.industrum.gasanalyzer.elan.frames;
 
+import java.util.Queue;
+
 import pl.industrum.gasanalyzer.elan.types.ELANCollectiveChannelState;
 
 public class ELANRxInvalidFrame extends ELANRxFrame
 {
-	private ELANCollectiveChannelState collectiveChannelState;
+	private Queue<ELANCollectiveChannelState> collectiveChannelState;
 	
-	public ELANRxInvalidFrame( Integer sourceAdress, Integer targetAdress, ELANCollectiveChannelState collectiveChannelState )
+	public ELANRxInvalidFrame( Integer sourceAdress, Integer targetAdress, Queue<ELANCollectiveChannelState> collectiveChannelStateQueue )
 	{
 		//ELANRxFrame.valid set to false
 		super( sourceAdress, targetAdress, false );
 		
-		this.collectiveChannelState = collectiveChannelState;
+		this.collectiveChannelState = collectiveChannelStateQueue;
 	}
 	
-	public ELANCollectiveChannelState getCollectiveChannelState()
+	public Queue<ELANCollectiveChannelState> getCollectiveChannelState()
 	{
 		return collectiveChannelState;
 	}

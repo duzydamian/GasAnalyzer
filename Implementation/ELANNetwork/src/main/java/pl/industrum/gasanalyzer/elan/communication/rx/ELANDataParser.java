@@ -40,10 +40,9 @@ public class ELANDataParser extends Observable implements Runnable
 		}
 		else
 		{
-			ELANCollectiveChannelState collectiveChannelState = 
-					new ELANCollectiveChannelState( collectiveChannelStateByte );
+			Queue<ELANCollectiveChannelState> collectiveChannelStateQueue = ELANCollectiveChannelState.getStates(collectiveChannelStateByte);
 			
-			rxFrame = new ELANRxInvalidFrame( sourceAdress, targetAdress, collectiveChannelState );
+			rxFrame = new ELANRxInvalidFrame( sourceAdress, targetAdress, collectiveChannelStateQueue );
 			
 			channelStateByte = dataBuffer.poll();
 			while( channelStateByte != Integer.valueOf( 'k' ) ) //for example (must predict all function letters)
