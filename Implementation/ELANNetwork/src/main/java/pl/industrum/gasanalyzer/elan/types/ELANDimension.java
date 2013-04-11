@@ -14,4 +14,10 @@ public enum ELANDimension
 	{		
 		return ELANDimension.values()[index];
 	}
+	
+	@Override
+	public String toString()
+	{
+		return this.name();
+	}
 }

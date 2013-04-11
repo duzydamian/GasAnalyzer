@@ -17,4 +17,10 @@ public enum ELANMeasuredVariable
 		else
 			return ELANMeasuredVariable.values()[50];
 	}
+	
+	@Override
+	public String toString()
+	{
+		return this.name();
+	}
 }

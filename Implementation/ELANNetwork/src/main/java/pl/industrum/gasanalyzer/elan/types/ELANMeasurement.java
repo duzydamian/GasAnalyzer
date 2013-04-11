@@ -7,9 +7,11 @@ public class ELANMeasurement
 	private ELANMeasuredVariable measuredVariable;
 	private Double value;
 	
-	public ELANMeasurement( ELANDimension dimension, ELANMeasuredVariable measuredVariable ) {
+	public ELANMeasurement( ELANDimension dimension, ELANMeasuredVariable measuredVariable, Double value )
+	{
 		this.dimension = dimension;
 		this.measuredVariable = measuredVariable;
+		this.value = value;
 	}
 	
 	public ELANDimension getDimension()
@@ -25,5 +27,11 @@ public class ELANMeasurement
 	public Double getValue()
 	{
 		return value;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return value.toString() + dimension.toString() + " " + measuredVariable.toString();
 	}
 }
