@@ -32,6 +32,6 @@ public class ELANMeasurement
 	@Override
 	public String toString()
 	{
-		return value.toString() + dimension.toString() + " " + measuredVariable.toString();
+		return value.toString() + " " + dimension.toString() + " " + measuredVariable.toString();
 	}
 }
