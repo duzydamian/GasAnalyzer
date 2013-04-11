@@ -12,7 +12,7 @@ public enum ELANMeasuredVariable
 	
 	public static ELANMeasuredVariable getValue(int index)
 	{
-		if ( index > 49)			
+		if ( index < 49)			
 			return ELANMeasuredVariable.values()[index];
 		else
 			return ELANMeasuredVariable.values()[50];

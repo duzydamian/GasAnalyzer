@@ -11,6 +11,7 @@ public class ELANRxBroadcastFrame extends ELANRxFrame implements Iterable<ELANMe
 	public ELANRxBroadcastFrame( Integer sourceAdress, Integer targetAdress )
 	{
 		super( sourceAdress, targetAdress, true );
+		this.measurements = new ArrayList<ELANMeasurement>();
 	}
 	
 	public Iterator<ELANMeasurement> iterator() {        

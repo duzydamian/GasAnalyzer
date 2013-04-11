@@ -20,6 +20,7 @@ public class ELANRxFrame extends ELANFrame
 		this.sourceAdress = sourceAdress;
 		this.targetAdress = targetAdress;
 		this.valid = valid;
+		this.channelStateCollection = new ArrayList<ELANChannelState>();
 	}
 	
 	public void addChannelState( ELANChannelState channelState )
