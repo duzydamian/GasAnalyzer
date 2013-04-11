@@ -3,8 +3,15 @@ Ta biblioteka w pełni obsługuje arkusze kalkulacyjne :)
 
 RS:
 http://blog.milczarek.it/2011/09/java-programowanie-rs232-rxtx/
-
+http://en.wikibooks.org/wiki/Serial_Programming/Serial_Java#Initialize_a_Serial_Port
 
 Maven
 - SWT
 	http://stackoverflow.com/questions/5096299/maven-project-swt-3-5-dependency-any-official-public-repo
+
+
+On-line CRC calculation and free library
+http://www.lammertbies.nl/comm/info/crc-calculation.html
+
+RXTX
+http://rxtx.qbang.org/pub/rxtx/
