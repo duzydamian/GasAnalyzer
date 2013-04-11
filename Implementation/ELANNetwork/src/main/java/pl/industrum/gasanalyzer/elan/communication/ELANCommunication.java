@@ -11,7 +11,8 @@ import pl.industrum.gasanalyzer.elan.helpers.ELANCRC16;
  * @author duzydamian (Damian Karbowiak)
  * @see ELANConnection
  */
-public class ELANCommunication {
+public class ELANCommunication
+{
 
 	/**
 	 * Object stores existing connection.  
@@ -21,7 +22,8 @@ public class ELANCommunication {
 	/**
 	 * Crates new object to communicate with some device
 	 */
-	public ELANCommunication() {
+	public ELANCommunication()
+	{
 		super();
 		elanConnection = ELANConnection.getInstance();
 	}
@@ -29,21 +31,25 @@ public class ELANCommunication {
 	/**
 	 * Read one frame from network
 	 */
-	public Queue<Integer> readFrame(){
+	public Queue<Integer> readFrame()
+	{
 		Queue<Integer> data = new LinkedList<Integer>();
     	int  previousCharacter = -1;
     	//Read first character from new frame
     	int  courentCharacter = elanConnection.read();
-    	while(courentCharacter!=-1){
+    	while(courentCharacter!=-1)
+    	{
     		//Add current character to collected frame
     		data.add(courentCharacter);
-    		do{   
+    		do
+    		{   
     			previousCharacter = courentCharacter;  
     			//Read next character from new frame
     			courentCharacter = elanConnection.read();	
     			//Add current character to collected frame
     			data.add(courentCharacter);
-    		} while ( !( (previousCharacter==16) & (courentCharacter==3) ) );
+    		}
+    		while ( !( (previousCharacter==16) & (courentCharacter==3) ) );
     		
     		//Add CRC16 to frame
 			int CRCLow = elanConnection.read();
@@ -61,7 +67,8 @@ public class ELANCommunication {
 	/**
 	 * Write one frame to network
 	 */
-	public void writeFrame(){
+	public void writeFrame()
+	{
 		
 	}
 }
