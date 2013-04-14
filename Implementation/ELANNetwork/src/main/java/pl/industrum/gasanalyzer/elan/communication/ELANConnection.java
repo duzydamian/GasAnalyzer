@@ -13,6 +13,7 @@ import java.util.Vector;
 
 import pl.industrum.gasanalyzer.elan.communication.rx.ELANRxBufferObserver;
 import pl.industrum.gasanalyzer.elan.communication.rx.ELANRxByteBuffer;
+import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
 
 /**
  * Class of connection.
@@ -108,12 +109,13 @@ public class ELANConnection
 	 * @param portName name of port which you want to connect
 	 * @throws Exception
 	 */
-	public void connect(String portName) throws Exception
+	public ELANConnectionState connect(String portName) throws Exception
 	{
 		CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
 		if (portIdentifier.isCurrentlyOwned())
 		{
 			System.out.println("Error: Port is currently in use");
+			return ELANConnectionState.CURRENTLY_IN_USE;
 		}
 		else
 		{
@@ -136,6 +138,7 @@ public class ELANConnection
 				{
 					System.err.println("Can't open input stream: write-only");
 					is = null;
+					return ELANConnectionState.WRITE_ONLY;
 				}
 				
 				// Assign output stream from port to variable
@@ -148,11 +151,12 @@ public class ELANConnection
             	
             	dataRxTthread = new Thread( rxThread );
             	dataRxTthread.start();
-            	
+            	return ELANConnectionState.CONNECTED;
 			}
 			else
 			{
 				System.out.println("Error: Only serial ports are suported by this libary.");
+				return ELANConnectionState.NO_SERIAL_PORT;
 			}
 		}
 	}

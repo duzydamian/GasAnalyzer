@@ -11,16 +11,19 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 
 import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
-import org.eclipse.swt.widgets.ProgressBar;
+import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
 
 public class GasAnalyzerMainWindow {
 
@@ -32,6 +35,8 @@ public class GasAnalyzerMainWindow {
 	StyledText styledText;
 	Button connect;
 	CCombo portsList;
+	Label lblStatus;
+	ProgressBar progressBar;
 	boolean outSelected;
 	
 
@@ -61,11 +66,9 @@ public class GasAnalyzerMainWindow {
 	 */
 	protected void createContents() {
 		shlGasAnalyzer = new Shell();
-		FillLayout fl_shlGasAnalyzer = new FillLayout(SWT.VERTICAL);
-		fl_shlGasAnalyzer.spacing = 10;
-		shlGasAnalyzer.setLayout(fl_shlGasAnalyzer);
 		shlGasAnalyzer.setSize(450, 300);
 		shlGasAnalyzer.setText("Gas Analyzer");
+		shlGasAnalyzer.setLayout(new GridLayout(6, false));
 		
 		Menu menu = new Menu(shlGasAnalyzer, SWT.BAR);
 		shlGasAnalyzer.setMenuBar(menu);
@@ -93,10 +96,13 @@ public class GasAnalyzerMainWindow {
 		
 		MenuItem mntmO = new MenuItem(menu_3, SWT.NONE);
 		mntmO.setText("O programie");
+
+		GridData connectBarData = new GridData(GridData.FILL, GridData.CENTER, true, false);
+		connectBarData.horizontalSpan = 6;
 		
-		Composite connectBar = new Composite(shlGasAnalyzer, SWT.NONE);
-		connectBar.setEnabled(false);
-		connectBar.setLayout(new FillLayout(SWT.HORIZONTAL));
+		Composite connectBar = new Composite(shlGasAnalyzer, SWT.BORDER);
+		connectBar.setLayout(new FillLayout(SWT.HORIZONTAL));		
+		connectBar.setLayoutData(connectBarData);
 		
 		Label lblNewLabel = new Label(connectBar, SWT.NONE);
 		lblNewLabel.setText("Port:");
@@ -179,13 +185,18 @@ public class GasAnalyzerMainWindow {
 		        	
 		        	if (state)
 		        	{
-			        	//ELANConnection.getInstance().connect(portsList.getItem(portsList.getSelectionIndex()));
-			        	portsList.setEnabled(false);
-			        	connect.setText("Rozłącz");
-			        	for (int i=0; i<25; i++)
+		        		progressBar.setSelection(50);
+			        	ELANConnectionState connectionState = ELANConnection.getInstance().connect(portsList.getItem(portsList.getSelectionIndex()));
+			        	if (connectionState.isConnected())
 			        	{
-			        		System.out.println("Linia numer: "+i);
+			        	progressBar.setSelection(75);
+			        	portsList.setEnabled(false);
+			        	progressBar.setSelection(90);
+			        	connect.setText("Rozłącz");
+			        	progressBar.setSelection(100);
+			        	lblStatus.setText("Status: " + connectionState.getMessage());
 			        	}
+			        	progressBar.setSelection(0);
 		        	}
 		        	else
 		        	{
@@ -201,16 +212,23 @@ public class GasAnalyzerMainWindow {
 			}
 		});
 		
-		styledText = new StyledText(shlGasAnalyzer, SWT.BORDER | SWT.V_SCROLL);		
-		styledText.setAlignment(SWT.CENTER);
-		styledText.setBounds(10, 45, 428, 186);
+		GridData styledTextData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		styledTextData.horizontalSpan = 6;
 		
+		styledText = new StyledText(shlGasAnalyzer, SWT.BORDER | SWT.V_SCROLL);
+		styledText.setAlignment(SWT.CENTER);
+		styledText.setLayoutData(styledTextData);
+		
+		
+		GridData compositeData = new GridData(GridData.FILL, GridData.GRAB_VERTICAL, true, false);
+		compositeData.horizontalSpan = 6;
 		Composite composite = new Composite(shlGasAnalyzer, SWT.BORDER);
 		composite.setLayout(new FillLayout(SWT.HORIZONTAL));
+		composite.setLayoutData(compositeData);
 		
-		Label lblStatus = new Label(composite, SWT.NONE);
-		lblStatus.setText("Status:");
+		lblStatus = new Label(composite, SWT.NONE);
+		lblStatus.setText("Status: ");
 		
-		ProgressBar progressBar = new ProgressBar(composite, SWT.NONE);
+		progressBar = new ProgressBar(composite, SWT.NONE);
 	}
 }
