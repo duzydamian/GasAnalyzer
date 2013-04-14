@@ -10,7 +10,9 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
@@ -18,6 +20,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
 import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
+import org.eclipse.swt.widgets.ProgressBar;
 
 public class GasAnalyzerMainWindow {
 
@@ -58,6 +61,9 @@ public class GasAnalyzerMainWindow {
 	 */
 	protected void createContents() {
 		shlGasAnalyzer = new Shell();
+		FillLayout fl_shlGasAnalyzer = new FillLayout(SWT.VERTICAL);
+		fl_shlGasAnalyzer.spacing = 10;
+		shlGasAnalyzer.setLayout(fl_shlGasAnalyzer);
 		shlGasAnalyzer.setSize(450, 300);
 		shlGasAnalyzer.setText("Gas Analyzer");
 		
@@ -88,8 +94,14 @@ public class GasAnalyzerMainWindow {
 		MenuItem mntmO = new MenuItem(menu_3, SWT.NONE);
 		mntmO.setText("O programie");
 		
-		portsList = new CCombo(shlGasAnalyzer, SWT.BORDER);
-		portsList.setBounds(46, 10, 85, 29);
+		Composite connectBar = new Composite(shlGasAnalyzer, SWT.NONE);
+		connectBar.setEnabled(false);
+		connectBar.setLayout(new FillLayout(SWT.HORIZONTAL));
+		
+		Label lblNewLabel = new Label(connectBar, SWT.NONE);
+		lblNewLabel.setText("Port:");
+		
+		portsList = new CCombo(connectBar, SWT.BORDER);
 		
 		for (String port: ELANConnection.vectorPorts()) 
 		{
@@ -104,28 +116,20 @@ public class GasAnalyzerMainWindow {
 		{
 			connect.setEnabled(false);
 		}
-			
-
-		Label lblNewLabel = new Label(shlGasAnalyzer, SWT.NONE);
-		lblNewLabel.setBounds(10, 10, 30, 17);
-		lblNewLabel.setText("Port:");
 		
-		final Button btnOut = new Button(shlGasAnalyzer, SWT.RADIO);
-		btnOut.setBounds(232, 10, 50, 22);
+		connect = new Button(connectBar, SWT.TOGGLE);
+		connect.setText("Połącz");
+		
+		final Button btnOut = new Button(connectBar, SWT.RADIO);
 		btnOut.setText("out");
 		btnOut.setSelection(true);
 		
-		final Button btnOkno = new Button(shlGasAnalyzer, SWT.RADIO);
-		btnOkno.setBounds(288, 10, 63, 22);
+		final Button btnOkno = new Button(connectBar, SWT.RADIO);
 		btnOkno.setText("okno");
 		
-		final Button btnPlik = new Button(shlGasAnalyzer, SWT.RADIO);
-		btnPlik.setBounds(357, 10, 81, 22);
+		final Button btnPlik = new Button(connectBar, SWT.RADIO);
 		btnPlik.setText("plik");
-		
-		connect = new Button(shlGasAnalyzer, SWT.TOGGLE);
-		connect.setBounds(137, 10, 92, 29);
-		connect.setText("Połącz");
+				
 		connect.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -152,6 +156,7 @@ public class GasAnalyzerMainWindow {
 		        									byte[] character = new byte[1];
 		        									character[0] = (byte) arg0;
 		        									styledText.setText(styledText.getText()+new String(character));
+		        									styledText.setTopIndex(styledText.getLineCount() - 1);
 		        								}
 		        							});										
 		        				}
@@ -174,9 +179,13 @@ public class GasAnalyzerMainWindow {
 		        	
 		        	if (state)
 		        	{
-			        	ELANConnection.getInstance().connect(portsList.getItem(portsList.getSelectionIndex()));
+			        	//ELANConnection.getInstance().connect(portsList.getItem(portsList.getSelectionIndex()));
 			        	portsList.setEnabled(false);
 			        	connect.setText("Rozłącz");
+			        	for (int i=0; i<25; i++)
+			        	{
+			        		System.out.println("Linia numer: "+i);
+			        	}
 		        	}
 		        	else
 		        	{
@@ -194,6 +203,14 @@ public class GasAnalyzerMainWindow {
 		
 		styledText = new StyledText(shlGasAnalyzer, SWT.BORDER | SWT.V_SCROLL);		
 		styledText.setAlignment(SWT.CENTER);
-		styledText.setBounds(10, 45, 428, 186);		
+		styledText.setBounds(10, 45, 428, 186);
+		
+		Composite composite = new Composite(shlGasAnalyzer, SWT.BORDER);
+		composite.setLayout(new FillLayout(SWT.HORIZONTAL));
+		
+		Label lblStatus = new Label(composite, SWT.NONE);
+		lblStatus.setText("Status:");
+		
+		ProgressBar progressBar = new ProgressBar(composite, SWT.NONE);
 	}
 }
