@@ -30,8 +30,10 @@ public class ELANFrameCreationObserver implements Observer
 				{
 					for (ELANMeasurement measurement : (ELANRxBroadcastFrame)rx)
 					{
-						System.out.println(measurement.toString());
+						System.out.print(measurement.toString()+" || ");
 					}
+					System.out.println();
+					System.out.println();
 				}
 			}
 			else 

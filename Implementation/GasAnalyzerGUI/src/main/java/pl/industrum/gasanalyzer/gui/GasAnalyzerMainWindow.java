@@ -16,9 +16,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 
@@ -51,6 +54,33 @@ public class GasAnalyzerMainWindow {
 	public void open() {
 		Display display = Display.getDefault();
 		createContents();
+		
+		shlGasAnalyzer.addListener(SWT.Close, new Listener()
+		{
+	        public void handleEvent(Event event)
+	        {
+	          MessageBox messageBox = new MessageBox(shlGasAnalyzer, SWT.YES | SWT.NO | SWT.ICON_QUESTION);
+	          messageBox.setText("Zakończ");
+	          messageBox.setMessage("Czy na pewno chcesz zamknąć aplikację?");
+	          if (messageBox.open() == SWT.YES)
+	          {
+	        	  progressBar.setVisible(true);
+	        	  progressBar.setSelection(50);
+	        	  ELANConnection.getInstance().disconnect();
+	        	  progressBar.setSelection(100);
+	        	  portsList.setEnabled(true);	
+	        	  connect.setText("Połącz");
+	        	  progressBar.setSelection(0);
+	        	  progressBar.setVisible(false);  
+	        	  event.doit = true;
+	          }	          
+	          else
+	          {
+	        	  event.doit = false;
+	          }
+	        }
+		});
+	        
 		shlGasAnalyzer.open();
 		shlGasAnalyzer.layout();
 		while (!shlGasAnalyzer.isDisposed()) {
@@ -161,7 +191,7 @@ public class GasAnalyzerMainWindow {
 		        								{
 		        									byte[] character = new byte[1];
 		        									character[0] = (byte) arg0;
-		        									styledText.setText(styledText.getText()+new String(character));
+		        									styledText.append(new String(character));
 		        									styledText.setTopIndex(styledText.getLineCount() - 1);
 		        								}
 		        							});										
@@ -185,6 +215,7 @@ public class GasAnalyzerMainWindow {
 		        	
 		        	if (state)
 		        	{
+		        		progressBar.setVisible(true);
 		        		progressBar.setSelection(50);
 			        	ELANConnectionState connectionState = ELANConnection.getInstance().connect(portsList.getItem(portsList.getSelectionIndex()));
 			        	if (connectionState.isConnected())
@@ -197,12 +228,18 @@ public class GasAnalyzerMainWindow {
 			        	lblStatus.setText("Status: " + connectionState.getMessage());
 			        	}
 			        	progressBar.setSelection(0);
+			        	progressBar.setVisible(false);
 		        	}
 		        	else
 		        	{
+		        		progressBar.setVisible(true);
+		        		progressBar.setSelection(50);
 		        		ELANConnection.getInstance().disconnect();
+		        		progressBar.setSelection(100);
 			        	portsList.setEnabled(true);	
 			        	connect.setText("Połącz");
+			        	progressBar.setSelection(0);
+			        	progressBar.setVisible(false);
 		        	}
 		        }
 		        catch ( Exception e )
@@ -226,9 +263,10 @@ public class GasAnalyzerMainWindow {
 		composite.setLayout(new FillLayout(SWT.HORIZONTAL));
 		composite.setLayoutData(compositeData);
 		
-		lblStatus = new Label(composite, SWT.NONE);
+		lblStatus = new Label(composite, SWT.BOLD);
 		lblStatus.setText("Status: ");
 		
-		progressBar = new ProgressBar(composite, SWT.NONE);
+		progressBar = new ProgressBar(composite, SWT.BORDER);
+		progressBar.setVisible(false);
 	}
 }

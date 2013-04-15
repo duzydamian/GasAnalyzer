@@ -60,6 +60,10 @@ public class ELANCommunication
 			{
 				return data;
 			}
+			else
+			{
+				break;
+			}
     	}
 		return null;
 	}
