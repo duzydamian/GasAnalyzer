@@ -18,6 +18,7 @@ public class ELANFrameCreationObserver implements Observer
 		rxFrameBuffer = new LinkedList<ELANRxFrame>();
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void update( Observable obj, Object arg )
 	{					
 		try
@@ -28,10 +29,11 @@ public class ELANFrameCreationObserver implements Observer
 				rxFrameBuffer.add( rx );
 				if( rx.isValid() )
 				{
+					System.out.println(rx.getTimeStamp().toLocaleString());
 					for (ELANMeasurement measurement : (ELANRxBroadcastFrame)rx)
 					{
 						System.out.print(measurement.toString()+" || ");
-					}
+					}					
 					System.out.println();
 					System.out.println();
 				}

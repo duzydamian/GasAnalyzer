@@ -123,7 +123,7 @@ public class ELANConnection
 
 			if (commPort instanceof SerialPort)
 			{
-				System.out.println("Port " + portName + " successfull open.");
+				//System.out.println("Port " + portName + " successfull open.");
 				serialPort = (SerialPort) commPort;
 
 				serialPort.setSerialPortParams(ELAN_BAUD_RATE, ELAN_DATA_BITS, ELAN_STOP_BITS,
@@ -155,7 +155,7 @@ public class ELANConnection
 			}
 			else
 			{
-				System.out.println("Error: Only serial ports are suported by this libary.");
+				//System.out.println("Error: Only serial ports are suported by this libary.");
 				return ELANConnectionState.NO_SERIAL_PORT;
 			}
 		}

@@ -36,20 +36,20 @@ public class ELANCommunication
 		Queue<Integer> data = new LinkedList<Integer>();
     	int  previousCharacter = -1;
     	//Read first character from new frame
-    	int  courentCharacter = elanConnection.read();
-    	while(courentCharacter!=-1)
+    	int  curentCharacter = elanConnection.read();
+    	while(curentCharacter!=-1)
     	{
     		//Add current character to collected frame
-    		data.add(courentCharacter);
+    		data.add(curentCharacter);
     		do
     		{   
-    			previousCharacter = courentCharacter;  
+    			previousCharacter = curentCharacter;  
     			//Read next character from new frame
-    			courentCharacter = elanConnection.read();	
+    			curentCharacter = elanConnection.read();	
     			//Add current character to collected frame
-    			data.add(courentCharacter);
+    			data.add(curentCharacter);
     		}
-    		while ( !( (previousCharacter==16) & (courentCharacter==3) ) );
+    		while ( !( (previousCharacter==16) & (curentCharacter==3) ) );
     		
     		//Add CRC16 to frame
 			int CRCLow = elanConnection.read();

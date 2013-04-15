@@ -80,6 +80,11 @@
 			<version>0.0.4</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.9</version>
+		</dependency>		
+		<dependency>
 	        <groupId>org.eclipse.swt</groupId>
 
 	        <artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>

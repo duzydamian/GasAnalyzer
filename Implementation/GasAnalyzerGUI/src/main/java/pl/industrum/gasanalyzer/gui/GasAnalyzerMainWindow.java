@@ -204,6 +204,7 @@ public class GasAnalyzerMainWindow {
 		        			{
 		        				System.setErr(new PrintStream("err.log"));
 		        				System.setOut(new PrintStream("out.log"));
+		        				styledText.setText("Pomiary są zapisywane do pliku out.log...");
 		        			} 
 		        			catch (FileNotFoundException e1) 
 		        			{
