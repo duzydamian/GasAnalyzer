@@ -1,6 +1,7 @@
 package pl.industrum.gasanalyzer.gui.frames;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -11,7 +12,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.custom.StyledText;
 
 /**
  * @author duzydamian (Damian Karbowiak)
@@ -32,7 +32,6 @@ public class SurveyFrame extends Composite
 	private Button btnNewSurveyUser;
 	
 	private Button hideShowButton;		
-	private GridData hideShowButtonGridData;
 	
 	private Label lblPlace;
 	private Button btnNewPlace;
@@ -46,6 +45,9 @@ public class SurveyFrame extends Composite
 		
 	private Label lblKomentarz;
 	private StyledText styledText_1;
+	
+	private boolean showed;
+	private Composite form;
 
 	/**
 	 * Create the composite.
@@ -58,81 +60,82 @@ public class SurveyFrame extends Composite
 		surveyFrameData = new GridData(GridData.FILL, GridData.CENTER, true, false);
 		surveyFrameData.horizontalSpan = 6;
 		this.setLayoutData(surveyFrameData);
-		setLayout(new GridLayout(3, false));
+		setLayout(new GridLayout(1, false));
 		
-		lblSurveyName = new Label(this, SWT.NONE);
-		lblSurveyName.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		form = new Composite(this, SWT.NONE);
+		GridData gd_form = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_form.widthHint = 666;
+		form.setLayoutData(gd_form);
+		form.setLayout(new GridLayout(4, false));
+		
+		lblSurveyName = new Label(form, SWT.NONE);
+		lblSurveyName.setSize(44, 17);
 		lblSurveyName.setText("Nazwa");
 		
-		surveyName = new Text(this, SWT.BORDER);
-		surveyName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		new Label(this, SWT.NONE);
+		surveyName = new Text(form, SWT.BORDER);
+		GridData gd_surveyName = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_surveyName.widthHint = 190;
+		surveyName.setLayoutData(gd_surveyName);
 		
-		lblSurveyDate = new Label(this, SWT.NONE);
+		lblSurveyDate = new Label(form, SWT.NONE);
 		lblSurveyDate.setText("Data");
 		
-		surveyDate = new DateTime(this, SWT.BORDER);
-		new Label(this, SWT.NONE);
+		surveyDate = new DateTime(form, SWT.BORDER);
 		
-		lblSurveyUserList = new Label(this, SWT.NONE);
-		lblSurveyUserList.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblSurveyUserList.setText("Prowadzący pomiary");		
+		lblSurveyUserList = new Label(form, SWT.NONE);
+		lblSurveyUserList.setText("Prowadzący pomiary");
 		
-		surveyUserList = new Combo(this, SWT.NONE);
-		surveyUserList.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		surveyUserList = new Combo(form, SWT.NONE);
 		surveyUserList.add("Jan Wężyk");
 		surveyUserList.add("Kuba guzik");
 		
-		btnNewSurveyUser = new Button(this, SWT.NONE);
+		btnNewSurveyUser = new Button(form, SWT.NONE);
 		btnNewSurveyUser.setText("Nowy");
+		new Label(form, SWT.NONE);
 		
-		lblPlace = new Label(this, SWT.NONE);
-		lblPlace.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblPlace = new Label(form, SWT.NONE);
 		lblPlace.setText("Obiekt");
 		
-		combo = new Combo(this, SWT.NONE);
-		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		combo = new Combo(form, SWT.NONE);
 		combo.add("Narnia");
 		combo.add("Mordor");
 		
-		btnNewPlace = new Button(this, SWT.NONE);
+		btnNewPlace = new Button(form, SWT.NONE);
 		btnNewPlace.setText("Nowy");
+		new Label(form, SWT.NONE);
 		
-		lblLoad = new Label(this, SWT.NONE);
-		lblLoad.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblLoad = new Label(form, SWT.NONE);
 		lblLoad.setText("Obciążenie");
 		
-		text = new Text(this, SWT.BORDER);
-		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		new Label(this, SWT.NONE);
+		text = new Text(form, SWT.BORDER);
+		new Label(form, SWT.NONE);
+		new Label(form, SWT.NONE);
 		
-		lblWarunkiSzczeglne = new Label(this, SWT.NONE);
+		lblWarunkiSzczeglne = new Label(form, SWT.NONE);
 		lblWarunkiSzczeglne.setText("Warunki szczególne");
 		
-		styledText = new StyledText(this, SWT.BORDER);
-		styledText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		new Label(this, SWT.NONE);
+		styledText = new StyledText(form, SWT.BORDER);
 		
-		lblKomentarz = new Label(this, SWT.NONE);
+		lblKomentarz = new Label(form, SWT.NONE);
 		lblKomentarz.setText("Komentarz");
 		
-		styledText_1 = new StyledText(this, SWT.BORDER);
-		styledText_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		new Label(this, SWT.NONE);
+		styledText_1 = new StyledText(form, SWT.BORDER);
 		
-		hideShowButtonGridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
-		hideShowButtonGridData.horizontalSpan = 3;
-		
-		hideShowButton = new Button(this, SWT.UP);
-		hideShowButton.setLayoutData(hideShowButtonGridData);
+		hideShowButton = new Button(this, SWT.ARROW | SWT.UP);
+		hideShowButton.setLayoutData(new GridData(GridData.FILL, GridData.GRAB_VERTICAL, true, false));
 		hideShowButton.addSelectionListener(new SelectionAdapter()
 		{
 			@Override
 			public void widgetSelected(SelectionEvent arg0)
 			{
-				hide();
+				if (showed)
+					hide();				
+				else
+					show();				
 			}
 		});
+		
+		showed = true;
 	}
 
 	@Override
@@ -143,14 +146,16 @@ public class SurveyFrame extends Composite
 
 	private void hide()
 	{
-		hideShowButton.setVisible(false);
-		this.setVisible(false);
+		form.setVisible(false);
+		hideShowButton.reskin(SWT.ARROW | SWT.DOWN);
+		showed = false;
 	}
 	
-	@SuppressWarnings("unused")
 	private void show()
 	{
-		this.setVisible(true);
+		form.setVisible(true);
+		hideShowButton.reskin(SWT.ARROW | SWT.UP);
+		showed = true;
 	}
 	
 	public Text getText()

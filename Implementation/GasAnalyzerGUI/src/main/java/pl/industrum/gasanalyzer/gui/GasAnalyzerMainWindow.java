@@ -100,7 +100,7 @@ public class GasAnalyzerMainWindow {
 	 */
 	protected void createContents() {
 		shlGasAnalyzer = new Shell();
-		shlGasAnalyzer.setSize(450, 300);
+		shlGasAnalyzer.setSize(650, 500);
 		shlGasAnalyzer.setText("Gas Analyzer");
 		shlGasAnalyzer.setLayout(new GridLayout(6, false));
 		
