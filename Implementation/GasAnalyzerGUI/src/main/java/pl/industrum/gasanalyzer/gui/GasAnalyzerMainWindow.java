@@ -241,8 +241,8 @@ public class GasAnalyzerMainWindow {
 		styledText.setLayoutData(styledTextData);
 		
 		generateReportBar = new GenerateReportBar(shlGasAnalyzer, SWT.BORDER);
+		generateReportBar.redraw(); //dodane bo sie czepiał, ze zmienna nie użyta
 		
-		statusBar = new StatusBar(shlGasAnalyzer, SWT.BORDER);
-		
+		statusBar = new StatusBar(shlGasAnalyzer, SWT.BORDER);		
 	}	
 }

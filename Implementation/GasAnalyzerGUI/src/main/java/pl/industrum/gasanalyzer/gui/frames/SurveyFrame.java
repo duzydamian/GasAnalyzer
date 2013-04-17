@@ -13,6 +13,10 @@ import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import pl.industrum.gasanalyzer.gui.dialogs.NewSurveyUser;
+import pl.industrum.gasanalyzer.gui.dialogs.DatePicker;
+import pl.industrum.gasanalyzer.gui.dialogs.NewSurveyPlace;
+
 /**
  * @author duzydamian (Damian Karbowiak)
  *
@@ -22,39 +26,40 @@ public class SurveyFrame extends Composite
 
 	GridData surveyFrameData;
 	private Label lblSurveyName;
-	private Text surveyName;
+	private Text txtSurveyName;
 	
 	private Label lblSurveyDate;
-	private DateTime surveyDate;
+	private DateTime txtSurveyDate;
 		
-	private Label lblSurveyUserList;
-	private Combo surveyUserList;
+	private Label lblSurveyUser;
+	private Combo listSurveyUser;
 	private Button btnNewSurveyUser;
 	
 	private Button hideShowButton;		
 	
-	private Label lblPlace;
-	private Button btnNewPlace;
-	private Combo combo;
+	private Label lblSurveyPlace;
+	private Button btnNewSurveyPlace;
+	private Combo listSurveyPlace;
 	
-	private Label lblLoad;
-	private Text text;
+	private Label lblSurveyLoad;
+	private Text textSurveyLoad;
 	
-	private Label lblWarunkiSzczeglne;
-	private StyledText styledText;
+	private Label lblSurveySpecialConditions;
+	private StyledText styledTextSurveySpecialConditions;
 		
-	private Label lblKomentarz;
-	private StyledText styledText_1;
+	private Label lblComment;
+	private StyledText styledTextComment;
 	
 	private boolean showed;
-	private Composite form;
+	private Composite surveyForm;
+	private Button btnSelectDate;
 
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public SurveyFrame(Composite parent, int style)
+	public SurveyFrame(final Composite parent, int style)
 	{
 		super(parent, style);
 		surveyFrameData = new GridData(GridData.FILL, GridData.CENTER, true, false);
@@ -62,64 +67,95 @@ public class SurveyFrame extends Composite
 		this.setLayoutData(surveyFrameData);
 		setLayout(new GridLayout(1, false));
 		
-		form = new Composite(this, SWT.NONE);
-		GridData gd_form = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_form.widthHint = 666;
-		form.setLayoutData(gd_form);
-		form.setLayout(new GridLayout(4, false));
+		surveyForm = new Composite(this, SWT.NONE);
+		surveyForm.setLayout(new GridLayout(3, false));
 		
-		lblSurveyName = new Label(form, SWT.NONE);
+		lblSurveyName = new Label(surveyForm, SWT.NONE);
 		lblSurveyName.setSize(44, 17);
 		lblSurveyName.setText("Nazwa");
 		
-		surveyName = new Text(form, SWT.BORDER);
-		GridData gd_surveyName = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_surveyName.widthHint = 190;
-		surveyName.setLayoutData(gd_surveyName);
+		txtSurveyName = new Text(surveyForm, SWT.BORDER);
+		txtSurveyName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		
-		lblSurveyDate = new Label(form, SWT.NONE);
+		lblSurveyDate = new Label(surveyForm, SWT.NONE);
 		lblSurveyDate.setText("Data");
 		
-		surveyDate = new DateTime(form, SWT.BORDER);
+		txtSurveyDate = new DateTime(surveyForm, SWT.DATE);
+		txtSurveyDate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		
-		lblSurveyUserList = new Label(form, SWT.NONE);
-		lblSurveyUserList.setText("Prowadzący pomiary");
+		btnSelectDate = new Button(surveyForm, SWT.NONE);
+		btnSelectDate.setText("Wybierz");	
+		btnSelectDate.addSelectionListener(new SelectionAdapter()
+		{
+			public void widgetSelected (SelectionEvent e)
+			{
+				DatePicker datePicker = new DatePicker(parent.getShell(), SWT.NONE);
+				int[] date = datePicker.open();
+				if (date != null)
+					txtSurveyDate.setDate(date[0], date[1], date[2]);
+				
+			}
+		});
 		
-		surveyUserList = new Combo(form, SWT.NONE);
-		surveyUserList.add("Jan Wężyk");
-		surveyUserList.add("Kuba guzik");
+		lblSurveyUser = new Label(surveyForm, SWT.NONE);
+		lblSurveyUser.setText("Prowadzący pomiary");
 		
-		btnNewSurveyUser = new Button(form, SWT.NONE);
-		btnNewSurveyUser.setText("Nowy");
-		new Label(form, SWT.NONE);
+		listSurveyUser = new Combo(surveyForm, SWT.NONE);
+		listSurveyUser.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		listSurveyUser.add("Jan Wężyk");
+		listSurveyUser.add("Kuba guzik");
 		
-		lblPlace = new Label(form, SWT.NONE);
-		lblPlace.setText("Obiekt");
+		btnNewSurveyUser = new Button(surveyForm, SWT.NONE);
+		btnNewSurveyUser.setText("Nowy");	
+		btnNewSurveyUser.addSelectionListener(new SelectionAdapter()
+		{
+			public void widgetSelected (SelectionEvent e)
+			{
+				NewSurveyUser addSurveyUser = new NewSurveyUser(parent.getShell(), SWT.NONE);
+				addSurveyUser.open();
+				
+				refreshListSurveyUser();
+			}
+		});
 		
-		combo = new Combo(form, SWT.NONE);
-		combo.add("Narnia");
-		combo.add("Mordor");
+		lblSurveyPlace = new Label(surveyForm, SWT.NONE);
+		lblSurveyPlace.setText("Obiekt");
 		
-		btnNewPlace = new Button(form, SWT.NONE);
-		btnNewPlace.setText("Nowy");
-		new Label(form, SWT.NONE);
+		listSurveyPlace = new Combo(surveyForm, SWT.NONE);
+		listSurveyPlace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		listSurveyPlace.add("Narnia");
+		listSurveyPlace.add("Mordor");
 		
-		lblLoad = new Label(form, SWT.NONE);
-		lblLoad.setText("Obciążenie");
+		btnNewSurveyPlace = new Button(surveyForm, SWT.NONE);
+		btnNewSurveyPlace.setText("Nowy");
+		btnNewSurveyPlace.addSelectionListener(new SelectionAdapter()
+		{
+			public void widgetSelected (SelectionEvent e)
+			{
+				NewSurveyPlace newSurveyPlace = new NewSurveyPlace(parent.getShell(), SWT.NONE);
+				newSurveyPlace.open();
+				
+				refreshListSurveyPlace();
+			}
+		});
 		
-		text = new Text(form, SWT.BORDER);
-		new Label(form, SWT.NONE);
-		new Label(form, SWT.NONE);
+		lblSurveyLoad = new Label(surveyForm, SWT.NONE);
+		lblSurveyLoad.setText("Obciążenie");
 		
-		lblWarunkiSzczeglne = new Label(form, SWT.NONE);
-		lblWarunkiSzczeglne.setText("Warunki szczególne");
+		textSurveyLoad = new Text(surveyForm, SWT.BORDER);
+		textSurveyLoad.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		
-		styledText = new StyledText(form, SWT.BORDER);
+		lblSurveySpecialConditions = new Label(surveyForm, SWT.NONE);
+		lblSurveySpecialConditions.setText("Warunki szczególne");
 		
-		lblKomentarz = new Label(form, SWT.NONE);
-		lblKomentarz.setText("Komentarz");
+		styledTextSurveySpecialConditions = new StyledText(surveyForm, SWT.BORDER);
+		styledTextSurveySpecialConditions.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		
-		styledText_1 = new StyledText(form, SWT.BORDER);
+		lblComment = new Label(surveyForm, SWT.NONE);
+		lblComment.setText("Komentarz");
+		
+		styledTextComment = new StyledText(surveyForm, SWT.BORDER);
+		styledTextComment.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		
 		hideShowButton = new Button(this, SWT.ARROW | SWT.UP);
 		hideShowButton.setLayoutData(new GridData(GridData.FILL, GridData.GRAB_VERTICAL, true, false));
@@ -146,35 +182,25 @@ public class SurveyFrame extends Composite
 
 	private void hide()
 	{
-		form.setVisible(false);
+		surveyForm.setVisible(false);
 		hideShowButton.reskin(SWT.ARROW | SWT.DOWN);
 		showed = false;
 	}
 	
 	private void show()
 	{
-		form.setVisible(true);
+		surveyForm.setVisible(true);
 		hideShowButton.reskin(SWT.ARROW | SWT.UP);
 		showed = true;
 	}
 	
-	public Text getText()
+	private void refreshListSurveyUser()
 	{
-		return surveyName;
+		
 	}
-
-	public DateTime getDateTime()
+	
+	private void refreshListSurveyPlace()
 	{
-		return surveyDate;
-	}
-
-	public Combo getCombo()
-	{
-		return surveyUserList;
-	}
-
-	public Label getLblUytkownik()
-	{
-		return lblSurveyUserList;
+		
 	}
 }

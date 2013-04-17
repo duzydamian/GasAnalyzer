@@ -28,7 +28,7 @@ public class XlsDialog extends Dialog {
 	 */
 	public XlsDialog(Shell parent, int style) {
 		super(parent, style);
-		setText("SWT Dialog");
+		setText("Generuj raport jako xls");
 	}
 
 	/**
@@ -52,7 +52,7 @@ public class XlsDialog extends Dialog {
 	 * Create contents of the dialog.
 	 */
 	private void createContents() {
-		shell = new Shell(getParent(), getStyle());
+		shell = new Shell(getParent(), getStyle()| SWT.DIALOG_TRIM);
 		shell.setSize(450, 300);
 		shell.setText(getText());
 		shell.setLayout(new GridLayout(3, false));
