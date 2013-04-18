@@ -11,7 +11,7 @@ import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
 
 public class ELANFrameCreationObserver implements Observer
 {
-	private Queue<ELANRxFrame> rxFrameBuffer;
+	private static Queue<ELANRxFrame> rxFrameBuffer;
 
 	public ELANFrameCreationObserver()
 	{

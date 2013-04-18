@@ -5,7 +5,8 @@ import java.util.Iterator;
 
 import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
 
-public class ELANRxBroadcastFrame extends ELANRxFrame implements Iterable<ELANMeasurement> {
+public class ELANRxBroadcastFrame extends ELANRxFrame implements Iterable<ELANMeasurement>
+{
 	private ArrayList<ELANMeasurement> measurements;
 	
 	public ELANRxBroadcastFrame( Integer sourceAdress, Integer targetAdress )
@@ -14,7 +15,8 @@ public class ELANRxBroadcastFrame extends ELANRxFrame implements Iterable<ELANMe
 		this.measurements = new ArrayList<ELANMeasurement>();
 	}
 	
-	public Iterator<ELANMeasurement> iterator() {        
+	public Iterator<ELANMeasurement> iterator() 
+	{        
         Iterator<ELANMeasurement> imeasurements = measurements.iterator();
         return imeasurements; 
     }

@@ -8,9 +8,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Vector;
 
+import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
+import pl.industrum.gasanalyzer.elan.communication.rx.ELANFrameCreationObserver;
 import pl.industrum.gasanalyzer.elan.communication.rx.ELANRxBufferObserver;
 import pl.industrum.gasanalyzer.elan.communication.rx.ELANRxByteBuffer;
 import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
@@ -22,14 +26,18 @@ import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
  * @see gnu.io.CommPort
  * @see gnu.io.SerialPort
  */
-public class ELANConnection
+public class ELANConnection implements Iterable<ELANNetwork>
 {
-	
 	/**
 	 * Instance for singleton
 	 */
 	private static ELANConnection instance = null;
 	
+	//Collection for all networks
+	private ArrayList<ELANNetwork> networks;
+	//ELAN observers
+	private static ELANFrameCreationObserver dataParserObserver;
+	private static ELANRxBufferObserver rxBufferObserver;
 	/**
 	 * Interface Parameters
 	 * Level RS485
@@ -87,8 +95,21 @@ public class ELANConnection
 		super();
 		is = null;
 		os = null;
+		networks = new ArrayList<ELANNetwork>();
 	}	
+	/**
+	 * Networks list iterator
+	 */
+	public Iterator<ELANNetwork> iterator() 
+	{        
+        Iterator<ELANNetwork> inetworks = networks.iterator();
+        return inetworks; 
+    }
 	
+	public ELANNetwork getNetwork( int i )
+	{
+		return networks.get( i );
+	}
 	/**
 	 * 
 	 * 
