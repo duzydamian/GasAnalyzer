@@ -16,6 +16,9 @@ import org.eclipse.swt.widgets.Text;
 import pl.industrum.gasanalyzer.gui.dialogs.NewSurveyUser;
 import pl.industrum.gasanalyzer.gui.dialogs.DatePicker;
 import pl.industrum.gasanalyzer.gui.dialogs.NewSurveyPlace;
+import org.eclipse.swt.widgets.ExpandBar;
+import org.eclipse.swt.widgets.ExpandItem;
+import org.eclipse.swt.layout.FillLayout;
 
 /**
  * @author duzydamian (Damian Karbowiak)
@@ -35,8 +38,6 @@ public class SurveyFrame extends Composite
 	private Combo listSurveyUser;
 	private Button btnNewSurveyUser;
 	
-	private Button hideShowButton;		
-	
 	private Label lblSurveyPlace;
 	private Button btnNewSurveyPlace;
 	private Combo listSurveyPlace;
@@ -50,9 +51,10 @@ public class SurveyFrame extends Composite
 	private Label lblComment;
 	private StyledText styledTextComment;
 	
-	private boolean showed;
 	private Composite surveyForm;
 	private Button btnSelectDate;
+	private ExpandBar expandBar;
+	private ExpandItem xpndtmDanaPomiaru;
 
 	/**
 	 * Create the composite.
@@ -65,9 +67,15 @@ public class SurveyFrame extends Composite
 		surveyFrameData = new GridData(GridData.FILL, GridData.CENTER, true, false);
 		surveyFrameData.horizontalSpan = 6;
 		this.setLayoutData(surveyFrameData);
-		setLayout(new GridLayout(1, false));
+		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
-		surveyForm = new Composite(this, SWT.NONE);
+		expandBar = new ExpandBar(this, SWT.NONE);
+		
+		xpndtmDanaPomiaru = new ExpandItem(expandBar, SWT.NONE);
+		xpndtmDanaPomiaru.setText("Dane pomiaru");
+		
+		surveyForm = new Composite(expandBar, SWT.NONE);
+		xpndtmDanaPomiaru.setControl(surveyForm);
 		surveyForm.setLayout(new GridLayout(3, false));
 		
 		lblSurveyName = new Label(surveyForm, SWT.NONE);
@@ -156,42 +164,14 @@ public class SurveyFrame extends Composite
 		
 		styledTextComment = new StyledText(surveyForm, SWT.BORDER);
 		styledTextComment.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
+		xpndtmDanaPomiaru.setHeight(xpndtmDanaPomiaru.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		
-		hideShowButton = new Button(this, SWT.ARROW | SWT.UP);
-		hideShowButton.setLayoutData(new GridData(GridData.FILL, GridData.GRAB_VERTICAL, true, false));
-		hideShowButton.addSelectionListener(new SelectionAdapter()
-		{
-			@Override
-			public void widgetSelected(SelectionEvent arg0)
-			{
-				if (showed)
-					hide();				
-				else
-					show();				
-			}
-		});
-		
-		showed = true;
 	}
 
 	@Override
 	protected void checkSubclass()
 	{
 		// Disable the check that prevents subclassing of SWT components
-	}
-
-	private void hide()
-	{
-		surveyForm.setVisible(false);
-		hideShowButton.reskin(SWT.ARROW | SWT.DOWN);
-		showed = false;
-	}
-	
-	private void show()
-	{
-		surveyForm.setVisible(true);
-		hideShowButton.reskin(SWT.ARROW | SWT.UP);
-		showed = true;
 	}
 	
 	private void refreshListSurveyUser()
