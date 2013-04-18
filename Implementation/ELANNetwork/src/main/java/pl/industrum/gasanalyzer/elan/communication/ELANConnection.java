@@ -14,8 +14,6 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
-import pl.industrum.gasanalyzer.elan.communication.rx.ELANFrameCreationObserver;
-import pl.industrum.gasanalyzer.elan.communication.rx.ELANRxBufferObserver;
 import pl.industrum.gasanalyzer.elan.communication.rx.ELANRxByteBuffer;
 import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
 
@@ -32,12 +30,8 @@ public class ELANConnection implements Iterable<ELANNetwork>
 	 * Instance for singleton
 	 */
 	private static ELANConnection instance = null;
-	
 	//Collection for all networks
 	private ArrayList<ELANNetwork> networks;
-	//ELAN observers
-	private static ELANFrameCreationObserver dataParserObserver;
-	private static ELANRxBufferObserver rxBufferObserver;
 	/**
 	 * Interface Parameters
 	 * Level RS485
@@ -93,9 +87,12 @@ public class ELANConnection implements Iterable<ELANNetwork>
 	protected ELANConnection()
 	{
 		super();
-		is = null;
-		os = null;
-		networks = new ArrayList<ELANNetwork>();
+		this.is = null;
+		this.os = null;
+		
+		//initialize network collection and add new network
+		this.networks = new ArrayList<ELANNetwork>();
+		this.addNetwork( "System pomiarowy" ); //should be in GUI
 	}	
 	/**
 	 * Networks list iterator
@@ -110,10 +107,16 @@ public class ELANConnection implements Iterable<ELANNetwork>
 	{
 		return networks.get( i );
 	}
+	
+	public void addNetwork( String name )
+	{
+		ELANNetwork network = new ELANNetwork( name );
+		this.networks.add( network );
+	}
 	/**
 	 * 
 	 * 
-	 * @return Instance if exsists or new if not
+	 * @return Instance if exists or new if not
 	 */
 	public synchronized static ELANConnection getInstance()
 	{
@@ -166,17 +169,16 @@ public class ELANConnection implements Iterable<ELANNetwork>
 				os = new PrintStream(serialPort.getOutputStream(), true);
 				
 				//Start thread to get frames
-				ELANRxByteBuffer rxThread = new ELANRxByteBuffer();
-            	ELANRxBufferObserver rxBufferObserver = new ELANRxBufferObserver();            	
-            	rxThread.addObserver( rxBufferObserver );
+				ELANRxByteBuffer rxThread = new ELANRxByteBuffer();            	
+            	rxThread.addObserver( this.networks.get(0) );
             	
             	dataRxTthread = new Thread( rxThread );
             	dataRxTthread.start();
+            	
             	return ELANConnectionState.CONNECTED;
 			}
 			else
 			{
-				//System.out.println("Error: Only serial ports are suported by this libary.");
 				return ELANConnectionState.NO_SERIAL_PORT;
 			}
 		}

@@ -93,7 +93,24 @@ public class ELANDataParser extends Observable implements Runnable
 		notifyObservers( rxFrame );
 	}
 	
-	public Queue<Integer> trimData( Queue<Integer> data )
+	public static Integer[] preparser( Queue<Integer> data )
+	{
+		return ELANDataParser.getAddresses( ELANDataParser.trimData( data ) );
+	}
+	
+	public static Integer[] getAddresses( Queue<Integer> trimedData )
+	{
+		Integer targetAdress = trimedData.poll();
+		Integer sourceAdress = trimedData.poll();
+		
+		Integer[] addressesArray = new Integer[2];
+		addressesArray[0] = targetAdress;
+		addressesArray[1] = sourceAdress;
+		
+		return addressesArray;
+	}
+	
+	public static Queue<Integer> trimData( Queue<Integer> data )
 	{
 		Queue<Integer> trimedQueue = new LinkedList<Integer>();
 		
