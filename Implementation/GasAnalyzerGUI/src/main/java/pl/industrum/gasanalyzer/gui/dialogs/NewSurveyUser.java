@@ -9,6 +9,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
+import pl.industrum.gasanalyzer.i18n.Messages;
 
 public class NewSurveyUser extends Dialog {
 
@@ -30,7 +31,7 @@ public class NewSurveyUser extends Dialog {
 	 */
 	public NewSurveyUser(Shell parent, int style) {
 		super(parent, style);
-		setText("Nowy użytkownik");
+		setText(Messages.getString("NewSurveyUser.this.text")); //$NON-NLS-1$
 	}
 
 	/**
@@ -60,19 +61,19 @@ public class NewSurveyUser extends Dialog {
 		shell.setLayout(new GridLayout(3, false));
 		
 		lblTitle = new Label(shell, SWT.NONE);
-		lblTitle.setText("Tytuł naukowy");		
+		lblTitle.setText(Messages.getString("NewSurveyUser.lblTitle.text"));		 //$NON-NLS-1$
 		
 		textTitle = new Text(shell, SWT.BORDER);
 		textTitle.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 		
 		lblName = new Label(shell, SWT.NONE);
-		lblName.setText("Imię");
+		lblName.setText(Messages.getString("NewSurveyUser.lblName.text")); //$NON-NLS-1$
 		
 		textName = new Text(shell, SWT.BORDER);
 		textName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 		
 		lblSurname = new Label(shell, SWT.NONE);
-		lblSurname.setText("Nazwisko");
+		lblSurname.setText(Messages.getString("NewSurveyUser.lblSurname.text")); //$NON-NLS-1$
 		
 		textSurname = new Text(shell, SWT.BORDER);
 		textSurname.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));		
@@ -81,11 +82,11 @@ public class NewSurveyUser extends Dialog {
 		
 		btnOk = new Button(shell, SWT.NONE);
 		btnOk.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		btnOk.setText("OK");
+		btnOk.setText(Messages.getString("NewSurveyUser.btnOk.text")); //$NON-NLS-1$
 				
 		btnCancel = new Button(shell, SWT.NONE);
 		btnCancel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		btnCancel.setText("Anuluj");
+		btnCancel.setText(Messages.getString("NewSurveyUser.btnCancel.text")); //$NON-NLS-1$
 	}
 
 }

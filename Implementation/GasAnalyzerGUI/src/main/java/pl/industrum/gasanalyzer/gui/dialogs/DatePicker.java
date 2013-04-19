@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import pl.industrum.gasanalyzer.i18n.Messages;
 
 public class DatePicker extends Dialog {
 
@@ -25,7 +26,7 @@ public class DatePicker extends Dialog {
 	 */
 	public DatePicker(Shell parent, int style) {
 		super(parent, style);
-		setText("Wybierz date");
+		setText(Messages.getString("DatePicker.this.text")); //$NON-NLS-1$
 	}
 
 	/**
@@ -58,7 +59,7 @@ public class DatePicker extends Dialog {
 		calendar = new DateTime (shell, SWT.CALENDAR | SWT.BORDER);
 		
 		ok = new Button (shell, SWT.PUSH);
-		ok.setText ("OK");
+		ok.setText (Messages.getString("DatePicker.ok.text")); //$NON-NLS-1$
 		ok.setLayoutData(new GridData (SWT.FILL, SWT.CENTER, false, false));
 		ok.addSelectionListener (new SelectionAdapter () {
 			public void widgetSelected (SelectionEvent e) {

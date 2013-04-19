@@ -64,8 +64,8 @@ public class GasAnalyzerMainWindow {
 	        public void handleEvent(Event event)
 	        {
 	          MessageBox messageBox = new MessageBox(shlGasAnalyzer, SWT.YES | SWT.NO | SWT.ICON_QUESTION);
-	          messageBox.setText(Messages.getString("GasAnalyzerMainWindow.0")); //$NON-NLS-1$
-	          messageBox.setMessage(Messages.getString("GasAnalyzerMainWindow.1")); //$NON-NLS-1$
+	          messageBox.setText("Zakończ");
+	          messageBox.setMessage("Czy na pewno chcesz zamknąć aplikację?");
 	          if (messageBox.open() == SWT.YES)
 	          {
 	        	  statusBar.showProgressBar();
@@ -73,7 +73,7 @@ public class GasAnalyzerMainWindow {
 	        	  ELANConnection.getInstance().disconnect();
 	        	  statusBar.setProgress(100);
 	        	  portsList.setEnabled(true);	
-	        	  connect.setText(Messages.getString("GasAnalyzerMainWindow.2")); //$NON-NLS-1$
+	        	  connect.setText("Połącz");
 	        	  statusBar.setProgress(0);
 	        	  statusBar.hideProgressBar();
 	        	  event.doit = true;
@@ -101,7 +101,7 @@ public class GasAnalyzerMainWindow {
 	protected void createContents() {
 		shlGasAnalyzer = new Shell();
 		shlGasAnalyzer.setSize(650, 500);
-		shlGasAnalyzer.setText("Gas Analyzer"); //$NON-NLS-1$
+		shlGasAnalyzer.setText("Gas Analyzer");
 		shlGasAnalyzer.setLayout(new GridLayout(6, false));
 		
 		menu = new MainMenu(shlGasAnalyzer, SWT.BAR);
@@ -117,12 +117,12 @@ public class GasAnalyzerMainWindow {
 		connectBar.setLayoutData(connectBarData);
 		
 		Label lblNewLabel = new Label(connectBar, SWT.NONE);
-		lblNewLabel.setText("Port:"); //$NON-NLS-1$
+		lblNewLabel.setText("Port:");
 		
 		portsList = new CCombo(connectBar, SWT.BORDER);
 		
 		connect = new Button(connectBar, SWT.TOGGLE);
-		connect.setText("Połącz"); //$NON-NLS-1$
+		connect.setText("Połącz");
 		
 		for (String port: ELANConnection.vectorPorts()) 
 		{
@@ -139,14 +139,14 @@ public class GasAnalyzerMainWindow {
 		}				
 		
 		final Button btnOut = new Button(connectBar, SWT.RADIO);
-		btnOut.setText("out"); //$NON-NLS-1$
+		btnOut.setText("out");
 		btnOut.setSelection(true);
 		
 		final Button btnOkno = new Button(connectBar, SWT.RADIO);
-		btnOkno.setText("okno"); //$NON-NLS-1$
+		btnOkno.setText("okno");
 		
 		final Button btnPlik = new Button(connectBar, SWT.RADIO);
-		btnPlik.setText("plik"); //$NON-NLS-1$
+		btnPlik.setText("plik");
 				
 		connect.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -184,9 +184,9 @@ public class GasAnalyzerMainWindow {
 		        		{
 		        			try 
 		        			{
-		        				System.setErr(new PrintStream("err.log")); //$NON-NLS-1$
-		        				System.setOut(new PrintStream("out.log")); //$NON-NLS-1$
-		        				styledText.setText(Messages.getString("GasAnalyzerMainWindow.11")); //$NON-NLS-1$
+		        				System.setErr(new PrintStream("err.log"));
+		        				System.setOut(new PrintStream("out.log"));
+		        				styledText.setText("Pomiary są zapisywane do pliku out.log...");
 		        			} 
 		        			catch (FileNotFoundException e1) 
 		        			{
@@ -207,9 +207,9 @@ public class GasAnalyzerMainWindow {
 			        	portsList.setEnabled(false);
 			        	portsList.setVisible(false);			        	
 			        	statusBar.setProgress(90);
-			        	connect.setText(Messages.getString("GasAnalyzerMainWindow.12")); //$NON-NLS-1$
+			        	connect.setText("Rozłącz");
 			        	statusBar.setProgress(100);
-			        	statusBar.setStatusText(Messages.getString("GasAnalyzerMainWindow.13") + connectionState.getMessage()); //$NON-NLS-1$
+			        	statusBar.setStatusText("Status: " + connectionState.getMessage());
 			        	}
 			        	statusBar.setProgress(0);
 			        	statusBar.hideProgressBar();
@@ -221,7 +221,7 @@ public class GasAnalyzerMainWindow {
 		        		ELANConnection.getInstance().disconnect();
 		        		statusBar.setProgress(100);
 			        	portsList.setEnabled(true);	
-			        	connect.setText(Messages.getString("GasAnalyzerMainWindow.14")); //$NON-NLS-1$
+			        	connect.setText("Połącz");
 			        	statusBar.setProgress(0);
 			        	statusBar.hideProgressBar();
 		        	}

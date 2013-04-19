@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import pl.industrum.gasanalyzer.i18n.Messages;
 
 public class PdfDialog extends Dialog {
 
@@ -28,7 +29,7 @@ public class PdfDialog extends Dialog {
 	 */
 	public PdfDialog(Shell parent, int style) {
 		super(parent, style);
-		setText("Generuj raport jako pdf");
+		setText(Messages.getString("PdfDialog.this.text")); //$NON-NLS-1$
 	}
 
 	/**
@@ -59,7 +60,7 @@ public class PdfDialog extends Dialog {
 		
 		lblFilePath = new Label(shell, SWT.NONE);
 		lblFilePath.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblFilePath.setText("Nazwa pliku");
+		lblFilePath.setText(Messages.getString("PdfDialog.lblFilePath.text")); //$NON-NLS-1$
 		
 		textFilePath = new Text(shell, SWT.BORDER);
 		textFilePath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -78,6 +79,6 @@ public class PdfDialog extends Dialog {
 					textFilePath.setText(path);
 			}
 		});
-		btnBrowse.setText("Przeglądaj");
+		btnBrowse.setText(Messages.getString("PdfDialog.btnBrowse.text")); //$NON-NLS-1$
 	}
 }

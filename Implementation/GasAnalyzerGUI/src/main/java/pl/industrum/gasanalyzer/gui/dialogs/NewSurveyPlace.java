@@ -4,6 +4,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import pl.industrum.gasanalyzer.i18n.Messages;
 
 public class NewSurveyPlace extends Dialog {
 
@@ -17,7 +18,7 @@ public class NewSurveyPlace extends Dialog {
 	 */
 	public NewSurveyPlace(Shell parent, int style) {
 		super(parent, style);
-		setText("Nowy obiekt");
+		setText(Messages.getString("NewSurveyPlace.this.text")); //$NON-NLS-1$
 	}
 
 	/**
