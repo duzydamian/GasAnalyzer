@@ -2,6 +2,8 @@ package pl.industrum.gasanalyzer.gui.frames;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.ExpandEvent;
+import org.eclipse.swt.events.ExpandListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -20,12 +22,13 @@ import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.layout.FillLayout;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 /**
  * @author duzydamian (Damian Karbowiak)
  *
  */
-public class SurveyFrame extends Composite
+public abstract class SurveyFrame extends Composite
 {	
 
 	GridData surveyFrameData;
@@ -71,11 +74,22 @@ public class SurveyFrame extends Composite
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		expandBar = new ExpandBar(this, SWT.NONE);
+		expandBar.addExpandListener(new ExpandListener() {
+			
+			public void itemExpanded(ExpandEvent arg0) {
+				resize();
+			}
+			
+			public void itemCollapsed(ExpandEvent arg0) {
+				resize();
+			}
+		});
 		
 		xpndtmDanaPomiaru = new ExpandItem(expandBar, SWT.NONE);
 		xpndtmDanaPomiaru.setText(Messages.getString("SurveyFrame.xpndtmDanaPomiaru.text")); //$NON-NLS-1$
 		
 		surveyForm = new Composite(expandBar, SWT.NONE);
+		xpndtmDanaPomiaru.setHeight(surveyForm.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		xpndtmDanaPomiaru.setControl(surveyForm);
 		surveyForm.setLayout(new GridLayout(3, false));
 		
@@ -114,6 +128,7 @@ public class SurveyFrame extends Composite
 		listSurveyUser.add("Kuba guzik");
 		
 		btnNewSurveyUser = new Button(surveyForm, SWT.NONE);
+		btnNewSurveyUser.setImage(SWTResourceManager.getImage(SurveyFrame.class, "/pl/industrum/gasanalyzer/gui/add.png"));
 		btnNewSurveyUser.setText(Messages.getString("SurveyFrame.btnNewSurveyUser.text"));	 //$NON-NLS-1$
 		btnNewSurveyUser.addSelectionListener(new SelectionAdapter()
 		{
@@ -166,7 +181,7 @@ public class SurveyFrame extends Composite
 		styledTextComment.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		xpndtmDanaPomiaru.setHeight(xpndtmDanaPomiaru.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
 		
-	}
+	}	
 
 	@Override
 	protected void checkSubclass()
@@ -183,4 +198,6 @@ public class SurveyFrame extends Composite
 	{
 		
 	}
+	
+	public abstract void resize();
 }

@@ -22,16 +22,7 @@ public class DeviceTree extends Composite
 	public DeviceTree(Composite parent, int style)
 	{
 		super(parent, style);
-		setLayout(new GridLayout(3, false));
-		
-		Label lblSurveyStep = new Label(this, SWT.NONE);
-		lblSurveyStep.setText(Messages.getString("DeviceTree.lblSurveyStep.text")); //$NON-NLS-1$
-		
-		Spinner surveyStep = new Spinner(this, SWT.BORDER);
-		surveyStep.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		
-		Button btnOk = new Button(this, SWT.NONE);
-		btnOk.setText(Messages.getString("DeviceTree.btnOk.text")); //$NON-NLS-1$
+		setLayout(new GridLayout(3, false));				
 		
 		Tree deviceTree = new Tree(this, SWT.BORDER);
 		deviceTree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
@@ -45,6 +36,15 @@ public class DeviceTree extends Composite
 		TreeItem trtmUltramat_1 = new TreeItem(trtmWszystki, SWT.NONE);
 		trtmUltramat_1.setText(Messages.getString("DeviceTree.trtmUltramat_1.text(java.lang.String)")); //$NON-NLS-1$
 		trtmWszystki.setExpanded(true);
+		
+		Label lblSurveyStep = new Label(this, SWT.NONE);
+		lblSurveyStep.setText(Messages.getString("DeviceTree.lblSurveyStep.text")); //$NON-NLS-1$
+		
+		Spinner surveyStep = new Spinner(this, SWT.BORDER);
+		surveyStep.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		
+		Button btnOk = new Button(this, SWT.NONE);
+		btnOk.setText(Messages.getString("DeviceTree.btnOk.text")); //$NON-NLS-1$
 	}
 
 	@Override
