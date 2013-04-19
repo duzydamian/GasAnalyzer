@@ -121,19 +121,19 @@ public class GasAnalyzerMainWindow {
 		
 		portsList = new CCombo(connectBar, SWT.BORDER);
 		
-//		for (String port: ELANConnection.vectorPorts()) 
-//		{
-//			portsList.add(port);
-//		}
-//		
-//		if (portsList.getItemCount()>0)
-//		{
-//			portsList.select(0);
-//		}
-//		else
-//		{
-//			connect.setEnabled(false);
-//		}
+		for (String port: ELANConnection.vectorPorts()) 
+		{
+			portsList.add(port);
+		}
+		
+		if (portsList.getItemCount()>0)
+		{
+			portsList.select(0);
+		}
+		else
+		{
+			connect.setEnabled(false);
+		}
 		
 		connect = new Button(connectBar, SWT.TOGGLE);
 		connect.setText("Połącz");

@@ -95,7 +95,10 @@ public class ELANDataParser extends Observable implements Runnable
 	
 	public static Integer[] preparser( Queue<Integer> data )
 	{
-		return ELANDataParser.getAddresses( ELANDataParser.trimData( data ) );
+		Queue<Integer> dataTemp = new LinkedList<Integer>();
+		dataTemp.addAll(data);
+		
+		return ELANDataParser.getAddresses( ELANDataParser.trimData( dataTemp ) );
 	}
 	
 	public static Integer[] getAddresses( Queue<Integer> trimedData )

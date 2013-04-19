@@ -8,16 +8,18 @@ import java.util.Observer;
 import java.util.Queue;
 
 import pl.industrum.gasanalyzer.elan.communication.rx.ELANDataParser;
+import pl.industrum.gasanalyzer.elan.exceptions.DuplicateDeviceException;
+import pl.industrum.gasanalyzer.elan.exceptions.NullDeviceException;
 
 public class ELANNetwork implements Iterable<ELANMeasurementDevice>, Observer
 {
 	private String name;
-	private ArrayList<ELANMeasurementDevice> measurementDevices;
+	private ELANMeasurementDevice[] measurementDevices;
 	
 	public ELANNetwork( String name )
 	{
 		this.name = name;
-		this.measurementDevices = new ArrayList<ELANMeasurementDevice>( 255 );
+		initializeDevicesPool();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -35,11 +37,16 @@ public class ELANNetwork implements Iterable<ELANMeasurementDevice>, Observer
 				if( dataBuffer.size() > 0 )
 				{
 					//Preparser, used only to get source and target address
-					Integer deviceAddress = ELANDataParser.getAddresses( dataBuffer )[1];
+					//address = channel_address * 16 + component_address ()
+					Integer deviceAddress = ( ELANDataParser.preparser( dataBuffer )[1] )/16;
 					
 					//Start data parser thread to avoid frames lost.
 	            	ELANDataParser dataParserThread = new ELANDataParser( dataBuffer );
-	            	dataParserThread.addObserver( this.measurementDevices.get( deviceAddress ) );
+	            	if( measurementDevices[deviceAddress] == null )
+	            	{
+	            		addDevice( deviceAddress );
+	            	}
+	            	dataParserThread.addObserver( measurementDevices[deviceAddress] );
 	            	
 	            	Thread thread = new Thread( dataParserThread );
 	            	thread.start();
@@ -58,43 +65,61 @@ public class ELANNetwork implements Iterable<ELANMeasurementDevice>, Observer
 	
 	public Iterator<ELANMeasurementDevice> iterator() 
 	{        
-        Iterator<ELANMeasurementDevice> imeasurementDevices = measurementDevices.iterator();
+		ArrayList<ELANMeasurementDevice> measurementDevicesArray = new ArrayList<ELANMeasurementDevice>();
+		for( int i = 0; i < 12; i++ )
+		{
+			measurementDevicesArray.add(measurementDevices[i]);
+		}
+        Iterator<ELANMeasurementDevice> imeasurementDevices = measurementDevicesArray.iterator();
+        
         return imeasurementDevices; 
     }
 	
-	public boolean addDevice( String name, Integer deviceAddress )
+	public void initializeDevicesPool()
 	{
-		if( measurementDevices.get( deviceAddress ) != null )
+		measurementDevices = new ELANMeasurementDevice[12];
+		for( int i = 0; i < 12; i++ )
+		{
+			measurementDevices[i] = null;
+		}
+	}
+	
+	public void addDevice( String name, Integer deviceAddress ) throws DuplicateDeviceException
+	{
+		if( measurementDevices[deviceAddress.intValue()] == null )
 		{
 			ELANMeasurementDevice device = new ELANMeasurementDevice( name, deviceAddress );
-			measurementDevices.add( deviceAddress, device );
-			
-			return true;
+			measurementDevices[deviceAddress.intValue()] = device;
 		}
 		else
 		{
-			return false;
+			throw new DuplicateDeviceException( "Trying to duplicate device" );
 		}
 	}
 	
-	public boolean addDevice( Integer deviceAddress )
+	public void addDevice( Integer deviceAddress ) throws DuplicateDeviceException
 	{
-		if( measurementDevices.get( deviceAddress ) != null )
+		if( measurementDevices[deviceAddress] == null )
 		{
 			ELANMeasurementDevice device = new ELANMeasurementDevice( deviceAddress );
-			measurementDevices.add( deviceAddress, device );
-			
-			return true;
+			measurementDevices[deviceAddress] = device;
 		}
 		else
 		{
-			return false;
+			throw new DuplicateDeviceException( "Trying to duplicate device" );
 		}
 	}
 	
-	public boolean removeDevice( Integer deviceAddress )
+	public void removeDevice( Integer deviceAddress ) throws NullDeviceException
 	{
-		return measurementDevices.remove( deviceAddress );
+		if( measurementDevices[deviceAddress] != null )
+		{
+			measurementDevices[deviceAddress] = null;
+		}
+		else
+		{
+			throw new NullDeviceException( "There is no device with ID=" + deviceAddress.toString() + " in " + getName() + " network." );
+		}
 	}
 	
 	public String getName()
@@ -102,9 +127,17 @@ public class ELANNetwork implements Iterable<ELANMeasurementDevice>, Observer
 		return this.name;
 	}
 	
-	public ELANMeasurementDevice getDevice( int i )
+	public ELANMeasurementDevice getDevice( Integer deviceAddress ) throws NullDeviceException
 	{
-		return measurementDevices.get( i );
+		ELANMeasurementDevice device = measurementDevices[deviceAddress];
+		
+		if( device != null )
+		{
+			return device;
+		}
+		else
+		{
+			throw new NullDeviceException( "There is no device with ID=" + deviceAddress.toString() + " in " + getName() + " network." );
+		}
 	}
-
 }

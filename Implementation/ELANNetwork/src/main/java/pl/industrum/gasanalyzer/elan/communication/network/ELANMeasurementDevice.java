@@ -42,7 +42,7 @@ public class ELANMeasurementDevice implements Observer
 				
 				if( rx.isValid() )
 				{
-					rxFrameBuffer.add( rx );
+					//rxFrameBuffer.add( rx );
 					System.out.println(rx.getTimeStamp().toLocaleString());
 					for (ELANMeasurement measurement : (ELANRxBroadcastFrame)rx)
 					{
