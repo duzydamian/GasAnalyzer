@@ -14,7 +14,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import pl.industrum.gasanalyzer.i18n.Messages;
 
-public class XlsDialog extends Dialog {
+public class XlsDialog extends Dialog
+{
 
 	protected Object result;
 	protected Shell shell;
@@ -27,7 +28,8 @@ public class XlsDialog extends Dialog {
 	 * @param parent
 	 * @param style
 	 */
-	public XlsDialog(Shell parent, int style) {
+	public XlsDialog(Shell parent, int style)
+	{
 		super(parent, style);
 		setText(Messages.getString("XlsDialog.this.text")); //$NON-NLS-1$
 	}
@@ -36,13 +38,16 @@ public class XlsDialog extends Dialog {
 	 * Open the dialog.
 	 * @return the result
 	 */
-	public Object open() {
+	public Object open()
+	{
 		createContents();
 		shell.open();
 		shell.layout();
 		Display display = getParent().getDisplay();
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch()) {
+		while (!shell.isDisposed())
+		{
+			if (!display.readAndDispatch())
+			{
 				display.sleep();
 			}
 		}
@@ -52,7 +57,8 @@ public class XlsDialog extends Dialog {
 	/**
 	 * Create contents of the dialog.
 	 */
-	private void createContents() {
+	private void createContents()
+	{
 		shell = new Shell(getParent(), getStyle()| SWT.DIALOG_TRIM);
 		shell.setSize(450, 300);
 		shell.setText(getText());

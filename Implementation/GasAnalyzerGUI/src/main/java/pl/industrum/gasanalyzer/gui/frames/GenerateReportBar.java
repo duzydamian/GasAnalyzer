@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.ProgressBar;
 
 import pl.industrum.gasanalyzer.gui.dialogs.PdfDialog;
 import pl.industrum.gasanalyzer.gui.dialogs.XlsDialog;
+import pl.industrum.gasanalyzer.i18n.Messages;
 
 /**
  * @author duzydamian (Damian Karbowiak)
@@ -41,13 +42,13 @@ public class GenerateReportBar extends Composite
 		this.setLayoutData(compositeData);
 		
 		lblStatus = new Label(this, SWT.BOLD);
-		lblStatus.setText("Generuj raport: ");
+		lblStatus.setText(Messages.getString("GenerateReportBar.lblStatus.text")); //$NON-NLS-1$
 		
 		lblPdf = new Label(this, SWT.BOLD);
-		lblPdf.setText("Jako PDF: ");
+		lblPdf.setText(Messages.getString("GenerateReportBar.lblPdf.text")); //$NON-NLS-1$
 				
 		btnPdf = new Button(this, SWT.PUSH);
-		btnPdf.setText("PDF");
+		btnPdf.setText(Messages.getString("GenerateReportBar.btnPdf.text")); //$NON-NLS-1$
 		btnPdf.addSelectionListener(new SelectionAdapter()
 		{
 			@Override
@@ -58,14 +59,15 @@ public class GenerateReportBar extends Composite
 		});
 		
 		lblXls = new Label(this, SWT.BOLD);
-		lblXls.setText("Jako XLS: ");
+		lblXls.setText(Messages.getString("GenerateReportBar.lblXls.text")); //$NON-NLS-1$
 		
 		btnXls = new Button(this, SWT.PUSH);
-		btnXls.setText("XLS");
+		btnXls.setText(Messages.getString("GenerateReportBar.btnXls.text")); //$NON-NLS-1$
 		btnXls.addSelectionListener(new SelectionAdapter()
 		{
 			@Override
-			public void widgetSelected(SelectionEvent arg0) {	
+			public void widgetSelected(SelectionEvent arg0)
+			{	
 				XlsDialog xlsDialog = new XlsDialog(parent.getShell(), SWT.NONE);
 				xlsDialog.open();
 			}
@@ -83,7 +85,7 @@ public class GenerateReportBar extends Composite
 
 	@SuppressWarnings("unused")
 	private void hide()
-	{;
+	{
 		this.setVisible(false);
 	}
 	
@@ -94,7 +96,7 @@ public class GenerateReportBar extends Composite
 	}
 	
 	public void hideProgressBar()
-	{;
+	{
 		this.progressBar.setVisible(false);
 	}
 	

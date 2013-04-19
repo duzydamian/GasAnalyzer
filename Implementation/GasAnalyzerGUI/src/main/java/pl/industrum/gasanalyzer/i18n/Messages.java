@@ -4,13 +4,15 @@ import java.beans.Beans;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class Messages {
+public class Messages
+{
 	////////////////////////////////////////////////////////////////////////////
 	//
 	// Constructor
 	//
 	////////////////////////////////////////////////////////////////////////////
-	private Messages() {
+	private Messages()
+	{
 		// do not instantiate
 	}
 	////////////////////////////////////////////////////////////////////////////
@@ -20,7 +22,8 @@ public class Messages {
 	////////////////////////////////////////////////////////////////////////////
 	private static final String BUNDLE_NAME = "pl.industrum.gasanalyzer.i18n.messages"; //$NON-NLS-1$
 	private static final ResourceBundle RESOURCE_BUNDLE = loadBundle();
-	private static ResourceBundle loadBundle() {
+	private static ResourceBundle loadBundle()
+	{
 		return ResourceBundle.getBundle(BUNDLE_NAME);
 	}
 	////////////////////////////////////////////////////////////////////////////
@@ -28,11 +31,15 @@ public class Messages {
 	// Strings access
 	//
 	////////////////////////////////////////////////////////////////////////////
-	public static String getString(String key) {
-		try {
+	public static String getString(String key)
+	{
+		try
+		{
 			ResourceBundle bundle = Beans.isDesignTime() ? loadBundle() : RESOURCE_BUNDLE;
 			return bundle.getString(key);
-		} catch (MissingResourceException e) {
+		}
+		catch (MissingResourceException e)
+		{
 			return "!" + key + "!";
 		}
 	}

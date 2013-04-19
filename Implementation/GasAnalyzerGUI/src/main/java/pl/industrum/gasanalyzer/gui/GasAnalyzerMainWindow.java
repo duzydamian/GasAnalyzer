@@ -28,9 +28,10 @@ import pl.industrum.gasanalyzer.gui.frames.GenerateReportBar;
 import pl.industrum.gasanalyzer.gui.frames.MainMenu;
 import pl.industrum.gasanalyzer.gui.frames.StatusBar;
 import pl.industrum.gasanalyzer.gui.frames.SurveyFrame;
+import pl.industrum.gasanalyzer.i18n.Messages;
 
-public class GasAnalyzerMainWindow {
-
+public class GasAnalyzerMainWindow
+{
 	protected Shell shlGasAnalyzer;	
 	
 	/**
@@ -47,7 +48,8 @@ public class GasAnalyzerMainWindow {
 	private GenerateReportBar generateReportBar;
 	
 
-	public GasAnalyzerMainWindow() {
+	public GasAnalyzerMainWindow()
+	{
 		super();
 		outSelected = false;
 	}
@@ -55,7 +57,8 @@ public class GasAnalyzerMainWindow {
 	/**
 	 * Open the window.
 	 */
-	public void open() {
+	public void open()
+	{
 		Display display = Display.getDefault();
 		createContents();
 		
@@ -87,8 +90,10 @@ public class GasAnalyzerMainWindow {
 	        
 		shlGasAnalyzer.open();
 		shlGasAnalyzer.layout();
-		while (!shlGasAnalyzer.isDisposed()) {
-			if (!display.readAndDispatch()) {
+		while (!shlGasAnalyzer.isDisposed())
+		{
+			if (!display.readAndDispatch())
+			{
 				display.sleep();
 			}
 		}
@@ -98,10 +103,11 @@ public class GasAnalyzerMainWindow {
 	 * Create contents of the window.
 	 * @wbp.parser.entryPoint
 	 */
-	protected void createContents() {
+	protected void createContents()
+	{
 		shlGasAnalyzer = new Shell();
 		shlGasAnalyzer.setSize(650, 500);
-		shlGasAnalyzer.setText("Gas Analyzer");
+		shlGasAnalyzer.setText(Messages.getString("GasAnalyzerMainWindow.shlGasAnalyzer.text")); //$NON-NLS-1$
 		shlGasAnalyzer.setLayout(new GridLayout(6, false));
 		
 		menu = new MainMenu(shlGasAnalyzer, SWT.BAR);
@@ -117,12 +123,12 @@ public class GasAnalyzerMainWindow {
 		connectBar.setLayoutData(connectBarData);
 		
 		Label lblNewLabel = new Label(connectBar, SWT.NONE);
-		lblNewLabel.setText("Port:");
+		lblNewLabel.setText(Messages.getString("GasAnalyzerMainWindow.lblNewLabel.text")); //$NON-NLS-1$
 		
 		portsList = new CCombo(connectBar, SWT.BORDER);
 		
 		connect = new Button(connectBar, SWT.TOGGLE);
-		connect.setText("Połącz");
+		connect.setText(Messages.getString("GasAnalyzerMainWindow.connect.text")); //$NON-NLS-1$
 		
 		for (String port: ELANConnection.vectorPorts()) 
 		{
@@ -139,18 +145,20 @@ public class GasAnalyzerMainWindow {
 		}				
 		
 		final Button btnOut = new Button(connectBar, SWT.RADIO);
-		btnOut.setText("out");
+		btnOut.setText(Messages.getString("GasAnalyzerMainWindow.btnOut.text")); //$NON-NLS-1$
 		btnOut.setSelection(true);
 		
 		final Button btnOkno = new Button(connectBar, SWT.RADIO);
-		btnOkno.setText("okno");
+		btnOkno.setText(Messages.getString("GasAnalyzerMainWindow.btnOkno.text")); //$NON-NLS-1$
 		
 		final Button btnPlik = new Button(connectBar, SWT.RADIO);
-		btnPlik.setText("plik");
+		btnPlik.setText(Messages.getString("GasAnalyzerMainWindow.btnPlik.text")); //$NON-NLS-1$
 				
-		connect.addSelectionListener(new SelectionAdapter() {
+		connect.addSelectionListener(new SelectionAdapter()
+		{
 			@Override
-			public void widgetSelected(SelectionEvent arg0) {
+			public void widgetSelected(SelectionEvent arg0)
+			{
 				boolean state = connect.getSelection();
 		        try
 		        {
@@ -165,7 +173,8 @@ public class GasAnalyzerMainWindow {
 		        	        System.setOut(new PrintStream(new OutputStream()
 		        	        {	
 		        				@Override
-		        				public void write(final int arg0) throws IOException {
+		        				public void write(final int arg0) throws IOException
+		        				{
 		        					Display.getDefault().syncExec( 
 		        							new Runnable() 
 		        							{
@@ -204,12 +213,12 @@ public class GasAnalyzerMainWindow {
 			        	if (connectionState.isConnected())
 			        	{
 			        		statusBar.setProgress(75);
-			        	portsList.setEnabled(false);
-			        	portsList.setVisible(false);			        	
-			        	statusBar.setProgress(90);
-			        	connect.setText("Rozłącz");
-			        	statusBar.setProgress(100);
-			        	statusBar.setStatusText("Status: " + connectionState.getMessage());
+				        	portsList.setEnabled(false);
+				        	portsList.setVisible(false);			        	
+				        	statusBar.setProgress(90);
+				        	connect.setText("Rozłącz");
+				        	statusBar.setProgress(100);
+				        	statusBar.setStatusText("Status: " + connectionState.getMessage());
 			        	}
 			        	statusBar.setProgress(0);
 			        	statusBar.hideProgressBar();

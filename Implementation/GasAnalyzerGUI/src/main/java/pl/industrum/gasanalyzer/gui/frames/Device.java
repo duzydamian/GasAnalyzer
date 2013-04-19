@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
+import pl.industrum.gasanalyzer.i18n.Messages;
 
 /**
  * @author duzydamian (Damian Karbowiak)
@@ -34,10 +35,10 @@ public class Device extends Composite
 		grpName.setLayout(new GridLayout(2, false));
 		
 		Label lblStan = new Label(grpName, SWT.NONE);
-		lblStan.setText("Stan");
+		lblStan.setText(Messages.getString("Device.lblStan.text")); //$NON-NLS-1$
 		
 		Label lblOk = new Label(grpName, SWT.NONE);
-		lblOk.setText("OK");
+		lblOk.setText(Messages.getString("Device.lblOk.text")); //$NON-NLS-1$
 	}
 
 	@Override

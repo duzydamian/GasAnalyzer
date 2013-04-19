@@ -19,6 +19,7 @@ import pl.industrum.gasanalyzer.gui.dialogs.NewSurveyPlace;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.layout.FillLayout;
+import pl.industrum.gasanalyzer.i18n.Messages;
 
 /**
  * @author duzydamian (Damian Karbowiak)
@@ -72,7 +73,7 @@ public class SurveyFrame extends Composite
 		expandBar = new ExpandBar(this, SWT.NONE);
 		
 		xpndtmDanaPomiaru = new ExpandItem(expandBar, SWT.NONE);
-		xpndtmDanaPomiaru.setText("Dane pomiaru");
+		xpndtmDanaPomiaru.setText(Messages.getString("SurveyFrame.xpndtmDanaPomiaru.text")); //$NON-NLS-1$
 		
 		surveyForm = new Composite(expandBar, SWT.NONE);
 		xpndtmDanaPomiaru.setControl(surveyForm);
@@ -80,19 +81,19 @@ public class SurveyFrame extends Composite
 		
 		lblSurveyName = new Label(surveyForm, SWT.NONE);
 		lblSurveyName.setSize(44, 17);
-		lblSurveyName.setText("Nazwa");
+		lblSurveyName.setText(Messages.getString("SurveyFrame.lblSurveyName.text")); //$NON-NLS-1$
 		
 		txtSurveyName = new Text(surveyForm, SWT.BORDER);
 		txtSurveyName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		
 		lblSurveyDate = new Label(surveyForm, SWT.NONE);
-		lblSurveyDate.setText("Data");
+		lblSurveyDate.setText(Messages.getString("SurveyFrame.lblSurveyDate.text")); //$NON-NLS-1$
 		
 		txtSurveyDate = new DateTime(surveyForm, SWT.DATE);
 		txtSurveyDate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		
 		btnSelectDate = new Button(surveyForm, SWT.NONE);
-		btnSelectDate.setText("Wybierz");	
+		btnSelectDate.setText(Messages.getString("SurveyFrame.btnSelectDate.text"));	 //$NON-NLS-1$
 		btnSelectDate.addSelectionListener(new SelectionAdapter()
 		{
 			public void widgetSelected (SelectionEvent e)
@@ -100,13 +101,12 @@ public class SurveyFrame extends Composite
 				DatePicker datePicker = new DatePicker(parent.getShell(), SWT.NONE);
 				int[] date = datePicker.open();
 				if (date != null)
-					txtSurveyDate.setDate(date[0], date[1], date[2]);
-				
+					txtSurveyDate.setDate(date[0], date[1], date[2]);				
 			}
 		});
 		
 		lblSurveyUser = new Label(surveyForm, SWT.NONE);
-		lblSurveyUser.setText("Prowadzący pomiary");
+		lblSurveyUser.setText(Messages.getString("SurveyFrame.lblSurveyUser.text")); //$NON-NLS-1$
 		
 		listSurveyUser = new Combo(surveyForm, SWT.NONE);
 		listSurveyUser.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -114,7 +114,7 @@ public class SurveyFrame extends Composite
 		listSurveyUser.add("Kuba guzik");
 		
 		btnNewSurveyUser = new Button(surveyForm, SWT.NONE);
-		btnNewSurveyUser.setText("Nowy");	
+		btnNewSurveyUser.setText(Messages.getString("SurveyFrame.btnNewSurveyUser.text"));	 //$NON-NLS-1$
 		btnNewSurveyUser.addSelectionListener(new SelectionAdapter()
 		{
 			public void widgetSelected (SelectionEvent e)
@@ -127,7 +127,7 @@ public class SurveyFrame extends Composite
 		});
 		
 		lblSurveyPlace = new Label(surveyForm, SWT.NONE);
-		lblSurveyPlace.setText("Obiekt");
+		lblSurveyPlace.setText(Messages.getString("SurveyFrame.lblSurveyPlace.text")); //$NON-NLS-1$
 		
 		listSurveyPlace = new Combo(surveyForm, SWT.NONE);
 		listSurveyPlace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -135,7 +135,7 @@ public class SurveyFrame extends Composite
 		listSurveyPlace.add("Mordor");
 		
 		btnNewSurveyPlace = new Button(surveyForm, SWT.NONE);
-		btnNewSurveyPlace.setText("Nowy");
+		btnNewSurveyPlace.setText(Messages.getString("SurveyFrame.btnNewSurveyPlace.text")); //$NON-NLS-1$
 		btnNewSurveyPlace.addSelectionListener(new SelectionAdapter()
 		{
 			public void widgetSelected (SelectionEvent e)
@@ -148,19 +148,19 @@ public class SurveyFrame extends Composite
 		});
 		
 		lblSurveyLoad = new Label(surveyForm, SWT.NONE);
-		lblSurveyLoad.setText("Obciążenie");
+		lblSurveyLoad.setText(Messages.getString("SurveyFrame.lblSurveyLoad.text")); //$NON-NLS-1$
 		
 		textSurveyLoad = new Text(surveyForm, SWT.BORDER);
 		textSurveyLoad.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		
 		lblSurveySpecialConditions = new Label(surveyForm, SWT.NONE);
-		lblSurveySpecialConditions.setText("Warunki szczególne");
+		lblSurveySpecialConditions.setText(Messages.getString("SurveyFrame.lblSurveySpecialConditions.text")); //$NON-NLS-1$
 		
 		styledTextSurveySpecialConditions = new StyledText(surveyForm, SWT.BORDER);
 		styledTextSurveySpecialConditions.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		
 		lblComment = new Label(surveyForm, SWT.NONE);
-		lblComment.setText("Komentarz");
+		lblComment.setText(Messages.getString("SurveyFrame.lblComment.text")); //$NON-NLS-1$
 		
 		styledTextComment = new StyledText(surveyForm, SWT.BORDER);
 		styledTextComment.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));

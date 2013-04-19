@@ -6,6 +6,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
+import pl.industrum.gasanalyzer.i18n.Messages;
 
 /**
  * @author duzydamian (Damian Karbowiak)
@@ -31,7 +32,7 @@ public class StatusBar extends Composite
 		this.setLayoutData(compositeData);
 		
 		lblStatus = new Label(this, SWT.BOLD);
-		lblStatus.setText("Status: ");
+		lblStatus.setText(Messages.getString("StatusBar.lblStatus.text")); //$NON-NLS-1$
 		
 		progressBar = new ProgressBar(this, SWT.BORDER);
 		progressBar.setVisible(false);

@@ -11,7 +11,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import pl.industrum.gasanalyzer.i18n.Messages;
 
-public class NewSurveyUser extends Dialog {
+public class NewSurveyUser extends Dialog
+{
 
 	protected Object result;
 	protected Shell shell;
@@ -29,7 +30,8 @@ public class NewSurveyUser extends Dialog {
 	 * @param parent
 	 * @param style
 	 */
-	public NewSurveyUser(Shell parent, int style) {
+	public NewSurveyUser(Shell parent, int style)
+	{
 		super(parent, style);
 		setText(Messages.getString("NewSurveyUser.this.text")); //$NON-NLS-1$
 	}
@@ -38,13 +40,16 @@ public class NewSurveyUser extends Dialog {
 	 * Open the dialog.
 	 * @return the result
 	 */
-	public Object open() {
+	public Object open()
+	{
 		createContents();
 		shell.open();
 		shell.layout();
 		Display display = getParent().getDisplay();
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch()) {
+		while (!shell.isDisposed())
+		{
+			if (!display.readAndDispatch())
+			{
 				display.sleep();
 			}
 		}
@@ -54,7 +59,8 @@ public class NewSurveyUser extends Dialog {
 	/**
 	 * Create contents of the dialog.
 	 */
-	private void createContents() {
+	private void createContents()
+	{
 		shell = new Shell(getParent(), getStyle() | SWT.DIALOG_TRIM);
 		shell.setSize(300, 165);
 		shell.setText(getText());
