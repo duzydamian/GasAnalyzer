@@ -7,7 +7,6 @@ import java.io.PrintStream;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -208,13 +207,6 @@ public class GasAnalyzerMainWindow
 			}			
 		};	
 		
-		shlGasAnalyzer.addListener (SWT.Resize,  new Listener () {
-			    public void handleEvent (Event e) {
-			      Rectangle rect = shlGasAnalyzer.getClientArea ();
-			      System.out.println(rect);
-			    }
-			  });
-		
 		GridData connectBarData = new GridData(GridData.FILL, GridData.CENTER, true, false);
 		connectBarData.horizontalSpan = 6;
 		
@@ -239,6 +231,7 @@ public class GasAnalyzerMainWindow
 		composite.setLayoutData(compositeData);
 		
 		deviceTree = new DeviceTree(composite, SWT.V_SCROLL);
+		deviceTree.redraw();
 		
 		styledText = new StyledText(composite, SWT.BORDER | SWT.V_SCROLL);
 		styledText.setAlignment(SWT.CENTER);				

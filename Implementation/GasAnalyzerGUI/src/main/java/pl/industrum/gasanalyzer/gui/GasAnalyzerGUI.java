@@ -23,8 +23,14 @@ public class GasAnalyzerGUI
 	{
 		try
 		{		
-			GasAnalyzerMainWindow window = new GasAnalyzerMainWindow();
-			window.open();
+			SplashScreen splashScreen = new SplashScreen();
+			splashScreen.open();
+			
+			if ( splashScreen.isAllTestComplete() )
+			{
+				GasAnalyzerMainWindow window = new GasAnalyzerMainWindow();
+				window.open();
+			}
 		}
 		catch (Exception e)
 		{

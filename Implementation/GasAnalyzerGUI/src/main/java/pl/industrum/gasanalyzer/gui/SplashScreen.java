@@ -5,28 +5,38 @@ import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.layout.*;
 
+import pl.industrum.gasanalyzer.test.TestVector;
+
 public class SplashScreen
 {
+	private TestVector testVector;
+	private ProgressBar progressBar;
+	private int testsCount;
+	private FormData progressBarData;
+	private Label label;
+	private Label stateLabel;
+	private FormData stateLabelData;
+	private FormLayout layout;
+	private Shell splash;
+	private GC gc;
+	private Image image;
+	private Display display;
+	private Rectangle splashRect;
+	private Rectangle displayRect;
+	private FormData labelData;
+	private boolean allTestComplete;
 
-	private static ProgressBar progressBar;
-	private static int testsCount;
-	private static FormData progressBarData;
-	private static Label label;
-	private static Label stateLabel;
-	private static FormData stateLabelData;
-	private static FormLayout layout;
-	private static Shell splash;
-	private static GC gc;
-	private static Image image;
-	private static Display display;
-	private static Rectangle splashRect;
-	private static Rectangle displayRect;
-	private static FormData labelData;
-
-	public static void main(String[] args)
+	public SplashScreen()
 	{
+		super();
+	}
+	
+	public void open()
+	{
+		allTestComplete = true;
 		display = new Display();
-		testsCount = 10;
+		testVector = new TestVector();
+		testsCount = testVector.size();
 		image = new Image(display, 300, 300);
 		gc = new GC(image);
 		gc.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
@@ -80,16 +90,18 @@ public class SplashScreen
 			public void run()
 			{
 				for (int i=0; i<testsCount; i++)
-				{			
-					progressBar.setSelection(i+1);
+				{													
 					try
 					{
-						Thread.sleep(100);
+						stateLabel.setText(testVector.get(i).getName());
+						testVector.get(i).test();
+						Thread.sleep(500);
 					}
 					catch (Throwable e)
 					{
 						e.printStackTrace();
 					}
+					progressBar.setSelection(i+1);
 				}
 				splash.close();
 				image.dispose();
@@ -105,4 +117,11 @@ public class SplashScreen
 		}
 	}
 
+	/**
+	 * @return the allTestComplete
+	 */
+	public boolean isAllTestComplete()
+	{
+		return allTestComplete;
+	}
 }
