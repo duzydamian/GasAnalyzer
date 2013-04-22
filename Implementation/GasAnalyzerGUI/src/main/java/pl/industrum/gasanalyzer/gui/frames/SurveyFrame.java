@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import pl.industrum.gasanalyzer.gui.SWTResourceManager;
 import pl.industrum.gasanalyzer.gui.dialogs.NewSurveyUser;
 import pl.industrum.gasanalyzer.gui.dialogs.DatePicker;
 import pl.industrum.gasanalyzer.gui.dialogs.NewSurveyPlace;
@@ -22,7 +23,6 @@ import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.layout.FillLayout;
 import pl.industrum.gasanalyzer.i18n.Messages;
-import org.eclipse.wb.swt.SWTResourceManager;
 
 /**
  * @author duzydamian (Damian Karbowiak)

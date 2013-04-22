@@ -85,7 +85,7 @@ public class SplashScreen
 		splash.setLocation(x, y);
 		splash.open();
 		
-		display.asyncExec(new Runnable()
+		display.syncExec(new Runnable()
 		{
 			public void run()
 			{

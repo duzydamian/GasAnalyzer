@@ -9,6 +9,8 @@ package pl.industrum.gasanalyzer.gui;
  */
 public class GasAnalyzerGUI
 {	
+	private static String RXTXVersion;
+	private static String NativeRXTXVersion;
 	
 	public GasAnalyzerGUI()
 	{
@@ -36,5 +38,37 @@ public class GasAnalyzerGUI
 		{
 			e.printStackTrace();
 		}		       
+	}
+
+	/**
+	 * @return the rXTXVersion
+	 */
+	public static String getRXTXVersion()
+	{
+		return RXTXVersion;
+	}
+
+	/**
+	 * @param rXTXVersion the rXTXVersion to set
+	 */
+	public static void setRXTXVersion(String rXTXVersion)
+	{
+		RXTXVersion = rXTXVersion;
+	}
+
+	/**
+	 * @return the nativeRXTXVersion
+	 */
+	public static String getNativeRXTXVersion()
+	{
+		return NativeRXTXVersion;
+	}
+
+	/**
+	 * @param nativeRXTXVersion the nativeRXTXVersion to set
+	 */
+	public static void setNativeRXTXVersion(String nativeRXTXVersion)
+	{
+		NativeRXTXVersion = nativeRXTXVersion;
 	}       
 }

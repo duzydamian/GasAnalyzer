@@ -2,6 +2,7 @@ package pl.industrum.gasanalyzer.elan.communication;
 
 import gnu.io.CommPort;
 import gnu.io.CommPortIdentifier;
+import gnu.io.RXTXVersion;
 import gnu.io.SerialPort;
 
 import java.io.BufferedReader;
@@ -234,7 +235,7 @@ public class ELANConnection
 	
 	@SuppressWarnings("unchecked")
 	public static void listPorts()
-	{
+	{		
 		Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
 		while (portEnum.hasMoreElements())
 		{
@@ -260,5 +261,15 @@ public class ELANConnection
 		default:
 			return "Unknown type";
 		}
+	}
+	
+	public static String getRXTXVersion()
+	{
+		return RXTXVersion.getVersion();
+	}
+	
+	public static String getNativeRXTXVersion()
+	{
+		return RXTXVersion.nativeGetVersion();
 	}
 }
