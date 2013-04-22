@@ -1,19 +1,22 @@
 package pl.industrum.gasanalyzer.gui.dialogs;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
+
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.types.UsefulColor;
 
 public class NewSurveyUser extends Dialog
 {
-
 	protected Object result;
 	protected Shell shell;
 	private Text textTitle;
@@ -24,6 +27,7 @@ public class NewSurveyUser extends Dialog
 	private Label lblSurname;
 	private Button btnOk;
 	private Button btnCancel;
+	private Display display;
 
 	/**
 	 * Create the dialog.
@@ -45,7 +49,7 @@ public class NewSurveyUser extends Dialog
 		createContents();
 		shell.open();
 		shell.layout();
-		Display display = getParent().getDisplay();
+		display = getParent().getDisplay();
 		while (!shell.isDisposed())
 		{
 			if (!display.readAndDispatch())
@@ -89,10 +93,61 @@ public class NewSurveyUser extends Dialog
 		btnOk = new Button(shell, SWT.NONE);
 		btnOk.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnOk.setText(Messages.getString("NewSurveyUser.btnOk.text")); //$NON-NLS-1$
+		btnOk.addSelectionListener(new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected(SelectionEvent arg0)
+			{
+				if (validate())
+				{
+					saveAction();
+					shell.dispose();
+				}
+			}
+		});
 				
 		btnCancel = new Button(shell, SWT.NONE);
 		btnCancel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnCancel.setText(Messages.getString("NewSurveyUser.btnCancel.text")); //$NON-NLS-1$
+		btnCancel.addSelectionListener(new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected(SelectionEvent arg0)
+			{
+				shell.dispose();
+			}
+		});
 	}
 
+	protected void saveAction()
+	{
+		System.out.println(textTitle.getText()+" "+textName.getText()+" "+textSurname.getText());
+	}
+
+	private boolean validate()
+	{
+		boolean isValid = true;
+		
+		if( textName.getText().isEmpty() | textName.getText() == null )
+		{
+			textName.setBackground(UsefulColor.RED_ERROR.getColor());
+			isValid = false;
+		}
+		else
+		{
+			textName.setBackground(UsefulColor.WHITE.getColor());
+		}
+		
+		if( textSurname.getText().isEmpty() | textSurname.getText() == null )
+		{
+			textSurname.setBackground(UsefulColor.RED_ERROR.getColor());
+			isValid = false;
+		}
+		else
+		{
+			textSurname.setBackground(UsefulColor.WHITE.getColor());
+		}
+		
+		return isValid;
+	}
 }
