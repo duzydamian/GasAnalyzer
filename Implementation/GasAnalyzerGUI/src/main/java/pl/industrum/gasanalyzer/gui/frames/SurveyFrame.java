@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
@@ -75,17 +76,92 @@ public abstract class SurveyFrame extends Composite
 		
 		expandBar = new ExpandBar(this, SWT.NONE);
 		expandBar.addExpandListener(new ExpandListener() {
-			
-			public void itemExpanded(ExpandEvent arg0) {
-				resize();
-			}
-			
-			public void itemCollapsed(ExpandEvent arg0) {
-				resize();
-			}
-		});
+
+            private void resize(final ExpandEvent event, final boolean expand){
+
+                final Display display = Display.getCurrent();
+
+                new Thread(new Runnable() {
+                    public void run() {
+
+                        final int[] orgSize = new int[1];
+                        final int[] currentSize = new int[1];
+
+                        final Object lock = new Object();
+
+                        if (display.isDisposed() || expandBar.isDisposed())
+                        {
+                            return;
+                        }
+
+                        display.syncExec(new Runnable()
+                        {
+                            public void run()
+                            {
+                                if (expandBar.isDisposed() || expandBar.getShell().isDisposed())
+                                {
+                                    return;
+                                }
+
+                                synchronized(lock)
+                                {
+                                	expandBar.getShell().pack(true);
+                                    orgSize[0] = expandBar.getShell().getSize().y;
+                                    currentSize[0] = orgSize[0];
+                                }
+                            }
+                        });     
+
+                        while (currentSize[0] == orgSize[0])
+                        {
+                            if (display.isDisposed() || expandBar.isDisposed())
+                            {
+                                return;
+                            }
+
+                            display.syncExec(new Runnable()
+                            {
+                                public void run()
+                                {
+
+                                    synchronized(lock)
+                                    {
+                                        if (expandBar.isDisposed() || expandBar.getShell().isDisposed())
+                                        {
+                                            return;
+                                        }
+
+                                        currentSize[0] = expandBar.getShell().getSize().y;
+
+                                        if (currentSize[0] != orgSize[0])
+                                        {
+                                            return;
+                                        }
+                                        else
+                                        {
+                                        	expandBar.getShell().layout(true);
+                                        	expandBar.getShell().pack(true);
+                                        }
+                                    }
+                                }
+                            });                             
+                        }
+                    }
+                }).start();
+        }
+
+        public void itemCollapsed(ExpandEvent event) {
+            resize(event, false);
+        }
+
+        public void itemExpanded(ExpandEvent event) {        
+            resize(event, true);
+        }
+
+        });
 		
 		xpndtmDanaPomiaru = new ExpandItem(expandBar, SWT.NONE);
+		xpndtmDanaPomiaru.setExpanded(true);
 		xpndtmDanaPomiaru.setText(Messages.getString("SurveyFrame.xpndtmDanaPomiaru.text")); //$NON-NLS-1$
 		
 		surveyForm = new Composite(expandBar, SWT.NONE);
@@ -180,9 +256,8 @@ public abstract class SurveyFrame extends Composite
 		styledTextComment = new StyledText(surveyForm, SWT.BORDER);
 		styledTextComment.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		xpndtmDanaPomiaru.setHeight(xpndtmDanaPomiaru.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-		
 	}	
-
+	
 	@Override
 	protected void checkSubclass()
 	{

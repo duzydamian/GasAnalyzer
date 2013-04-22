@@ -203,7 +203,8 @@ public class GasAnalyzerMainWindow
 			@Override
 			public void resize()
 			{				
-				
+				layout();
+				getParent().layout();
 			}			
 		};	
 		

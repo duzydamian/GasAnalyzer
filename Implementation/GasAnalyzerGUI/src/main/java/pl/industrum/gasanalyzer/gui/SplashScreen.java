@@ -26,11 +26,17 @@ public class SplashScreen
 	private FormData labelData;
 	private boolean allTestComplete;
 
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	public SplashScreen()
 	{
 		super();
 	}
 	
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	public void open()
 	{
 		allTestComplete = true;
@@ -95,7 +101,7 @@ public class SplashScreen
 					{
 						stateLabel.setText(testVector.get(i).getName());
 						testVector.get(i).test();
-						Thread.sleep(500);
+						Thread.sleep(1000);
 					}
 					catch (Throwable e)
 					{
@@ -119,6 +125,7 @@ public class SplashScreen
 
 	/**
 	 * @return the allTestComplete
+	 * @wbp.parser.entryPoint
 	 */
 	public boolean isAllTestComplete()
 	{

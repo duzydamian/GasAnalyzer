@@ -1,6 +1,10 @@
 package pl.industrum.gasanalyzer.gui.frames;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.SWT;
@@ -49,10 +53,34 @@ public class DeviceTree extends Composite
 		lblSurveyStep.setText(Messages.getString("DeviceTree.lblSurveyStep.text")); //$NON-NLS-1$
 		
 		surveyStep = new Spinner(this, SWT.BORDER);
+		surveyStep.setMinimum(1);
+		surveyStep.setMaximum(9999);
+		surveyStep.setSelection(60);
 		surveyStep.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		surveyStep.addModifyListener(new ModifyListener()
+		{			
+			public void modifyText(ModifyEvent arg0)
+			{
+				btnOk.setEnabled(true);
+			}
+		});
 		
 		btnOk = new Button(this, SWT.NONE);
 		btnOk.setText(Messages.getString("DeviceTree.btnOk.text")); //$NON-NLS-1$
+		btnOk.addSelectionListener(new SelectionAdapter()
+		{
+			public void widgetSelected (SelectionEvent e)
+			{
+				setSurveyStep();
+				btnOk.setEnabled(false);
+			}
+		});
+	}
+
+	protected void setSurveyStep()
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
