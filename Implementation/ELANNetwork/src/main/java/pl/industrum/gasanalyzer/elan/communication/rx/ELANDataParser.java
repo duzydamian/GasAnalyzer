@@ -8,6 +8,7 @@ import java.util.Queue;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxFrame;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxInvalidFrame;
+import pl.industrum.gasanalyzer.elan.notifications.ELANDataParserNotification;
 import pl.industrum.gasanalyzer.elan.types.ELANChannelState;
 import pl.industrum.gasanalyzer.elan.types.ELANCollectiveChannelState;
 import pl.industrum.gasanalyzer.elan.types.ELANDimension;
@@ -90,7 +91,7 @@ public class ELANDataParser extends Observable implements Runnable
 		}
 		
 		setChanged();
-		notifyObservers( rxFrame );
+		notifyObservers( new ELANDataParserNotification( rxFrame ) );
 	}
 	
 	public static Integer[] preparser( Queue<Integer> data )

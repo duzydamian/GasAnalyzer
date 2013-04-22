@@ -4,6 +4,7 @@ import java.util.Observable;
 import java.util.Queue;
 
 import pl.industrum.gasanalyzer.elan.communication.ELANCommunication;
+import pl.industrum.gasanalyzer.elan.notifications.ELANRxByteBufferNotification;
 
 public class ELANRxByteBuffer extends Observable implements Runnable
 {	
@@ -28,7 +29,7 @@ public class ELANRxByteBuffer extends Observable implements Runnable
 	        	if(frame != null && i%10==0)
 	        	{	        		
 		        	setChanged();
-		        	notifyObservers( frame );
+		        	notifyObservers( new ELANRxByteBufferNotification( frame ) );
 	        	}
 			}
 			catch( Exception e )

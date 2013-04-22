@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.Observable;
+import java.util.Observer;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
@@ -29,7 +31,8 @@ import pl.industrum.gasanalyzer.gui.frames.MainMenu;
 import pl.industrum.gasanalyzer.gui.frames.StatusBar;
 import pl.industrum.gasanalyzer.gui.frames.SurveyFrame;
 
-public class GasAnalyzerMainWindow {
+public class GasAnalyzerMainWindow implements Observer
+{
 
 	protected Shell shlGasAnalyzer;	
 	
@@ -50,6 +53,30 @@ public class GasAnalyzerMainWindow {
 	public GasAnalyzerMainWindow() {
 		super();
 		outSelected = false;
+	}
+	
+	public void update( Observable obj, Object arg )
+	{
+	}
+	
+	public ELANConnectionState connect() throws Exception
+	{
+		//!!! Every network should join to only one connection
+		//every connection should join only one network
+		//because every port is a network and it needs to have
+		//connections itself (maybe we could just move some parts
+		//of connection to Network and live only network aggregation
+		//or we should change the singleton)
+		ELANConnection connection = ELANConnection.getInstance();
+		connection.addNetwork( this );
+		ELANConnectionState connectionState = connection.connect( portsList.getItem( portsList.getSelectionIndex() ) );
+		
+		return connectionState;
+	}
+	
+	public void disconnect()
+	{
+		ELANConnection.getInstance().disconnect();
 	}
 	
 	/**
@@ -200,16 +227,16 @@ public class GasAnalyzerMainWindow {
 		        	{
 		        		statusBar.showProgressBar();
 		        		statusBar.setProgress(50);
-			        	ELANConnectionState connectionState = ELANConnection.getInstance().connect(portsList.getItem(portsList.getSelectionIndex()));
+			        	ELANConnectionState connectionState = connect();
 			        	if (connectionState.isConnected())
 			        	{
 			        		statusBar.setProgress(75);
-			        	portsList.setEnabled(false);
-			        	portsList.setVisible(false);			        	
-			        	statusBar.setProgress(90);
-			        	connect.setText("Rozłącz");
-			        	statusBar.setProgress(100);
-			        	statusBar.setStatusText("Status: " + connectionState.getMessage());
+				        	portsList.setEnabled(false);
+				        	portsList.setVisible(false);			        	
+				        	statusBar.setProgress(90);
+				        	connect.setText("Rozłącz");
+				        	statusBar.setProgress(100);
+				        	statusBar.setStatusText("Status: " + connectionState.getMessage());
 			        	}
 			        	statusBar.setProgress(0);
 			        	statusBar.hideProgressBar();
@@ -218,7 +245,7 @@ public class GasAnalyzerMainWindow {
 		        	{
 		        		statusBar.showProgressBar();
 		        		statusBar.setProgress(50);
-		        		ELANConnection.getInstance().disconnect();
+		        		disconnect();
 		        		statusBar.setProgress(100);
 			        	portsList.setEnabled(true);	
 			        	connect.setText("Połącz");

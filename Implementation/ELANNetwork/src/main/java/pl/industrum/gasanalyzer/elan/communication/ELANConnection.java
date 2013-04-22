@@ -11,6 +11,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Observer;
 import java.util.Vector;
 
 import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
@@ -92,7 +93,6 @@ public class ELANConnection implements Iterable<ELANNetwork>
 		
 		//initialize network collection and add new network
 		this.networks = new ArrayList<ELANNetwork>();
-		this.addNetwork( "System pomiarowy" ); //should be in GUI
 	}	
 	/**
 	 * Networks list iterator
@@ -108,9 +108,19 @@ public class ELANConnection implements Iterable<ELANNetwork>
 		return networks.get( i );
 	}
 	
-	public void addNetwork( String name )
+	public void addNetwork( String name, Observer observer )
 	{
-		ELANNetwork network = new ELANNetwork( name );
+		ELANNetwork network = new ELANNetwork( name, ELANNetwork.getNetworksCounter() );
+		ELANNetwork.incNetworksCounter();
+		network.addObserver( observer );
+		this.networks.add( network );
+	}
+	
+	public void addNetwork( Observer observer )
+	{
+		ELANNetwork network = new ELANNetwork( ELANNetwork.getNetworksCounter() );
+		ELANNetwork.incNetworksCounter();
+		network.addObserver( observer );
 		this.networks.add( network );
 	}
 	/**

@@ -5,18 +5,18 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Queue;
 
-import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxFrame;
+import pl.industrum.gasanalyzer.elan.notifications.ELANDataParserNotification;
+import pl.industrum.gasanalyzer.elan.notifications.ELANMeasurementDeviceNotification;
 import pl.industrum.gasanalyzer.elan.types.ELANDeviceType;
-import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
 
-public class ELANMeasurementDevice implements Observer
+public class ELANMeasurementDevice extends Observable implements Observer
 {
 	private String name; //optional
 	private ELANDeviceType deviceType;
 	private Integer deviceAddress;
 	
-	private Queue<ELANRxFrame> rxFrameBuffer;
+	private Queue<ELANRxFrame> rxFrameBuffer; 
 	
 	public ELANMeasurementDevice( String name, Integer deviceAddress )
 	{
@@ -31,25 +31,33 @@ public class ELANMeasurementDevice implements Observer
 		rxFrameBuffer = new LinkedList<ELANRxFrame>();
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void update( Observable obj, Object arg )
 	{					
 		try
 		{
-			if( arg instanceof ELANRxFrame )
+			if( arg instanceof ELANDataParserNotification )
 			{
-				ELANRxFrame rx = ( ELANRxFrame )arg;
+				ELANRxFrame rx = ( ( ELANDataParserNotification ) arg ).getData();
 				
 				if( rx.isValid() )
 				{
-					//rxFrameBuffer.add( rx );
-					System.out.println(rx.getTimeStamp().toLocaleString());
-					for (ELANMeasurement measurement : (ELANRxBroadcastFrame)rx)
+					//Notify Network about received measurement frame
+					if( isEmpty() )
 					{
-						System.out.print(measurement.toString()+" || ");
-					}					
-					System.out.println();
-					System.out.println();
+						setChanged();
+						notifyObservers( new ELANMeasurementDeviceNotification( getDeviceAddress() ) );
+					}
+					//Add frame to buffer
+					rxFrameBuffer.add( rx );
+					
+					
+//					System.out.println(rx.getTimeStamp().toLocaleString());
+//					for (ELANMeasurement measurement : (ELANRxBroadcastFrame)rx)
+//					{
+//						System.out.print(measurement.toString()+" || ");
+//					}					
+//					System.out.println();
+//					System.out.println();
 				}
 			}
 			else 
