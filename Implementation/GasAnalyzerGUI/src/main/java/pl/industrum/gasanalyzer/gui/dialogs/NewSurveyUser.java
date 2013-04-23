@@ -13,9 +13,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import pl.industrum.gasanalyzer.gui.SWTResourceManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
 import pl.industrum.gasanalyzer.types.UsefulColor;
-import org.eclipse.wb.swt.SWTResourceManager;
 
 public class NewSurveyUser extends Dialog
 {

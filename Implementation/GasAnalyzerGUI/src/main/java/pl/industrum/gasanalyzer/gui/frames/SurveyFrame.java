@@ -105,7 +105,8 @@ public abstract class SurveyFrame extends Composite
 
                                 synchronized(lock)
                                 {
-                                	expandBar.getShell().pack(true);
+                                	//expandBar.getShell().getParent().pack(true);
+                                	expandBar.getParent().getShell().pack(true);
                                     orgSize[0] = expandBar.getShell().getSize().y;
                                     currentSize[0] = orgSize[0];
                                 }
@@ -139,8 +140,8 @@ public abstract class SurveyFrame extends Composite
                                         }
                                         else
                                         {
-                                        	expandBar.getShell().layout(true);
-                                        	expandBar.getShell().pack(true);
+                                        	expandBar.getParent().getShell().layout(true);
+                                        	expandBar.getParent().getShell().pack(true);
                                         }
                                     }
                                 }
