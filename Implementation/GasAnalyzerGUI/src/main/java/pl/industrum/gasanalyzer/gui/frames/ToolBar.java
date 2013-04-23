@@ -6,13 +6,11 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.CoolBar;
 import org.eclipse.swt.widgets.CoolItem;
 import org.eclipse.swt.widgets.Label;
 
-import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
 import pl.industrum.gasanalyzer.gui.SWTResourceManager;
 import pl.industrum.gasanalyzer.gui.dialogs.PdfDialog;
 import pl.industrum.gasanalyzer.gui.dialogs.XlsDialog;
@@ -25,17 +23,11 @@ import pl.industrum.gasanalyzer.i18n.Messages;
 public abstract class ToolBar extends Composite
 {
 	GridData compositeData;
-	Button btnConnect;
-	Combo portsList;
 	private Button btnPdf;
 	private Button btnXls;
 	private CoolBar bar;
 	private CoolItem coolItemBtnPdf;
 	private CoolItem coolItemBtnXls;
-	private CoolItem coolItemLblPort;
-	private CoolItem coolItemPortsList;
-	private CoolItem coolItemBtnConnect;
-	private Label lblPort;
 	private CoolItem coolItemBtnRefresh;
 	private Button btnRefresh;
 	private CoolItem coolItem;
@@ -58,24 +50,9 @@ public abstract class ToolBar extends Composite
 
 		bar = new CoolBar( this, SWT.NONE );
 
-		coolItemLblPort = new CoolItem( bar, SWT.NONE );
-		lblPort = new Label( bar, SWT.NONE );
-		lblPort.setText( Messages
-				.getString( "GasAnalyzerMainWindow.lblNewLabel.text" ) );
-		coolItemLblPort.setPreferredSize( coolItemLblPort.computeSize(
-				lblPort.computeSize( SWT.DEFAULT, SWT.DEFAULT ).x,
-				lblPort.computeSize( SWT.DEFAULT, SWT.DEFAULT ).y ) );
-		coolItemLblPort.setControl( lblPort );
-
-		coolItemPortsList = new CoolItem( bar, SWT.NONE );
-		portsList = new Combo( bar, SWT.BORDER );
-		coolItemPortsList.setPreferredSize( coolItemPortsList.computeSize(
-				portsList.computeSize( SWT.DEFAULT, SWT.DEFAULT ).x,
-				portsList.computeSize( SWT.DEFAULT, SWT.DEFAULT ).y ) );
-		coolItemPortsList.setControl( portsList );
-
 		coolItemBtnRefresh = new CoolItem( bar, SWT.NONE );
 		btnRefresh = new Button( bar, SWT.NONE );
+		btnRefresh.setToolTipText(Messages.getString("ToolBar.btnRefresh.toolTipText")); //$NON-NLS-1$
 		btnRefresh.setImage( SWTResourceManager.getImage( ToolBar.class,
 				"/pl/industrum/gasanalyzer/gui/odswiez.png" ) );
 		coolItemBtnRefresh.setPreferredSize( coolItemBtnRefresh.computeSize(
@@ -90,31 +67,13 @@ public abstract class ToolBar extends Composite
 			{
 				refreshPortList();
 			}
-		} );
-
-		coolItemBtnConnect = new CoolItem( bar, SWT.NONE );
-		btnConnect = new Button( bar, SWT.TOGGLE );
-		btnConnect.setText( Messages
-				.getString( "GasAnalyzerMainWindow.connect.text" ) ); //$NON-NLS-1$
-		coolItemBtnConnect.setPreferredSize( coolItemBtnConnect.computeSize(
-				btnConnect.computeSize( SWT.DEFAULT, SWT.DEFAULT ).x,
-				btnConnect.computeSize( SWT.DEFAULT, SWT.DEFAULT ).y ) );
-		coolItemBtnConnect.setControl( btnConnect );
-
-		btnConnect.addSelectionListener( new SelectionAdapter()
-		{
-			@Override
-			public void widgetSelected( SelectionEvent arg0 )
-			{
-				boolean state = btnConnect.getSelection();
-				connectDisconnect( state );
-			}
-		} );
+		});
 
 		coolItemBtnPdf = new CoolItem( bar, SWT.NONE );
 		btnPdf = new Button( bar, SWT.PUSH );
 		btnPdf.setImage( SWTResourceManager.getImage( ToolBar.class,
 				"/pl/industrum/gasanalyzer/gui/pdf.png" ) );
+		btnPdf.setToolTipText( "Generuj raport jako PDF" );
 		coolItemBtnPdf.setPreferredSize( coolItemBtnPdf.computeSize(
 				btnPdf.computeSize( SWT.DEFAULT, SWT.DEFAULT ).x,
 				btnPdf.computeSize( SWT.DEFAULT, SWT.DEFAULT ).y ) );
@@ -133,6 +92,7 @@ public abstract class ToolBar extends Composite
 
 		coolItemBtnXls = new CoolItem( bar, SWT.NONE );
 		btnXls = new Button( bar, SWT.PUSH );
+		btnXls.setToolTipText(Messages.getString("ToolBar.btnXls.toolTipText")); //$NON-NLS-1$
 		btnXls.setImage( SWTResourceManager.getImage( ToolBar.class,
 				"/pl/industrum/gasanalyzer/gui/excel.png" ) );
 		coolItemBtnXls.setPreferredSize( coolItemBtnXls.computeSize(
@@ -151,8 +111,6 @@ public abstract class ToolBar extends Composite
 			}
 		} );
 
-		refreshPortList();
-
 		bar.pack();
 		
 		coolItem = new CoolItem(bar, SWT.NONE);
@@ -168,40 +126,5 @@ public abstract class ToolBar extends Composite
 		// Disable the check that prevents subclassing of SWT components
 	}
 
-	private void refreshPortList()
-	{
-		portsList.removeAll();
-
-		for( String port: ELANConnection.vectorPorts() )
-		{
-			portsList.add( port );
-		}
-
-		if ( portsList.getItemCount() > 0 )
-		{
-			portsList.select( 0 );
-		} else
-		{
-			btnConnect.setEnabled( false );
-		}
-	}
-
-	public void setConnect()
-	{
-		portsList.setEnabled( true );
-		btnConnect.setText( "Połącz" );
-	}
-
-	public void setDisconnect()
-	{
-		portsList.setEnabled( true );
-		btnConnect.setText( "Połącz" );
-	}
-
-	public String getSelectedPort()
-	{
-		return portsList.getItem( portsList.getSelectionIndex() );
-	}
-
-	public abstract void connectDisconnect( boolean state );
+	public abstract void refreshPortList();
 }

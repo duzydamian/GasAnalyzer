@@ -91,10 +91,6 @@ public class GasAnalyzerMainWindow implements Observer
 					{
 						iter.getConnection().disconnect();
 					}
-					statusBar.setProgress( 100 );
-					toolBar.setConnect();
-					statusBar.setProgress( 0 );
-					statusBar.hideProgressBar();
 					event.doit = true;
 				} else
 				{
@@ -134,7 +130,60 @@ public class GasAnalyzerMainWindow implements Observer
 		toolBar = new ToolBar( shlGasAnalyzer, SWT.BORDER )
 		{
 			@Override
-			public void connectDisconnect( boolean state )
+			public void refreshPortList()
+			{
+				deviceTree.refreshTree();
+			}
+		};
+
+		surveyFrame = new SurveyFrame( shlGasAnalyzer, SWT.BORDER )
+		{
+			@Override
+			public void resize()
+			{
+				layout();
+				getParent().layout();
+			}
+		};
+
+		GridData connectBarData = new GridData( GridData.FILL, GridData.CENTER,
+				true, false );
+		connectBarData.horizontalSpan = 6;
+
+		Composite connectBar = new Composite( shlGasAnalyzer, SWT.BORDER );
+		connectBar.setLayout( new FillLayout( SWT.HORIZONTAL ) );
+		connectBar.setLayoutData( connectBarData );
+
+		btnOut = new Button( connectBar, SWT.RADIO );
+		btnOut.setText( Messages
+				.getString( "GasAnalyzerMainWindow.btnOut.text" ) ); //$NON-NLS-1$
+		btnOut.setSelection( true );
+
+		btnOkno = new Button( connectBar, SWT.RADIO );
+		btnOkno.setText( Messages
+				.getString( "GasAnalyzerMainWindow.btnOkno.text" ) ); //$NON-NLS-1$
+
+		btnPlik = new Button( connectBar, SWT.RADIO );
+		btnPlik.setText( Messages
+				.getString( "GasAnalyzerMainWindow.btnPlik.text" ) ); //$NON-NLS-1$				
+
+		GridData compositeData = new GridData( GridData.FILL, GridData.FILL,
+				true, true );
+		compositeData.horizontalSpan = 6;
+		composite = new Composite( shlGasAnalyzer, SWT.NONE );
+		composite.setLayout( new FillLayout( SWT.HORIZONTAL ) );
+		composite.setLayoutData( compositeData );
+
+		deviceTree = new DeviceTree( composite, SWT.V_SCROLL )
+		{
+			@Override
+			public void setSurveyStep( int step )
+			{
+				//TODO
+			}
+
+			@Override
+			public void connectToDevice(String port)
 			{
 				try
 				{
@@ -183,102 +232,22 @@ public class GasAnalyzerMainWindow implements Observer
 						}
 						outSelected = true;
 					}
-
-					if ( state )
-					{
-						statusBar.showProgressBar();
-						statusBar.setProgress( 50 );
-						ELANConnectionState connectionState = connect( toolBar.getSelectedPort() );
-						if ( connectionState.isConnected() )
-						{
-							statusBar.setProgress( 75 );
-							toolBar.setDisconnect();
-							statusBar.setProgress( 90 );
-							statusBar.setProgress( 100 );
-							statusBar.setStatusText( "Status: "
-									+ connectionState.getMessage() );
-						}
-						statusBar.setProgress( 0 );
-						statusBar.hideProgressBar();
-					} else
-					{
-						statusBar.showProgressBar();
-						statusBar.setProgress( 50 );
-						disconnect( toolBar.getSelectedPort() );
-						statusBar.setProgress( 100 );
-						toolBar.setConnect();
-						statusBar.setProgress( 0 );
-						statusBar.hideProgressBar();
-					}
 				} catch ( Exception e )
 				{
 					e.printStackTrace();
 				}
-			}
-		};
-
-		surveyFrame = new SurveyFrame( shlGasAnalyzer, SWT.BORDER )
-		{
-			@Override
-			public void resize()
-			{
-				layout();
-				getParent().layout();
-			}
-		};
-		new Label(shlGasAnalyzer, SWT.NONE);
-		new Label(shlGasAnalyzer, SWT.NONE);
-		new Label(shlGasAnalyzer, SWT.NONE);
-		new Label(shlGasAnalyzer, SWT.NONE);
-
-		GridData connectBarData = new GridData( GridData.FILL, GridData.CENTER,
-				true, false );
-		connectBarData.horizontalSpan = 6;
-
-		Composite connectBar = new Composite( shlGasAnalyzer, SWT.BORDER );
-		connectBar.setLayout( new FillLayout( SWT.HORIZONTAL ) );
-		connectBar.setLayoutData( connectBarData );
-
-		btnOut = new Button( connectBar, SWT.RADIO );
-		btnOut.setText( Messages
-				.getString( "GasAnalyzerMainWindow.btnOut.text" ) ); //$NON-NLS-1$
-		btnOut.setSelection( true );
-
-		btnOkno = new Button( connectBar, SWT.RADIO );
-		btnOkno.setText( Messages
-				.getString( "GasAnalyzerMainWindow.btnOkno.text" ) ); //$NON-NLS-1$
-
-		btnPlik = new Button( connectBar, SWT.RADIO );
-		btnPlik.setText( Messages
-				.getString( "GasAnalyzerMainWindow.btnPlik.text" ) ); //$NON-NLS-1$				
-
-		GridData compositeData = new GridData( GridData.FILL, GridData.FILL,
-				true, true );
-		compositeData.horizontalSpan = 6;
-		composite = new Composite( shlGasAnalyzer, SWT.NONE );
-		composite.setLayout( new FillLayout( SWT.HORIZONTAL ) );
-		composite.setLayoutData( compositeData );
-
-		deviceTree = new DeviceTree( composite, SWT.V_SCROLL )
-		{
-			@Override
-			public void setSurveyStep( int step )
-			{
-				//TODO
-			}
-
-			@Override
-			public void connectToDevice(String port)
-			{
 				ELANConnectionState connectionState = connect( port );
+			}
+
+			@Override
+			public void disconnectFromDevice( String text )
+			{
+				disconnect( text );
 			}	
 		};
-		new Label(deviceTree, SWT.NONE);
-		new Label(deviceTree, SWT.NONE);
 		deviceTree.redraw();
 
 		device = new Device( composite, SWT.NONE, "Test" );
-		device.redraw();
 
 		styledText = new StyledText( composite, SWT.BORDER | SWT.V_SCROLL );
 		styledText.setAlignment( SWT.CENTER );

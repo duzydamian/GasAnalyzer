@@ -15,10 +15,13 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.TreeItem;
 
 import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
+import pl.industrum.gasanalyzer.gui.SWTResourceManager;
+import pl.industrum.gasanalyzer.gui.dialogs.NetworkScan;
 import pl.industrum.gasanalyzer.i18n.Messages;
 
 public abstract class DeviceTree extends Composite
@@ -35,37 +38,56 @@ public abstract class DeviceTree extends Composite
 	 * @param parent
 	 * @param style
 	 */
-	public DeviceTree( Composite parent, int style )
+	public DeviceTree( final Composite parent, int style )
 	{
 		super( parent, style );
 		setLayout( new GridLayout( 3, false ) );
 
-		deviceTree = new Tree( this, SWT.BORDER );
+		deviceTree = new Tree( this, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		deviceTree.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true,
 				3, 1 ) );
 		deviceTree.addListener (SWT.MenuDetect, new Listener () {
 			public void handleEvent (Event event) {
-				Menu menu = new Menu (deviceTree.getShell(), SWT.POP_UP);
-				MenuItem item = new MenuItem (menu, SWT.PUSH);
-				item.setText ("Połącz");
-				item.addListener (SWT.Selection, new Listener () {
-					public void handleEvent (Event e) {
-						if( deviceTree.getSelection().length > 0 )
-						{
-							for( TreeItem treeItem: deviceTree.getSelection() )
-							{
-								System.out.println( treeItem.getText() );
-								connectToDevice(treeItem.getText());								
-							}							
-						}
+				if( deviceTree.getSelection().length == 1 )
+				{
+					final TreeItem treeItem = deviceTree.getSelection()[0];
+					Menu menu = new Menu (deviceTree.getShell(), SWT.POP_UP);
+					MenuItem item = new MenuItem (menu, SWT.PUSH);
+					final boolean connect = (treeItem.getImage() == null);
+					if ( connect )
+					{
+						item.setText ("Połącz z "+treeItem.getText());
+						item.setImage( SWTResourceManager.getImage( DeviceTree.class, "/pl/industrum/gasanalyzer/gui/connect.png" ) );
 					}
-				});
-				menu.setLocation (event.x, event.y);
-				menu.setVisible (true);
-				while (!menu.isDisposed () && menu.isVisible ()) {
-					if (!deviceTree.getDisplay().readAndDispatch ()) deviceTree.getDisplay().sleep ();
+					else
+					{
+						item.setText ("Rozłącz z "+treeItem.getText());
+						item.setImage( SWTResourceManager.getImage( DeviceTree.class, "/pl/industrum/gasanalyzer/gui/disconnect.png" ) );
+					}
+					item.addListener (SWT.Selection, new Listener () {
+						public void handleEvent (Event e) {
+								if ( connect )
+								{
+									connectToDevice(treeItem.getText());
+									NetworkScan scan = new NetworkScan( parent.getShell(), SWT.NONE );
+									scan.open();
+									treeItem.setImage( SWTResourceManager.getImage( DeviceTree.class, "/pl/industrum/gasanalyzer/gui/connect.png" ) );
+								}
+								else
+								{
+									disconnectFromDevice(treeItem.getText());
+									//treeItem.setImage( null );
+								}
+							}
+
+					});
+					menu.setLocation (event.x, event.y);
+					menu.setVisible (true);
+					while (!menu.isDisposed () && menu.isVisible ()) {
+						if (!deviceTree.getDisplay().readAndDispatch ()) deviceTree.getDisplay().sleep ();
+					}
+					menu.dispose ();
 				}
-				menu.dispose ();
 			}
 		});
 
@@ -111,6 +133,26 @@ public abstract class DeviceTree extends Composite
 		// Disable the check that prevents subclassing of SWT components
 	}
 
+	public void refreshTree()
+	{
+		for( String port: ELANConnection.vectorPorts() )
+		{
+			boolean toAdd = true;
+			for( TreeItem item: deviceTree.getItems() )
+			{
+				if( item.getText().contains( port ));
+					toAdd = false;
+			}
+			
+			if ( toAdd )
+			{
+				TreeItem item = new TreeItem( deviceTree, SWT.COLOR_GRAY );
+				item.setText( port );
+			}
+		}
+	}
+	
 	public abstract void setSurveyStep(int step);
 	public abstract void connectToDevice(String port);
+	public abstract void disconnectFromDevice( String text );	
 }

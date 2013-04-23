@@ -135,7 +135,7 @@ public class SplashScreen
 					{
 						stateLabel.setText(testVector.get(i).getName());
 						testVector.get(i).test();
-						Thread.sleep(1000);
+						Thread.sleep(100);
 					}
 					catch (Throwable e)
 					{
