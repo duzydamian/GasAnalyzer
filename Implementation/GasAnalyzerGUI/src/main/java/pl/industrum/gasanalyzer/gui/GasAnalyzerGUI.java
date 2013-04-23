@@ -9,6 +9,7 @@ package pl.industrum.gasanalyzer.gui;
  */
 public class GasAnalyzerGUI
 {
+	private static String AppVersion;
 	private static String RXTXVersion;
 	private static String NativeRXTXVersion;
 
@@ -38,6 +39,22 @@ public class GasAnalyzerGUI
 		{
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * @return the appVersion
+	 */
+	public static String getAppVersion()
+	{
+		return AppVersion;
+	}
+
+	/**
+	 * @param appVersion the appVersion to set
+	 */
+	public static void setAppVersion( String appVersion )
+	{
+		AppVersion = appVersion;
 	}
 
 	/**
