@@ -12,8 +12,10 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import pl.industrum.gasanalyzer.i18n.Messages;
 
-public class XlsDialog extends Dialog {
+public class XlsDialog extends Dialog
+{
 
 	protected Object result;
 	protected Shell shell;
@@ -23,25 +25,31 @@ public class XlsDialog extends Dialog {
 
 	/**
 	 * Create the dialog.
+	 * 
 	 * @param parent
 	 * @param style
 	 */
-	public XlsDialog(Shell parent, int style) {
-		super(parent, style);
-		setText("Generuj raport jako xls");
+	public XlsDialog( Shell parent, int style )
+	{
+		super( parent, style );
+		setText( Messages.getString( "XlsDialog.this.text" ) ); //$NON-NLS-1$
 	}
 
 	/**
 	 * Open the dialog.
+	 * 
 	 * @return the result
 	 */
-	public Object open() {
+	public Object open()
+	{
 		createContents();
 		shell.open();
 		shell.layout();
 		Display display = getParent().getDisplay();
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch()) {
+		while ( !shell.isDisposed() )
+		{
+			if ( !display.readAndDispatch() )
+			{
 				display.sleep();
 			}
 		}
@@ -51,33 +59,38 @@ public class XlsDialog extends Dialog {
 	/**
 	 * Create contents of the dialog.
 	 */
-	private void createContents() {
-		shell = new Shell(getParent(), getStyle()| SWT.DIALOG_TRIM);
-		shell.setSize(450, 300);
-		shell.setText(getText());
-		shell.setLayout(new GridLayout(3, false));
-		
-		lblFilePath = new Label(shell, SWT.NONE);
-		lblFilePath.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblFilePath.setText("Nazwa pliku");
-		
-		textFilePath = new Text(shell, SWT.BORDER);
-		textFilePath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
-		btnBrowse = new Button(shell, SWT.NONE);
-		btnBrowse.addSelectionListener(new SelectionAdapter()
+	private void createContents()
+	{
+		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
+		shell.setSize( 450, 300 );
+		shell.setText( getText() );
+		shell.setLayout( new GridLayout( 3, false ) );
+
+		lblFilePath = new Label( shell, SWT.NONE );
+		lblFilePath.setLayoutData( new GridData( SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1 ) );
+		lblFilePath
+				.setText( Messages.getString( "XlsDialog.lblFilePath.text" ) ); //$NON-NLS-1$
+
+		textFilePath = new Text( shell, SWT.BORDER );
+		textFilePath.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
+				false, 1, 1 ) );
+
+		btnBrowse = new Button( shell, SWT.NONE );
+		btnBrowse.addSelectionListener( new SelectionAdapter()
 		{
 			@Override
-			public void widgetSelected(SelectionEvent arg0)
+			public void widgetSelected( SelectionEvent arg0 )
 			{
-				FileDialog fileDialog = new FileDialog(getParent(), SWT.NONE);
-				fileDialog.setText("Wybierz plik");
-				fileDialog.setFilterExtensions(new String[] { "*.xls" });
+				FileDialog fileDialog = new FileDialog( getParent(), SWT.NONE );
+				fileDialog.setText( "Wybierz plik" );
+				fileDialog.setFilterExtensions( new String[]
+				{ "*.xls" } );
 				String path = fileDialog.open();
-				if(path != null)
-					textFilePath.setText(path);
+				if ( path != null )
+					textFilePath.setText( path );
 			}
-		});
-		btnBrowse.setText("Przeglądaj");
+		} );
+		btnBrowse.setText( Messages.getString( "XlsDialog.btnBrowse.text" ) ); //$NON-NLS-1$
 	}
 }

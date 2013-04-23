@@ -6,10 +6,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
+import pl.industrum.gasanalyzer.i18n.Messages;
 
 /**
  * @author duzydamian (Damian Karbowiak)
- *
+ * 
  */
 public class StatusBar extends Composite
 {
@@ -19,22 +20,24 @@ public class StatusBar extends Composite
 
 	/**
 	 * Create the composite.
+	 * 
 	 * @param parent
 	 * @param style
 	 */
-	public StatusBar(Composite parent, int style)
+	public StatusBar( Composite parent, int style )
 	{
-		super(parent, style);
-		compositeData = new GridData(GridData.FILL, GridData.GRAB_VERTICAL, true, false);
+		super( parent, style );
+		compositeData = new GridData( GridData.FILL, GridData.GRAB_VERTICAL,
+				true, false );
 		compositeData.horizontalSpan = 6;
-		this.setLayout(new FillLayout(SWT.HORIZONTAL));
-		this.setLayoutData(compositeData);
-		
-		lblStatus = new Label(this, SWT.BOLD);
-		lblStatus.setText("Status: ");
-		
-		progressBar = new ProgressBar(this, SWT.BORDER);
-		progressBar.setVisible(false);
+		this.setLayout( new FillLayout( SWT.HORIZONTAL ) );
+		this.setLayoutData( compositeData );
+
+		lblStatus = new Label( this, SWT.BOLD );
+		lblStatus.setText( Messages.getString( "StatusBar.lblStatus.text" ) ); //$NON-NLS-1$
+
+		progressBar = new ProgressBar( this, SWT.BORDER );
+		progressBar.setVisible( false );
 	}
 
 	@Override
@@ -43,36 +46,38 @@ public class StatusBar extends Composite
 		// Disable the check that prevents subclassing of SWT components
 	}
 
-	@SuppressWarnings("unused")
+	@SuppressWarnings( "unused" )
 	private void hide()
-	{;
-		this.setVisible(false);
+	{
+		;
+		this.setVisible( false );
 	}
-	
-	@SuppressWarnings("unused")
+
+	@SuppressWarnings( "unused" )
 	private void show()
 	{
-		this.setVisible(true);
+		this.setVisible( true );
 	}
-	
+
 	public void hideProgressBar()
-	{;
-		this.progressBar.setVisible(false);
+	{
+		;
+		this.progressBar.setVisible( false );
 	}
-	
+
 	public void showProgressBar()
 	{
-		this.progressBar.setVisible(true);
+		this.progressBar.setVisible( true );
 	}
-	
-	public void setProgress(int progress)
+
+	public void setProgress( int progress )
 	{
-		this.progressBar.setVisible(true);
-		this.progressBar.setSelection(progress);
+		this.progressBar.setVisible( true );
+		this.progressBar.setSelection( progress );
 	}
-	
-	public void setStatusText(String status)
+
+	public void setStatusText( String status )
 	{
-		this.lblStatus.setText(status);
+		this.lblStatus.setText( status );
 	}
 }
