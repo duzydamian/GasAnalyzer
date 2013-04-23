@@ -2,15 +2,15 @@ package pl.industrum.gasanalyzer.elan.notifications;
 
 public class ELANNetworkNotification implements ELANNotification
 {
-	private String networkName;
+	private Integer networkID;
 	
-	public ELANNetworkNotification( String networkName )
+	public ELANNetworkNotification( Integer networkID )
 	{
-		this.networkName = networkName;
+		this.networkID = networkID;
 	}
 	
-	public String getData()
+	public Integer getData()
 	{
-		return networkName;
+		return networkID;
 	}
 }

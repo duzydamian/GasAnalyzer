@@ -4,16 +4,17 @@ import java.util.Observable;
 import java.util.Queue;
 
 import pl.industrum.gasanalyzer.elan.communication.ELANCommunication;
+import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
 import pl.industrum.gasanalyzer.elan.notifications.ELANRxByteBufferNotification;
 
 public class ELANRxByteBuffer extends Observable implements Runnable
 {	
 	private ELANCommunication communication;
 	
-	public ELANRxByteBuffer()
+	public ELANRxByteBuffer( ELANConnection connection )
 	{
 		//Open port and start communication.
-		communication = new ELANCommunication();
+		communication = new ELANCommunication( connection );
 	}
 	
 	public void run()

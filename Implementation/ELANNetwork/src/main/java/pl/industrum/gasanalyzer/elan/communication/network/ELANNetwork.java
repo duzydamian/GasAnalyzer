@@ -6,6 +6,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Queue;
 
+import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
 import pl.industrum.gasanalyzer.elan.communication.rx.ELANDataParser;
 import pl.industrum.gasanalyzer.elan.exceptions.DuplicateDeviceException;
 import pl.industrum.gasanalyzer.elan.exceptions.NullDeviceException;
@@ -15,8 +16,7 @@ import pl.industrum.gasanalyzer.elan.notifications.ELANRxByteBufferNotification;
 
 public class ELANNetwork extends Observable implements Iterable<ELANMeasurementDevice>, Observer
 {
-	//Total amount of networks registered in application 
-	//even if removed!
+	//Total amount of networks ever registered in application
 	private static Integer networksCounter = 0;
 	
 	public static void incNetworksCounter()
@@ -39,17 +39,13 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 	private String name;
 	private ELANMeasurementDevice[] measurementDevices;
 	private boolean[] measurementDevicesNotifications;
-	
-	public ELANNetwork( String name, Integer id )
-	{
-		this.name = name;
-		this.id = id;
-		initializeDevicesPool();
-	}
+	private ELANConnection connection;
 	
 	public ELANNetwork( Integer id )
 	{
 		this.id = id;
+		this.name = "";
+		this.connection = new ELANConnection();
 		initializeDevicesPool();
 	}
 	
@@ -79,6 +75,7 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 	            	dataParserThread.addObserver( measurementDevices[deviceAddress] );
 	            	
 	            	Thread thread = new Thread( dataParserThread );
+	            	thread.setName( "DATA_PARSER_FROM_NETWORK[" + id.toString() + "]" );
 	            	thread.start();
 				}
 				else if( arg instanceof ELANMeasurementDeviceNotification )
@@ -89,7 +86,7 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 					if( checkNotifications() )
 					{
 						setChanged();
-						notifyObservers( new ELANNetworkNotification( getName() ) );
+						notifyObservers( new ELANNetworkNotification( getId() ) );
 						clearNotifications();
 					}
 				}
@@ -195,7 +192,14 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 	
 	public String getName()
 	{
-		return name;
+		if( name == "" )
+		{
+			return "Network " + id.toString();
+		}
+		else
+		{
+			return name;
+		}
 	}
 	
 	public void rename( String name )
@@ -215,5 +219,10 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 		{
 			throw new NullDeviceException( "There is no device with ID=" + deviceAddress.toString() + " in " + getName() + " network." );
 		}
+	}
+	
+	public ELANConnection getConnection()
+	{
+		return connection;
 	}
 }

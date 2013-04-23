@@ -22,10 +22,10 @@ public class ELANCommunication
 	/**
 	 * Crates new object to communicate with some device
 	 */
-	public ELANCommunication()
+	public ELANCommunication( ELANConnection elanConnection )
 	{
 		super();
-		elanConnection = ELANConnection.getInstance();
+		this.elanConnection = elanConnection.getInstance();
 	}
 	
 	/**

@@ -10,7 +10,8 @@ package pl.industrum.gasanalyzer.elan.types;
 public enum ELANConnectionState
 {
 	CONNECTED(true, "Połączono"), CURRENTLY_IN_USE(false, "Port już zajęty"),
-	WRITE_ONLY(false, "Port tylko do zapisu"), NO_SERIAL_PORT(false, "Błędny typ portu");
+	WRITE_ONLY(false, "Port tylko do zapisu"), NO_SERIAL_PORT(false, "Błędny typ portu"),
+	CONNECTION_EXCEPTION(false, "Connection threw exception");
 	
 	boolean connected;
 	String message;

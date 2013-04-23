@@ -8,13 +8,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.Observer;
 import java.util.Vector;
 
-import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
 import pl.industrum.gasanalyzer.elan.communication.rx.ELANRxByteBuffer;
 import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
 
@@ -25,14 +22,14 @@ import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
  * @see gnu.io.CommPort
  * @see gnu.io.SerialPort
  */
-public class ELANConnection implements Iterable<ELANNetwork>
+public class ELANConnection
 {
 	/**
 	 * Instance for singleton
 	 */
-	private static ELANConnection instance = null;
-	//Collection for all networks
-	private ArrayList<ELANNetwork> networks;
+	//Foolish because there could be many connections
+	//due to many networks could exists
+	private ELANConnection instance = null;
 	/**
 	 * Interface Parameters
 	 * Level RS485
@@ -85,50 +82,18 @@ public class ELANConnection implements Iterable<ELANNetwork>
 	/**
 	 * Default constructor
 	 */
-	protected ELANConnection()
+	public ELANConnection()
 	{
 		super();
 		this.is = null;
 		this.os = null;
-		
-		//initialize network collection and add new network
-		this.networks = new ArrayList<ELANNetwork>();
-	}	
-	/**
-	 * Networks list iterator
-	 */
-	public Iterator<ELANNetwork> iterator() 
-	{        
-        Iterator<ELANNetwork> inetworks = networks.iterator();
-        return inetworks; 
-    }
-	
-	public ELANNetwork getNetwork( int i )
-	{
-		return networks.get( i );
-	}
-	
-	public void addNetwork( String name, Observer observer )
-	{
-		ELANNetwork network = new ELANNetwork( name, ELANNetwork.getNetworksCounter() );
-		ELANNetwork.incNetworksCounter();
-		network.addObserver( observer );
-		this.networks.add( network );
-	}
-	
-	public void addNetwork( Observer observer )
-	{
-		ELANNetwork network = new ELANNetwork( ELANNetwork.getNetworksCounter() );
-		ELANNetwork.incNetworksCounter();
-		network.addObserver( observer );
-		this.networks.add( network );
 	}
 	/**
 	 * 
 	 * 
 	 * @return Instance if exists or new if not
 	 */
-	public synchronized static ELANConnection getInstance()
+	public synchronized ELANConnection getInstance()
 	{
 		if (instance == null)
 		{
@@ -143,7 +108,7 @@ public class ELANConnection implements Iterable<ELANNetwork>
 	 * @param portName name of port which you want to connect
 	 * @throws Exception
 	 */
-	public ELANConnectionState connect(String portName) throws Exception
+	public ELANConnectionState connect(String portName,  Observer observer) throws Exception
 	{
 		CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
 		if (portIdentifier.isCurrentlyOwned())
@@ -179,10 +144,11 @@ public class ELANConnection implements Iterable<ELANNetwork>
 				os = new PrintStream(serialPort.getOutputStream(), true);
 				
 				//Start thread to get frames
-				ELANRxByteBuffer rxThread = new ELANRxByteBuffer();            	
-            	rxThread.addObserver( this.networks.get(0) );
+				ELANRxByteBuffer rxThread = new ELANRxByteBuffer( this );            	
+            	rxThread.addObserver( observer );
             	
-            	dataRxTthread = new Thread( rxThread );
+            	Thread dataRxTthread = new Thread( rxThread );
+            	dataRxTthread.setName( "RX_BYTE_BUFFER_FROM_CONNECTION[" + portName + "]" );
             	dataRxTthread.start();
             	
             	return ELANConnectionState.CONNECTED;
