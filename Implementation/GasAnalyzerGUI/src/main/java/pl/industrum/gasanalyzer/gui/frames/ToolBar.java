@@ -25,25 +25,21 @@ import pl.industrum.gasanalyzer.i18n.Messages;
 public abstract class ToolBar extends Composite
 {
 	GridData compositeData;
-	Label lblGenerate;
 	Button btnConnect;
 	Combo portsList;
-	private Label lblPdf;
-	private Label lblXls;
 	private Button btnPdf;
 	private Button btnXls;
 	private CoolBar bar;
-	private CoolItem coolItemLblGenerate;
 	private CoolItem coolItemBtnPdf;
 	private CoolItem coolItemBtnXls;
-	private CoolItem coolItemLblPdf;
-	private CoolItem coolItemLblXls;
 	private CoolItem coolItemLblPort;
 	private CoolItem coolItemPortsList;
 	private CoolItem coolItemBtnConnect;
 	private Label lblPort;
 	private CoolItem coolItemBtnRefresh;
 	private Button btnRefresh;
+	private CoolItem coolItem;
+	private Label lblNewLabel;
 
 	/**
 	 * Create the composite.
@@ -115,28 +111,10 @@ public abstract class ToolBar extends Composite
 			}
 		} );
 
-		coolItemLblGenerate = new CoolItem( bar, SWT.NONE );
-		lblGenerate = new Label( bar, SWT.BOLD );
-		lblGenerate.setText( Messages
-				.getString( "GenerateReportBar.lblStatus.text" ) ); //$NON-NLS-1$
-		coolItemLblGenerate.setPreferredSize( coolItemLblGenerate.computeSize(
-				lblGenerate.computeSize( SWT.DEFAULT, SWT.DEFAULT ).x,
-				lblGenerate.computeSize( SWT.DEFAULT, SWT.DEFAULT ).y ) );
-		coolItemLblGenerate.setControl( lblGenerate );
-
-		coolItemLblPdf = new CoolItem( bar, SWT.NONE );
-		lblPdf = new Label( bar, SWT.BOLD );
-		lblPdf.setText( Messages.getString( "GenerateReportBar.lblPdf.text" ) ); //$NON-NLS-1$
-		coolItemLblPdf.setPreferredSize( coolItemLblPdf.computeSize(
-				lblPdf.computeSize( SWT.DEFAULT, SWT.DEFAULT ).x,
-				lblPdf.computeSize( SWT.DEFAULT, SWT.DEFAULT ).y ) );
-		coolItemLblPdf.setControl( lblPdf );
-
 		coolItemBtnPdf = new CoolItem( bar, SWT.NONE );
 		btnPdf = new Button( bar, SWT.PUSH );
 		btnPdf.setImage( SWTResourceManager.getImage( ToolBar.class,
 				"/pl/industrum/gasanalyzer/gui/pdf.png" ) );
-		btnPdf.setText( Messages.getString( "GenerateReportBar.btnPdf.text" ) ); //$NON-NLS-1$
 		coolItemBtnPdf.setPreferredSize( coolItemBtnPdf.computeSize(
 				btnPdf.computeSize( SWT.DEFAULT, SWT.DEFAULT ).x,
 				btnPdf.computeSize( SWT.DEFAULT, SWT.DEFAULT ).y ) );
@@ -153,19 +131,10 @@ public abstract class ToolBar extends Composite
 			}
 		} );
 
-		coolItemLblXls = new CoolItem( bar, SWT.NONE );
-		lblXls = new Label( bar, SWT.BOLD );
-		lblXls.setText( Messages.getString( "GenerateReportBar.lblXls.text" ) ); //$NON-NLS-1$
-		coolItemLblXls.setPreferredSize( coolItemLblXls.computeSize(
-				lblXls.computeSize( SWT.DEFAULT, SWT.DEFAULT ).x,
-				lblXls.computeSize( SWT.DEFAULT, SWT.DEFAULT ).y ) );
-		coolItemLblXls.setControl( lblXls );
-
 		coolItemBtnXls = new CoolItem( bar, SWT.NONE );
 		btnXls = new Button( bar, SWT.PUSH );
 		btnXls.setImage( SWTResourceManager.getImage( ToolBar.class,
 				"/pl/industrum/gasanalyzer/gui/excel.png" ) );
-		btnXls.setText( Messages.getString( "GenerateReportBar.btnXls.text" ) ); //$NON-NLS-1$
 		coolItemBtnXls.setPreferredSize( coolItemBtnXls.computeSize(
 				btnXls.computeSize( SWT.DEFAULT, SWT.DEFAULT ).x,
 				btnXls.computeSize( SWT.DEFAULT, SWT.DEFAULT ).y ) );
@@ -185,6 +154,12 @@ public abstract class ToolBar extends Composite
 		refreshPortList();
 
 		bar.pack();
+		
+		coolItem = new CoolItem(bar, SWT.NONE);
+		
+		lblNewLabel = new Label(bar, SWT.NONE);
+		coolItem.setControl(lblNewLabel);
+		lblNewLabel.setText(Messages.getString("ToolBar.lblNewLabel.text")); //$NON-NLS-1$
 	}
 
 	@Override

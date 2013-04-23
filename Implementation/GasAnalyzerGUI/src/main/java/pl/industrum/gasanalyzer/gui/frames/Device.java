@@ -28,11 +28,11 @@ public class Device extends Composite
 	public Device( Composite parent, int style, String name )
 	{
 		super( parent, style );
-		compositeData = new GridData( GridData.FILL, GridData.GRAB_VERTICAL,
-				true, false );
-		compositeData.horizontalSpan = 6;
+//		compositeData = new GridData( GridData.FILL, GridData.GRAB_VERTICAL,
+//				true, false );
+//		compositeData.horizontalSpan = 6;
 		this.setLayout( new FillLayout( SWT.HORIZONTAL ) );
-		this.setLayoutData( compositeData );
+		//this.setLayoutData( compositeData );
 
 		Group grpOneDIvice = new Group( this, SWT.NONE );
 		grpOneDIvice.setText( name );

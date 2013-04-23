@@ -248,9 +248,11 @@ public class GasAnalyzerMainWindow
 		deviceTree.redraw();
 
 		device = new Device( composite, SWT.NONE, "Test" );
+		device.redraw();
 
 		styledText = new StyledText( composite, SWT.BORDER | SWT.V_SCROLL );
 		styledText.setAlignment( SWT.CENTER );
+		styledText.setWordWrap( true );
 
 		statusBar = new StatusBar( shlGasAnalyzer, SWT.BORDER );
 	}
