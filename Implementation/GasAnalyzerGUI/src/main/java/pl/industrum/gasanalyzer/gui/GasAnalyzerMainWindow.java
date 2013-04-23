@@ -27,6 +27,7 @@ import pl.industrum.gasanalyzer.gui.frames.StatusBar;
 import pl.industrum.gasanalyzer.gui.frames.SurveyFrame;
 import pl.industrum.gasanalyzer.gui.frames.ToolBar;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import org.eclipse.swt.widgets.Label;
 
 public class GasAnalyzerMainWindow
 {
@@ -215,6 +216,10 @@ public class GasAnalyzerMainWindow
 				getParent().layout();
 			}
 		};
+		new Label(shlGasAnalyzer, SWT.NONE);
+		new Label(shlGasAnalyzer, SWT.NONE);
+		new Label(shlGasAnalyzer, SWT.NONE);
+		new Label(shlGasAnalyzer, SWT.NONE);
 
 		GridData connectBarData = new GridData( GridData.FILL, GridData.CENTER,
 				true, false );
@@ -245,6 +250,8 @@ public class GasAnalyzerMainWindow
 		composite.setLayoutData( compositeData );
 
 		deviceTree = new DeviceTree( composite, SWT.V_SCROLL );
+		new Label(deviceTree, SWT.NONE);
+		new Label(deviceTree, SWT.NONE);
 		deviceTree.redraw();
 
 		device = new Device( composite, SWT.NONE, "Test" );

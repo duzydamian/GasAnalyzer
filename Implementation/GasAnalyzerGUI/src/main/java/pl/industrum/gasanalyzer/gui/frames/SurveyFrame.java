@@ -144,6 +144,8 @@ public abstract class SurveyFrame extends Composite
 		listSurveyPlace.add( "Mordor" );
 
 		btnNewSurveyPlace = new Button( surveyForm, SWT.NONE );
+		btnNewSurveyPlace.setImage( SWTResourceManager.getImage(
+				SurveyFrame.class, "/pl/industrum/gasanalyzer/gui/add.png" ) );
 		btnNewSurveyPlace.setText( Messages
 				.getString( "SurveyFrame.btnNewSurveyPlace.text" ) ); //$NON-NLS-1$
 		btnNewSurveyPlace.addSelectionListener( new SelectionAdapter()
