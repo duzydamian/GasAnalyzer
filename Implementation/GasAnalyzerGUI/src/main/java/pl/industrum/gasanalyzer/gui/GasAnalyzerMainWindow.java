@@ -265,7 +265,13 @@ public class GasAnalyzerMainWindow implements Observer
 			public void setSurveyStep( int step )
 			{
 				//TODO
-			}			
+			}
+
+			@Override
+			public void connectToDevice(String port)
+			{
+				ELANConnectionState connectionState = connect( port );
+			}	
 		};
 		new Label(deviceTree, SWT.NONE);
 		new Label(deviceTree, SWT.NONE);

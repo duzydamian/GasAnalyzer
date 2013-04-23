@@ -8,20 +8,23 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.TreeItem;
+
+import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
 import pl.industrum.gasanalyzer.i18n.Messages;
 
 public abstract class DeviceTree extends Composite
 {
 
-	private Tree deviceTree;
-	private TreeItem trtmWszystki;
-	private TreeItem trtmUltramat;
-	private TreeItem trtmUltramat_1;
+	private Tree deviceTree;	
 	private Label lblSurveyStep;
 	private Spinner surveyStep;
 	private Button btnOk;
@@ -40,21 +43,38 @@ public abstract class DeviceTree extends Composite
 		deviceTree = new Tree( this, SWT.BORDER );
 		deviceTree.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true,
 				3, 1 ) );
+		deviceTree.addListener (SWT.MenuDetect, new Listener () {
+			public void handleEvent (Event event) {
+				Menu menu = new Menu (deviceTree.getShell(), SWT.POP_UP);
+				MenuItem item = new MenuItem (menu, SWT.PUSH);
+				item.setText ("Połącz");
+				item.addListener (SWT.Selection, new Listener () {
+					public void handleEvent (Event e) {
+						if( deviceTree.getSelection().length > 0 )
+						{
+							for( TreeItem treeItem: deviceTree.getSelection() )
+							{
+								System.out.println( treeItem.getText() );
+								connectToDevice(treeItem.getText());								
+							}							
+						}
+					}
+				});
+				menu.setLocation (event.x, event.y);
+				menu.setVisible (true);
+				while (!menu.isDisposed () && menu.isVisible ()) {
+					if (!deviceTree.getDisplay().readAndDispatch ()) deviceTree.getDisplay().sleep ();
+				}
+				menu.dispose ();
+			}
+		});
 
-		trtmWszystki = new TreeItem( deviceTree, SWT.NONE );
-		trtmWszystki.setText( Messages
-				.getString( "DeviceTree.trtmWszystki.text(java.lang.String)" ) ); //$NON-NLS-1$
-
-		trtmUltramat = new TreeItem( trtmWszystki, SWT.NONE );
-		trtmUltramat.setText( Messages
-				.getString( "DeviceTree.trtmUltramat.text(java.lang.String)" ) ); //$NON-NLS-1$
-
-		trtmUltramat_1 = new TreeItem( trtmWszystki, SWT.NONE );
-		trtmUltramat_1
-				.setText( Messages
-						.getString( "DeviceTree.trtmUltramat_1.text(java.lang.String)" ) ); //$NON-NLS-1$
-		trtmWszystki.setExpanded( true );
-
+		for( String port: ELANConnection.vectorPorts() )
+		{
+			TreeItem item = new TreeItem( deviceTree, SWT.COLOR_GRAY );
+			item.setText( port );
+		}
+					
 		lblSurveyStep = new Label( this, SWT.NONE );
 		lblSurveyStep.setText( Messages
 				.getString( "DeviceTree.lblSurveyStep.text" ) ); //$NON-NLS-1$
@@ -85,13 +105,12 @@ public abstract class DeviceTree extends Composite
 		} );
 	}
 
-	public abstract void setSurveyStep(int step);
-	
-
 	@Override
 	protected void checkSubclass()
 	{
 		// Disable the check that prevents subclassing of SWT components
 	}
 
+	public abstract void setSurveyStep(int step);
+	public abstract void connectToDevice(String port);
 }
