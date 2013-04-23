@@ -16,12 +16,19 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
-import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
+import pl.industrum.gasanalyzer.elan.communication.network.ELANMeasurementDevice;
+import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
+import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
+import pl.industrum.gasanalyzer.elan.frames.ELANRxFrame;
+import pl.industrum.gasanalyzer.elan.notifications.ELANNetworkNotification;
+import pl.industrum.gasanalyzer.elan.notifications.ELANRxByteBufferNotification;
 import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
+import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
 import pl.industrum.gasanalyzer.gui.frames.Device;
 import pl.industrum.gasanalyzer.gui.frames.DeviceTree;
 import pl.industrum.gasanalyzer.gui.frames.MainMenu;
@@ -29,10 +36,10 @@ import pl.industrum.gasanalyzer.gui.frames.StatusBar;
 import pl.industrum.gasanalyzer.gui.frames.SurveyFrame;
 import pl.industrum.gasanalyzer.gui.frames.ToolBar;
 import pl.industrum.gasanalyzer.i18n.Messages;
-import org.eclipse.swt.widgets.Label;
 
 public class GasAnalyzerMainWindow implements Observer
 {
+	private ELANConnectionWrapper connectionWrapper;
 	protected Shell shlGasAnalyzer;
 	boolean outSelected;
 
@@ -57,6 +64,7 @@ public class GasAnalyzerMainWindow implements Observer
 	{
 		super();
 		outSelected = false;
+		connectionWrapper = new ELANConnectionWrapper();
 	}
 
 	/**
@@ -80,7 +88,10 @@ public class GasAnalyzerMainWindow implements Observer
 				{
 					statusBar.showProgressBar();
 					statusBar.setProgress( 50 );
-					//ELANConnection.getInstance().disconnect();
+					for( ELANNetwork iter: connectionWrapper )
+					{
+						iter.getConnection().disconnect();
+					}
 					statusBar.setProgress( 100 );
 					toolBar.setConnect();
 					statusBar.setProgress( 0 );
@@ -178,10 +189,7 @@ public class GasAnalyzerMainWindow implements Observer
 					{
 						statusBar.showProgressBar();
 						statusBar.setProgress( 50 );
-						ELANConnectionState connectionState = ELANConnectionState.CONNECTED;
-//						ELANConnectionState connectionState = ELANConnection
-//								.getInstance().connect(
-//										toolBar.getSelectedPort() );
+						ELANConnectionState connectionState = connect( toolBar.getSelectedPort() );
 						if ( connectionState.isConnected() )
 						{
 							statusBar.setProgress( 75 );
@@ -197,7 +205,7 @@ public class GasAnalyzerMainWindow implements Observer
 					{
 						statusBar.showProgressBar();
 						statusBar.setProgress( 50 );
-//						ELANConnection.getInstance().disconnect();
+						disconnect( toolBar.getSelectedPort() );
 						statusBar.setProgress( 100 );
 						toolBar.setConnect();
 						statusBar.setProgress( 0 );
@@ -267,9 +275,33 @@ public class GasAnalyzerMainWindow implements Observer
 		statusBar = new StatusBar( shlGasAnalyzer, SWT.BORDER );
 	}
 
-	public void update( Observable arg0, Object arg1 )
+	public ELANConnectionState connect(String port)
 	{
-		// TODO Auto-generated method stub
-		
+		return connectionWrapper.connectWithNetwork( port, this );		
+	}
+	
+	public void disconnect(String port)
+	{
+		connectionWrapper.getNetwork( port ).getConnection().disconnect();
+	}
+	
+	public void update( Observable obj, Object arg )
+	{
+		if( arg instanceof ELANNetworkNotification )
+		{
+			ELANNetworkNotification notification = ( ELANNetworkNotification )arg;
+			for( ELANMeasurementDevice device: connectionWrapper.getNetwork( notification.getData() ) )
+			{
+				if ( device != null )
+				{
+					ELANRxFrame poll = device.pollAndClear();
+					ELANRxBroadcastFrame frame = ( ELANRxBroadcastFrame )poll;
+					for( ELANMeasurement elanMeasurement: frame )
+					{
+						System.out.println(elanMeasurement.toString());
+					}
+				}
+			}			
+		}		
 	}
 }

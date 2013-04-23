@@ -25,7 +25,7 @@ public class ELANCommunication
 	public ELANCommunication( ELANConnection elanConnection )
 	{
 		super();
-		this.elanConnection = elanConnection.getInstance();
+		this.elanConnection = elanConnection;
 	}
 	
 	/**

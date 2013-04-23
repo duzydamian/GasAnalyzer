@@ -44,12 +44,15 @@ public class ELANMeasurementDevice extends Observable implements Observer
 					//Notify Network about received measurement frame
 					if( isEmpty() )
 					{
+						rxFrameBuffer.add( rx );
 						setChanged();
 						notifyObservers( new ELANMeasurementDeviceNotification( getDeviceAddress() ) );
 					}
-					//Add frame to buffer
-					rxFrameBuffer.add( rx );
-					
+					else
+					{
+						//Add frame to buffer
+						rxFrameBuffer.add( rx );
+					}
 					
 //					System.out.println(rx.getTimeStamp().toLocaleString());
 //					for (ELANMeasurement measurement : (ELANRxBroadcastFrame)rx)
@@ -73,7 +76,7 @@ public class ELANMeasurementDevice extends Observable implements Observer
 
 	public boolean isEmpty()
 	{
-		if( rxFrameBuffer.size() > 0 )
+		if( rxFrameBuffer.peek() != null )
 		{
 			return false;
 		}
@@ -83,9 +86,17 @@ public class ELANMeasurementDevice extends Observable implements Observer
 		}
 	}
 	
+	public ELANRxFrame pollAndClear()
+	{
+		ELANRxFrame frame = poll();
+		rxFrameBuffer.clear();
+		return frame;
+	}
+	
 	public ELANRxFrame poll()
 	{
-		return rxFrameBuffer.poll();
+		ELANRxFrame frame = rxFrameBuffer.poll();
+		return frame;
 	}
 	
 	public String getName()

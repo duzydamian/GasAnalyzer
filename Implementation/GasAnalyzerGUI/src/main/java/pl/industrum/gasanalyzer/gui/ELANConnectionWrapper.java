@@ -33,9 +33,9 @@ public class ELANConnectionWrapper implements Iterable<ELANNetwork>
 	{
 		try
 		{	
-			ELANNetwork network = new ELANNetwork( ELANNetwork.getNetworksCounter() );
+			ELANNetwork network = new ELANNetwork( ELANNetwork.getNetworksCounter(), port );
 			ELANNetwork.incNetworksCounter();
-			ELANConnectionState state = network.getConnection().getInstance().connect( port, network );
+			ELANConnectionState state = network.getConnection().connect( port, network );
 			network.addObserver( observer );
 			networks.put( port, network );
 			

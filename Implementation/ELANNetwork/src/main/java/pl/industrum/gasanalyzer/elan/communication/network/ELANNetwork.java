@@ -36,15 +36,17 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 	
 	//Non static part of ELANNetwork
 	private Integer id;
+	private String port;
 	private String name;
 	private ELANMeasurementDevice[] measurementDevices;
 	private boolean[] measurementDevicesNotifications;
 	private ELANConnection connection;
 	
-	public ELANNetwork( Integer id )
+	public ELANNetwork( Integer id, String port )
 	{
 		this.id = id;
 		this.name = "";
+		this.port = port ;
 		this.connection = new ELANConnection();
 		initializeDevicesPool();
 	}
@@ -78,17 +80,17 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 	            	thread.setName( "DATA_PARSER_FROM_NETWORK[" + id.toString() + "]" );
 	            	thread.start();
 				}
-				else if( arg instanceof ELANMeasurementDeviceNotification )
+			}
+			else if( arg instanceof ELANMeasurementDeviceNotification )
+			{
+				Integer deviceAddress = ( ( ELANMeasurementDeviceNotification ) arg ).getData();
+				measurementDevicesNotifications[ deviceAddress ] = true;
+				//Check if all notification received
+				if( checkNotifications() )
 				{
-					Integer deviceAddress = ( ( ELANMeasurementDeviceNotification ) arg ).getData();
-					measurementDevicesNotifications[ deviceAddress ] = true;
-					//Check if all notification received
-					if( checkNotifications() )
-					{
-						setChanged();
-						notifyObservers( new ELANNetworkNotification( getId() ) );
-						clearNotifications();
-					}
+					setChanged();
+					notifyObservers( new ELANNetworkNotification( getPort() ) );
+					clearNotifications();
 				}
 			}
 			else
@@ -151,6 +153,7 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 		if( measurementDevices[deviceAddress] == null )
 		{
 			ELANMeasurementDevice device = new ELANMeasurementDevice( name, deviceAddress );
+			device.addObserver( this );
 			measurementDevices[deviceAddress] = device;
 			( measurementDevices[deviceAddress] ).addObserver( this );
 		}
@@ -165,6 +168,7 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 		if( measurementDevices[deviceAddress] == null )
 		{
 			ELANMeasurementDevice device = new ELANMeasurementDevice( deviceAddress );
+			device.addObserver( this );
 			measurementDevices[deviceAddress] = device;
 		}
 		else
@@ -201,7 +205,12 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 			return name;
 		}
 	}
-	
+
+	public String getPort()
+	{
+		return port;
+	}
+
 	public void rename( String name )
 	{
 		this.name = name;

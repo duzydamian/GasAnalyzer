@@ -26,12 +26,6 @@ import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
 public class ELANConnection
 {
 	/**
-	 * Instance for singleton
-	 */
-	//Foolish because there could be many connections
-	//due to many networks could exists
-	private ELANConnection instance = null;
-	/**
 	 * Interface Parameters
 	 * Level RS485
 	 */	
@@ -88,19 +82,6 @@ public class ELANConnection
 		super();
 		this.is = null;
 		this.os = null;
-	}
-	/**
-	 * 
-	 * 
-	 * @return Instance if exists or new if not
-	 */
-	public synchronized ELANConnection getInstance()
-	{
-		if (instance == null)
-		{
-			instance = new ELANConnection();
-		}
-		return instance;
 	}
 	
 	/**
