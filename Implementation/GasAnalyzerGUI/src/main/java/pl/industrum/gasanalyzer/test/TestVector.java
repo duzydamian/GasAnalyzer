@@ -7,7 +7,7 @@ import java.util.Vector;
 
 /**
  * @author duzydamian (Damian Karbowiak)
- *
+ * 
  */
 public class TestVector extends Vector<Test>
 {
@@ -19,8 +19,8 @@ public class TestVector extends Vector<Test>
 	public TestVector()
 	{
 		super();
-		add(new LibRxTxTest());
-		add(new ComPortAccessibilityTest());
+		add( new LibRxTxTest() );
+		add( new ComPortAccessibilityTest() );
 	}
 
 }

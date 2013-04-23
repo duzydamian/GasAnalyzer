@@ -22,29 +22,31 @@ public class DatePicker extends Dialog
 
 	/**
 	 * Create the dialog.
+	 * 
 	 * @param parent
 	 * @param style
 	 */
-	public DatePicker(Shell parent, int style)
+	public DatePicker( Shell parent, int style )
 	{
-		super(parent, style);
-		setText(Messages.getString("DatePicker.this.text")); //$NON-NLS-1$
+		super( parent, style );
+		setText( Messages.getString( "DatePicker.this.text" ) ); //$NON-NLS-1$
 	}
 
 	/**
 	 * Open the dialog.
+	 * 
 	 * @return the result
 	 */
 	public int[] open()
 	{
 		createContents();
-		shell.pack ();
+		shell.pack();
 		shell.open();
 		shell.layout();
 		Display display = getParent().getDisplay();
-		while (!shell.isDisposed())
+		while ( !shell.isDisposed() )
 		{
-			if (!display.readAndDispatch())
+			if ( !display.readAndDispatch() )
 			{
 				display.sleep();
 			}
@@ -57,26 +59,29 @@ public class DatePicker extends Dialog
 	 */
 	private void createContents()
 	{
-		shell = new Shell(getParent(), getStyle() | SWT.DIALOG_TRIM);
-		shell.setSize(450, 300);
-		shell.setText(getText());
-		shell.setLayout (new GridLayout (1, false));
+		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
+		shell.setSize( 450, 300 );
+		shell.setText( getText() );
+		shell.setLayout( new GridLayout( 1, false ) );
 
-		calendar = new DateTime (shell, SWT.CALENDAR | SWT.BORDER);
-		
-		ok = new Button (shell, SWT.PUSH);
-		ok.setText (Messages.getString("DatePicker.ok.text")); //$NON-NLS-1$
-		ok.setLayoutData(new GridData (SWT.FILL, SWT.CENTER, false, false));
-		ok.addSelectionListener (new SelectionAdapter ()
+		calendar = new DateTime( shell, SWT.CALENDAR | SWT.BORDER );
+
+		ok = new Button( shell, SWT.PUSH );
+		ok.setText( Messages.getString( "DatePicker.ok.text" ) ); //$NON-NLS-1$
+		ok.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false, false ) );
+		ok.addSelectionListener( new SelectionAdapter()
 		{
-			public void widgetSelected (SelectionEvent e)
+			public void widgetSelected( SelectionEvent e )
 			{
-				System.out.println ("Calendar date selected (MM/DD/YYYY) = " + (calendar.getMonth () + 1) + "/" + calendar.getDay () + "/" + calendar.getYear ());
-				result = new int[] {calendar.getYear(), calendar.getMonth(), calendar.getDay()};
+				System.out.println( "Calendar date selected (MM/DD/YYYY) = "
+						+ ( calendar.getMonth() + 1 ) + "/" + calendar.getDay()
+						+ "/" + calendar.getYear() );
+				result = new int[]
+				{ calendar.getYear(), calendar.getMonth(), calendar.getDay() };
 				shell.close();
 			}
-		});
-		shell.setDefaultButton (ok);		
+		} );
+		shell.setDefaultButton( ok );
 	}
 
 }

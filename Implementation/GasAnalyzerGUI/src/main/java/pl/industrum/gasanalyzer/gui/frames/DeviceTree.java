@@ -28,59 +28,67 @@ public class DeviceTree extends Composite
 
 	/**
 	 * Create the composite.
+	 * 
 	 * @param parent
 	 * @param style
 	 */
-	public DeviceTree(Composite parent, int style)
+	public DeviceTree( Composite parent, int style )
 	{
-		super(parent, style);
-		setLayout(new GridLayout(3, false));				
-		
-		deviceTree = new Tree(this, SWT.BORDER);
-		deviceTree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
-		
-		trtmWszystki = new TreeItem(deviceTree, SWT.NONE);
-		trtmWszystki.setText(Messages.getString("DeviceTree.trtmWszystki.text(java.lang.String)")); //$NON-NLS-1$
-		
-		trtmUltramat = new TreeItem(trtmWszystki, SWT.NONE);
-		trtmUltramat.setText(Messages.getString("DeviceTree.trtmUltramat.text(java.lang.String)")); //$NON-NLS-1$
-		
-		trtmUltramat_1 = new TreeItem(trtmWszystki, SWT.NONE);
-		trtmUltramat_1.setText(Messages.getString("DeviceTree.trtmUltramat_1.text(java.lang.String)")); //$NON-NLS-1$
-		trtmWszystki.setExpanded(true);
-		
-		lblSurveyStep = new Label(this, SWT.NONE);
-		lblSurveyStep.setText(Messages.getString("DeviceTree.lblSurveyStep.text")); //$NON-NLS-1$
-		
-		surveyStep = new Spinner(this, SWT.BORDER);
-		surveyStep.setMinimum(1);
-		surveyStep.setMaximum(9999);
-		surveyStep.setSelection(60);
-		surveyStep.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		surveyStep.addModifyListener(new ModifyListener()
-		{			
-			public void modifyText(ModifyEvent arg0)
-			{
-				btnOk.setEnabled(true);
-			}
-		});
-		
-		btnOk = new Button(this, SWT.NONE);
-		btnOk.setText(Messages.getString("DeviceTree.btnOk.text")); //$NON-NLS-1$
-		btnOk.addSelectionListener(new SelectionAdapter()
+		super( parent, style );
+		setLayout( new GridLayout( 3, false ) );
+
+		deviceTree = new Tree( this, SWT.BORDER );
+		deviceTree.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true,
+				3, 1 ) );
+
+		trtmWszystki = new TreeItem( deviceTree, SWT.NONE );
+		trtmWszystki.setText( Messages
+				.getString( "DeviceTree.trtmWszystki.text(java.lang.String)" ) ); //$NON-NLS-1$
+
+		trtmUltramat = new TreeItem( trtmWszystki, SWT.NONE );
+		trtmUltramat.setText( Messages
+				.getString( "DeviceTree.trtmUltramat.text(java.lang.String)" ) ); //$NON-NLS-1$
+
+		trtmUltramat_1 = new TreeItem( trtmWszystki, SWT.NONE );
+		trtmUltramat_1
+				.setText( Messages
+						.getString( "DeviceTree.trtmUltramat_1.text(java.lang.String)" ) ); //$NON-NLS-1$
+		trtmWszystki.setExpanded( true );
+
+		lblSurveyStep = new Label( this, SWT.NONE );
+		lblSurveyStep.setText( Messages
+				.getString( "DeviceTree.lblSurveyStep.text" ) ); //$NON-NLS-1$
+
+		surveyStep = new Spinner( this, SWT.BORDER );
+		surveyStep.setMinimum( 1 );
+		surveyStep.setMaximum( 9999 );
+		surveyStep.setSelection( 60 );
+		surveyStep.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
+				false, 1, 1 ) );
+		surveyStep.addModifyListener( new ModifyListener()
 		{
-			public void widgetSelected (SelectionEvent e)
+			public void modifyText( ModifyEvent arg0 )
+			{
+				btnOk.setEnabled( true );
+			}
+		} );
+
+		btnOk = new Button( this, SWT.NONE );
+		btnOk.setText( Messages.getString( "DeviceTree.btnOk.text" ) ); //$NON-NLS-1$
+		btnOk.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
 			{
 				setSurveyStep();
-				btnOk.setEnabled(false);
+				btnOk.setEnabled( false );
 			}
-		});
+		} );
 	}
 
 	protected void setSurveyStep()
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

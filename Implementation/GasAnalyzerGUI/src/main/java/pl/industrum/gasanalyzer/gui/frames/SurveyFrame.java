@@ -27,35 +27,35 @@ import pl.industrum.gasanalyzer.i18n.Messages;
 
 /**
  * @author duzydamian (Damian Karbowiak)
- *
+ * 
  */
 public abstract class SurveyFrame extends Composite
-{	
+{
 
 	GridData surveyFrameData;
 	private Label lblSurveyName;
 	private Text txtSurveyName;
-	
+
 	private Label lblSurveyDate;
 	private DateTime txtSurveyDate;
-		
+
 	private Label lblSurveyUser;
 	private Combo listSurveyUser;
 	private Button btnNewSurveyUser;
-	
+
 	private Label lblSurveyPlace;
 	private Button btnNewSurveyPlace;
 	private Combo listSurveyPlace;
-	
+
 	private Label lblSurveyLoad;
 	private Text textSurveyLoad;
-	
+
 	private Label lblSurveySpecialConditions;
 	private StyledText styledTextSurveySpecialConditions;
-		
+
 	private Label lblComment;
 	private StyledText styledTextComment;
-	
+
 	private Composite surveyForm;
 	private Button btnSelectDate;
 	private ExpandBar expandBar;
@@ -63,217 +63,258 @@ public abstract class SurveyFrame extends Composite
 
 	/**
 	 * Create the composite.
+	 * 
 	 * @param parent
 	 * @param style
 	 */
-	public SurveyFrame(final Composite parent, int style)
+	public SurveyFrame( final Composite parent, int style )
 	{
-		super(parent, style);
-		surveyFrameData = new GridData(GridData.FILL, GridData.CENTER, true, false);
+		super( parent, style );
+		surveyFrameData = new GridData( GridData.FILL, GridData.CENTER, true,
+				false );
 		surveyFrameData.horizontalSpan = 6;
-		this.setLayoutData(surveyFrameData);
-		setLayout(new FillLayout(SWT.HORIZONTAL));
-		
-		expandBar = new ExpandBar(this, SWT.NONE);
-		expandBar.addExpandListener(new ExpandListener() {
+		this.setLayoutData( surveyFrameData );
+		setLayout( new FillLayout( SWT.HORIZONTAL ) );
 
-            private void resize(final ExpandEvent event, final boolean expand){
-
-                final Display display = Display.getCurrent();
-
-                new Thread(new Runnable() {
-                    public void run() {
-
-                        final int[] orgSize = new int[1];
-                        final int[] currentSize = new int[1];
-
-                        final Object lock = new Object();
-
-                        if (display.isDisposed() || expandBar.isDisposed())
-                        {
-                            return;
-                        }
-
-                        display.syncExec(new Runnable()
-                        {
-                            public void run()
-                            {
-                                if (expandBar.isDisposed() || expandBar.getShell().isDisposed())
-                                {
-                                    return;
-                                }
-
-                                synchronized(lock)
-                                {
-                                	//expandBar.getShell().getParent().pack(true);
-                                	expandBar.getParent().getShell().pack(true);
-                                    orgSize[0] = expandBar.getShell().getSize().y;
-                                    currentSize[0] = orgSize[0];
-                                }
-                            }
-                        });     
-
-                        while (currentSize[0] == orgSize[0])
-                        {
-                            if (display.isDisposed() || expandBar.isDisposed())
-                            {
-                                return;
-                            }
-
-                            display.syncExec(new Runnable()
-                            {
-                                public void run()
-                                {
-
-                                    synchronized(lock)
-                                    {
-                                        if (expandBar.isDisposed() || expandBar.getShell().isDisposed())
-                                        {
-                                            return;
-                                        }
-
-                                        currentSize[0] = expandBar.getShell().getSize().y;
-
-                                        if (currentSize[0] != orgSize[0])
-                                        {
-                                            return;
-                                        }
-                                        else
-                                        {
-                                        	expandBar.getParent().getShell().layout(true);
-                                        	expandBar.getParent().getShell().pack(true);
-                                        }
-                                    }
-                                }
-                            });                             
-                        }
-                    }
-                }).start();
-        }
-
-        public void itemCollapsed(ExpandEvent event) {
-            resize(event, false);
-        }
-
-        public void itemExpanded(ExpandEvent event) {        
-            resize(event, true);
-        }
-
-        });
-		
-		xpndtmDanaPomiaru = new ExpandItem(expandBar, SWT.NONE);
-		xpndtmDanaPomiaru.setExpanded(true);
-		xpndtmDanaPomiaru.setText(Messages.getString("SurveyFrame.xpndtmDanaPomiaru.text")); //$NON-NLS-1$
-		
-		surveyForm = new Composite(expandBar, SWT.NONE);
-		xpndtmDanaPomiaru.setHeight(surveyForm.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-		xpndtmDanaPomiaru.setControl(surveyForm);
-		surveyForm.setLayout(new GridLayout(3, false));
-		
-		lblSurveyName = new Label(surveyForm, SWT.NONE);
-		lblSurveyName.setSize(44, 17);
-		lblSurveyName.setText(Messages.getString("SurveyFrame.lblSurveyName.text")); //$NON-NLS-1$
-		
-		txtSurveyName = new Text(surveyForm, SWT.BORDER);
-		txtSurveyName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
-		
-		lblSurveyDate = new Label(surveyForm, SWT.NONE);
-		lblSurveyDate.setText(Messages.getString("SurveyFrame.lblSurveyDate.text")); //$NON-NLS-1$
-		
-		txtSurveyDate = new DateTime(surveyForm, SWT.DATE);
-		txtSurveyDate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		
-		btnSelectDate = new Button(surveyForm, SWT.NONE);
-		btnSelectDate.setText(Messages.getString("SurveyFrame.btnSelectDate.text"));	 //$NON-NLS-1$
-		btnSelectDate.addSelectionListener(new SelectionAdapter()
+		expandBar = new ExpandBar( this, SWT.NONE );
+		expandBar.addExpandListener( new ExpandListener()
 		{
-			public void widgetSelected (SelectionEvent e)
+
+			private void resize( final ExpandEvent event, final boolean expand )
 			{
-				DatePicker datePicker = new DatePicker(parent.getShell(), SWT.NONE);
-				int[] date = datePicker.open();
-				if (date != null)
-					txtSurveyDate.setDate(date[0], date[1], date[2]);				
+
+				final Display display = Display.getCurrent();
+
+				new Thread( new Runnable()
+				{
+					public void run()
+					{
+
+						final int[] orgSize = new int[1];
+						final int[] currentSize = new int[1];
+
+						final Object lock = new Object();
+
+						if ( display.isDisposed() || expandBar.isDisposed() )
+						{
+							return;
+						}
+
+						display.syncExec( new Runnable()
+						{
+							public void run()
+							{
+								if ( expandBar.isDisposed()
+										|| expandBar.getShell().isDisposed() )
+								{
+									return;
+								}
+
+								synchronized ( lock )
+								{
+									// expandBar.getShell().getParent().pack(true);
+									expandBar.getParent().getShell()
+											.pack( true );
+									orgSize[0] = expandBar.getShell().getSize().y;
+									currentSize[0] = orgSize[0];
+								}
+							}
+						} );
+
+						while ( currentSize[0] == orgSize[0] )
+						{
+							if ( display.isDisposed() || expandBar.isDisposed() )
+							{
+								return;
+							}
+
+							display.syncExec( new Runnable()
+							{
+								public void run()
+								{
+
+									synchronized ( lock )
+									{
+										if ( expandBar.isDisposed()
+												|| expandBar.getShell()
+														.isDisposed() )
+										{
+											return;
+										}
+
+										currentSize[0] = expandBar.getShell()
+												.getSize().y;
+
+										if ( currentSize[0] != orgSize[0] )
+										{
+											return;
+										} else
+										{
+											expandBar.getParent().getShell()
+													.layout( true );
+											expandBar.getParent().getShell()
+													.pack( true );
+										}
+									}
+								}
+							} );
+						}
+					}
+				} ).start();
 			}
-		});
-		
-		lblSurveyUser = new Label(surveyForm, SWT.NONE);
-		lblSurveyUser.setText(Messages.getString("SurveyFrame.lblSurveyUser.text")); //$NON-NLS-1$
-		
-		listSurveyUser = new Combo(surveyForm, SWT.NONE);
-		listSurveyUser.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		listSurveyUser.add("Jan Wężyk");
-		listSurveyUser.add("Kuba guzik");
-		
-		btnNewSurveyUser = new Button(surveyForm, SWT.NONE);
-		btnNewSurveyUser.setImage(SWTResourceManager.getImage(SurveyFrame.class, "/pl/industrum/gasanalyzer/gui/add.png"));
-		btnNewSurveyUser.setText(Messages.getString("SurveyFrame.btnNewSurveyUser.text"));	 //$NON-NLS-1$
-		btnNewSurveyUser.addSelectionListener(new SelectionAdapter()
-		{
-			public void widgetSelected (SelectionEvent e)
+
+			public void itemCollapsed( ExpandEvent event )
 			{
-				NewSurveyUser addSurveyUser = new NewSurveyUser(parent.getShell(), SWT.NONE);
+				resize( event, false );
+			}
+
+			public void itemExpanded( ExpandEvent event )
+			{
+				resize( event, true );
+			}
+
+		} );
+
+		xpndtmDanaPomiaru = new ExpandItem( expandBar, SWT.NONE );
+		xpndtmDanaPomiaru.setExpanded( true );
+		xpndtmDanaPomiaru.setText( Messages
+				.getString( "SurveyFrame.xpndtmDanaPomiaru.text" ) ); //$NON-NLS-1$
+
+		surveyForm = new Composite( expandBar, SWT.NONE );
+		xpndtmDanaPomiaru.setHeight( surveyForm.computeSize( SWT.DEFAULT,
+				SWT.DEFAULT ).y );
+		xpndtmDanaPomiaru.setControl( surveyForm );
+		surveyForm.setLayout( new GridLayout( 3, false ) );
+
+		lblSurveyName = new Label( surveyForm, SWT.NONE );
+		lblSurveyName.setSize( 44, 17 );
+		lblSurveyName.setText( Messages
+				.getString( "SurveyFrame.lblSurveyName.text" ) ); //$NON-NLS-1$
+
+		txtSurveyName = new Text( surveyForm, SWT.BORDER );
+		txtSurveyName.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
+				false, 2, 1 ) );
+
+		lblSurveyDate = new Label( surveyForm, SWT.NONE );
+		lblSurveyDate.setText( Messages
+				.getString( "SurveyFrame.lblSurveyDate.text" ) ); //$NON-NLS-1$
+
+		txtSurveyDate = new DateTime( surveyForm, SWT.DATE );
+		txtSurveyDate.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
+				false, 1, 1 ) );
+
+		btnSelectDate = new Button( surveyForm, SWT.NONE );
+		btnSelectDate.setImage( SWTResourceManager.getImage( SurveyFrame.class,
+				"/pl/industrum/gasanalyzer/gui/calendar.png" ) );
+		btnSelectDate.setText( Messages
+				.getString( "SurveyFrame.btnSelectDate.text" ) ); //$NON-NLS-1$
+		btnSelectDate.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				DatePicker datePicker = new DatePicker( parent.getShell(),
+						SWT.NONE );
+				int[] date = datePicker.open();
+				if ( date != null )
+					txtSurveyDate.setDate( date[0], date[1], date[2] );
+			}
+		} );
+
+		lblSurveyUser = new Label( surveyForm, SWT.NONE );
+		lblSurveyUser.setText( Messages
+				.getString( "SurveyFrame.lblSurveyUser.text" ) ); //$NON-NLS-1$
+
+		listSurveyUser = new Combo( surveyForm, SWT.NONE );
+		listSurveyUser.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
+				false, false, 1, 1 ) );
+		listSurveyUser.add( "Jan Wężyk" );
+		listSurveyUser.add( "Kuba guzik" );
+
+		btnNewSurveyUser = new Button( surveyForm, SWT.NONE );
+		btnNewSurveyUser.setImage( SWTResourceManager.getImage(
+				SurveyFrame.class, "/pl/industrum/gasanalyzer/gui/add.png" ) );
+		btnNewSurveyUser.setText( Messages
+				.getString( "SurveyFrame.btnNewSurveyUser.text" ) ); //$NON-NLS-1$
+		btnNewSurveyUser.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				NewSurveyUser addSurveyUser = new NewSurveyUser( parent
+						.getShell(), SWT.NONE );
 				addSurveyUser.open();
-				
+
 				refreshListSurveyUser();
 			}
-		});
-		
-		lblSurveyPlace = new Label(surveyForm, SWT.NONE);
-		lblSurveyPlace.setText(Messages.getString("SurveyFrame.lblSurveyPlace.text")); //$NON-NLS-1$
-		
-		listSurveyPlace = new Combo(surveyForm, SWT.NONE);
-		listSurveyPlace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		listSurveyPlace.add("Narnia");
-		listSurveyPlace.add("Mordor");
-		
-		btnNewSurveyPlace = new Button(surveyForm, SWT.NONE);
-		btnNewSurveyPlace.setText(Messages.getString("SurveyFrame.btnNewSurveyPlace.text")); //$NON-NLS-1$
-		btnNewSurveyPlace.addSelectionListener(new SelectionAdapter()
+		} );
+
+		lblSurveyPlace = new Label( surveyForm, SWT.NONE );
+		lblSurveyPlace.setText( Messages
+				.getString( "SurveyFrame.lblSurveyPlace.text" ) ); //$NON-NLS-1$
+
+		listSurveyPlace = new Combo( surveyForm, SWT.NONE );
+		listSurveyPlace.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
+				false, false, 1, 1 ) );
+		listSurveyPlace.add( "Narnia" );
+		listSurveyPlace.add( "Mordor" );
+
+		btnNewSurveyPlace = new Button( surveyForm, SWT.NONE );
+		btnNewSurveyPlace.setText( Messages
+				.getString( "SurveyFrame.btnNewSurveyPlace.text" ) ); //$NON-NLS-1$
+		btnNewSurveyPlace.addSelectionListener( new SelectionAdapter()
 		{
-			public void widgetSelected (SelectionEvent e)
+			public void widgetSelected( SelectionEvent e )
 			{
-				NewSurveyPlace newSurveyPlace = new NewSurveyPlace(parent.getShell(), SWT.NONE);
+				NewSurveyPlace newSurveyPlace = new NewSurveyPlace( parent
+						.getShell(), SWT.NONE );
 				newSurveyPlace.open();
-				
+
 				refreshListSurveyPlace();
 			}
-		});
-		
-		lblSurveyLoad = new Label(surveyForm, SWT.NONE);
-		lblSurveyLoad.setText(Messages.getString("SurveyFrame.lblSurveyLoad.text")); //$NON-NLS-1$
-		
-		textSurveyLoad = new Text(surveyForm, SWT.BORDER);
-		textSurveyLoad.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
-		
-		lblSurveySpecialConditions = new Label(surveyForm, SWT.NONE);
-		lblSurveySpecialConditions.setText(Messages.getString("SurveyFrame.lblSurveySpecialConditions.text")); //$NON-NLS-1$
-		
-		styledTextSurveySpecialConditions = new StyledText(surveyForm, SWT.BORDER);
-		styledTextSurveySpecialConditions.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
-		
-		lblComment = new Label(surveyForm, SWT.NONE);
-		lblComment.setText(Messages.getString("SurveyFrame.lblComment.text")); //$NON-NLS-1$
-		
-		styledTextComment = new StyledText(surveyForm, SWT.BORDER);
-		styledTextComment.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
-		xpndtmDanaPomiaru.setHeight(xpndtmDanaPomiaru.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-	}	
-	
+		} );
+
+		lblSurveyLoad = new Label( surveyForm, SWT.NONE );
+		lblSurveyLoad.setText( Messages
+				.getString( "SurveyFrame.lblSurveyLoad.text" ) ); //$NON-NLS-1$
+
+		textSurveyLoad = new Text( surveyForm, SWT.BORDER );
+		textSurveyLoad.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
+				false, false, 2, 1 ) );
+
+		lblSurveySpecialConditions = new Label( surveyForm, SWT.NONE );
+		lblSurveySpecialConditions.setText( Messages
+				.getString( "SurveyFrame.lblSurveySpecialConditions.text" ) ); //$NON-NLS-1$
+
+		styledTextSurveySpecialConditions = new StyledText( surveyForm,
+				SWT.BORDER );
+		styledTextSurveySpecialConditions.setLayoutData( new GridData(
+				SWT.FILL, SWT.CENTER, false, false, 2, 1 ) );
+
+		lblComment = new Label( surveyForm, SWT.NONE );
+		lblComment
+				.setText( Messages.getString( "SurveyFrame.lblComment.text" ) ); //$NON-NLS-1$
+
+		styledTextComment = new StyledText( surveyForm, SWT.BORDER );
+		styledTextComment.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
+				false, false, 2, 1 ) );
+		xpndtmDanaPomiaru.setHeight( xpndtmDanaPomiaru.getControl()
+				.computeSize( SWT.DEFAULT, SWT.DEFAULT ).y );
+	}
+
 	@Override
 	protected void checkSubclass()
 	{
 		// Disable the check that prevents subclassing of SWT components
 	}
-	
+
 	private void refreshListSurveyUser()
 	{
-		
+
 	}
-	
+
 	private void refreshListSurveyPlace()
 	{
-		
+
 	}
-	
+
 	public abstract void resize();
 }

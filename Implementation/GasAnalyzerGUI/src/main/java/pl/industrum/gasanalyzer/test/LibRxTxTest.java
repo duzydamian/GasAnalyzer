@@ -8,7 +8,7 @@ import pl.industrum.gasanalyzer.gui.GasAnalyzerGUI;
 
 /**
  * @author duzydamian (Damian Karbowiak)
- *
+ * 
  */
 public class LibRxTxTest extends Test
 {
@@ -18,12 +18,13 @@ public class LibRxTxTest extends Test
 	 */
 	public LibRxTxTest()
 	{
-		super("Testowanie biblioteki RxTx");
+		super( "Testowanie biblioteki RxTx" );
 	}
 
 	public void test()
-	{		
-		GasAnalyzerGUI.setRXTXVersion(ELANConnection.getRXTXVersion());
-		GasAnalyzerGUI.setNativeRXTXVersion(ELANConnection.getNativeRXTXVersion());				
+	{
+		GasAnalyzerGUI.setRXTXVersion( ELANConnection.getRXTXVersion() );
+		GasAnalyzerGUI.setNativeRXTXVersion( ELANConnection
+				.getNativeRXTXVersion() );
 	}
 }

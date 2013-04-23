@@ -14,17 +14,19 @@ public class NewSurveyPlace extends Dialog
 
 	/**
 	 * Create the dialog.
+	 * 
 	 * @param parent
 	 * @param style
 	 */
-	public NewSurveyPlace(Shell parent, int style)
+	public NewSurveyPlace( Shell parent, int style )
 	{
-		super(parent, style);
-		setText(Messages.getString("NewSurveyPlace.this.text")); //$NON-NLS-1$
+		super( parent, style );
+		setText( Messages.getString( "NewSurveyPlace.this.text" ) ); //$NON-NLS-1$
 	}
 
 	/**
 	 * Open the dialog.
+	 * 
 	 * @return the result
 	 */
 	public Object open()
@@ -33,9 +35,9 @@ public class NewSurveyPlace extends Dialog
 		shell.open();
 		shell.layout();
 		Display display = getParent().getDisplay();
-		while (!shell.isDisposed())
+		while ( !shell.isDisposed() )
 		{
-			if (!display.readAndDispatch())
+			if ( !display.readAndDispatch() )
 			{
 				display.sleep();
 			}
@@ -48,9 +50,9 @@ public class NewSurveyPlace extends Dialog
 	 */
 	private void createContents()
 	{
-		shell = new Shell(getParent(), getStyle() | SWT.DIALOG_TRIM);
-		shell.setSize(450, 300);
-		shell.setText(getText());
+		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
+		shell.setSize( 450, 300 );
+		shell.setText( getText() );
 
 	}
 

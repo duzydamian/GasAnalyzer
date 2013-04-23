@@ -5,39 +5,39 @@ package pl.industrum.gasanalyzer.gui;
 
 /**
  * @author duzydamian(Damian Karbowiak)
- *
+ * 
  */
 public class GasAnalyzerGUI
-{	
+{
 	private static String RXTXVersion;
 	private static String NativeRXTXVersion;
-	
+
 	public GasAnalyzerGUI()
 	{
-		super();		
+		super();
 	}
-	
+
 	/**
 	 * Launch the application.
+	 * 
 	 * @param args
 	 */
-	public static void main(String[] args)
+	public static void main( String[] args )
 	{
 		try
-		{		
+		{
 			SplashScreen splashScreen = new SplashScreen();
 			splashScreen.open();
-			
+
 			if ( splashScreen.isAllTestComplete() )
 			{
 				GasAnalyzerMainWindow window = new GasAnalyzerMainWindow();
 				window.open();
 			}
-		}
-		catch (Exception e)
+		} catch ( Exception e )
 		{
 			e.printStackTrace();
-		}		       
+		}
 	}
 
 	/**
@@ -49,9 +49,10 @@ public class GasAnalyzerGUI
 	}
 
 	/**
-	 * @param rXTXVersion the rXTXVersion to set
+	 * @param rXTXVersion
+	 *            the rXTXVersion to set
 	 */
-	public static void setRXTXVersion(String rXTXVersion)
+	public static void setRXTXVersion( String rXTXVersion )
 	{
 		RXTXVersion = rXTXVersion;
 	}
@@ -65,10 +66,11 @@ public class GasAnalyzerGUI
 	}
 
 	/**
-	 * @param nativeRXTXVersion the nativeRXTXVersion to set
+	 * @param nativeRXTXVersion
+	 *            the nativeRXTXVersion to set
 	 */
-	public static void setNativeRXTXVersion(String nativeRXTXVersion)
+	public static void setNativeRXTXVersion( String nativeRXTXVersion )
 	{
 		NativeRXTXVersion = nativeRXTXVersion;
-	}       
+	}
 }
