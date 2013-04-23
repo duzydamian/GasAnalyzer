@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>GasAnalyzer</artifactId>
   <groupId>pl.industrum.gasanalyzer</groupId>
-  <version>0.0.3</version>
+  <version>0.0.4</version>
   <packaging>pom</packaging>
   <name>Gas Analyzer All</name>
   <description>Opis możesz tu wymyślić Grzesiu</description>

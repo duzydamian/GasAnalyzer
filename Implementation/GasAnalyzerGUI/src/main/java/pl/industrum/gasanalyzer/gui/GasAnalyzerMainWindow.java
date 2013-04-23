@@ -26,7 +26,6 @@ import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxFrame;
 import pl.industrum.gasanalyzer.elan.notifications.ELANNetworkNotification;
-import pl.industrum.gasanalyzer.elan.notifications.ELANRxByteBufferNotification;
 import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
 import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
 import pl.industrum.gasanalyzer.gui.frames.Device;
@@ -262,13 +261,11 @@ public class GasAnalyzerMainWindow implements Observer
 
 		deviceTree = new DeviceTree( composite, SWT.V_SCROLL )
 		{
-
 			@Override
 			public void setSurveyStep( int step )
 			{
 				//TODO
-			}
-			
+			}			
 		};
 		new Label(deviceTree, SWT.NONE);
 		new Label(deviceTree, SWT.NONE);
