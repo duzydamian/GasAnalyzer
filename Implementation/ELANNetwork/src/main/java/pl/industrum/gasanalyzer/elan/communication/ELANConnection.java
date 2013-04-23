@@ -68,11 +68,13 @@ public class ELANConnection
 	 * Object stores information about port you connect to.
 	 */
 	CommPort commPort;
-	
+
+	private ELANRxByteBuffer rxThread;
+
 	/**
 	 * Thread to read data from network.
 	 */
-	Thread dataRxTthread; 
+	private Thread dataRxThread; 
 			
 	/**
 	 * Default constructor
@@ -90,7 +92,7 @@ public class ELANConnection
 	 * @param portName name of port which you want to connect
 	 * @throws Exception
 	 */
-	public ELANConnectionState connect(String portName,  Observer observer) throws Exception
+	public ELANConnectionState connect(String portName, Observer observer) throws Exception
 	{
 		CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
 		if (portIdentifier.isCurrentlyOwned())
@@ -125,13 +127,12 @@ public class ELANConnection
 				// Assign output stream from port to variable
 				os = new PrintStream(serialPort.getOutputStream(), true);
 				
-				//Start thread to get frames
-				ELANRxByteBuffer rxThread = new ELANRxByteBuffer( this );            	
+				rxThread = new ELANRxByteBuffer( this );            	
             	rxThread.addObserver( observer );
             	
-            	Thread dataRxTthread = new Thread( rxThread );
-            	dataRxTthread.setName( "RX_BYTE_BUFFER_FROM_CONNECTION[" + portName + "]" );
-            	dataRxTthread.start();
+            	dataRxThread = new Thread( rxThread );
+            	dataRxThread.setName( "RX_BYTE_BUFFER_FROM_CONNECTION[" + portName + "]" );
+            	dataRxThread.start();
             	
             	return ELANConnectionState.CONNECTED;
 			}
@@ -149,9 +150,9 @@ public class ELANConnection
 	{
 		try
 		{			
-			if (dataRxTthread != null)
+			if (dataRxThread != null)
 			{
-				dataRxTthread.interrupt();
+				dataRxThread.interrupt();
 			}
 			if (commPort != null)
 				commPort.close();

@@ -260,7 +260,16 @@ public class GasAnalyzerMainWindow implements Observer
 		composite.setLayout( new FillLayout( SWT.HORIZONTAL ) );
 		composite.setLayoutData( compositeData );
 
-		deviceTree = new DeviceTree( composite, SWT.V_SCROLL );
+		deviceTree = new DeviceTree( composite, SWT.V_SCROLL )
+		{
+
+			@Override
+			public void setSurveyStep( int step )
+			{
+				//TODO
+			}
+			
+		};
 		new Label(deviceTree, SWT.NONE);
 		new Label(deviceTree, SWT.NONE);
 		deviceTree.redraw();
@@ -296,6 +305,7 @@ public class GasAnalyzerMainWindow implements Observer
 				{
 					ELANRxFrame poll = device.pollAndClear();
 					ELANRxBroadcastFrame frame = ( ELANRxBroadcastFrame )poll;
+					System.out.println(frame.getTimeStamp());
 					for( ELANMeasurement elanMeasurement: frame )
 					{
 						System.out.println(elanMeasurement.toString());

@@ -15,7 +15,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.TreeItem;
 import pl.industrum.gasanalyzer.i18n.Messages;
 
-public class DeviceTree extends Composite
+public abstract class DeviceTree extends Composite
 {
 
 	private Tree deviceTree;
@@ -79,17 +79,14 @@ public class DeviceTree extends Composite
 		{
 			public void widgetSelected( SelectionEvent e )
 			{
-				setSurveyStep();
+				setSurveyStep(surveyStep.getSelection());
 				btnOk.setEnabled( false );
 			}
 		} );
 	}
 
-	protected void setSurveyStep()
-	{
-		// TODO Auto-generated method stub
-
-	}
+	public abstract void setSurveyStep(int step);
+	
 
 	@Override
 	protected void checkSubclass()
