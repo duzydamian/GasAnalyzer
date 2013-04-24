@@ -64,6 +64,7 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 				{
 					//Preparser, used only to get source and target address
 					//address = channel_address * 16 + component_address ()
+					//TODO change index in device array add "-1", but not for device address
 					Integer deviceAddress = ( ELANDataParser.preparser( dataBuffer )[1] )/16;
 					
 					//Start data parser thread to avoid frames lost.

@@ -49,34 +49,18 @@ public class GasAnalyzerMainWindow implements Observer
 
 	private GenerateReportBar generateReportBar;
 	
+	private ELANConnectionWrapper connectionWrapper;
+	
 
-	public GasAnalyzerMainWindow() {
+	public GasAnalyzerMainWindow()
+	{
 		super();
 		outSelected = false;
+		connectionWrapper = new ELANConnectionWrapper();
 	}
 	
 	public void update( Observable obj, Object arg )
 	{
-	}
-	
-	public ELANConnectionState connect() throws Exception
-	{
-		//!!! Every network should join to only one connection
-		//every connection should join only one network
-		//because every port is a network and it needs to have
-		//connections itself (maybe we could just move some parts
-		//of connection to Network and live only network aggregation
-		//or we should change the singleton)
-		ELANConnection connection = ELANConnection.getInstance();
-		connection.addNetwork( this );
-		ELANConnectionState connectionState = connection.connect( portsList.getItem( portsList.getSelectionIndex() ) );
-		
-		return connectionState;
-	}
-	
-	public void disconnect()
-	{
-		ELANConnection.getInstance().disconnect();
 	}
 	
 	/**
@@ -227,7 +211,9 @@ public class GasAnalyzerMainWindow implements Observer
 		        	{
 		        		statusBar.showProgressBar();
 		        		statusBar.setProgress(50);
-			        	ELANConnectionState connectionState = connect();
+		        		//Begin connection
+		        		
+			        	//End connection
 			        	if (connectionState.isConnected())
 			        	{
 			        		statusBar.setProgress(75);
