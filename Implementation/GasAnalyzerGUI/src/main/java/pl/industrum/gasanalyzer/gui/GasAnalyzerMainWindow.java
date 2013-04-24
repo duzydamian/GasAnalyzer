@@ -16,7 +16,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
@@ -32,7 +31,6 @@ import pl.industrum.gasanalyzer.gui.frames.Device;
 import pl.industrum.gasanalyzer.gui.frames.DeviceTree;
 import pl.industrum.gasanalyzer.gui.frames.MainMenu;
 import pl.industrum.gasanalyzer.gui.frames.StatusBar;
-import pl.industrum.gasanalyzer.gui.frames.SurveyFrame;
 import pl.industrum.gasanalyzer.gui.frames.ToolBar;
 import pl.industrum.gasanalyzer.i18n.Messages;
 
@@ -47,7 +45,6 @@ public class GasAnalyzerMainWindow implements Observer
 	 */
 	StyledText styledText;
 	MainMenu menu;
-	SurveyFrame surveyFrame;
 	StatusBar statusBar;
 
 	private ToolBar toolBar;
@@ -124,7 +121,21 @@ public class GasAnalyzerMainWindow implements Observer
 				.getString( "GasAnalyzerMainWindow.shlGasAnalyzer.text" ) ); //$NON-NLS-1$
 		shlGasAnalyzer.setLayout( new GridLayout( 6, false ) );
 
-		menu = new MainMenu( shlGasAnalyzer, SWT.BAR );
+		menu = new MainMenu( shlGasAnalyzer, SWT.BAR )
+		{
+			@Override
+			public void refreshDeviceTree()
+			{
+				deviceTree.refreshTree();
+			}
+
+			@Override
+			public void closeApplication()
+			{
+				shlGasAnalyzer.close();
+			}		
+		};
+		
 		shlGasAnalyzer.setMenuBar( menu );
 
 		toolBar = new ToolBar( shlGasAnalyzer, SWT.BORDER )
@@ -134,15 +145,11 @@ public class GasAnalyzerMainWindow implements Observer
 			{
 				deviceTree.refreshTree();
 			}
-		};
 
-		surveyFrame = new SurveyFrame( shlGasAnalyzer, SWT.BORDER )
-		{
 			@Override
-			public void resize()
+			public void closeApplication()
 			{
-				layout();
-				getParent().layout();
+				shlGasAnalyzer.close();
 			}
 		};
 

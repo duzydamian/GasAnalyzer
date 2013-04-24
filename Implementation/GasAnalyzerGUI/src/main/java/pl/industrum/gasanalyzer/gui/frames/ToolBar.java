@@ -32,12 +32,15 @@ public abstract class ToolBar extends Composite
 	private Button btnRefresh;
 	private CoolItem coolItem;
 	private Label lblNewLabel;
+	private CoolItem coolItemBtnExit;
+	private Button btnExit;
 
 	/**
 	 * Create the composite.
 	 * 
 	 * @param parent
 	 * @param style
+	 * @param btnExit 
 	 */
 	public ToolBar( final Composite parent, int style )
 	{
@@ -50,6 +53,25 @@ public abstract class ToolBar extends Composite
 
 		bar = new CoolBar( this, SWT.NONE );
 
+		coolItemBtnExit = new CoolItem( bar, SWT.NONE );
+		btnExit = new Button( bar, SWT.NONE );
+		btnExit.setToolTipText(Messages.getString("ToolBar.btnExit.toolTipText")); //$NON-NLS-1$
+		btnExit.setImage( SWTResourceManager.getImage( ToolBar.class,
+				"/pl/industrum/gasanalyzer/gui/shutdown.png" ) );
+		coolItemBtnExit.setPreferredSize( coolItemBtnExit.computeSize(
+				btnExit.computeSize( SWT.DEFAULT, SWT.DEFAULT ).x,
+				btnExit.computeSize( SWT.DEFAULT, SWT.DEFAULT ).y ) );
+		coolItemBtnExit.setControl( btnExit );
+
+		btnExit.addSelectionListener( new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected( SelectionEvent arg0 )
+			{
+				closeApplication();
+			}
+		});
+		
 		coolItemBtnRefresh = new CoolItem( bar, SWT.NONE );
 		btnRefresh = new Button( bar, SWT.NONE );
 		btnRefresh.setToolTipText(Messages.getString("ToolBar.btnRefresh.toolTipText")); //$NON-NLS-1$
@@ -73,7 +95,7 @@ public abstract class ToolBar extends Composite
 		btnPdf = new Button( bar, SWT.PUSH );
 		btnPdf.setImage( SWTResourceManager.getImage( ToolBar.class,
 				"/pl/industrum/gasanalyzer/gui/pdf.png" ) );
-		btnPdf.setToolTipText( "Generuj raport jako PDF" );
+		btnPdf.setToolTipText( Messages.getString("ToolBar.btnPdf.toolTipText") ); //$NON-NLS-1$
 		coolItemBtnPdf.setPreferredSize( coolItemBtnPdf.computeSize(
 				btnPdf.computeSize( SWT.DEFAULT, SWT.DEFAULT ).x,
 				btnPdf.computeSize( SWT.DEFAULT, SWT.DEFAULT ).y ) );
@@ -127,4 +149,5 @@ public abstract class ToolBar extends Composite
 	}
 
 	public abstract void refreshPortList();
+	public abstract void closeApplication();
 }

@@ -1,7 +1,8 @@
 package pl.industrum.gasanalyzer.gui.dialogs;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -24,14 +25,18 @@ public class NewSurveyUser extends Dialog
 	private Text textTitle;
 	private Text textName;
 	private Text textSurname;
-	private CLabel lblTitle;
-	private CLabel lblName;
-	private CLabel lblSurname;
+	private Label lblTitle;
+	private Label lblName;
+	private Label lblSurname;
 	private Button btnOk;
 	private Button btnCancel;
 	private Display display;
-	private CLabel lblFunction;
+	private Label lblFunction;
 	private Text textFunction;
+	private Label icoTitle;
+	private Label icoName;
+	private Label icoSurname;
+	private Label icoFunction;
 
 	/**
 	 * Create the dialog.
@@ -72,39 +77,80 @@ public class NewSurveyUser extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 300, 200 );
+		shell.setSize( 339, 200 );
 		shell.setText( getText() );
-		shell.setLayout( new GridLayout( 3, false ) );
+		shell.setLayout( new GridLayout( 4, false ) );
 
-		lblTitle = new CLabel( shell, SWT.NONE );
+		lblTitle = new Label( shell, SWT.NONE );
 		lblTitle.setText( Messages.getString( "NewSurveyUser.lblTitle.text" ) ); //$NON-NLS-1$
 
 		textTitle = new Text( shell, SWT.BORDER );
 		textTitle.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 2, 1 ) );
+		textTitle.addModifyListener( new ModifyListener()
+		{
+			
+			public void modifyText( ModifyEvent arg0 )
+			{
+				validateTitle();
+			}
+		} );
+		
+		icoTitle = new Label(shell, SWT.NONE);
 
-		lblName = new CLabel( shell, SWT.RIGHT );
+		lblName = new Label( shell, SWT.RIGHT );
 		lblName.setText( Messages.getString( "NewSurveyUser.lblName.text" ) ); //$NON-NLS-1$
 
 		textName = new Text( shell, SWT.BORDER );
 		textName.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 2, 1 ) );
+		textName.addModifyListener( new ModifyListener()
+		{
+			
+			public void modifyText( ModifyEvent arg0 )
+			{
+				validateName();
+			}
+		} );
+		
+		icoName = new Label(shell, SWT.NONE);
+		icoName.setImage( null );
 
-		lblSurname = new CLabel( shell, SWT.NONE );
+		lblSurname = new Label( shell, SWT.NONE );
 		lblSurname.setText( Messages
 				.getString( "NewSurveyUser.lblSurname.text" ) ); //$NON-NLS-1$
 
 		textSurname = new Text( shell, SWT.BORDER );
 		textSurname.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 2, 1 ) );
+		textSurname.addModifyListener( new ModifyListener()
+		{
+			
+			public void modifyText( ModifyEvent arg0 )
+			{
+				validateSurname();
+			}
+		} );
+		
+		icoSurname = new Label(shell, SWT.NONE);
 
-		lblFunction = new CLabel( shell, SWT.NONE );
+		lblFunction = new Label( shell, SWT.NONE );
 		lblFunction.setText( Messages
 				.getString( "NewSurveyUser.lblNewLabel.text" ) ); //$NON-NLS-1$
 
 		textFunction = new Text( shell, SWT.BORDER );
 		textFunction.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 2, 1 ) );
+		textFunction.addModifyListener( new ModifyListener()
+		{
+			
+			public void modifyText( ModifyEvent arg0 )
+			{
+				validateFunction();
+			}
+		} );
+		
+		icoFunction = new Label(shell, SWT.NONE);
 
 		new Label( shell, SWT.NONE );
 
@@ -117,7 +163,7 @@ public class NewSurveyUser extends Dialog
 			@Override
 			public void widgetSelected( SelectionEvent arg0 )
 			{
-				if ( validate() )
+				if ( validateAll() )
 				{
 					saveAction();
 					shell.dispose();
@@ -130,6 +176,7 @@ public class NewSurveyUser extends Dialog
 				false, 1, 1 ) );
 		btnCancel
 				.setText( Messages.getString( "NewSurveyUser.btnCancel.text" ) ); //$NON-NLS-1$
+		new Label(shell, SWT.NONE);
 		btnCancel.addSelectionListener( new SelectionAdapter()
 		{
 			@Override
@@ -146,66 +193,89 @@ public class NewSurveyUser extends Dialog
 				+ " " + textSurname.getText() );
 	}
 
-	private boolean validate()
+	private void validateTitle()
+	{
+		if ( textTitle.getText().isEmpty() | textTitle.getText() == null )
+		{
+			setFormFieldWarning( lblTitle, textTitle, icoTitle );
+		} else
+		{
+			setFormFieldOK( lblTitle, textTitle, icoTitle );
+		}
+	}
+	
+	private boolean validateName()
+	{
+		if ( textName.getText().isEmpty() | textName.getText() == null )
+		{
+			setFormFieldError( lblName, textName, icoName );
+			return false;
+		} else
+		{
+			setFormFieldOK( lblName, textName, icoName );
+			return true;
+		}
+	}
+	
+	private boolean validateSurname()
+	{
+		if ( textSurname.getText().isEmpty() | textSurname.getText() == null )
+		{
+			setFormFieldError( lblSurname, textSurname, icoSurname );
+			return false;
+		} else
+		{
+			setFormFieldOK( lblSurname, textSurname, icoSurname );
+			return true;
+		}
+	}
+	
+	private void validateFunction()
+	{
+		if ( textFunction.getText().isEmpty() | textFunction.getText() == null )
+		{
+			setFormFieldWarning( lblFunction, textFunction, icoFunction );
+		} else
+		{
+			setFormFieldOK( lblFunction, textFunction, icoFunction );
+		}
+	}
+	private boolean validateAll()
 	{
 		boolean isValid = true;
 
-		if ( textTitle.getText().isEmpty() | textTitle.getText() == null )
-		{
-			setFormFieldWarning( lblTitle, textTitle );
-		} else
-		{
-			clearFormField( lblTitle, textTitle );
-		}
+		validateTitle();
+		
+		isValid = validateName();
 
-		if ( textName.getText().isEmpty() | textName.getText() == null )
-		{
-			setFormFieldError( lblName, textName );
-			isValid = false;
-		} else
-		{
-			clearFormField( lblName, textName );
-		}
+		isValid = validateSurname();
 
-		if ( textSurname.getText().isEmpty() | textSurname.getText() == null )
-		{
-			setFormFieldError( lblSurname, textSurname );
-			isValid = false;
-		} else
-		{
-			clearFormField( lblSurname, textSurname );
-		}
-
-		if ( textFunction.getText().isEmpty() | textFunction.getText() == null )
-		{
-			setFormFieldWarning( lblFunction, textFunction );
-		} else
-		{
-			clearFormField( lblFunction, textFunction );
-		}
-
+		validateFunction();
+		
 		return isValid;
 	}
 
-	private void setFormFieldError( CLabel label, Text textField )
+	private void setFormFieldError( Label label, Text textField, Label ico )
 	{
-		label.setImage( SWTResourceManager.getImage( NewSurveyUser.class,
+		ico.setImage( SWTResourceManager.getImage( NewSurveyUser.class,
 				"/pl/industrum/gasanalyzer/gui/remove.png" ) );
-		label.getParent().layout();
+		ico.getParent().layout();
 		textField.setBackground( UsefulColor.RED_ERROR.getColor() );
 	}
 
-	private void setFormFieldWarning( CLabel label, Text textField )
+	private void setFormFieldWarning( Label label, Text textField, Label ico )
 	{
-		label.setImage( SWTResourceManager.getImage( NewSurveyUser.class,
+		ico.setImage( SWTResourceManager.getImage( NewSurveyUser.class,
 				"/pl/industrum/gasanalyzer/gui/warning.png" ) );
-		label.getParent().layout();
+		ico.getParent().layout();
 		textField.setBackground( UsefulColor.YELLOW_WARNING.getColor() );
 	}
-
-	private void clearFormField( CLabel label, Text textField )
+	
+	private void setFormFieldOK( Label label, Text textField, Label ico )
 	{
-		label.setImage( null );
+		ico.setImage( SWTResourceManager.getImage( NewSurveyUser.class,
+				"/pl/industrum/gasanalyzer/gui/ok.png" ) );
+		ico.getParent().layout();
 		textField.setBackground( UsefulColor.WHITE.getColor() );
 	}
 }
