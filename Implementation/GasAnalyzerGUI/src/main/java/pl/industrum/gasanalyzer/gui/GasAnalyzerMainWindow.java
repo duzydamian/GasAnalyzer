@@ -183,7 +183,7 @@ public class GasAnalyzerMainWindow implements Observer
 			}
 
 			@Override
-			public void connectToDevice(String port)
+			public boolean connectWithNetwork(String port)
 			{
 				try
 				{
@@ -237,12 +237,19 @@ public class GasAnalyzerMainWindow implements Observer
 					e.printStackTrace();
 				}
 				ELANConnectionState connectionState = connect( port );
+				return connectionState.isConnected();
 			}
 
 			@Override
 			public void disconnectFromDevice( String text )
 			{
 				disconnect( text );
+			}
+
+			@Override
+			public ELANConnectionWrapper getGUIConnectionWrapper()
+			{
+				return getConnectionWrapper();
 			}	
 		};
 		deviceTree.redraw();
@@ -264,6 +271,14 @@ public class GasAnalyzerMainWindow implements Observer
 	public void disconnect(String port)
 	{
 		connectionWrapper.getNetwork( port ).getConnection().disconnect();
+	}
+	
+	/**
+	 * @return the connectionWrapper
+	 */
+	public ELANConnectionWrapper getConnectionWrapper()
+	{
+		return connectionWrapper;
 	}
 	
 	public void update( Observable obj, Object arg )

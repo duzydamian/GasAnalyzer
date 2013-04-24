@@ -107,9 +107,12 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 	public Iterator<ELANMeasurementDevice> iterator() 
 	{        
 		ArrayList<ELANMeasurementDevice> measurementDevicesArray = new ArrayList<ELANMeasurementDevice>();
-		for( int i = 0; i < 12; i++ )
+		for( int i = 0; i < 13; i++ )
 		{
-			measurementDevicesArray.add( measurementDevices[i] );
+			if( measurementDevices[i] != null )
+			{
+				measurementDevicesArray.add( measurementDevices[i] );
+			}
 		}
         Iterator<ELANMeasurementDevice> imeasurementDevices = measurementDevicesArray.iterator();
         
@@ -118,10 +121,14 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 	
 	public void initializeDevicesPool()
 	{
-		measurementDevices = new ELANMeasurementDevice[12];
-		measurementDevicesNotifications = new boolean[12];
+		/*
+		 * Number of elements is 13 becouse ELAN Network support up to 12 devices 
+		 * with adresses 1-12
+		 */				
+		measurementDevices = new ELANMeasurementDevice[13];
+		measurementDevicesNotifications = new boolean[13];
 		
-		for( int i = 0; i < 12; i++ )
+		for( int i = 0; i < 13; i++ )
 		{
 			measurementDevices[i] = null;
 			measurementDevicesNotifications[i] = false;
@@ -130,7 +137,7 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 	
 	public boolean checkNotifications()
 	{
-		for( int i = 0; i < 12; i++ )
+		for( int i = 0; i < 13; i++ )
 		{
 			if( measurementDevices[i] != null && measurementDevicesNotifications[i] == false )
 			{
@@ -142,7 +149,7 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 	
 	public void clearNotifications()
 	{
-		for( int i = 0; i < 12; i++ )
+		for( int i = 0; i < 13; i++ )
 		{
 			measurementDevicesNotifications[i] = false;
 		}
@@ -233,5 +240,18 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 	public ELANConnection getConnection()
 	{
 		return connection;
+	}
+	
+	public Integer getSize()
+	{
+		Integer size = 0;
+		
+		for( ELANMeasurementDevice device: measurementDevices )
+		{
+			if( device != null )
+				size++;
+		}
+		
+		return size;
 	}
 }

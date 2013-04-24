@@ -27,6 +27,7 @@ public class ELANMeasurementDevice extends Observable implements Observer
 	
 	public ELANMeasurementDevice( Integer deviceAddress )
 	{
+		this.setName( "" );
 		this.setDeviceAddress( deviceAddress );
 		rxFrameBuffer = new LinkedList<ELANRxFrame>();
 	}
@@ -101,7 +102,14 @@ public class ELANMeasurementDevice extends Observable implements Observer
 	
 	public String getName()
 	{
-		return name;
+		if( name == "" )
+		{
+			return "Device " + deviceAddress.toString();
+		}
+		else
+		{
+			return name;
+		}
 	}
 
 	public void setName( String name )
