@@ -55,6 +55,7 @@ public class GasAnalyzerMainWindow implements Observer
 	private Button btnOkno;
 	private Button btnPlik;
 	private Device device;
+	private Composite connectBar;
 
 	public GasAnalyzerMainWindow()
 	{
@@ -133,6 +134,13 @@ public class GasAnalyzerMainWindow implements Observer
 			public void closeApplication()
 			{
 				shlGasAnalyzer.close();
+			}
+
+			@Override
+			public void newSurveyCreated()
+			{
+				enableSurvey();
+				toolBar.enableSurvey();
 			}		
 		};
 		
@@ -157,10 +165,11 @@ public class GasAnalyzerMainWindow implements Observer
 				true, false );
 		connectBarData.horizontalSpan = 6;
 
-		Composite connectBar = new Composite( shlGasAnalyzer, SWT.BORDER );
+		connectBar = new Composite( shlGasAnalyzer, SWT.BORDER );
 		connectBar.setLayout( new FillLayout( SWT.HORIZONTAL ) );
 		connectBar.setLayoutData( connectBarData );
-
+		connectBar.setEnabled( false );
+		
 		btnOut = new Button( connectBar, SWT.RADIO );
 		btnOut.setText( Messages
 				.getString( "GasAnalyzerMainWindow.btnOut.text" ) ); //$NON-NLS-1$
@@ -259,15 +268,25 @@ public class GasAnalyzerMainWindow implements Observer
 				return getConnectionWrapper();
 			}	
 		};
-		deviceTree.redraw();
+		deviceTree.setEnabled( false );
 
 		device = new Device( composite, SWT.NONE, "Test" );
+		device.setEnabled( false );
 
 		styledText = new StyledText( composite, SWT.BORDER | SWT.V_SCROLL );
 		styledText.setAlignment( SWT.CENTER );
 		styledText.setWordWrap( true );
+		styledText.setEnabled( false );
 
 		statusBar = new StatusBar( shlGasAnalyzer, SWT.BORDER );
+	}
+	
+	public void enableSurvey()
+	{
+		connectBar.setEnabled( true );
+		deviceTree.setEnabled( true );
+		device.setEnabled( true );
+		styledText.setEnabled( true );
 	}
 
 	public ELANConnectionState connect(String port)

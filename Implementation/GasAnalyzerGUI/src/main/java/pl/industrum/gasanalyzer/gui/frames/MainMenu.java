@@ -19,6 +19,9 @@ import pl.industrum.gasanalyzer.i18n.Messages;
 public abstract class MainMenu extends Menu
 {
 
+	private MenuItem mntmSurvey;
+	private MenuItem mntmNetwork;
+
 	/**
 	 * @param arg0
 	 * @param arg1
@@ -45,6 +48,8 @@ public abstract class MainMenu extends Menu
 			{
 				NewSurvey newSurvey = new NewSurvey( getShell(), SWT.NONE );
 				newSurvey.open();
+				newSurveyCreated();
+				enableSurvey();
 			}
 		} );
 		
@@ -68,10 +73,10 @@ public abstract class MainMenu extends Menu
 		Menu menuEdit = new Menu( mntmEdit );
 		mntmEdit.setMenu( menuEdit );
 		
-	//_________________Survey___________________________________________________
-		MenuItem mntmSurvey = new MenuItem( this, SWT.CASCADE );
+		mntmSurvey = new MenuItem( this, SWT.CASCADE );
 		mntmSurvey.setText( Messages.getString( "MainMenu.Survey" ) ); //$NON-NLS-1$
-
+		mntmSurvey.setEnabled( false );
+		
 		Menu menuSurvey = new Menu( mntmSurvey );
 		mntmSurvey.setMenu( menuSurvey );
 
@@ -81,9 +86,9 @@ public abstract class MainMenu extends Menu
 		mntmPreferences.setText( Messages.getString( "MainMenu.Preferences" ) ); //$NON-NLS-1$
 		mntmPreferences.setAccelerator( SWT.MOD1 + 'P' );
 
-	//_________________Network___________________________________________________
-		MenuItem mntmNetwork = new MenuItem( this, SWT.CASCADE );
+		mntmNetwork = new MenuItem( this, SWT.CASCADE );
 		mntmNetwork.setText( Messages.getString( "MainMenu.Network" ) ); //$NON-NLS-1$
+		mntmNetwork.setEnabled( false );
 
 		Menu menuNetwork = new Menu( mntmNetwork );
 		mntmNetwork.setMenu( menuNetwork );
@@ -128,9 +133,17 @@ public abstract class MainMenu extends Menu
 		} );
 	}
 
+	public void enableSurvey()
+	{
+		mntmSurvey.setEnabled( true );
+		mntmNetwork.setEnabled( true );
+	}
+	
 	public abstract void closeApplication();
 
 	public abstract void refreshDeviceTree();
+	
+	public abstract void newSurveyCreated();
 	
 	protected void checkSubclass()
 	{

@@ -90,6 +90,7 @@ public abstract class ToolBar extends Composite
 				refreshPortList();
 			}
 		});
+		btnRefresh.setEnabled( false );
 
 		coolItemBtnPdf = new CoolItem( bar, SWT.NONE );
 		btnPdf = new Button( bar, SWT.PUSH );
@@ -111,6 +112,7 @@ public abstract class ToolBar extends Composite
 				pdfDialog.open();
 			}
 		} );
+		btnPdf.setEnabled( false );
 
 		coolItemBtnXls = new CoolItem( bar, SWT.NONE );
 		btnXls = new Button( bar, SWT.PUSH );
@@ -132,6 +134,7 @@ public abstract class ToolBar extends Composite
 				xlsDialog.open();
 			}
 		} );
+		btnXls.setEnabled( false );
 
 		bar.pack();
 		
@@ -142,6 +145,13 @@ public abstract class ToolBar extends Composite
 		lblNewLabel.setText(Messages.getString("ToolBar.lblNewLabel.text")); //$NON-NLS-1$
 	}
 
+	public void enableSurvey()
+	{
+		btnRefresh.setEnabled( true );
+		btnXls.setEnabled( true );
+		btnPdf.setEnabled( true );
+	}
+	
 	@Override
 	protected void checkSubclass()
 	{
