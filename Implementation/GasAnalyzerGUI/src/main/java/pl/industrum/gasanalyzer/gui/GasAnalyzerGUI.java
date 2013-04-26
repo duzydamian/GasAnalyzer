@@ -5,6 +5,11 @@ package pl.industrum.gasanalyzer.gui;
 
 import java.io.PrintStream;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Shell;
+
+import pl.industrum.gasanalyzer.gui.dialogs.SendExceptionCatched;
+
 /**
  * @author duzydamian(Damian Karbowiak)
  * 
@@ -67,6 +72,8 @@ public class GasAnalyzerGUI
 		} catch ( Exception e )
 		{
 			e.printStackTrace();
+			SendExceptionCatched sendExceptionCatched = new SendExceptionCatched(new Shell(), SWT.NONE, e );
+			sendExceptionCatched.open();
 		}
 	}
 

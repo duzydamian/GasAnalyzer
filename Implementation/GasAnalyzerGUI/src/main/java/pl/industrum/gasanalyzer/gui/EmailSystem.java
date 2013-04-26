@@ -32,6 +32,10 @@ public class EmailSystem
 		attachments.add( new File( "err.log" ) );
 	}
 
+	public void sendExceptionNotification(String stackTrace){
+		openMailClient( new String[]{ "duzydamian@gmail.com", "bananowy.grzesiu@gmail.com" }, "[GasAnalyzer] Exception", stackTrace );
+	}
+	
 	public void sendSuggestionNotification(){
 		openMailClient( new String[]{ "duzydamian@gmail.com", "bananowy.grzesiu@gmail.com" }, "[GasAnalyzer] Propozycja", "Twoja propozycja" );
 	}

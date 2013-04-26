@@ -159,11 +159,12 @@ public class SplashScreen
 	}
 	
 	/**
+	 * @throws Exception 
 	 * @wbp.parser.entryPoint
 	 */
-	public void open()
+	public void open() throws Exception
 	{
-		
+			//throw new Exception(); //Ta linia pozwala na przetestowanie okna SendExceptionCatched
 	}
 
 	/**
