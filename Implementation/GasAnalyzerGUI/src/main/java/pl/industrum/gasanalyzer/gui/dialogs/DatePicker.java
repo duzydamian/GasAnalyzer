@@ -73,9 +73,9 @@ public class DatePicker extends Dialog
 		{
 			public void widgetSelected( SelectionEvent e )
 			{
-				System.out.println( "Calendar date selected (MM/DD/YYYY) = "
-						+ ( calendar.getMonth() + 1 ) + "/" + calendar.getDay()
-						+ "/" + calendar.getYear() );
+//				System.out.println( "Calendar date selected (MM/DD/YYYY) = "
+//						+ ( calendar.getMonth() + 1 ) + "/" + calendar.getDay()
+//						+ "/" + calendar.getYear() );
 				result = new int[]
 				{ calendar.getYear(), calendar.getMonth(), calendar.getDay() };
 				shell.close();

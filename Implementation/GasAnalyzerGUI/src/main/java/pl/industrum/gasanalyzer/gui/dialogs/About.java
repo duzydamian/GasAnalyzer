@@ -1,24 +1,42 @@
 package pl.industrum.gasanalyzer.gui.dialogs;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 
-import pl.industrum.gasanalyzer.gui.SWTResourceManager;
-import org.eclipse.swt.widgets.Link;
+import pl.industrum.gasanalyzer.gui.EmailSystem;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class About extends Dialog
 {
 
 	protected Object result;
 	protected Shell shell;
+	private Composite composite;
+	private Label industrumLogo;
+	private Group grpInformation;
+	private Label lblAuthors;
+	private Label lblDamianKarbowiak;
+	private Label lblGrzegorzPowala;
+	private Link linkDamianKarbowiak;
+	private Link linkGrzegorzPowala;
+	private Label lblProjectWebsite;
+	private Link linkProjectWebsite;
+	private Composite compositeLogos;
+	private Label imiueLogo;
+	private Label zkiwpLogo;
+	private Label polslLogo;
 
 	/**
 	 * Create the dialog.
@@ -63,57 +81,80 @@ public class About extends Dialog
 		shell.setText( getText() );
 		shell.setLayout( new FillLayout( SWT.VERTICAL ) );
 
-		Composite composite = new Composite( shell, SWT.NONE );
+		composite = new Composite( shell, SWT.NONE );
 		composite.setLayout( new FillLayout( SWT.VERTICAL ) );
 
-		Label label = new Label( composite, SWT.CENTER );
-		label.setAlignment( SWT.CENTER );
-		label.setImage( SWTResourceManager.getImage( About.class,
-				"/pl/industrum/gasanalyzer/gui/SKNIndustrumLogo.png" ) );
+		industrumLogo = new Label( composite, SWT.CENTER );
+		industrumLogo.setAlignment( SWT.CENTER );
+		industrumLogo.setImage( UsefulImage.INDUSTRUM_LOGO.getImage() );
 
-		Group grpInformacje = new Group( shell, SWT.NONE );
-		grpInformacje.setText( Messages.getString("About.grpInformacje.text") ); //$NON-NLS-1$
-		grpInformacje.setLayout( new GridLayout( 3, false ) );
+		grpInformation = new Group( shell, SWT.NONE );
+		grpInformation.setText( Messages.getString("About.grpInformacje.text") ); //$NON-NLS-1$
+		grpInformation.setLayout( new GridLayout( 3, false ) );
 
-		Label lblAutorzy = new Label( grpInformacje, SWT.NONE );
-		lblAutorzy.setText( Messages.getString("About.lblAutorzy.text") ); //$NON-NLS-1$
+		lblAuthors = new Label( grpInformation, SWT.NONE );
+		lblAuthors.setText( Messages.getString("About.lblAutorzy.text") ); //$NON-NLS-1$
 
-		Label lblDamianKarbowiakGrzegorz = new Label( grpInformacje, SWT.NONE );
-		lblDamianKarbowiakGrzegorz
+		lblDamianKarbowiak = new Label( grpInformation, SWT.NONE );
+		lblDamianKarbowiak
 				.setText( "Damian Karbowiak" );
 		
-		Link link = new Link(grpInformacje, SWT.NONE);
-		link.setText("<a>duzydamian@gmail.com</a>");
-		new Label(grpInformacje, SWT.NONE);
+		linkDamianKarbowiak = new Link(grpInformation, SWT.NONE);
+		linkDamianKarbowiak.setText("<a>duzydamian@gmail.com</a>");
+		linkDamianKarbowiak.addSelectionListener(new SelectionAdapter()
+		{
+	        @Override
+	        public void widgetSelected(SelectionEvent e)
+	        {
+	        	//System.out.println("You have selected: "+e.text);
+	        	new EmailSystem().openMailClient( e.text, "[GasAnalyzer]", "Write body here" );
+	        }
+	    });
 		
-		Label lblGrzegorzPowaa = new Label(grpInformacje, SWT.NONE);
-		lblGrzegorzPowaa.setText("Grzegorz Powała");
+		new Label(grpInformation, SWT.NONE);
 		
-		Link link_1 = new Link(grpInformacje, SWT.NONE);
-		link_1.setText("<a>bananowy.grzesiu@gmail.com</a>");
+		lblGrzegorzPowala = new Label(grpInformation, SWT.NONE);
+		lblGrzegorzPowala.setText("Grzegorz Powała");
 		
-		Label lblStronaProjektu = new Label(grpInformacje, SWT.NONE);
-		lblStronaProjektu.setText(Messages.getString("About.lblStronaProjektu.text")); //$NON-NLS-1$
+		linkGrzegorzPowala = new Link(grpInformation, SWT.NONE);
+		linkGrzegorzPowala.setText("<a>bananowy.grzesiu@gmail.com</a>");
+		linkGrzegorzPowala.addSelectionListener(new SelectionAdapter()
+		{
+	        @Override
+	        public void widgetSelected(SelectionEvent e)
+	        {
+	        	//System.out.println("You have selected: "+e.text);
+	            new EmailSystem().openMailClient( e.text, "[GasAnalyzer]", "Write body here" );
+	        }
+	    });
 		
-		Link link_2 = new Link(grpInformacje, SWT.NONE);
-		link_2.setText("<a href=\"https://github.com/duzydamian/GasAnalyzer\">GitHub</a>");
-		new Label(grpInformacje, SWT.NONE);
+		lblProjectWebsite = new Label(grpInformation, SWT.NONE);
+		lblProjectWebsite.setText(Messages.getString("About.lblStronaProjektu.text")); //$NON-NLS-1$
+		
+		linkProjectWebsite = new Link(grpInformation, SWT.NONE);
+		linkProjectWebsite.setText("<a href=\"https://github.com/duzydamian/GasAnalyzer/\">GitHub</a>");
+		linkProjectWebsite.addSelectionListener(new SelectionAdapter()
+		{
+	        @Override
+	        public void widgetSelected(SelectionEvent e)
+	        {
+	               //System.out.println("You have selected: "+e.text);
+	               Program.launch( e.text );
+	        }
+	    });
+		new Label(grpInformation, SWT.NONE);
 
-		Composite composite_1 = new Composite( shell, SWT.NONE );
-		composite_1.setLayout( new FillLayout( SWT.HORIZONTAL ) );
+		compositeLogos = new Composite( shell, SWT.NONE );
+		compositeLogos.setLayout( new FillLayout( SWT.HORIZONTAL ) );
 
-		Label label_2 = new Label( composite_1, SWT.NONE );
-		label_2.setAlignment( SWT.CENTER );
-		label_2.setImage( SWTResourceManager.getImage( About.class,
-				"/pl/industrum/gasanalyzer/gui/IMIUELogo.png" ) );
+		imiueLogo = new Label( compositeLogos, SWT.NONE );
+		imiueLogo.setAlignment( SWT.CENTER );
+		imiueLogo.setImage( UsefulImage.IMIUE_LOGO.getImage() );
 
-		Label label_3 = new Label( composite_1, SWT.CENTER );
-		label_3.setImage( SWTResourceManager.getImage( About.class,
-				"/pl/industrum/gasanalyzer/gui/ZKiWPLogo.png" ) );
+		zkiwpLogo = new Label( compositeLogos, SWT.CENTER );
+		zkiwpLogo.setImage( UsefulImage.ZKIWP_LOGO.getImage() );
 
-		Label label_1 = new Label( composite_1, SWT.CENTER );
-		label_1.setImage( SWTResourceManager.getImage( About.class,
-				"/pl/industrum/gasanalyzer/gui/PolslLogo.png" ) );
-
+		polslLogo = new Label( compositeLogos, SWT.CENTER );
+		polslLogo.setImage( UsefulImage.POLSL_LOGO.getImage() );
 	}
 }

@@ -20,9 +20,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import pl.industrum.gasanalyzer.gui.SWTResourceManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
 import pl.industrum.gasanalyzer.types.UsefulColor;
+import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class NewSurvey extends Dialog
 {
@@ -124,8 +124,7 @@ public class NewSurvey extends Dialog
 
 		btnSelectDate = new Button( surveyForm, SWT.NONE );
 		btnSelectDate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		btnSelectDate.setImage( SWTResourceManager.getImage( NewSurvey.class,
-				"/pl/industrum/gasanalyzer/gui/calendar.png" ) );
+		btnSelectDate.setImage( UsefulImage.CALENDAR.getImage() );
 		btnSelectDate.setText( Messages
 				.getString( "SurveyFrame.btnSelectDate.text" ) ); //$NON-NLS-1$
 		btnSelectDate.addSelectionListener( new SelectionAdapter()
@@ -162,8 +161,7 @@ public class NewSurvey extends Dialog
 
 		btnNewSurveyUser = new Button( surveyForm, SWT.NONE );
 		btnNewSurveyUser.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		btnNewSurveyUser.setImage( SWTResourceManager.getImage(
-				NewSurvey.class, "/pl/industrum/gasanalyzer/gui/add.png" ) );
+		btnNewSurveyUser.setImage( UsefulImage.ADD.getImage() );
 		btnNewSurveyUser.setText( Messages
 				.getString( "SurveyFrame.btnNewSurveyUser.text" ) ); //$NON-NLS-1$
 		btnNewSurveyUser.addSelectionListener( new SelectionAdapter()
@@ -200,8 +198,7 @@ public class NewSurvey extends Dialog
 
 		btnNewSurveyPlace = new Button( surveyForm, SWT.NONE );
 		btnNewSurveyPlace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		btnNewSurveyPlace.setImage( SWTResourceManager.getImage(
-				NewSurvey.class, "/pl/industrum/gasanalyzer/gui/add.png" ) );
+		btnNewSurveyPlace.setImage( UsefulImage.ADD.getImage() );
 		btnNewSurveyPlace.setText( Messages
 				.getString( "SurveyFrame.btnNewSurveyPlace.text" ) ); //$NON-NLS-1$
 		btnNewSurveyPlace.addSelectionListener( new SelectionAdapter()
@@ -448,24 +445,21 @@ public class NewSurvey extends Dialog
 
 	private void setFormFieldError( Label label, Control textField, Label ico )
 	{
-		ico.setImage( SWTResourceManager.getImage( NewSurveyUser.class,
-				"/pl/industrum/gasanalyzer/gui/remove.png" ) );
+		ico.setImage( UsefulImage.ERROR.getImage() );
 		ico.getParent().layout();
 		textField.setBackground( UsefulColor.RED_ERROR.getColor() );
 	}
 
 	private void setFormFieldWarning( Label label, Control textField, Label ico )
 	{
-		ico.setImage( SWTResourceManager.getImage( NewSurveyUser.class,
-				"/pl/industrum/gasanalyzer/gui/warning.png" ) );
+		ico.setImage( UsefulImage.WARNING.getImage() );
 		ico.getParent().layout();
 		textField.setBackground( UsefulColor.YELLOW_WARNING.getColor() );
 	}
 	
 	private void setFormFieldOK( Label label, Control textField, Label ico )
 	{
-		ico.setImage( SWTResourceManager.getImage( NewSurveyUser.class,
-				"/pl/industrum/gasanalyzer/gui/ok.png" ) );
+		ico.setImage( UsefulImage.OK.getImage() );
 		ico.getParent().layout();
 		textField.setBackground( UsefulColor.WHITE.getColor() );
 	}

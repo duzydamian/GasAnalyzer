@@ -22,9 +22,10 @@ import org.eclipse.swt.widgets.TreeItem;
 import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
 import pl.industrum.gasanalyzer.elan.communication.network.ELANMeasurementDevice;
 import pl.industrum.gasanalyzer.gui.ELANConnectionWrapper;
-import pl.industrum.gasanalyzer.gui.SWTResourceManager;
 import pl.industrum.gasanalyzer.gui.dialogs.NetworkScan;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.types.UsefulColor;
+import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public abstract class DeviceTree extends Composite
 {
@@ -47,8 +48,8 @@ public abstract class DeviceTree extends Composite
 		super( parent, style );
 		setLayout( new GridLayout( 3, false ) );
 
-		imageDisconnect = SWTResourceManager.getImage( DeviceTree.class, "/pl/industrum/gasanalyzer/gui/disconnect.png" );
-		imageConnect = SWTResourceManager.getImage( DeviceTree.class, "/pl/industrum/gasanalyzer/gui/connect.png" );
+		imageDisconnect = UsefulImage.DISCONNECT.getImage();
+		imageConnect = UsefulImage.CONNECT.getImage();
 		
 		deviceTree = new Tree( this, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		deviceTree.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true,
@@ -84,11 +85,12 @@ public abstract class DeviceTree extends Composite
 											for( ELANMeasurementDevice device: getGUIConnectionWrapper().getNetwork( treeItem.getText() ) )
 											{
 												TreeItem item = new TreeItem( treeItem, SWT.COLOR_GRAY );
-												item.setText( device.getName() );
+												item.setText( device.getName() );												
 											}
 											
 											treeItem.setText( getGUIConnectionWrapper().getNetwork( treeItem.getText() ).getName() +" [" + getGUIConnectionWrapper().getNetwork( treeItem.getText() ).getPort() + "]" );
-											treeItem.setImage( SWTResourceManager.getImage( DeviceTree.class, "/pl/industrum/gasanalyzer/gui/connect.png" ) );
+											treeItem.setImage( imageConnect );
+											treeItem.setForeground( UsefulColor.BLACK.getColor() );
 											treeItem.setExpanded( true );
 										}
 										else
@@ -106,6 +108,7 @@ public abstract class DeviceTree extends Composite
 									treeItem.removeAll();
 									treeItem.setText( port );
 									treeItem.setImage( imageDisconnect );
+									treeItem.setForeground( UsefulColor.GRAY_DISCONNECT.getColor() );
 								}
 							}
 
@@ -120,14 +123,7 @@ public abstract class DeviceTree extends Composite
 				}
 			}
 		});
-
-		for( String port: ELANConnection.vectorPorts() )
-		{
-			TreeItem item = new TreeItem( deviceTree, SWT.COLOR_GRAY );
-			item.setText( port );
-			item.setImage( imageDisconnect );
-		}
-					
+		
 		lblSurveyStep = new Label( this, SWT.NONE );
 		lblSurveyStep.setText( Messages
 				.getString( "DeviceTree.lblSurveyStep.text" ) ); //$NON-NLS-1$
@@ -177,12 +173,22 @@ public abstract class DeviceTree extends Composite
 			
 			if ( toAdd )
 			{
-				TreeItem item = new TreeItem( deviceTree, SWT.COLOR_GRAY );
+				TreeItem item = new TreeItem( deviceTree, SWT.NONE );
 				item.setText( port );
+				item.setImage( imageDisconnect );
+				item.setForeground( UsefulColor.GRAY_DISCONNECT.getColor() );
 			}
 		}
 	}
 	
+	@Override
+	public void setEnabled( boolean arg0 )
+	{		
+		super.setEnabled( arg0 );
+		deviceTree.setEnabled( arg0 );
+		surveyStep.setEnabled( arg0 );
+		btnOk.setEnabled( arg0 );
+	}
 	public abstract void setSurveyStep(int step);
 	public abstract boolean connectWithNetwork(String port);
 	public abstract void disconnectFromDevice( String text );	

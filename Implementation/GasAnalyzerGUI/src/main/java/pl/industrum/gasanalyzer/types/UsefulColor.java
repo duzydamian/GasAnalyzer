@@ -12,8 +12,11 @@ import org.eclipse.swt.widgets.Display;
  */
 public enum UsefulColor
 {
-	RED_ERROR( 251, 51, 51 ), YELLOW_WARNING( 255, 255, 51 ), WHITE( 255, 255,
-			255 );
+	RED_ERROR( 255, 100, 100 ), 
+	YELLOW_WARNING( 255, 255, 100 ), 
+	WHITE( 255, 255, 255 ),
+	BLACK( 0, 0, 0 ),
+	GRAY_DISCONNECT( 190, 190, 190 );	
 
 	int red;
 	int green;

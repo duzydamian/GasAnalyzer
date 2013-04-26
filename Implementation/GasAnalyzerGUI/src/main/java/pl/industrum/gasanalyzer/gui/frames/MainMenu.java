@@ -7,10 +7,10 @@ import org.eclipse.swt.widgets.Decorations;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
-import pl.industrum.gasanalyzer.gui.SWTResourceManager;
 import pl.industrum.gasanalyzer.gui.dialogs.About;
 import pl.industrum.gasanalyzer.gui.dialogs.NewSurvey;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.types.UsefulImage;
 
 /**
  * @author duzydamian (Damian Karbowiak)
@@ -40,8 +40,7 @@ public abstract class MainMenu extends Menu
 
 		MenuItem mntmNewSurvey = new MenuItem( menuFile, SWT.NONE );
 		mntmNewSurvey.setText( Messages.getString( "MainMenu.NewSurvey" ) );
-		mntmNewSurvey.setImage( SWTResourceManager.getImage( MainMenu.class,
-				"/pl/industrum/gasanalyzer/gui/add.png" ) );
+		mntmNewSurvey.setImage( UsefulImage.NEW_SURVEY.getImage() );
 		mntmNewSurvey.addSelectionListener( new SelectionAdapter()
 		{
 			public void widgetSelected( SelectionEvent e )
@@ -53,10 +52,15 @@ public abstract class MainMenu extends Menu
 			}
 		} );
 		
+		MenuItem mntmOpenSurvey = new MenuItem( menuFile, SWT.NONE );
+		mntmOpenSurvey.setText( Messages.getString( "MainMenu.OpenSurvey" ) );
+		mntmOpenSurvey.setImage( UsefulImage.OPEN_SURVEY.getImage() );
+		
+		new MenuItem( menuFile, SWT.SEPARATOR );
+		
 		MenuItem mntmExit = new MenuItem( menuFile, SWT.NONE );
 		mntmExit.setText( Messages.getString( "MainMenu.Exit" ) ); //$NON-NLS-1$
-		mntmExit.setImage( SWTResourceManager.getImage( MainMenu.class,
-				"/pl/industrum/gasanalyzer/gui/shutdown.png" ) );
+		mntmExit.setImage( UsefulImage.SHUTDOWN.getImage() );
 		mntmExit.setAccelerator( SWT.MOD1 + 'Q' );
 		mntmExit.addSelectionListener( new SelectionAdapter()
 		{
@@ -81,8 +85,7 @@ public abstract class MainMenu extends Menu
 		mntmSurvey.setMenu( menuSurvey );
 
 		MenuItem mntmPreferences = new MenuItem( menuSurvey, SWT.NONE );
-		mntmPreferences.setImage( SWTResourceManager.getImage( MainMenu.class,
-				"/pl/industrum/gasanalyzer/gui/ustawienia.png" ) );
+		mntmPreferences.setImage( UsefulImage.PREFERENCES.getImage() );
 		mntmPreferences.setText( Messages.getString( "MainMenu.Preferences" ) ); //$NON-NLS-1$
 		mntmPreferences.setAccelerator( SWT.MOD1 + 'P' );
 
@@ -93,16 +96,15 @@ public abstract class MainMenu extends Menu
 		Menu menuNetwork = new Menu( mntmNetwork );
 		mntmNetwork.setMenu( menuNetwork );
 
-		MenuItem mntmConnect = new MenuItem( menuNetwork, SWT.NONE );
+		MenuItem mntmConnect = new MenuItem( menuNetwork, SWT.CASCADE );
 		mntmConnect.setText( Messages.getString( "MainMenu.Connect" ) ); //$NON-NLS-1$
 		
-		MenuItem mntmDisconnect = new MenuItem( menuNetwork, SWT.NONE );
+		MenuItem mntmDisconnect = new MenuItem( menuNetwork, SWT.CASCADE );
 		mntmDisconnect.setText( Messages.getString( "MainMenu.Disconnect" ) ); //$NON-NLS-1$
 		
 		MenuItem mntmRefresh = new MenuItem( menuNetwork, SWT.NONE );
 		mntmRefresh.setText( Messages.getString( "MainMenu.Refresh" ) ); //$NON-NLS-1$
-		mntmRefresh.setImage( SWTResourceManager.getImage( MainMenu.class,
-				"/pl/industrum/gasanalyzer/gui/odswiez.png" ) );
+		mntmRefresh.setImage( UsefulImage.REFRESH.getImage() );
 		mntmRefresh.addSelectionListener( new SelectionAdapter()
 		{
 			public void widgetSelected( SelectionEvent e )
@@ -120,8 +122,6 @@ public abstract class MainMenu extends Menu
 
 		MenuItem mntmAbout = new MenuItem( menuHelp, SWT.NONE );
 		mntmAbout.setText( Messages.getString( "MainMenu.About" ) ); //$NON-NLS-1$
-		mntmAbout.setImage( SWTResourceManager.getImage( MainMenu.class,
-				"/pl/industrum/gasanalyzer/gui/aboutmini.png" ) );
 		mntmAbout.setAccelerator( SWT.MOD1 + 'O' );
 		mntmAbout.addSelectionListener( new SelectionAdapter()
 		{

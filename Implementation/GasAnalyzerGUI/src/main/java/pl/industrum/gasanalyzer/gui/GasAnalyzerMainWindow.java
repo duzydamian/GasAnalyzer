@@ -139,14 +139,13 @@ public class GasAnalyzerMainWindow implements Observer
 			@Override
 			public void newSurveyCreated()
 			{
-				enableSurvey();
-				toolBar.enableSurvey();
+				enableSurveyMainWIndow();				
 			}		
 		};
 		
 		shlGasAnalyzer.setMenuBar( menu );
 
-		toolBar = new ToolBar( shlGasAnalyzer, SWT.BORDER )
+		toolBar = new ToolBar( shlGasAnalyzer, SWT.NONE )
 		{
 			@Override
 			public void refreshPortList()
@@ -190,7 +189,7 @@ public class GasAnalyzerMainWindow implements Observer
 		composite.setLayout( new FillLayout( SWT.HORIZONTAL ) );
 		composite.setLayoutData( compositeData );
 
-		deviceTree = new DeviceTree( composite, SWT.V_SCROLL )
+		deviceTree = new DeviceTree( composite, SWT.NONE )
 		{
 			@Override
 			public void setSurveyStep( int step )
@@ -281,10 +280,12 @@ public class GasAnalyzerMainWindow implements Observer
 		statusBar = new StatusBar( shlGasAnalyzer, SWT.BORDER );
 	}
 	
-	public void enableSurvey()
+	public void enableSurveyMainWIndow()
 	{
+		toolBar.enableSurvey();
 		connectBar.setEnabled( true );
 		deviceTree.setEnabled( true );
+		deviceTree.refreshTree();
 		device.setEnabled( true );
 		styledText.setEnabled( true );
 	}

@@ -14,9 +14,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import pl.industrum.gasanalyzer.gui.SWTResourceManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
 import pl.industrum.gasanalyzer.types.UsefulColor;
+import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class NewSurveyUser extends Dialog
 {
@@ -257,24 +257,21 @@ public class NewSurveyUser extends Dialog
 
 	private void setFormFieldError( Label label, Text textField, Label ico )
 	{
-		ico.setImage( SWTResourceManager.getImage( NewSurveyUser.class,
-				"/pl/industrum/gasanalyzer/gui/remove.png" ) );
+		ico.setImage( UsefulImage.ERROR.getImage() );
 		ico.getParent().layout();
 		textField.setBackground( UsefulColor.RED_ERROR.getColor() );
 	}
 
 	private void setFormFieldWarning( Label label, Text textField, Label ico )
 	{
-		ico.setImage( SWTResourceManager.getImage( NewSurveyUser.class,
-				"/pl/industrum/gasanalyzer/gui/warning.png" ) );
+		ico.setImage( UsefulImage.WARNING.getImage() );
 		ico.getParent().layout();
 		textField.setBackground( UsefulColor.YELLOW_WARNING.getColor() );
 	}
 	
 	private void setFormFieldOK( Label label, Text textField, Label ico )
 	{
-		ico.setImage( SWTResourceManager.getImage( NewSurveyUser.class,
-				"/pl/industrum/gasanalyzer/gui/ok.png" ) );
+		ico.setImage( UsefulImage.OK.getImage() );
 		ico.getParent().layout();
 		textField.setBackground( UsefulColor.WHITE.getColor() );
 	}

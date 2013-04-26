@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 
 import pl.industrum.gasanalyzer.test.TestVector;
+import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class SplashScreen
 {
@@ -72,27 +73,27 @@ public class SplashScreen
 		label.setLayoutData(labelData);		
 		
 		industrumLogo = new Label(splash, SWT.NONE);
-		industrumLogo.setImage(SWTResourceManager.getImage(SplashScreen.class, "/pl/industrum/gasanalyzer/gui/SKNIndustrumLogo.png"));
+		industrumLogo.setImage( UsefulImage.INDUSTRUM_LOGO.getImage() );
 		industrumLogoData = new FormData();
 		industrumLogoData.bottom = new FormAttachment (50, -5);
 		industrumLogo.setLayoutData(industrumLogoData);
 	
 		imiueLogo = new Label(splash, SWT.NONE);
-		imiueLogo.setImage(SWTResourceManager.getImage(SplashScreen.class, "/pl/industrum/gasanalyzer/gui/IMIUELogo.png"));
+		imiueLogo.setImage( UsefulImage.IMIUE_LOGO.getImage() );
 		imiueLogoData = new FormData();
 		imiueLogoData.left = new FormAttachment (2, 0);	
 		imiueLogoData.bottom = new FormAttachment (80, -5);
 		imiueLogo.setLayoutData(imiueLogoData);
 		
 		zkiwpLogo = new Label(splash, SWT.NONE);
-		zkiwpLogo.setImage(SWTResourceManager.getImage(SplashScreen.class, "/pl/industrum/gasanalyzer/gui/ZKiWPLogo.png"));
+		zkiwpLogo.setImage( UsefulImage.ZKIWP_LOGO.getImage() );
 		zkiwpLogoData = new FormData();
 		zkiwpLogoData.left = new FormAttachment (28, 0);
 		zkiwpLogoData.bottom = new FormAttachment (80, -5);
 		zkiwpLogo.setLayoutData(zkiwpLogoData);
 		
 		polslLogo = new Label(splash, SWT.NONE);
-		polslLogo.setImage(SWTResourceManager.getImage(SplashScreen.class, "/pl/industrum/gasanalyzer/gui/PolslLogo.png"));
+		polslLogo.setImage( UsefulImage.POLSL_LOGO.getImage() );
 		polslLogoData = new FormData();
 		polslLogoData.left = new FormAttachment (72, 0);		
 		polslLogoData.bottom = new FormAttachment (80, -5);

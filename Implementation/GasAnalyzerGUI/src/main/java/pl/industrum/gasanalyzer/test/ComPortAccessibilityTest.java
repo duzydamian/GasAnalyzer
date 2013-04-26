@@ -15,7 +15,6 @@ import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
  */
 public class ComPortAccessibilityTest extends Test
 {
-
 	private MessageBox messageDialog;
 	private Shell shell;
 
