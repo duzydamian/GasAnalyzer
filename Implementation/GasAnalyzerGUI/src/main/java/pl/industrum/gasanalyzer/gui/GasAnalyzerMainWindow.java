@@ -267,7 +267,7 @@ public class GasAnalyzerMainWindow implements Observer
 				{
 					ELANRxFrame poll = device.pollAndClear();
 					ELANRxBroadcastFrame frame = ( ELANRxBroadcastFrame )poll;
-					System.out.println(frame.getTimeStamp());
+					System.out.println(frame.getSourceAdress() + " @ " + frame.getTimeStamp());
 					for( ELANMeasurement elanMeasurement: frame )
 					{
 						System.out.println(elanMeasurement.toString());

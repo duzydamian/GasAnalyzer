@@ -59,6 +59,10 @@ public abstract class DeviceTree extends Composite
 				if( deviceTree.getSelection().length == 1 )
 				{
 					final TreeItem treeItem = deviceTree.getSelection()[0];
+					if ( treeItem.getParentItem() != null )
+					{
+						return;
+					}
 					Menu menu = new Menu (deviceTree.getShell(), SWT.POP_UP);
 					MenuItem item = new MenuItem (menu, SWT.PUSH);
 					final boolean connect = (treeItem.getImage() == imageDisconnect );
