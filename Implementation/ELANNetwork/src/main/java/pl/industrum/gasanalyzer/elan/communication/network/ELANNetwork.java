@@ -8,11 +8,13 @@ import java.util.Queue;
 
 import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
 import pl.industrum.gasanalyzer.elan.communication.rx.ELANDataParser;
+import pl.industrum.gasanalyzer.elan.communication.rx.ELANDeviceInformationParser;
 import pl.industrum.gasanalyzer.elan.exceptions.DuplicateDeviceException;
 import pl.industrum.gasanalyzer.elan.exceptions.NullDeviceException;
 import pl.industrum.gasanalyzer.elan.notifications.ELANMeasurementDeviceNotification;
 import pl.industrum.gasanalyzer.elan.notifications.ELANNetworkNotification;
 import pl.industrum.gasanalyzer.elan.notifications.ELANRxByteBufferNotification;
+import pl.industrum.gasanalyzer.elan.types.ELANMeasuredVariable;
 
 public class ELANNetwork extends Observable implements Iterable<ELANMeasurementDevice>, Observer
 {
@@ -64,16 +66,24 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 				//Last time check dataBuffer non-zero size condition.
 				if( dataBuffer.size() > 0 )
 				{
-					//Preparser, used only to get source and target address
-					//address = channel_address * 16 + component_address ()
-					Integer deviceAddress = ( ELANDataParser.preparser( dataBuffer )[1] )/16;
+					//Parsing information helper
+					ELANDeviceInformationParser parser = new ELANDeviceInformationParser();
 					
-					//Start data parser thread to avoid frames lost.
-	            	ELANDataParser dataParserThread = new ELANDataParser( dataBuffer );
+					//Parser, used only to get source and target address
+					//address = channel_address * 16 + component_address ()
+					Integer deviceAddress = ( parser.parseAddresses( dataBuffer ) ).get( "source" );
+					
+					//Add new device
 	            	if( measurementDevices[deviceAddress] == null )
 	            	{
+	            		//Parser, used only to get measured variables list	            		
 	            		addDevice( deviceAddress );
+	            		Queue<ELANMeasuredVariable> measuredVariables = parser.parseMeasuredVariables( dataBuffer );
+	            		( measurementDevices[deviceAddress] ).getDeviceInformation().setMeasuredVariables( measuredVariables );
 	            	}
+	            	
+	            	//Start data parser thread to avoid frames lost.
+	            	ELANDataParser dataParserThread = new ELANDataParser( dataBuffer );
 	            	dataParserThread.addObserver( measurementDevices[deviceAddress] );
 	            	
 	            	Thread thread = new Thread( dataParserThread );

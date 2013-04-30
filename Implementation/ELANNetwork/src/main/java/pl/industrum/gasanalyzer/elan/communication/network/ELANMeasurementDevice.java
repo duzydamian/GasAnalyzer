@@ -5,6 +5,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Queue;
 
+import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxFrame;
 import pl.industrum.gasanalyzer.elan.notifications.ELANDataParserNotification;
 import pl.industrum.gasanalyzer.elan.notifications.ELANMeasurementDeviceNotification;
@@ -12,23 +13,24 @@ import pl.industrum.gasanalyzer.elan.types.ELANDeviceType;
 
 public class ELANMeasurementDevice extends Observable implements Observer
 {
-	private String name; //optional
-	private ELANDeviceType deviceType;
-	private Integer deviceAddress;
-	
+	//Frames buffers
 	private Queue<ELANRxFrame> rxFrameBuffer; 
+	private Queue<ELANRxBroadcastFrame> rxBroadcastFrameBuffer; 
+	
+	private ELANMeasurementDeviceInformation deviceInformation;
 	
 	public ELANMeasurementDevice( String name, Integer deviceAddress )
 	{
-		this.setName( name );
-		this.setDeviceAddress( deviceAddress );
-		this.rxFrameBuffer = new LinkedList<ELANRxFrame>();
+		deviceInformation = new ELANMeasurementDeviceInformation();
+		setName( name );
+		setDeviceAddress( deviceAddress );
+		rxFrameBuffer = new LinkedList<ELANRxFrame>();
 	}
 	
 	public ELANMeasurementDevice( Integer deviceAddress )
 	{
-		this.setName( "" );
-		this.setDeviceAddress( deviceAddress );
+		deviceInformation = new ELANMeasurementDeviceInformation();
+		setDeviceAddress( deviceAddress );
 		rxFrameBuffer = new LinkedList<ELANRxFrame>();
 	}
 	
@@ -54,14 +56,6 @@ public class ELANMeasurementDevice extends Observable implements Observer
 						//Add frame to buffer
 						rxFrameBuffer.add( rx );
 					}
-					
-//					System.out.println(rx.getTimeStamp().toLocaleString());
-//					for (ELANMeasurement measurement : (ELANRxBroadcastFrame)rx)
-//					{
-//						System.out.print(measurement.toString()+" || ");
-//					}					
-//					System.out.println();
-//					System.out.println();
 				}
 			}
 			else 
@@ -100,41 +94,40 @@ public class ELANMeasurementDevice extends Observable implements Observer
 		return frame;
 	}
 	
+	public ELANMeasurementDeviceInformation getDeviceInformation()
+	{
+		return this.deviceInformation;
+	}
+	
+	
 	public String getName()
 	{
-		if( name == "" )
-		{
-			return "Device " + deviceAddress.toString();
-		}
-		else
-		{
-			return name;
-		}
+		return getDeviceInformation().getName();
 	}
 
 	public void setName( String name )
 	{
-		this.name = name;
+		getDeviceInformation().setName( name );
 	}
 
 	public ELANDeviceType getDeviceType()
 	{
-		return deviceType;
+		return getDeviceInformation().getDeviceType();
 	}
 
 	public void setDeviceType( ELANDeviceType deviceType )
 	{
-		//!!!empty for now, it is needed to ask the device for its type
+		getDeviceInformation().setDeviceType( deviceType );
 	}
 
 	public Integer getDeviceAddress()
 	{
-		return deviceAddress;
+		return getDeviceInformation().getDeviceAddress();
 	}
 
 	public void setDeviceAddress( Integer deviceAddress )
 	{
-		this.deviceAddress = deviceAddress;
+		getDeviceInformation().setDeviceAddress( deviceAddress );
 	}
 	
 	
