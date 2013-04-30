@@ -88,11 +88,16 @@ public abstract class DeviceTree extends Composite
 										{
 											for( ELANMeasurementDevice device: getGUIConnectionWrapper().getNetwork( treeItem.getText() ) )
 											{
-												TreeItem item = new TreeItem( treeItem, SWT.COLOR_GRAY );
-												item.setText( device.getName() );												
+												TreeItem itemTreeItem = new TreeItem( treeItem, SWT.COLOR_GRAY );
+												itemTreeItem.setText( device.getName() );
+												addDeviceToDeviceCollection(device.getName());
+												layout();
 											}
 											
-											treeItem.setText( getGUIConnectionWrapper().getNetwork( treeItem.getText() ).getName() +" [" + getGUIConnectionWrapper().getNetwork( treeItem.getText() ).getPort() + "]" );
+											String oldName = treeItem.getText(); 
+											String newName = getGUIConnectionWrapper().getNetwork( treeItem.getText() ).getName() +" [" + getGUIConnectionWrapper().getNetwork( treeItem.getText() ).getPort() + "]";
+											treeItem.setText( newName );
+											renameNetwork( oldName, newName );
 											treeItem.setImage( imageConnect );
 											treeItem.setForeground( UsefulColor.BLACK.getColor() );
 											treeItem.setExpanded( true );
@@ -115,7 +120,6 @@ public abstract class DeviceTree extends Composite
 									treeItem.setForeground( UsefulColor.GRAY_DISCONNECT.getColor() );
 								}
 							}
-
 					});
 					menu.setLocation (event.x, event.y);
 					menu.setVisible (true);
@@ -127,6 +131,23 @@ public abstract class DeviceTree extends Composite
 				}
 			}
 		});
+		
+		deviceTree.addListener( SWT.Selection, new Listener () {
+			public void handleEvent (Event event) {
+				if( deviceTree.getSelection().length == 1 )
+				{
+					final TreeItem treeItem = deviceTree.getSelection()[0];
+					if ( treeItem.getParentItem() != null )
+					{
+						setSelectedDeviceVisible( treeItem.getText() );
+					}
+					else
+					{
+						setSelectedNetworkVisible( treeItem.getText() );
+					}
+				}
+			}
+		} );
 		
 		lblSurveyStep = new Label( this, SWT.NONE );
 		lblSurveyStep.setText( Messages
@@ -181,6 +202,7 @@ public abstract class DeviceTree extends Composite
 				item.setText( port );
 				item.setImage( imageDisconnect );
 				item.setForeground( UsefulColor.GRAY_DISCONNECT.getColor() );
+				addNetworkToNetworkCollection( port );
 			}
 		}
 	}
@@ -197,4 +219,10 @@ public abstract class DeviceTree extends Composite
 	public abstract boolean connectWithNetwork(String port);
 	public abstract void disconnectFromDevice( String text );	
 	public abstract ELANConnectionWrapper getGUIConnectionWrapper();
+	public abstract void addDeviceToDeviceCollection(String deviceName);
+	public abstract void addNetworkToNetworkCollection(String networkName);
+	public abstract void setSelectedDeviceVisible(String text );
+	public abstract void setSelectedNetworkVisible(String text );
+	public abstract void renameNetwork( String oldName, String newName );
+
 }

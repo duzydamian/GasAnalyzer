@@ -27,6 +27,7 @@ public class Device extends Composite
 	private Composite currentBody;
 	private Label lblStan;
 	private ArrayList<ELANMeasurement> measurements;
+	private String deviceName;
 
 	/**
 	 * Create the composite.
@@ -43,6 +44,7 @@ public class Device extends Composite
 		this.setLayout( new FillLayout( SWT.HORIZONTAL ) );		
 		//this.setLayoutData( compositeData );
 		this.measurements = new ArrayList<ELANMeasurement>();
+		this.setDeviceName( name );
 
 		grpOneDIvice = new Group( this, SWT.NONE );
 		grpOneDIvice.setText( name );
@@ -90,6 +92,22 @@ public class Device extends Composite
 		
 	}
 	
+	/**
+	 * @return the deviceName
+	 */
+	public String getDeviceName()
+	{
+		return deviceName;
+	}
+
+	/**
+	 * @param deviceName the deviceName to set
+	 */
+	public void setDeviceName( String deviceName )
+	{
+		this.deviceName = deviceName;
+	}
+
 	@Override
 	protected void checkSubclass()
 	{

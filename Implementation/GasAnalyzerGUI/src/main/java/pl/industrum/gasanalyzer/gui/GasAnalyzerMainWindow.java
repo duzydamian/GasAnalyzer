@@ -25,9 +25,10 @@ import pl.industrum.gasanalyzer.elan.frames.ELANRxFrame;
 import pl.industrum.gasanalyzer.elan.notifications.ELANNetworkNotification;
 import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
 import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
-import pl.industrum.gasanalyzer.gui.frames.Device;
+import pl.industrum.gasanalyzer.gui.frames.DeviceCollection;
 import pl.industrum.gasanalyzer.gui.frames.DeviceTree;
 import pl.industrum.gasanalyzer.gui.frames.MainMenu;
+import pl.industrum.gasanalyzer.gui.frames.NetworkCollection;
 import pl.industrum.gasanalyzer.gui.frames.StatusBar;
 import pl.industrum.gasanalyzer.gui.frames.ToolBar;
 import pl.industrum.gasanalyzer.i18n.Messages;
@@ -49,7 +50,8 @@ public class GasAnalyzerMainWindow implements Observer
 	private Composite composite2;
 
 	private DeviceTree deviceTree;
-	private Device device;
+	private DeviceCollection deviceCollection;
+	private NetworkCollection networkCollection;
 
 	public GasAnalyzerMainWindow( boolean forwarding )
 	{
@@ -187,12 +189,50 @@ public class GasAnalyzerMainWindow implements Observer
 			public ELANConnectionWrapper getGUIConnectionWrapper()
 			{
 				return getConnectionWrapper();
+			}
+
+			@Override
+			public void addDeviceToDeviceCollection(String deviceName)
+			{
+				deviceCollection.addDevice( deviceName );
+			}
+
+			@Override
+			public void setSelectedDeviceVisible( String text )
+			{
+				networkCollection.setVisible( false );
+				deviceCollection.setVisible( true );
+				deviceCollection.setVisibleDivice( text );
+				composite.layout();
+			}
+
+			@Override
+			public void addNetworkToNetworkCollection( String networkName )
+			{
+				networkCollection.addNetwork( networkName );
+			}
+
+			@Override
+			public void setSelectedNetworkVisible( String text )
+			{
+				deviceCollection.setVisible( false );
+				networkCollection.setVisible( true );
+				networkCollection.setVisibleNetwork( text );
+				composite.layout();
+			}
+
+			@Override
+			public void renameNetwork( String oldName, String newName )
+			{
+				networkCollection.renameNetwork( oldName, newName );
 			}	
 		};
 		deviceTree.setEnabled( false );
 
-		device = new Device( composite, SWT.NONE, "Test" );
-		device.setEnabled( false );
+		networkCollection = new NetworkCollection( composite, SWT.NONE, "" );
+		networkCollection.setEnabled( false );
+		deviceCollection = new DeviceCollection( composite, SWT.NONE, "Test" );
+		deviceCollection.setEnabled( false );
 
 		GridData compositeData2 = new GridData( GridData.FILL, GridData.FILL,
 				true, true );
@@ -213,7 +253,8 @@ public class GasAnalyzerMainWindow implements Observer
 		toolBar.enableSurvey();
 		deviceTree.setEnabled( true );
 		deviceTree.refreshTree();
-		device.setEnabled( true );
+		networkCollection.setEnabled( true );
+		deviceCollection.setEnabled( true );
 		styledText.setEnabled( true );
 	}
 
