@@ -145,7 +145,7 @@ public class GasAnalyzerMainWindow implements Observer
 		toolBar = new ToolBar( shlGasAnalyzer, SWT.NONE )
 		{
 			@Override
-			public void refreshPortList()
+			public void refreshDeviceTree()
 			{
 				deviceTree.refreshTree();
 			}
@@ -154,6 +154,12 @@ public class GasAnalyzerMainWindow implements Observer
 			public void closeApplication()
 			{
 				shlGasAnalyzer.close();
+			}
+
+			@Override
+			public void newSurveyCreated()
+			{
+				enableSurveyMainWIndow();
 			}
 		};	
 
@@ -204,6 +210,7 @@ public class GasAnalyzerMainWindow implements Observer
 				deviceCollection.setVisible( true );
 				deviceCollection.setVisibleDivice( text );
 				composite.layout();
+				composite.getParent().layout();
 			}
 
 			@Override
@@ -219,6 +226,7 @@ public class GasAnalyzerMainWindow implements Observer
 				networkCollection.setVisible( true );
 				networkCollection.setVisibleNetwork( text );
 				composite.layout();
+				composite.getParent().layout();
 			}
 
 			@Override

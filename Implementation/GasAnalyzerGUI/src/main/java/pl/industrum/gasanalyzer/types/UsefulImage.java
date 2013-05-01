@@ -11,14 +11,15 @@ import org.eclipse.swt.graphics.Image;
  */
 public enum UsefulImage
 {
-	ABOUT_STAR( "/pl/industrum/gasanalyzer/gui/aboutmini.png" ),
+	ABOUT_STAR( "/pl/industrum/gasanalyzer/gui/about.png" ),
+	NEW_MAIL( "/pl/industrum/gasanalyzer/gui/mail-message-new.png" ),
 	SHUTDOWN( "/pl/industrum/gasanalyzer/gui/shutdown.png" ),
 	REFRESH( "/pl/industrum/gasanalyzer/gui/odswiez.png" ),
 	PDF( "/pl/industrum/gasanalyzer/gui/pdf.png" ),
 	EXCEL( "/pl/industrum/gasanalyzer/gui/excel.png" ),
-	NEW_SURVEY( "/pl/industrum/gasanalyzer/gui/add.png" ),
+	NEW_SURVEY( "/pl/industrum/gasanalyzer/gui/newSurvey.png" ),
 	OPEN_SURVEY( "/pl/industrum/gasanalyzer/gui/dir.png" ),
-	PREFERENCES( "/pl/industrum/gasanalyzer/gui/ustawienia.png" ),
+	PREFERENCES( "/pl/industrum/gasanalyzer/gui/preferences.png" ),
 	CALENDAR( "/pl/industrum/gasanalyzer/gui/calendar.png" ),
 	CONNECT( "/pl/industrum/gasanalyzer/gui/connect.png" ),
 	DISCONNECT( "/pl/industrum/gasanalyzer/gui/disconnect.png" ),

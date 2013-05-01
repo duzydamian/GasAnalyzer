@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.Decorations;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
+import pl.industrum.gasanalyzer.gui.EmailSystem;
 import pl.industrum.gasanalyzer.gui.dialogs.About;
 import pl.industrum.gasanalyzer.gui.dialogs.NewSurvey;
 import pl.industrum.gasanalyzer.i18n.Messages;
@@ -120,9 +121,34 @@ public abstract class MainMenu extends Menu
 		Menu menuHelp = new Menu( mntmHelp );
 		mntmHelp.setMenu( menuHelp );
 
+		MenuItem mntmBug = new MenuItem( menuHelp, SWT.NONE );
+		mntmBug.setText( Messages.getString( "MainMenu.Bug" ) ); //$NON-NLS-1$
+		mntmBug.setImage( UsefulImage.NEW_MAIL.getImage() );
+		mntmBug.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				new EmailSystem().sendBugNotification();
+			}
+		} );
+		
+		MenuItem mntmSuggestion = new MenuItem( menuHelp, SWT.NONE );
+		mntmSuggestion.setText( Messages.getString( "MainMenu.Suggestion" ) ); //$NON-NLS-1$
+		mntmSuggestion.setImage( UsefulImage.NEW_MAIL.getImage() );
+		mntmSuggestion.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				new EmailSystem().sendSuggestionNotification();
+			}
+		} );
+		
+		new MenuItem( menuHelp, SWT.SEPARATOR );
+		
 		MenuItem mntmAbout = new MenuItem( menuHelp, SWT.NONE );
 		mntmAbout.setText( Messages.getString( "MainMenu.About" ) ); //$NON-NLS-1$
-		mntmAbout.setAccelerator( SWT.MOD1 + 'O' );
+		mntmAbout.setImage( UsefulImage.ABOUT_STAR.getImage() );
+		mntmAbout.setAccelerator( SWT.MOD1 + 'O' );		
 		mntmAbout.addSelectionListener( new SelectionAdapter()
 		{
 			public void widgetSelected( SelectionEvent e )
@@ -140,9 +166,7 @@ public abstract class MainMenu extends Menu
 	}
 	
 	public abstract void closeApplication();
-
-	public abstract void refreshDeviceTree();
-	
+	public abstract void refreshDeviceTree();	
 	public abstract void newSurveyCreated();
 	
 	protected void checkSubclass()

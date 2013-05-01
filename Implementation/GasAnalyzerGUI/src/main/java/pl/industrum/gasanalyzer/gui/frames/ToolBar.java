@@ -8,6 +8,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolItem;
 
+import pl.industrum.gasanalyzer.gui.dialogs.NewSurvey;
 import pl.industrum.gasanalyzer.gui.dialogs.PdfDialog;
 import pl.industrum.gasanalyzer.gui.dialogs.XlsDialog;
 import pl.industrum.gasanalyzer.i18n.Messages;
@@ -25,6 +26,8 @@ public abstract class ToolBar extends Composite
 	private org.eclipse.swt.widgets.ToolBar bar;
 	private ToolItem btnRefresh;
 	private ToolItem btnExit;
+	private ToolItem btnNewSurvey;
+	private ToolItem btnOpenSurvey;
 	
 	/**
 	 * Create the composite.
@@ -44,6 +47,24 @@ public abstract class ToolBar extends Composite
 
 		bar = new org.eclipse.swt.widgets.ToolBar( this, SWT.NONE );
 
+		btnNewSurvey = new ToolItem( bar, SWT.PUSH );
+		btnNewSurvey.setToolTipText(Messages.getString("ToolBar.btnNewSurvey.toolTipText")); //$NON-NLS-1$
+		btnNewSurvey.setImage( UsefulImage.NEW_SURVEY.getImage() );
+		btnNewSurvey.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				NewSurvey newSurvey = new NewSurvey( getShell(), SWT.NONE );
+				newSurvey.open();
+				newSurveyCreated();
+				enableSurvey();
+			}
+		} );
+		
+		btnOpenSurvey = new ToolItem( bar, SWT.PUSH );
+		btnOpenSurvey.setToolTipText(Messages.getString("ToolBar.btnOpenSurvey.toolTipText")); //$NON-NLS-1$
+		btnOpenSurvey.setImage( UsefulImage.OPEN_SURVEY.getImage() );
+		
 		btnExit = new ToolItem( bar, SWT.PUSH );
 		btnExit.setToolTipText(Messages.getString("ToolBar.btnExit.toolTipText")); //$NON-NLS-1$
 		btnExit.setImage( UsefulImage.SHUTDOWN.getImage() );
@@ -68,7 +89,7 @@ public abstract class ToolBar extends Composite
 			@Override
 			public void widgetSelected( SelectionEvent arg0 )
 			{
-				refreshPortList();
+				refreshDeviceTree();
 			}
 		});
 		btnRefresh.setEnabled( false );
@@ -123,6 +144,7 @@ public abstract class ToolBar extends Composite
 		// Disable the check that prevents subclassing of SWT components
 	}
 
-	public abstract void refreshPortList();
+	public abstract void refreshDeviceTree();
 	public abstract void closeApplication();
+	public abstract void newSurveyCreated();
 }
