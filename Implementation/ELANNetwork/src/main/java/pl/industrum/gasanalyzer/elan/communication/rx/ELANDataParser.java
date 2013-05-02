@@ -15,7 +15,7 @@ import pl.industrum.gasanalyzer.elan.types.ELANDimension;
 import pl.industrum.gasanalyzer.elan.types.ELANMeasuredVariable;
 import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
 
-public class ELANDataParser extends Observable implements Runnable
+public class ELANDataParser extends Observable implements Runnable, ELANParser
 {
 	private Queue<Integer> dataBuffer;
 	private ELANRxFrame rxFrame;
@@ -30,24 +30,22 @@ public class ELANDataParser extends Observable implements Runnable
 		//First cut off header and footer of frame
 		dataBuffer = trimData( dataBuffer );
 		
-		Integer targetAdress = dataBuffer.poll();
-		Integer sourceAdress = dataBuffer.poll();
-		
 		//collective channel state (1 byte)
 		Integer collectiveChannelStateByte = dataBuffer.poll();
+		
 		//channel state (could be few bytes, every byte means different option)
 		Integer channelStateByte;
 		
 		//If the collective state is 0, the transmitted measured values are valid.
 		if( collectiveChannelStateByte == 0 )
 		{
-			rxFrame = new ELANRxBroadcastFrame( sourceAdress, targetAdress );
+			rxFrame = new ELANRxBroadcastFrame();
 		}
 		else
 		{
 			Queue<ELANCollectiveChannelState> collectiveChannelStateQueue = ELANCollectiveChannelState.getStates(collectiveChannelStateByte);
 			
-			rxFrame = new ELANRxInvalidFrame( sourceAdress, targetAdress, collectiveChannelStateQueue );
+			rxFrame = new ELANRxInvalidFrame( collectiveChannelStateQueue );
 		}
 		
 		channelStateByte = dataBuffer.poll();
@@ -89,32 +87,16 @@ public class ELANDataParser extends Observable implements Runnable
 				}	
 			}
 		}
+		else
+		{
+			
+		}
 		
 		setChanged();
 		notifyObservers( new ELANDataParserNotification( rxFrame ) );
 	}
 	
-	public static Integer[] preparser( Queue<Integer> data )
-	{
-		Queue<Integer> dataTemp = new LinkedList<Integer>();
-		dataTemp.addAll(data);
-		
-		return ELANDataParser.getAddresses( ELANDataParser.trimData( dataTemp ) );
-	}
-	
-	public static Integer[] getAddresses( Queue<Integer> trimedData )
-	{
-		Integer targetAdress = trimedData.poll();
-		Integer sourceAdress = trimedData.poll();
-		
-		Integer[] addressesArray = new Integer[2];
-		addressesArray[0] = targetAdress;
-		addressesArray[1] = sourceAdress;
-		
-		return addressesArray;
-	}
-	
-	public static Queue<Integer> trimData( Queue<Integer> data )
+	public Queue<Integer> trimData( Queue<Integer> data )
 	{
 		Queue<Integer> trimedQueue = new LinkedList<Integer>();
 		
@@ -147,6 +129,11 @@ public class ELANDataParser extends Observable implements Runnable
 				}
 			}
 		}
+		
+		//Trim source and target address
+		dataBuffer.poll();
+		dataBuffer.poll();
+		
 		return trimedQueue;
 	}
 }

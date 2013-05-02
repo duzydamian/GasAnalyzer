@@ -8,10 +8,10 @@ public class ELANRxInvalidFrame extends ELANRxFrame
 {
 	private Queue<ELANCollectiveChannelState> collectiveChannelState;
 	
-	public ELANRxInvalidFrame( Integer sourceAdress, Integer targetAdress, Queue<ELANCollectiveChannelState> collectiveChannelStateQueue )
+	public ELANRxInvalidFrame( Queue<ELANCollectiveChannelState> collectiveChannelStateQueue )
 	{
 		//ELANRxFrame.valid set to false
-		super( sourceAdress, targetAdress, false );
+		super( false );
 		
 		this.collectiveChannelState = collectiveChannelStateQueue;
 	}
