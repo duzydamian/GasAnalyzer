@@ -1,5 +1,7 @@
 package pl.industrum.gasanalyzer.gui.frames;
 
+import java.util.Vector;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -11,8 +13,11 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
 import pl.industrum.gasanalyzer.elan.communication.network.ELANMeasurementDevice;
-import pl.industrum.gasanalyzer.elan.types.ELANMeasuredVariable;
+import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
+import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
+import pl.industrum.gasanalyzer.elan.types.ELANVariableDimensionPair;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.types.UsefulImage;
 
 /**
  * @author duzydamian (Damian Karbowiak)
@@ -28,6 +33,8 @@ public class Device extends Composite
 	private String deviceName;
 	private Integer deviceAddress;
 	private Label lblStateMessage;
+	private Vector<Label> lblMeasuredValues;
+	private TabItem tbitmHistory;
 
 	/**
 	 * Create the composite.
@@ -45,6 +52,7 @@ public class Device extends Composite
 		//this.setLayoutData( compositeData );
 		this.deviceName = device.getName() ;
 		this.deviceAddress = device.getDeviceAddress();
+		this.lblMeasuredValues = new Vector<Label>();
 
 		grpOneDIvice = new Group( this, SWT.NONE );
 		grpOneDIvice.setText( deviceName );
@@ -59,21 +67,24 @@ public class Device extends Composite
 		tbitmCurrent.setControl( currentBody );
 		currentBody.setLayout( new GridLayout( 3, false ) );
 
-		for( ELANMeasuredVariable measurement: device.getDeviceInformation() )
+		for( ELANVariableDimensionPair measurement: device.getDeviceInformation() )
 		{
-			Label lblMeasuredVariable = new Label( currentBody, SWT.NONE );
-			lblMeasuredVariable.setText( measurement.name() );
+			Label lblMeasuredVariable = new Label( currentBody, SWT.WRAP );
+			lblMeasuredVariable.setText( measurement.getVariable().name() );
 			Label lblMeasuredValue = new Label( currentBody, SWT.NONE );
 			lblMeasuredValue.setText( "0" );
+			lblMeasuredValues.add( lblMeasuredValue );
 			Label lblMeasuredDimension = new Label( currentBody, SWT.NONE );
-			lblMeasuredDimension.setText( measurement.name() );
+			lblMeasuredDimension.setText( measurement.getDimension().name() );
 		}
-		lblState = new Label( currentBody, SWT.NONE );
+		lblState = new Label( currentBody, SWT.WRAP );
 		lblState.setText( Messages.getString( "Device.lblStan.text" ) );
 		lblStateMessage = new Label( currentBody, SWT.NONE );
 		lblStateMessage.setText( Messages.getString( "Device.lblOk.text" ) );		
+		new Label(currentBody, SWT.NONE);
 
-		TabItem tbitmHistory = new TabItem( tabFolder, SWT.NONE );
+		tbitmHistory = new TabItem( tabFolder, SWT.NONE );
+		tbitmHistory.setImage( UsefulImage.CALENDAR.getImage() );
 		tbitmHistory.setText( Messages.getString( "Device.tbtmNewItem.text" ) ); //$NON-NLS-1$
 
 		Composite historyBody = new Composite( tabFolder, SWT.NONE );
@@ -86,19 +97,17 @@ public class Device extends Composite
 		super.setEnabled( arg0 );
 		grpOneDIvice.setEnabled( arg0 );
 		tabFolder.setEnabled( arg0 );
-	}
+	}	
 	
-	public void addELANMeasuredVariable()
+	public void updateMeasurment(ELANRxBroadcastFrame frame)
 	{
-		//for( iterable_type iterable_element: iterable )
+		int i = 0;
+		for( ELANMeasurement elanMeasurement: frame )
 		{
-			
+			//System.out.println(elanMeasurement.toString());
+			lblMeasuredValues.get( i ).setText( elanMeasurement.getValue().toString() );
+			i++;
 		}
-	}
-	
-	public void updateMeasurment()
-	{
-		
 	}
 	
 	/**

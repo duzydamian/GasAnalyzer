@@ -1,12 +1,19 @@
 package pl.industrum.gasanalyzer.gui.frames;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabFolder2Adapter;
+import org.eclipse.swt.custom.CTabFolderEvent;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
+
+import pl.industrum.gasanalyzer.types.UsefulImage;
 
 /**
  * @author duzydamian (Damian Karbowiak)
@@ -16,7 +23,7 @@ public class Network extends Composite
 {
 	GridData compositeData;
 	private Group grpOneNetwork;
-	private Composite currentBody;
+	private Composite body;
 	private Label lblState;
 	private String networkName;
 	private Label lblStateMessage;
@@ -42,20 +49,69 @@ public class Network extends Composite
 		grpOneNetwork.setText( name );
 		grpOneNetwork.setLayout( new FillLayout( SWT.HORIZONTAL ) );
 
-		currentBody = new Composite( grpOneNetwork, SWT.NONE );
-		currentBody.setLayout( new GridLayout( 2, false ) );
+		body = new Composite( grpOneNetwork, SWT.NONE );
+		body.setLayout( new GridLayout( 2, false ) );
 
-		lblState = new Label( currentBody, SWT.NONE );
+		lblState = new Label( body, SWT.NONE );
 		lblState.setText( "Stan sieci" );
-		lblStateMessage = new Label( currentBody, SWT.NONE );
+		lblStateMessage = new Label( body, SWT.NONE );
 		lblStateMessage.setText( "Niepołączona" );	
 		
-		lblDevicesCount = new Label( currentBody, SWT.NONE );
+		lblDevicesCount = new Label( body, SWT.WRAP );
 		lblDevicesCount.setText( "Liczba urządzeń w sieci" );
-		lblDevicesCountValue = new Label( currentBody, SWT.NONE );
-		lblDevicesCountValue.setText( "" );		
+		lblDevicesCountValue = new Label( body, SWT.NONE );
+		lblDevicesCountValue.setText( "" );	
 		
-		currentBody.layout();
+		GridData globaGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		globaGridData.horizontalSpan = 2;
+		final CTabFolder folder = new CTabFolder(body, SWT.BORDER);
+		folder.setLayoutData( globaGridData );
+		folder.setSimple(false);
+		//folder.setUnselectedImageVisible(false);
+		folder.setUnselectedCloseVisible(false);
+
+		CTabItem itemWarning = new CTabItem(folder, SWT.CLOSE);
+		itemWarning.setText("Warning");
+		itemWarning.setImage(UsefulImage.WARNING.getImage());
+		Text textitemWarning = new Text(folder, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+		textitemWarning.setText("Text for item "+"\n\none, two, three\n\nabcdefghijklmnop");
+		itemWarning.setControl(textitemWarning);
+
+		CTabItem itemError = new CTabItem(folder, SWT.CLOSE);
+		itemError.setText("Error");
+		itemError.setImage(UsefulImage.ERROR.getImage());
+		Text textError = new Text(folder, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+		textError.setText("Text for item "+"\n\none, two, three\n\nabcdefghijklmnop");
+		itemError.setControl(textError);
+			
+		folder.setMinimizeVisible(true);
+		folder.setMaximizeVisible(true);
+		folder.addCTabFolder2Listener(new CTabFolder2Adapter() {
+			public void minimize(CTabFolderEvent event) {
+				folder.setMinimized(true);
+				GridData localGridData = new GridData(SWT.FILL, SWT.FILL, true, false);
+				localGridData.horizontalSpan = 2;
+				folder.setLayoutData( localGridData) ;
+				body.layout(true);
+			}
+			public void maximize(CTabFolderEvent event) {
+				folder.setMaximized(true);
+				GridData localGridData = new GridData(SWT.FILL, SWT.FILL, true, true); 
+				localGridData.horizontalSpan = 2;
+				folder.setLayoutData( localGridData );
+				body.layout(true);
+			}
+			public void restore(CTabFolderEvent event) {
+				folder.setMinimized(false);
+				folder.setMaximized(false);
+				GridData localGridData = new GridData(SWT.FILL, SWT.FILL, true, false); 
+				localGridData.horizontalSpan = 2;				
+				folder.setLayoutData( localGridData );
+				body.layout(true);
+			}
+		});
+		
+		body.layout();
 		layout();
 		this.setNetworkName( name );
 	}
@@ -65,23 +121,10 @@ public class Network extends Composite
 	{
 		super.setEnabled( arg0 );
 		grpOneNetwork.setEnabled( arg0 );
-		currentBody.layout();
+		body.layout();
 		layout();
 	}
-	
-	public void addELANMeasuredVariable()
-	{
-		//for( iterable_type iterable_element: iterable )
-		{
-			
-		}
-	}
-	
-	public void updateMeasurment()
-	{
-		
-	}
-	
+
 	/**
 	 * @return the deviceName
 	 */
@@ -97,7 +140,7 @@ public class Network extends Composite
 	{
 		this.networkName = name;
 		this.grpOneNetwork.setText( name );
-		currentBody.layout();
+		body.layout();
 		layout();
 	}
 
@@ -111,7 +154,7 @@ public class Network extends Composite
 	{
 		lblStateMessage.setText( "Podłączona" );
 		lblDevicesCountValue.setText( String.valueOf( networkSize ) );
-		currentBody.layout();
+		body.layout();
 		layout();
 	}
 }

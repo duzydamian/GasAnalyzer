@@ -6,6 +6,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
+
 import pl.industrum.gasanalyzer.i18n.Messages;
 
 /**
@@ -14,9 +15,9 @@ import pl.industrum.gasanalyzer.i18n.Messages;
  */
 public class StatusBar extends Composite
 {
-	Label lblStatus;
-	ProgressBar progressBar;
-	GridData compositeData;
+	private Label lblStatus;
+	private ProgressBar progressBar;
+	private GridData compositeData;
 
 	/**
 	 * Create the composite.
@@ -30,12 +31,12 @@ public class StatusBar extends Composite
 		compositeData = new GridData( GridData.FILL, GridData.GRAB_VERTICAL,
 				true, false );
 		compositeData.horizontalSpan = 6;
-		this.setLayout( new FillLayout( SWT.HORIZONTAL ) );
 		this.setLayoutData( compositeData );
+		setLayout(new FillLayout(SWT.HORIZONTAL));
 
-		lblStatus = new Label( this, SWT.BOLD );
-		lblStatus.setText( Messages.getString( "StatusBar.lblStatus.text" ) ); //$NON-NLS-1$
-
+		lblStatus = new Label( this, SWT.NONE );
+		lblStatus.setText( "" ); //$NON-NLS-1$
+		
 		progressBar = new ProgressBar( this, SWT.BORDER );
 		progressBar.setVisible( false );
 	}
@@ -49,7 +50,6 @@ public class StatusBar extends Composite
 	@SuppressWarnings( "unused" )
 	private void hide()
 	{
-		;
 		this.setVisible( false );
 	}
 
@@ -61,7 +61,6 @@ public class StatusBar extends Composite
 
 	public void hideProgressBar()
 	{
-		;
 		this.progressBar.setVisible( false );
 	}
 
@@ -78,6 +77,6 @@ public class StatusBar extends Composite
 
 	public void setStatusText( String status )
 	{
-		this.lblStatus.setText( status );
+		this.lblStatus.setText( Messages.getString( "StatusBar.lblStatus.text" ) + status );
 	}
 }

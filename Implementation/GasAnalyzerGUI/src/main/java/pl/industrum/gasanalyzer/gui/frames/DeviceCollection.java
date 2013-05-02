@@ -8,6 +8,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 import pl.industrum.gasanalyzer.elan.communication.network.ELANMeasurementDevice;
+import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
 
 /**
  * @author duzydamian (Damian Karbowiak)
@@ -66,5 +67,16 @@ public class DeviceCollection extends Composite
 	protected void checkSubclass()
 	{
 		// Disable the check that prevents subclassing of SWT components
+	}
+
+	public void updateMeasurmentFormDevice( Integer deviceAddress,
+			ELANRxBroadcastFrame frame )
+	{
+		for( Device device: devices )
+		{
+			if( device.getDeviceAddress() == deviceAddress)
+				device.updateMeasurment( frame );			
+		}
+		currentBody.layout();
 	}
 }

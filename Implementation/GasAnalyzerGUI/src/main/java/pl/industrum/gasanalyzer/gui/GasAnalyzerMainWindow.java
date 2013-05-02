@@ -80,12 +80,15 @@ public class GasAnalyzerMainWindow implements Observer
 						.setMessage( "Czy na pewno chcesz zamknąć aplikację?" );
 				if ( messageBox.open() == SWT.YES )
 				{
+					statusBar.setStatusText( "Trwa rozłączanie sieci" );
 					statusBar.showProgressBar();
 					statusBar.setProgress( 50 );
 					for( ELANNetwork iter: connectionWrapper )
 					{
+						statusBar.setStatusText( "Trwa rozłączanie z " + iter.getName());
 						iter.getConnection().disconnect();
 					}
+					statusBar.setStatusText( "Trwa zamykanie aplikacji" );
 					event.doit = true;
 				} else
 				{
@@ -323,6 +326,7 @@ public class GasAnalyzerMainWindow implements Observer
 					ELANRxFrame poll = device.pollAndClear();
 					ELANRxBroadcastFrame frame = ( ELANRxBroadcastFrame )poll;
 					System.out.println(device.getDeviceAddress() + " @ " + frame.getTimeStamp());
+					deviceCollection.updateMeasurmentFormDevice( device.getDeviceAddress(), frame );
 					for( ELANMeasurement elanMeasurement: frame )
 					{
 						System.out.println(elanMeasurement.toString());
