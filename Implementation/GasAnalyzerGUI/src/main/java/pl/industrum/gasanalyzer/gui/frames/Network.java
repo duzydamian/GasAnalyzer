@@ -20,6 +20,8 @@ public class Network extends Composite
 	private Label lblState;
 	private String networkName;
 	private Label lblStateMessage;
+	private Label lblDevicesCount;
+	private Label lblDevicesCountValue;
 
 	/**
 	 * Create the composite.
@@ -48,6 +50,13 @@ public class Network extends Composite
 		lblStateMessage = new Label( currentBody, SWT.NONE );
 		lblStateMessage.setText( "Niepołączona" );	
 		
+		lblDevicesCount = new Label( currentBody, SWT.NONE );
+		lblDevicesCount.setText( "Liczba urządzeń w sieci" );
+		lblDevicesCountValue = new Label( currentBody, SWT.NONE );
+		lblDevicesCountValue.setText( "" );		
+		
+		currentBody.layout();
+		layout();
 		this.setNetworkName( name );
 	}
 
@@ -56,6 +65,8 @@ public class Network extends Composite
 	{
 		super.setEnabled( arg0 );
 		grpOneNetwork.setEnabled( arg0 );
+		currentBody.layout();
+		layout();
 	}
 	
 	public void addELANMeasuredVariable()
@@ -86,11 +97,21 @@ public class Network extends Composite
 	{
 		this.networkName = name;
 		this.grpOneNetwork.setText( name );
+		currentBody.layout();
+		layout();
 	}
 
 	@Override
 	protected void checkSubclass()
 	{
 		// Disable the check that prevents subclassing of SWT components
+	}
+
+	public void setNetworkConnected( int networkSize )
+	{
+		lblStateMessage.setText( "Podłączona" );
+		lblDevicesCountValue.setText( String.valueOf( networkSize ) );
+		currentBody.layout();
+		layout();
 	}
 }

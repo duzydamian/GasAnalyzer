@@ -74,4 +74,13 @@ public class NetworkCollection extends Composite
 	{
 		// Disable the check that prevents subclassing of SWT components
 	}
+
+	public void setNetworkConnected( int networkSize, String name )
+	{
+		for( Network network: networks )
+		{
+			if( network.getNetworkName().equalsIgnoreCase( name ))
+				network.setNetworkConnected( networkSize );
+		}
+	}
 }

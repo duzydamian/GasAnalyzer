@@ -198,9 +198,9 @@ public class GasAnalyzerMainWindow implements Observer
 			}
 
 			@Override
-			public void addDeviceToDeviceCollection(String deviceName)
+			public void addDeviceToDeviceCollection( ELANMeasurementDevice device )
 			{
-				deviceCollection.addDevice( deviceName );
+				deviceCollection.addDevice( device );
 			}
 
 			@Override
@@ -233,6 +233,12 @@ public class GasAnalyzerMainWindow implements Observer
 			public void renameNetwork( String oldName, String newName )
 			{
 				networkCollection.renameNetwork( oldName, newName );
+			}
+
+			@Override
+			public void setNetworkConnected( int networkSize, String name )
+			{
+				networkCollection.setNetworkConnected( networkSize, name );
 			}	
 		};
 		deviceTree.setEnabled( false );
@@ -316,7 +322,7 @@ public class GasAnalyzerMainWindow implements Observer
 				{
 					ELANRxFrame poll = device.pollAndClear();
 					ELANRxBroadcastFrame frame = ( ELANRxBroadcastFrame )poll;
-					System.out.println(frame.getSourceAdress() + " @ " + frame.getTimeStamp());
+					System.out.println(device.getDeviceAddress() + " @ " + frame.getTimeStamp());
 					for( ELANMeasurement elanMeasurement: frame )
 					{
 						System.out.println(elanMeasurement.toString());

@@ -43,7 +43,7 @@ public class ELANDeviceInformationParser implements ELANParser
 			Integer valueByte = trimedData.poll();
 			while( valueByte != 0 )
 			{
-				trimedData.poll(); //in last iteration jump over 0
+				valueByte = trimedData.poll(); //in last iteration jump over 0
 			}
 			
 			//Jump over dimension

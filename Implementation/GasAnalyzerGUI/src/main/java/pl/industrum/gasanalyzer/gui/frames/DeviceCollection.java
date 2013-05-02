@@ -7,6 +7,8 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import pl.industrum.gasanalyzer.elan.communication.network.ELANMeasurementDevice;
+
 /**
  * @author duzydamian (Damian Karbowiak)
  * 
@@ -43,9 +45,9 @@ public class DeviceCollection extends Composite
 		super.setEnabled( arg0 );
 	}
 	
-	public void addDevice(String deviceName)
+	public void addDevice( ELANMeasurementDevice device )
 	{
-		devices.add( new Device( currentBody, SWT.NONE, deviceName ) );
+		devices.add( new Device( currentBody, SWT.NONE, device ) );
 	}
 	
 	public void setVisibleDivice(String name)

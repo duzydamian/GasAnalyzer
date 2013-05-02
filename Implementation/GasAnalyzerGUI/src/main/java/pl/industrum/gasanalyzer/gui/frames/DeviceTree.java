@@ -86,11 +86,13 @@ public abstract class DeviceTree extends Composite
 										scan.open();
 										if ( getGUIConnectionWrapper().getNetwork( treeItem.getText() ).getSize() > 0 )
 										{
+											int networkSize = getGUIConnectionWrapper().getNetwork( treeItem.getText() ).getSize();
+											
 											for( ELANMeasurementDevice device: getGUIConnectionWrapper().getNetwork( treeItem.getText() ) )
 											{
 												TreeItem itemTreeItem = new TreeItem( treeItem, SWT.COLOR_GRAY );
 												itemTreeItem.setText( device.getName() );
-												addDeviceToDeviceCollection(device.getName());
+												addDeviceToDeviceCollection(device);
 												layout();
 											}
 											
@@ -98,6 +100,7 @@ public abstract class DeviceTree extends Composite
 											String newName = getGUIConnectionWrapper().getNetwork( treeItem.getText() ).getName() +" [" + getGUIConnectionWrapper().getNetwork( treeItem.getText() ).getPort() + "]";
 											treeItem.setText( newName );
 											renameNetwork( oldName, newName );
+											setNetworkConnected( networkSize, treeItem.getText() );
 											treeItem.setImage( imageConnect );
 											treeItem.setForeground( UsefulColor.BLACK.getColor() );
 											treeItem.setExpanded( true );
@@ -219,10 +222,11 @@ public abstract class DeviceTree extends Composite
 	public abstract boolean connectWithNetwork(String port);
 	public abstract void disconnectFromDevice( String text );	
 	public abstract ELANConnectionWrapper getGUIConnectionWrapper();
-	public abstract void addDeviceToDeviceCollection(String deviceName);
+	public abstract void addDeviceToDeviceCollection( ELANMeasurementDevice device );
 	public abstract void addNetworkToNetworkCollection(String networkName);
 	public abstract void setSelectedDeviceVisible(String text );
 	public abstract void setSelectedNetworkVisible(String text );
 	public abstract void renameNetwork( String oldName, String newName );
+	public abstract void setNetworkConnected( int networkSize, String name );	
 
 }
