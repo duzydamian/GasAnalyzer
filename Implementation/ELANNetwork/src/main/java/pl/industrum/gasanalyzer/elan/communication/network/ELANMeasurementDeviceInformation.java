@@ -5,32 +5,32 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import pl.industrum.gasanalyzer.elan.types.ELANDeviceType;
-import pl.industrum.gasanalyzer.elan.types.ELANMeasuredVariable;
+import pl.industrum.gasanalyzer.elan.types.ELANVariableDimensionPair;
 
-public class ELANMeasurementDeviceInformation implements Iterable<ELANMeasuredVariable>
+public class ELANMeasurementDeviceInformation implements Iterable<ELANVariableDimensionPair>
 {
 	private String name;
 	private ELANDeviceType deviceType;
 	private Integer deviceAddress;
-	private Queue<ELANMeasuredVariable> measuredVariables;
+	private Queue<ELANVariableDimensionPair> measuredVariables;
 	
 	public ELANMeasurementDeviceInformation()
 	{
 		name = "";
-		measuredVariables = new LinkedList<ELANMeasuredVariable>();
+		measuredVariables = new LinkedList<ELANVariableDimensionPair>();
 	}
 	
-	public Iterator<ELANMeasuredVariable> iterator() 
+	public Iterator<ELANVariableDimensionPair> iterator() 
 	{
-        Iterator<ELANMeasuredVariable> imeasuredVariables = measuredVariables.iterator();
+        Iterator<ELANVariableDimensionPair> imeasuredVariables = measuredVariables.iterator();
         return imeasuredVariables; 
     }
 	
-	public void addMeasuredVariable( ELANMeasuredVariable measuredVariable )
+	public void addMeasuredVariable( ELANVariableDimensionPair measuredVariable )
 	{
-		for( ELANMeasuredVariable variable : this )
+		for( ELANVariableDimensionPair variable : this )
 		{
-			if( variable == measuredVariable )
+			if( variable.getVariable() == measuredVariable.getVariable() )
 			{
 				return;
 			}
@@ -38,7 +38,7 @@ public class ELANMeasurementDeviceInformation implements Iterable<ELANMeasuredVa
 		measuredVariables.add( measuredVariable );
 	}
 	
-	public void setMeasuredVariables( Queue<ELANMeasuredVariable> measuredVariables )
+	public void setMeasuredVariables( Queue<ELANVariableDimensionPair> measuredVariables )
 	{
 		this.measuredVariables = measuredVariables;
 	}
