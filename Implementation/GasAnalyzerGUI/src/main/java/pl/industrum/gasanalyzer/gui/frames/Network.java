@@ -1,19 +1,12 @@
 package pl.industrum.gasanalyzer.gui.frames;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.custom.CTabFolder2Adapter;
-import org.eclipse.swt.custom.CTabFolderEvent;
-import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
-
-import pl.industrum.gasanalyzer.types.UsefulImage;
 
 /**
  * @author duzydamian (Damian Karbowiak)
@@ -58,58 +51,12 @@ public class Network extends Composite
 		lblStateMessage.setText( "Niepołączona" );	
 		
 		lblDevicesCount = new Label( body, SWT.WRAP );
+		GridData gd_lblDevicesCount = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_lblDevicesCount.widthHint = 100;
+		lblDevicesCount.setLayoutData(gd_lblDevicesCount);
 		lblDevicesCount.setText( "Liczba urządzeń w sieci" );
 		lblDevicesCountValue = new Label( body, SWT.NONE );
-		lblDevicesCountValue.setText( "" );	
-		
-		GridData globaGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		globaGridData.horizontalSpan = 2;
-		final CTabFolder folder = new CTabFolder(body, SWT.BORDER);
-		folder.setLayoutData( globaGridData );
-		folder.setSimple(false);
-		//folder.setUnselectedImageVisible(false);
-		folder.setUnselectedCloseVisible(false);
-
-		CTabItem itemWarning = new CTabItem(folder, SWT.CLOSE);
-		itemWarning.setText("Warning");
-		itemWarning.setImage(UsefulImage.WARNING.getImage());
-		Text textitemWarning = new Text(folder, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
-		textitemWarning.setText("Text for item "+"\n\none, two, three\n\nabcdefghijklmnop");
-		itemWarning.setControl(textitemWarning);
-
-		CTabItem itemError = new CTabItem(folder, SWT.CLOSE);
-		itemError.setText("Error");
-		itemError.setImage(UsefulImage.ERROR.getImage());
-		Text textError = new Text(folder, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
-		textError.setText("Text for item "+"\n\none, two, three\n\nabcdefghijklmnop");
-		itemError.setControl(textError);
-			
-		folder.setMinimizeVisible(true);
-		folder.setMaximizeVisible(true);
-		folder.addCTabFolder2Listener(new CTabFolder2Adapter() {
-			public void minimize(CTabFolderEvent event) {
-				folder.setMinimized(true);
-				GridData localGridData = new GridData(SWT.FILL, SWT.FILL, true, false);
-				localGridData.horizontalSpan = 2;
-				folder.setLayoutData( localGridData) ;
-				body.layout(true);
-			}
-			public void maximize(CTabFolderEvent event) {
-				folder.setMaximized(true);
-				GridData localGridData = new GridData(SWT.FILL, SWT.FILL, true, true); 
-				localGridData.horizontalSpan = 2;
-				folder.setLayoutData( localGridData );
-				body.layout(true);
-			}
-			public void restore(CTabFolderEvent event) {
-				folder.setMinimized(false);
-				folder.setMaximized(false);
-				GridData localGridData = new GridData(SWT.FILL, SWT.FILL, true, false); 
-				localGridData.horizontalSpan = 2;				
-				folder.setLayoutData( localGridData );
-				body.layout(true);
-			}
-		});
+		lblDevicesCountValue.setText( "-" );	
 		
 		body.layout();
 		layout();

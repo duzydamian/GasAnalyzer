@@ -29,6 +29,7 @@ import pl.industrum.gasanalyzer.gui.frames.DeviceCollection;
 import pl.industrum.gasanalyzer.gui.frames.DeviceTree;
 import pl.industrum.gasanalyzer.gui.frames.MainMenu;
 import pl.industrum.gasanalyzer.gui.frames.NetworkCollection;
+import pl.industrum.gasanalyzer.gui.frames.Problems;
 import pl.industrum.gasanalyzer.gui.frames.StatusBar;
 import pl.industrum.gasanalyzer.gui.frames.ToolBar;
 import pl.industrum.gasanalyzer.i18n.Messages;
@@ -52,6 +53,7 @@ public class GasAnalyzerMainWindow implements Observer
 	private DeviceTree deviceTree;
 	private DeviceCollection deviceCollection;
 	private NetworkCollection networkCollection;
+	private Problems problems;
 
 	public GasAnalyzerMainWindow( boolean forwarding )
 	{
@@ -170,7 +172,7 @@ public class GasAnalyzerMainWindow implements Observer
 				true, true );
 		compositeData.horizontalSpan = 6;
 		composite = new Composite( shlGasAnalyzer, SWT.NONE );
-		composite.setLayout( new FillLayout( SWT.HORIZONTAL ) );
+		composite.setLayout( new GridLayout( 3, false ) );
 		composite.setLayoutData( compositeData );
 
 		deviceTree = new DeviceTree( composite, SWT.NONE )
@@ -228,8 +230,10 @@ public class GasAnalyzerMainWindow implements Observer
 				deviceCollection.setVisible( false );
 				networkCollection.setVisible( true );
 				networkCollection.setVisibleNetwork( text );
-				composite.layout();
-				composite.getParent().layout();
+				networkCollection.layout(true);
+				composite.layout(true);
+				composite.getParent().layout(true);
+				
 			}
 
 			@Override
@@ -242,15 +246,49 @@ public class GasAnalyzerMainWindow implements Observer
 			public void setNetworkConnected( int networkSize, String name )
 			{
 				networkCollection.setNetworkConnected( networkSize, name );
+			}
+
+			@Override
+			public void setStatusBarInformation( int progress,
+					String statusMessage )
+			{
+				if ( progress == -1 )
+				{
+					statusBar.hideProgressBar();
+				}
+				else
+				{
+					statusBar.setProgress( progress );
+					statusBar.setStatusText( statusMessage );
+				}				
 			}	
 		};
 		deviceTree.setEnabled( false );
-
+		deviceTree.setLayoutData( new GridData( GridData.FILL, GridData.FILL, false, true ) );
 		networkCollection = new NetworkCollection( composite, SWT.NONE, "" );
 		networkCollection.setEnabled( false );
+		networkCollection.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
 		deviceCollection = new DeviceCollection( composite, SWT.NONE, "Test" );
 		deviceCollection.setEnabled( false );
+		deviceCollection.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
 
+		problems = new Problems( shlGasAnalyzer, SWT.NONE )
+		{
+			@Override
+			public void addWarning()
+			{
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void addError()
+			{
+				// TODO Auto-generated method stub
+				
+			}			
+		};
+		
 		GridData compositeData2 = new GridData( GridData.FILL, GridData.FILL,
 				true, true );
 		compositeData2.horizontalSpan = 6;

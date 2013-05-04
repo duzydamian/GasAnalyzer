@@ -82,6 +82,7 @@ public abstract class DeviceTree extends Composite
 								{									
 									if ( connectWithNetwork(treeItem.getText()) )
 									{
+										setStatusBarInformation( 10, "Łączenie z "+treeItem.getText() );
 										NetworkScan scan = new NetworkScan( parent.getShell(), SWT.NONE );
 										scan.open();
 										if ( getGUIConnectionWrapper().getNetwork( treeItem.getText() ).getSize() > 0 )
@@ -96,14 +97,17 @@ public abstract class DeviceTree extends Composite
 												layout();
 											}
 											
+											
 											String oldName = treeItem.getText(); 
 											String newName = getGUIConnectionWrapper().getNetwork( treeItem.getText() ).getName() +" [" + getGUIConnectionWrapper().getNetwork( treeItem.getText() ).getPort() + "]";
+											setStatusBarInformation( 100, "Połączono z "+ newName );
 											treeItem.setText( newName );
 											renameNetwork( oldName, newName );
 											setNetworkConnected( networkSize, treeItem.getText() );
 											treeItem.setImage( imageConnect );
 											treeItem.setForeground( UsefulColor.BLACK.getColor() );
 											treeItem.setExpanded( true );
+											setStatusBarInformation( -1, "");
 										}
 										else
 										{
@@ -228,5 +232,5 @@ public abstract class DeviceTree extends Composite
 	public abstract void setSelectedNetworkVisible(String text );
 	public abstract void renameNetwork( String oldName, String newName );
 	public abstract void setNetworkConnected( int networkSize, String name );	
-
+	public abstract void setStatusBarInformation( int progress, String statusMessage );	
 }

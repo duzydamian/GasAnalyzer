@@ -5,6 +5,7 @@ import java.util.Vector;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import pl.industrum.gasanalyzer.elan.communication.network.ELANMeasurementDevice;
@@ -37,7 +38,7 @@ public class DeviceCollection extends Composite
 		this.devices = new Vector<Device>();
 
 		currentBody = new Composite( this, SWT.NONE );
-		currentBody.setLayout( new FillLayout( SWT.VERTICAL ) );
+		currentBody.setLayout( new GridLayout( 1, false ) );
 	}
 
 	@Override
@@ -48,7 +49,9 @@ public class DeviceCollection extends Composite
 	
 	public void addDevice( ELANMeasurementDevice device )
 	{
-		devices.add( new Device( currentBody, SWT.NONE, device ) );
+		Device addedDevice = new Device( currentBody, SWT.NONE, device );
+		addedDevice.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
+		devices.add( addedDevice );
 	}
 	
 	public void setVisibleDivice(String name)
@@ -56,9 +59,17 @@ public class DeviceCollection extends Composite
 		for( Device device: devices )
 		{
 			if( device.getDeviceName().equalsIgnoreCase( name ))
+			{
+				GridData deviceLayoutData = new GridData( GridData.FILL, GridData.FILL,
+						true, true );
+				deviceLayoutData.verticalSpan = 3;
+				device.setLayoutData( deviceLayoutData );
 				device.setVisible( true );
+			}
 			else
+			{
 				device.setVisible( false );
+			}
 		}
 		currentBody.layout();
 	}
