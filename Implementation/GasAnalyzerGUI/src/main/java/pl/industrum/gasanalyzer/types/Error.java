@@ -21,4 +21,28 @@ public enum Error
 		this.message = message;
 		this.description = description;
 	}
+	
+	/**
+	 * @return the code
+	 */
+	public String getCode()
+	{
+		return code;
+	}
+
+	/**
+	 * @return the message
+	 */
+	public String getMessage()
+	{
+		return message;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription()
+	{
+		return description;
+	}
 }

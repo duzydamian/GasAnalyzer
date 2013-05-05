@@ -33,6 +33,8 @@ import pl.industrum.gasanalyzer.gui.frames.Problems;
 import pl.industrum.gasanalyzer.gui.frames.StatusBar;
 import pl.industrum.gasanalyzer.gui.frames.ToolBar;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.types.Error;
+import pl.industrum.gasanalyzer.types.Warning;
 
 public class GasAnalyzerMainWindow implements Observer
 {
@@ -272,22 +274,9 @@ public class GasAnalyzerMainWindow implements Observer
 		deviceCollection.setEnabled( false );
 		deviceCollection.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
 
-		problems = new Problems( shlGasAnalyzer, SWT.NONE )
-		{
-			@Override
-			public void addWarning()
-			{
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void addError()
-			{
-				// TODO Auto-generated method stub
-				
-			}			
-		};
+		problems = new Problems( shlGasAnalyzer, SWT.NONE );
+		problems.addWarning( Warning.NONE, "App" );
+		problems.addError( Error.NONE, "App" );
 		
 		GridData compositeData2 = new GridData( GridData.FILL, GridData.FILL,
 				true, true );

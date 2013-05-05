@@ -9,18 +9,32 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 
+import pl.industrum.gasanalyzer.types.Error;
 import pl.industrum.gasanalyzer.types.UsefulImage;
+import pl.industrum.gasanalyzer.types.Warning;
 
 /**
  * @author duzydamian (Damian Karbowiak)
  * 
  */
-public abstract class Problems extends Composite
+public class Problems extends Composite
 {
 	private GridData compositeData;
 	private Composite body;
+	private GridData globaGridData;
+	private CTabFolder folder;
+	private CTabItem itemWarning;
+	private CTabItem itemError;
+	private Table tableError;
+	private Table tableWarning;
 
 	/**
 	 * Create the composite.
@@ -40,27 +54,45 @@ public abstract class Problems extends Composite
 		body = new Composite( this, SWT.NONE );
 		body.setLayout( new GridLayout( 2, false ) );
 		
-		GridData globaGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		globaGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		globaGridData.horizontalSpan = 2;
-		final CTabFolder folder = new CTabFolder(body, SWT.BORDER);
+		folder = new CTabFolder(body, SWT.BORDER);
 		folder.setLayoutData( globaGridData );
 		folder.setSimple(false);
 		//folder.setUnselectedImageVisible(false);
 		folder.setUnselectedCloseVisible(false);
 
-		CTabItem itemWarning = new CTabItem(folder, SWT.CLOSE);
+		String[] titles = {"Kod", "Nazwa", "Opis", "Lokalizacja"};
+		
+		itemWarning = new CTabItem(folder, SWT.CLOSE);
 		itemWarning.setText("Warning");
 		itemWarning.setImage(UsefulImage.WARNING.getImage());
-		Text textitemWarning = new Text(folder, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
-		textitemWarning.setText("Text for item "+"\n\none, two, three\n\nabcdefghijklmnop");
-		itemWarning.setControl(textitemWarning);
+		tableWarning = new Table (folder, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		tableWarning.setLinesVisible (true);
+		tableWarning.setHeaderVisible (true);
+		for (int i=0; i<titles.length; i++) {
+			TableColumn column = new TableColumn (tableWarning, SWT.NONE);
+			column.setText (titles [i]);
+		}
+		for (int i=0; i<titles.length; i++) {
+			tableWarning.getColumn (i).pack ();
+		}
+		itemWarning.setControl(tableWarning);
 		
-		CTabItem itemError = new CTabItem(folder, SWT.CLOSE);
+		itemError = new CTabItem(folder, SWT.CLOSE);
 		itemError.setText("Error");
 		itemError.setImage(UsefulImage.ERROR.getImage());
-		Text textError = new Text(folder, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
-		textError.setText("Text for item "+"\n\none, two, three\n\nabcdefghijklmnop");
-		itemError.setControl(textError);
+		tableError = new Table (folder, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		tableError.setLinesVisible (true);
+		tableError.setHeaderVisible (true);
+		for (int i=0; i<titles.length; i++) {
+			TableColumn column = new TableColumn (tableError, SWT.NONE);
+			column.setText (titles [i]);
+		}
+		for (int i=0; i<titles.length; i++) {
+			tableError.getColumn (i).pack ();
+		}
+		itemError.setControl(tableError);
 			
 		folder.setMinimizeVisible(true);
 		folder.setMaximizeVisible(true);
@@ -89,6 +121,25 @@ public abstract class Problems extends Composite
 			}
 		});
 		
+		Menu menuWarning = new Menu (body.getShell(), SWT.POP_UP);
+		tableWarning.setMenu (menuWarning);
+		MenuItem itemWarning = new MenuItem (menuWarning, SWT.PUSH);
+		itemWarning.setText ("Delete Selection");
+		itemWarning.addListener (SWT.Selection, new Listener () {
+			public void handleEvent (Event event) {
+				tableWarning.remove (tableWarning.getSelectionIndices ());
+			}
+		});
+
+		Menu menuError = new Menu (body.getShell(), SWT.POP_UP);
+		tableError.setMenu (menuError);
+		MenuItem itemError = new MenuItem (menuError, SWT.PUSH);
+		itemError.setText ("Delete Selection");
+		itemError.addListener (SWT.Selection, new Listener () {
+			public void handleEvent (Event event) {
+				tableError.remove (tableError.getSelectionIndices ());
+			}
+		});
 		body.layout();
 		layout();
 	}
@@ -111,6 +162,21 @@ public abstract class Problems extends Composite
 		this.setVisible( true );
 	}
 
-	public abstract void addWarning();
-	public abstract void addError();
+	public void addWarning(Warning warning, String source)
+	{
+		TableItem item = new TableItem (tableWarning, SWT.NONE);
+		item.setText (0, warning.getCode());
+		item.setText (1, warning.getMessage());
+		item.setText (2, warning.getDescription());
+		item.setText (3, source);		
+	}
+	
+	public void addError(Error error, String source)
+	{
+		TableItem item = new TableItem (tableError, SWT.NONE);
+		item.setText (0, error.getCode());
+		item.setText (1, error.getMessage());
+		item.setText (2, error.getDescription());
+		item.setText (3, source);	
+	}
 }
