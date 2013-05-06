@@ -35,6 +35,7 @@ public class Problems extends Composite
 	private CTabItem itemError;
 	private Table tableError;
 	private Table tableWarning;
+	private String[] columns;
 
 	/**
 	 * Create the composite.
@@ -62,7 +63,7 @@ public class Problems extends Composite
 		//folder.setUnselectedImageVisible(false);
 		folder.setUnselectedCloseVisible(false);
 
-		String[] titles = {"Kod", "Nazwa", "Opis", "Lokalizacja"};
+		columns = new String[] {"Kod", "Nazwa", "Opis", "Lokalizacja"};
 		
 		itemWarning = new CTabItem(folder, SWT.CLOSE);
 		itemWarning.setText("Warning");
@@ -70,12 +71,15 @@ public class Problems extends Composite
 		tableWarning = new Table (folder, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		tableWarning.setLinesVisible (true);
 		tableWarning.setHeaderVisible (true);
-		for (int i=0; i<titles.length; i++) {
+		for (int i=0; i<columns.length; i++)
+		{
 			TableColumn column = new TableColumn (tableWarning, SWT.NONE);
-			column.setText (titles [i]);
+			column.setText (columns [i]);
 		}
-		for (int i=0; i<titles.length; i++) {
+		for (int i=0; i<columns.length; i++)
+		{
 			tableWarning.getColumn (i).pack ();
+			tableWarning.getColumn (i).setMoveable(true);
 		}
 		itemWarning.setControl(tableWarning);
 		
@@ -85,12 +89,13 @@ public class Problems extends Composite
 		tableError = new Table (folder, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		tableError.setLinesVisible (true);
 		tableError.setHeaderVisible (true);
-		for (int i=0; i<titles.length; i++) {
+		for (int i=0; i<columns.length; i++) {
 			TableColumn column = new TableColumn (tableError, SWT.NONE);
-			column.setText (titles [i]);
+			column.setText (columns [i]);
 		}
-		for (int i=0; i<titles.length; i++) {
+		for (int i=0; i<columns.length; i++) {
 			tableError.getColumn (i).pack ();
+			tableError.getColumn (i).setMoveable(true);
 		}
 		itemError.setControl(tableError);
 			
@@ -140,6 +145,7 @@ public class Problems extends Composite
 				tableError.remove (tableError.getSelectionIndices ());
 			}
 		});
+
 		body.layout();
 		layout();
 	}
@@ -168,7 +174,14 @@ public class Problems extends Composite
 		item.setText (0, warning.getCode());
 		item.setText (1, warning.getMessage());
 		item.setText (2, warning.getDescription());
-		item.setText (3, source);		
+		item.setText (3, source);				
+		for (int i=0; i<columns.length; i++)
+		{
+			tableWarning.getColumn (i).pack ();
+			tableWarning.getColumn (i).setMoveable(true);
+		}
+		folder.showItem( itemWarning );
+		folder.forceFocus();
 	}
 	
 	public void addError(Error error, String source)
@@ -177,6 +190,13 @@ public class Problems extends Composite
 		item.setText (0, error.getCode());
 		item.setText (1, error.getMessage());
 		item.setText (2, error.getDescription());
-		item.setText (3, source);	
+		item.setText (3, source);		
+		for (int i=0; i<columns.length; i++)
+		{
+			tableError.getColumn (i).pack ();
+			tableError.getColumn (i).setMoveable(true);
+		}
+		folder.showItem( itemError );
+		folder.forceFocus();
 	}
 }
