@@ -12,7 +12,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import pl.industrum.gasanalyzer.gui.dialogs.SendExceptionCatched;
-import pl.industrum.gasanalyzer.hibernate.HibernateUtil;
+import pl.industrum.gasanalyzer.hibernate.Hibernate;
 
 /**
  * @author duzydamian(Damian Karbowiak)
@@ -64,7 +64,7 @@ public class GasAnalyzerGUI
 
 			if ( splashScreen.isAllTestComplete() )
 			{
-				Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+				Session session = Hibernate.getSessionFactory().getCurrentSession();
 				session.beginTransaction();
 				session.getTransaction().commit();
 				GasAnalyzerMainWindow window = new GasAnalyzerMainWindow();
