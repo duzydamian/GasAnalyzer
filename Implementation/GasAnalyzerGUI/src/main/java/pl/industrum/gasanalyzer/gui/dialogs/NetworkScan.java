@@ -92,7 +92,7 @@ public class NetworkScan extends Dialog
 							break;
 						}
 						progressBar.setSelection(i);
-						Thread.sleep(100);
+						Thread.sleep(10);
 					}
 					catch (Throwable e)
 					{

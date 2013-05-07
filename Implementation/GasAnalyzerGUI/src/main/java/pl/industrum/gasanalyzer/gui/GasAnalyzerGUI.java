@@ -19,8 +19,6 @@ public class GasAnalyzerGUI
 	private static String AppVersion;
 	private static String RXTXVersion;
 	private static String NativeRXTXVersion;
-	
-	private static boolean toWindowForwarding = false;
 
 	public GasAnalyzerGUI()
 	{
@@ -45,10 +43,6 @@ public class GasAnalyzerGUI
 					{
 						//nothing to do
 					} 
-					else if ( forwarding.equalsIgnoreCase( "panel" ) | forwarding.equalsIgnoreCase( "window" ) )
-					{
-						toWindowForwarding = true;
-					}
 					else if ( forwarding.equalsIgnoreCase( "file" ) )
 					{
 						System.setErr( new PrintStream( "err.log" ) );
@@ -66,7 +60,7 @@ public class GasAnalyzerGUI
 
 			if ( splashScreen.isAllTestComplete() )
 			{
-				GasAnalyzerMainWindow window = new GasAnalyzerMainWindow(toWindowForwarding);
+				GasAnalyzerMainWindow window = new GasAnalyzerMainWindow();
 				window.open();
 			}
 		} catch ( Exception e )

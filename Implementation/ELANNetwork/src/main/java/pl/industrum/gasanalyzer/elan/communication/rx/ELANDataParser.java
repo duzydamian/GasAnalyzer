@@ -104,6 +104,10 @@ public class ELANDataParser extends Observable implements Runnable, ELANParser
 		data.poll();
 		data.poll();
 		
+		//Trim source and target address
+		data.poll();
+		data.poll();
+				
 		//Temporary variables
 		Integer elem;
 		Integer nextElem;
@@ -129,10 +133,6 @@ public class ELANDataParser extends Observable implements Runnable, ELANParser
 				}
 			}
 		}
-		
-		//Trim source and target address
-		dataBuffer.poll();
-		dataBuffer.poll();
 		
 		return trimedQueue;
 	}

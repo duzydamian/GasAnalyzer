@@ -88,6 +88,5 @@ public class DeviceCollection extends Composite
 			if( device.getDeviceAddress() == deviceAddress)
 				device.updateMeasurment( frame );			
 		}
-		currentBody.layout();
 	}
 }

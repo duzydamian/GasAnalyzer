@@ -1,17 +1,12 @@
 package pl.industrum.gasanalyzer.gui;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.util.Observable;
 import java.util.Observer;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -33,6 +28,7 @@ import pl.industrum.gasanalyzer.gui.frames.Problems;
 import pl.industrum.gasanalyzer.gui.frames.StatusBar;
 import pl.industrum.gasanalyzer.gui.frames.ToolBar;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.types.Error;
 import pl.industrum.gasanalyzer.types.Warning;
 
 public class GasAnalyzerMainWindow implements Observer
@@ -43,25 +39,22 @@ public class GasAnalyzerMainWindow implements Observer
 	/**
 	 * GUI Element's
 	 */
-	StyledText styledText;
 	MainMenu menu;
 	StatusBar statusBar;
 
 	private ToolBar toolBar;
-	private Composite composite;
-	private Composite composite2;
+	private SashForm sashDeviceTreeNetworkDevice;
+	private SashForm sashELANNetworkProblems;
 
 	private DeviceTree deviceTree;
 	private DeviceCollection deviceCollection;
 	private NetworkCollection networkCollection;
 	private Problems problems;
 
-	public GasAnalyzerMainWindow( boolean forwarding )
+	public GasAnalyzerMainWindow( )
 	{
 		super();
-		connectionWrapper = new ELANConnectionWrapper();
-		if ( forwarding )
-			setForwarding();
+		connectionWrapper = new ELANConnectionWrapper();		
 	}
 
 	/**
@@ -169,14 +162,17 @@ public class GasAnalyzerMainWindow implements Observer
 			}
 		};	
 
-		GridData compositeData = new GridData( GridData.FILL, GridData.FILL,
+		sashELANNetworkProblems = new SashForm(shlGasAnalyzer,SWT.VERTICAL);
+		GridData  compositeData = new GridData( GridData.FILL, GridData.FILL,
 				true, true );
 		compositeData.horizontalSpan = 6;
-		composite = new Composite( shlGasAnalyzer, SWT.NONE );
-		composite.setLayout( new GridLayout( 3, false ) );
-		composite.setLayoutData( compositeData );
+		sashELANNetworkProblems.setLayoutData( compositeData );
+		sashDeviceTreeNetworkDevice = new SashForm(sashELANNetworkProblems,SWT.HORIZONTAL);
+		
+		sashDeviceTreeNetworkDevice.setLayout( new GridLayout( 3, false ) );
+		sashDeviceTreeNetworkDevice.setLayoutData( compositeData );		
 
-		deviceTree = new DeviceTree( composite, SWT.NONE )
+		deviceTree = new DeviceTree( sashDeviceTreeNetworkDevice, SWT.NONE )
 		{
 			@Override
 			public void setSurveyStep( int step )
@@ -185,10 +181,10 @@ public class GasAnalyzerMainWindow implements Observer
 			}
 
 			@Override
-			public boolean connectWithNetwork(String port)
+			public ELANConnectionState connectWithNetwork(String port)
 			{				
 				ELANConnectionState connectionState = connect( port );
-				return connectionState.isConnected();
+				return connectionState;
 			}
 
 			@Override
@@ -215,8 +211,8 @@ public class GasAnalyzerMainWindow implements Observer
 				networkCollection.setVisible( false );
 				deviceCollection.setVisible( true );
 				deviceCollection.setVisibleDivice( text );
-				composite.layout();
-				composite.getParent().layout();
+				sashDeviceTreeNetworkDevice.layout();
+				sashDeviceTreeNetworkDevice.getParent().layout();
 			}
 
 			@Override
@@ -232,8 +228,8 @@ public class GasAnalyzerMainWindow implements Observer
 				networkCollection.setVisible( true );
 				networkCollection.setVisibleNetwork( text );
 				networkCollection.layout(true);
-				composite.layout(true);
-				composite.getParent().layout(true);
+				sashDeviceTreeNetworkDevice.layout(true);
+				sashDeviceTreeNetworkDevice.getParent().layout(true);
 				
 			}
 
@@ -268,31 +264,29 @@ public class GasAnalyzerMainWindow implements Observer
 			public void noDeviceFound( String source )
 			{
 				problems.addWarning( Warning.NO_DEVICE, source );
+			}
+
+			@Override
+			public void connectionProblem( String source, ELANConnectionState connectWithNetworkState )
+			{
+				Error error = Error.CONNECTION_PROBLEM;
+				error.setDescription( connectWithNetworkState.getMessage() );
+				problems.addError( error, source );
 			}	
 		};
 		deviceTree.setEnabled( false );
 		deviceTree.setLayoutData( new GridData( GridData.FILL, GridData.FILL, false, true ) );
-		networkCollection = new NetworkCollection( composite, SWT.NONE, "" );
+		networkCollection = new NetworkCollection( sashDeviceTreeNetworkDevice, SWT.NONE, "" );
 		networkCollection.setEnabled( false );
 		networkCollection.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
-		deviceCollection = new DeviceCollection( composite, SWT.NONE, "Test" );
+		deviceCollection = new DeviceCollection( sashDeviceTreeNetworkDevice, SWT.NONE, "Test" );
 		deviceCollection.setEnabled( false );
 		deviceCollection.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
 
-		problems = new Problems( shlGasAnalyzer, SWT.NONE );		
-		
-		GridData compositeData2 = new GridData( GridData.FILL, GridData.FILL,
-				true, true );
-		compositeData2.horizontalSpan = 6;
-		composite2 = new Composite( shlGasAnalyzer, SWT.NONE );
-		composite2.setLayout( new FillLayout( SWT.HORIZONTAL ) );
-		composite2.setLayoutData( compositeData2 );
-		
-		styledText = new StyledText( composite2, SWT.V_SCROLL );
-		styledText.setWordWrap( true );
-		styledText.setEnabled( false );
+		problems = new Problems( sashELANNetworkProblems, SWT.NONE );		
 
-		statusBar = new StatusBar( shlGasAnalyzer, SWT.BORDER );		
+		statusBar = new StatusBar( shlGasAnalyzer, SWT.BORDER );	
+		//composite.setWeights(new int[] {30,40,30});
 	}
 	
 	public void enableSurveyMainWIndow()
@@ -302,7 +296,7 @@ public class GasAnalyzerMainWindow implements Observer
 		deviceTree.refreshTree();
 		networkCollection.setEnabled( true );
 		deviceCollection.setEnabled( true );
-		styledText.setEnabled( true );
+		//styledText.setEnabled( true );
 	}
 
 	public ELANConnectionState connect(String port)
@@ -323,27 +317,6 @@ public class GasAnalyzerMainWindow implements Observer
 		return connectionWrapper;
 	}
 	
-	private void setForwarding()
-	{
-		System.setOut( new PrintStream( new OutputStream()
-		{
-			@Override
-			public void write( final int arg0 ) throws IOException
-			{
-				Display.getDefault().syncExec( new Runnable()
-				{
-					public void run()
-					{
-						byte[] character = new byte[1];
-						character[0] = ( byte )arg0;
-						styledText.append( new String( character ) );
-						styledText.setTopIndex( styledText.getLineCount() - 1 );
-					}
-				});
-			}
-		} ) );
-	}
-	
 	public void update( Observable obj, Object arg )
 	{
 		if( arg instanceof ELANNetworkNotification )
@@ -356,11 +329,11 @@ public class GasAnalyzerMainWindow implements Observer
 					ELANRxFrame poll = device.pollAndClear();
 					ELANRxBroadcastFrame frame = ( ELANRxBroadcastFrame )poll;
 					System.out.println(device.getDeviceAddress() + " @ " + frame.getTimeStamp());
-					deviceCollection.updateMeasurmentFormDevice( device.getDeviceAddress(), frame );
 					for( ELANMeasurement elanMeasurement: frame )
 					{
 						System.out.println(elanMeasurement.toString());
 					}
+					deviceCollection.updateMeasurmentFormDevice( device.getDeviceAddress(), frame );					
 				}
 			}			
 		}		

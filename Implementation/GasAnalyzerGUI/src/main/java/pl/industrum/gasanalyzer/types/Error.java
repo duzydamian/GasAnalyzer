@@ -9,12 +9,13 @@ package pl.industrum.gasanalyzer.types;
  */
 public enum Error
 {
-	NONE("E0000","","");
+	NONE("E0000","",""),
+	CONNECTION_PROBLEM("E001", "Problem z połączeniem z wybraną siecią.", "");
 	
 	String code;
 	String message;
 	String description;
-	
+
 	private Error(String code, String message, String description)
 	{
 		this.code = code;
@@ -44,5 +45,21 @@ public enum Error
 	public String getDescription()
 	{
 		return description;
+	}
+	
+	/**
+	 * @param message the message to set
+	 */
+	public void setMessage( String message )
+	{
+		this.message = message;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription( String description )
+	{
+		this.description = description;
 	}
 }

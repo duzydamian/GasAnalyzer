@@ -57,12 +57,12 @@ public class Problems extends Composite
 		
 		globaGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		globaGridData.horizontalSpan = 2;
-		folder = new CTabFolder(body, SWT.BORDER);
+		folder = new CTabFolder(body, SWT.NONE);
 		folder.setLayoutData( globaGridData );
 		folder.setSimple(false);
-		//folder.setUnselectedImageVisible(false);
 		folder.setUnselectedCloseVisible(false);
-
+		folder.setMinimizeVisible(true);
+		
 		columns = new String[] {"Kod", "Nazwa", "Opis", "Lokalizacja"};
 		
 		itemWarning = new CTabItem(folder, SWT.CLOSE);
@@ -98,9 +98,11 @@ public class Problems extends Composite
 			tableError.getColumn (i).setMoveable(true);
 		}
 		itemError.setControl(tableError);
-			
-		folder.setMinimizeVisible(true);
-		folder.setMaximizeVisible(true);
+		
+		folder.forceFocus();
+		folder.showItem( itemError );
+		folder.forceFocus();
+		
 		folder.addCTabFolder2Listener(new CTabFolder2Adapter() {
 			public void minimize(CTabFolderEvent event) {
 				folder.setMinimized(true);
@@ -145,9 +147,9 @@ public class Problems extends Composite
 				tableError.remove (tableError.getSelectionIndices ());
 			}
 		});
-
+		
 		body.layout();
-		layout();
+		layout();		
 	}
 
 	@Override
