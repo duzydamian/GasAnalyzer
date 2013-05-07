@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2013-05-07 14:42:07 by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="Measurement" table="measurement" schema="public">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="measurementSet" class="MeasurementSet" fetch="select">
+            <column name="measurement_set_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="measurementDimension" class="MeasurementDimension" fetch="select">
+            <column name="measurement_dimension_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="measurementVariable" class="MeasurementVariable" fetch="select">
+            <column name="measurement_variable_id" not-null="true" />
+        </many-to-one>
+        <property name="value" type="double">
+            <column name="value" precision="8" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

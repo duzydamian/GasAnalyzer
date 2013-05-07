@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2013-05-07 14:42:07 by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="ApplicationUser" table="application_user" schema="public">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="function" class="Function" fetch="select">
+            <column name="function_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="degree" class="Degree" fetch="select">
+            <column name="degree_id" not-null="true" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="name" length="30" not-null="true" />
+        </property>
+        <property name="surname" type="string">
+            <column name="surname" length="30" not-null="true" />
+        </property>
+        <set name="surveys" table="survey" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="application_user_id" not-null="true" />
+            </key>
+            <one-to-many class="Survey" />
+        </set>
+    </class>
+</hibernate-mapping>

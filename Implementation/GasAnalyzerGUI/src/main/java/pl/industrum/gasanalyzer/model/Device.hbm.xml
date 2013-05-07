@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2013-05-07 14:42:07 by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="Device" table="device" schema="public">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="deviceType" class="DeviceType" fetch="select">
+            <column name="device_type_id" not-null="true" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="name" length="30" not-null="true" />
+        </property>
+        <property name="address" type="int">
+            <column name="address" not-null="true" />
+        </property>
+        <set name="measurementSets" table="measurement_set" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="device_id" not-null="true" />
+            </key>
+            <one-to-many class="MeasurementSet" />
+        </set>
+    </class>
+</hibernate-mapping>

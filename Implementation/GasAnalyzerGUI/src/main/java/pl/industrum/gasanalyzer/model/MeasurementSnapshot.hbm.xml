@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2013-05-07 14:42:07 by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="MeasurementSnapshot" table="measurement_snapshot" schema="public">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <timestamp name="timestamp" column="timestamp" />
+        <many-to-one name="surveySection" class="SurveySection" fetch="select">
+            <column name="survey_section_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="survey" class="Survey" fetch="select">
+            <column name="survey_id" not-null="true" />
+        </many-to-one>
+        <property name="comment" type="string">
+            <column name="comment" length="250" />
+        </property>
+        <set name="measurementSets" table="measurement_set" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="measurement_snapshot_id" />
+            </key>
+            <one-to-many class="MeasurementSet" />
+        </set>
+    </class>
+</hibernate-mapping>
