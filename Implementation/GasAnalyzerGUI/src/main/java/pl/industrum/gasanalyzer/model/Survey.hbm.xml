@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2013-05-07 14:42:07 by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="Survey" table="survey" schema="public">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <timestamp name="timestamp" column="timestamp" />
+        <many-to-one name="object" class="Object" fetch="select">
+            <column name="object_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="applicationUser" class="ApplicationUser" fetch="select">
+            <column name="application_user_id" not-null="true" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="name" length="50" not-null="true" />
+        </property>
+        <property name="load" type="java.lang.Double">
+            <column name="load" precision="8" scale="0" />
+        </property>
+        <property name="specialConditions" type="string">
+            <column name="special_conditions" length="100" />
+        </property>
+        <property name="comment" type="string">
+            <column name="comment" length="100" />
+        </property>
+        <set name="measurementSnapshots" table="measurement_snapshot" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="survey_id" not-null="true" />
+            </key>
+            <one-to-many class="MeasurementSnapshot" />
+        </set>
+    </class>
+</hibernate-mapping>

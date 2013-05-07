@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2013-05-07 14:42:07 by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="Place" table="place" schema="public">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <property name="name" type="string">
+            <column name="name" length="30" />
+        </property>
+        <property name="city" type="string">
+            <column name="city" length="30" />
+        </property>
+        <property name="postCode" type="string">
+            <column name="post_code" length="10" />
+        </property>
+        <property name="address" type="string">
+            <column name="address" length="30" />
+        </property>
+        <set name="objects" table="object" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="place_id" not-null="true" />
+            </key>
+            <one-to-many class="Object" />
+        </set>
+    </class>
+</hibernate-mapping>
