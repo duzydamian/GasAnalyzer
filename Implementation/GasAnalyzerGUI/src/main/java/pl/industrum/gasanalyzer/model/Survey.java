@@ -15,7 +15,7 @@ public class Survey implements java.io.Serializable
 
 	private int id;
 	private Date timestamp;
-	private Object object;
+	private MeasuredObject object;
 	private ApplicationUser applicationUser;
 	private String name;
 	private Double load;
@@ -27,7 +27,7 @@ public class Survey implements java.io.Serializable
 	{
 	}
 
-	public Survey( int id, Object object, ApplicationUser applicationUser,
+	public Survey( int id, MeasuredObject object, ApplicationUser applicationUser,
 			String name )
 	{
 		this.id = id;
@@ -36,7 +36,7 @@ public class Survey implements java.io.Serializable
 		this.name = name;
 	}
 
-	public Survey( int id, Object object, ApplicationUser applicationUser,
+	public Survey( int id, MeasuredObject object, ApplicationUser applicationUser,
 			String name, Double load, String specialConditions, String comment,
 			Set measurementSnapshots )
 	{
@@ -70,12 +70,12 @@ public class Survey implements java.io.Serializable
 		this.timestamp = timestamp;
 	}
 
-	public Object getObject()
+	public MeasuredObject getObject()
 	{
 		return this.object;
 	}
 
-	public void setObject( Object object )
+	public void setObject( MeasuredObject object )
 	{
 		this.object = object;
 	}
