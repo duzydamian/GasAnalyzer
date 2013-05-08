@@ -8,6 +8,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
@@ -15,14 +17,17 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.model.ApplicationUser;
+import pl.industrum.gasanalyzer.model.Degree;
+import pl.industrum.gasanalyzer.model.Function;
 import pl.industrum.gasanalyzer.types.UsefulColor;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class NewSurveyUser extends Dialog
 {
-	protected Object result;
+	protected ApplicationUser result;
 	protected Shell shell;
-	private Text textTitle;
+	private Combo textTitle;
 	private Text textName;
 	private Text textSurname;
 	private Label lblTitle;
@@ -32,11 +37,13 @@ public class NewSurveyUser extends Dialog
 	private Button btnCancel;
 	private Display display;
 	private Label lblFunction;
-	private Text textFunction;
+	private Combo textFunction;
 	private Label icoTitle;
 	private Label icoName;
 	private Label icoSurname;
 	private Label icoFunction;
+	private Button btnNewTitle;
+	private Button btnNewFunction;
 
 	/**
 	 * Create the dialog.
@@ -55,7 +62,7 @@ public class NewSurveyUser extends Dialog
 	 * 
 	 * @return the result
 	 */
-	public Object open()
+	public ApplicationUser open()
 	{
 		createContents();
 		shell.open();
@@ -84,15 +91,32 @@ public class NewSurveyUser extends Dialog
 		lblTitle = new Label( shell, SWT.NONE );
 		lblTitle.setText( Messages.getString( "NewSurveyUser.lblTitle.text" ) ); //$NON-NLS-1$
 
-		textTitle = new Text( shell, SWT.BORDER );
+		textTitle = new Combo( shell, SWT.BORDER );
 		textTitle.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
-				false, 2, 1 ) );
+				false, 1, 1 ) );
 		textTitle.addModifyListener( new ModifyListener()
 		{
 			
 			public void modifyText( ModifyEvent arg0 )
 			{
 				validateTitle();
+			}
+		} );
+		
+		btnNewTitle = new Button( shell, SWT.NONE );
+		btnNewTitle.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		btnNewTitle.setImage( UsefulImage.ADD.getImage() );
+		btnNewTitle.setText( Messages
+				.getString( "SurveyFrame.btnNewSurveyPlace.text" ) ); //$NON-NLS-1$
+		btnNewTitle.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				NewSurveyUserTitle newSurveyUserTitle = new NewSurveyUserTitle( getParent()
+						.getShell(), SWT.NONE );
+				newSurveyUserTitle.open();
+
+				refreshListTitle();
 			}
 		} );
 		
@@ -138,15 +162,32 @@ public class NewSurveyUser extends Dialog
 		lblFunction.setText( Messages
 				.getString( "NewSurveyUser.lblNewLabel.text" ) ); //$NON-NLS-1$
 
-		textFunction = new Text( shell, SWT.BORDER );
+		textFunction = new Combo( shell, SWT.BORDER );
 		textFunction.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
-				false, 2, 1 ) );
+				false, 1, 1 ) );
 		textFunction.addModifyListener( new ModifyListener()
 		{
 			
 			public void modifyText( ModifyEvent arg0 )
 			{
 				validateFunction();
+			}
+		} );
+		
+		btnNewFunction = new Button( shell, SWT.NONE );
+		btnNewFunction.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		btnNewFunction.setImage( UsefulImage.ADD.getImage() );
+		btnNewFunction.setText( Messages
+				.getString( "SurveyFrame.btnNewSurveyPlace.text" ) ); //$NON-NLS-1$
+		btnNewFunction.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				NewSurveyUserFunction newSurveyUserFunction = new NewSurveyUserFunction( getParent()
+						.getShell(), SWT.NONE );
+				newSurveyUserFunction.open();
+
+				refreshListFunction();
 			}
 		} );
 		
@@ -187,10 +228,24 @@ public class NewSurveyUser extends Dialog
 		} );
 	}
 
+	protected void refreshListFunction()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	protected void refreshListTitle()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 	protected void saveAction()
 	{
 		System.out.println( textTitle.getText() + " " + textName.getText()
 				+ " " + textSurname.getText() );
+		ApplicationUser user = new ApplicationUser( 1, new Function(), new Degree(), textName.getText(), textSurname.getText() );
+		result = user;
 	}
 
 	private void validateTitle()
@@ -255,21 +310,21 @@ public class NewSurveyUser extends Dialog
 		return isValid;
 	}
 
-	private void setFormFieldError( Label label, Text textField, Label ico )
+	private void setFormFieldError( Label label, Control textField, Label ico )
 	{
 		ico.setImage( UsefulImage.ERROR.getImage() );
 		ico.getParent().layout();
 		textField.setBackground( UsefulColor.RED_ERROR.getColor() );
 	}
 
-	private void setFormFieldWarning( Label label, Text textField, Label ico )
+	private void setFormFieldWarning( Label label, Control textField, Label ico )
 	{
 		ico.setImage( UsefulImage.WARNING.getImage() );
 		ico.getParent().layout();
 		textField.setBackground( UsefulColor.YELLOW_WARNING.getColor() );
 	}
 	
-	private void setFormFieldOK( Label label, Text textField, Label ico )
+	private void setFormFieldOK( Label label, Control textField, Label ico )
 	{
 		ico.setImage( UsefulImage.OK.getImage() );
 		ico.getParent().layout();

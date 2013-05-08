@@ -2,8 +2,6 @@ package pl.industrum.gasanalyzer.gui.dialogs;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -12,7 +10,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
@@ -22,8 +19,6 @@ import org.eclipse.swt.widgets.Text;
 
 import pl.industrum.gasanalyzer.i18n.Messages;
 import pl.industrum.gasanalyzer.model.Survey;
-import pl.industrum.gasanalyzer.types.UsefulColor;
-import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class OpenSurvey extends Dialog
 {
@@ -39,10 +34,8 @@ public class OpenSurvey extends Dialog
 
 	private Label lblSurveyUser;
 	private Combo listSurveyUser;
-	private Button btnNewSurveyUser;
 
 	private Label lblSurveyPlace;
-	private Button btnNewSurveyPlace;
 	private Combo listSurveyPlace;
 
 	private Label lblSurveyLoad;
@@ -55,16 +48,9 @@ public class OpenSurvey extends Dialog
 	private StyledText styledTextComment;
 
 	private Composite surveyForm;
-	private Button btnSelectDate;
 	private Button btnCancel;
 	private Button btnOk;
-	private Label icoSUrveyName;
-	private Label icoSurveyDate;
-	private Label icoSurveyUser;
-	private Label icoSurveyPlace;
-	private Label icoSurveyLoad;
-	private Label icoSurveySpecialConditions;
-	private Label icoComment;
+	private Combo comboAllSurvey;
 
 	/**
 	 * Create the dialog.
@@ -84,7 +70,7 @@ public class OpenSurvey extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 490, 370 );
+		shell.setSize( 350, 400 );
 		shell.setText( getText() );
 		
 		surveyFrameData = new GridData( GridData.FILL, GridData.CENTER, true,
@@ -94,8 +80,14 @@ public class OpenSurvey extends Dialog
 		shell.setLayout( new FillLayout( SWT.HORIZONTAL ) );
 
 		surveyForm = new Composite( shell, SWT.NONE );
-		surveyForm.setLayout( new GridLayout( 4, false ) );
+		surveyForm.setLayout( new GridLayout( 3, false ) );
 
+		comboAllSurvey = new Combo( surveyForm, SWT.BORDER );
+		comboAllSurvey.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
+				false, 3, 1 ) );
+
+		loadSurveys();
+		
 		lblSurveyName = new Label( surveyForm, SWT.NONE );
 		lblSurveyName.setSize( 44, 17 );
 		lblSurveyName.setText( Messages
@@ -105,8 +97,6 @@ public class OpenSurvey extends Dialog
 		txtSurveyName.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
 				false, 2, 1 ) );
 		txtSurveyName.setEnabled( false );
-		
-		icoSUrveyName = new Label(surveyForm, SWT.NONE);
 
 		lblSurveyDate = new Label( surveyForm, SWT.NONE );
 		lblSurveyDate.setText( Messages
@@ -114,27 +104,8 @@ public class OpenSurvey extends Dialog
 
 		txtSurveyDate = new DateTime( surveyForm, SWT.DATE );
 		txtSurveyDate.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
-				false, 1, 1 ) );
+				false, 2, 1 ) );
 		txtSurveyDate.setEnabled( false );
-
-		btnSelectDate = new Button( surveyForm, SWT.NONE );
-		btnSelectDate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		btnSelectDate.setImage( UsefulImage.CALENDAR.getImage() );
-		btnSelectDate.setText( Messages
-				.getString( "SurveyFrame.btnSelectDate.text" ) ); //$NON-NLS-1$
-		btnSelectDate.addSelectionListener( new SelectionAdapter()
-		{
-			public void widgetSelected( SelectionEvent e )
-			{
-				DatePicker datePicker = new DatePicker( getParent().getShell(),
-						SWT.NONE );
-				int[] date = datePicker.open();
-				if ( date != null )
-					txtSurveyDate.setDate( date[0], date[1], date[2] );
-			}
-		} );
-		
-		icoSurveyDate = new Label(surveyForm, SWT.NONE);
 
 		lblSurveyUser = new Label( surveyForm, SWT.NONE );
 		lblSurveyUser.setText( Messages
@@ -142,60 +113,22 @@ public class OpenSurvey extends Dialog
 
 		listSurveyUser = new Combo( surveyForm, SWT.NONE );
 		listSurveyUser.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
-				false, false, 1, 1 ) );
+				false, false, 2, 1 ) );
 		listSurveyUser.add( "Jan Wężyk" );
 		listSurveyUser.add( "Kuba guzik" );
 		listSurveyUser.setEnabled( false );
-
-		btnNewSurveyUser = new Button( surveyForm, SWT.NONE );
-		btnNewSurveyUser.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		btnNewSurveyUser.setImage( UsefulImage.ADD.getImage() );
-		btnNewSurveyUser.setText( Messages
-				.getString( "SurveyFrame.btnNewSurveyUser.text" ) ); //$NON-NLS-1$
-		btnNewSurveyUser.addSelectionListener( new SelectionAdapter()
-		{
-			public void widgetSelected( SelectionEvent e )
-			{
-				NewSurveyUser addSurveyUser = new NewSurveyUser( getParent()
-						.getShell(), SWT.NONE );
-				addSurveyUser.open();
-
-				refreshListSurveyUser();
-			}
-		} );
 		
-		icoSurveyUser = new Label(surveyForm, SWT.NONE);
-
 		lblSurveyPlace = new Label( surveyForm, SWT.NONE );
 		lblSurveyPlace.setText( Messages
 				.getString( "SurveyFrame.lblSurveyPlace.text" ) ); //$NON-NLS-1$
 
 		listSurveyPlace = new Combo( surveyForm, SWT.NONE );
 		listSurveyPlace.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
-				false, false, 1, 1 ) );
+				false, false, 2, 1 ) );
 		listSurveyPlace.add( "Narnia" );
 		listSurveyPlace.add( "Mordor" );
 		listSurveyPlace.setEnabled( false );
-
-		btnNewSurveyPlace = new Button( surveyForm, SWT.NONE );
-		btnNewSurveyPlace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		btnNewSurveyPlace.setImage( UsefulImage.ADD.getImage() );
-		btnNewSurveyPlace.setText( Messages
-				.getString( "SurveyFrame.btnNewSurveyPlace.text" ) ); //$NON-NLS-1$
-		btnNewSurveyPlace.addSelectionListener( new SelectionAdapter()
-		{
-			public void widgetSelected( SelectionEvent e )
-			{
-				NewSurveyPlace newSurveyPlace = new NewSurveyPlace( getParent()
-						.getShell(), SWT.NONE );
-				newSurveyPlace.open();
-
-				refreshListSurveyPlace();
-			}
-		} );
 		
-		icoSurveyPlace = new Label(surveyForm, SWT.NONE);
-
 		lblSurveyLoad = new Label( surveyForm, SWT.NONE );
 		lblSurveyLoad.setText( Messages
 				.getString( "SurveyFrame.lblSurveyLoad.text" ) ); //$NON-NLS-1$
@@ -205,8 +138,6 @@ public class OpenSurvey extends Dialog
 				false, false, 2, 1 ) );
 		textSurveyLoad.setEnabled( false );
 		
-		icoSurveyLoad = new Label(surveyForm, SWT.NONE);
-
 		lblSurveySpecialConditions = new Label( surveyForm, SWT.NONE );
 		lblSurveySpecialConditions.setText( Messages
 				.getString( "SurveyFrame.lblSurveySpecialConditions.text" ) ); //$NON-NLS-1$
@@ -220,10 +151,7 @@ public class OpenSurvey extends Dialog
 		gd_styledTextSurveySpecialConditions.heightHint = 48;
 		styledTextSurveySpecialConditions.setLayoutData( gd_styledTextSurveySpecialConditions );
 		styledTextSurveySpecialConditions.setEnabled( false );
-		new Label(surveyForm, SWT.NONE);
 		
-		icoSurveySpecialConditions = new Label(surveyForm, SWT.NONE);
-
 		lblComment = new Label( surveyForm, SWT.NONE );
 		lblComment
 				.setText( Messages.getString( "SurveyFrame.lblComment.text" ) ); //$NON-NLS-1$
@@ -238,9 +166,6 @@ public class OpenSurvey extends Dialog
 		styledTextComment.setEnabled( false );
 		new Label(surveyForm, SWT.NONE);
 		
-		icoComment = new Label(surveyForm, SWT.NONE);
-		new Label(surveyForm, SWT.NONE);
-		new Label(surveyForm, SWT.NONE);
 		new Label(surveyForm, SWT.NONE);
 		
 		btnOk = new Button(surveyForm, SWT.RIGHT);
@@ -260,6 +185,7 @@ public class OpenSurvey extends Dialog
 		} );
 		
 		btnCancel = new Button(surveyForm, SWT.NONE);
+		btnCancel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnCancel.setText(Messages.getString("NewSurvey.btnAnuluj.text")); //$NON-NLS-1$
 		btnCancel.addSelectionListener( new SelectionAdapter()
 		{
@@ -271,6 +197,13 @@ public class OpenSurvey extends Dialog
 		} );
 	}
 	
+	private void loadSurveys()
+	{
+		// TODO Auto-generated method stub
+		comboAllSurvey.add( "sssssssssssssssssssssssssssssssssssssssssss" );
+		comboAllSurvey.add( "sssssssssssssssssssssssssssssssssssssssssss" );
+	}
+
 	/**
 	 * Open the dialog.
 	 * 
@@ -296,16 +229,6 @@ public class OpenSurvey extends Dialog
 	{
 		System.out.println( txtSurveyName.getText() + " " );
 		result = new Survey();
-	}
-	
-	private void refreshListSurveyUser()
-	{
-
-	}
-
-	private void refreshListSurveyPlace()
-	{
-
 	}
 	
 	@Override

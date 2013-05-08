@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.model.ApplicationUser;
 import pl.industrum.gasanalyzer.model.Survey;
 import pl.industrum.gasanalyzer.types.UsefulColor;
 import pl.industrum.gasanalyzer.types.UsefulImage;
@@ -84,7 +85,7 @@ public class NewSurvey extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 490, 370 );
+		shell.setSize( 470, 370 );
 		shell.setText( getText() );
 		
 		surveyFrameData = new GridData( GridData.FILL, GridData.CENTER, true,
@@ -301,7 +302,9 @@ public class NewSurvey extends Dialog
 		} );
 		
 		btnCancel = new Button(surveyForm, SWT.NONE);
+		btnCancel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnCancel.setText(Messages.getString("NewSurvey.btnAnuluj.text")); //$NON-NLS-1$
+		new Label(surveyForm, SWT.NONE);
 		btnCancel.addSelectionListener( new SelectionAdapter()
 		{
 			@Override
@@ -335,8 +338,7 @@ public class NewSurvey extends Dialog
 
 	protected void saveAction()
 	{
-		System.out.println( txtSurveyName.getText() + " " );
-		result = new Survey();
+		result = new Survey(1, null, new ApplicationUser(), txtSurveyName.getText(), 1.1, styledTextSurveySpecialConditions.getText(), styledTextComment.getText(), null);
 	}
 
 	private boolean validateName()
