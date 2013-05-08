@@ -25,7 +25,7 @@ import pl.industrum.gasanalyzer.model.Survey;
 import pl.industrum.gasanalyzer.types.UsefulColor;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
-public class NewSurvey extends Dialog
+public class EditSurvey extends Dialog
 {
 	protected Survey result;
 	protected Shell shell;
@@ -71,11 +71,12 @@ public class NewSurvey extends Dialog
 	 * 
 	 * @param parent
 	 * @param style
+	 * @param survey 
 	 */
-	public NewSurvey( Shell parent, int style )
+	public EditSurvey( Shell parent, int style )
 	{
 		super( parent, style );
-		setText( "Dane pomiaru" ); //$NON-NLS-1$
+		setText( "Edytuj dane pomiaru" ); //$NON-NLS-1$
 	}
 
 	/**
@@ -317,9 +318,12 @@ public class NewSurvey extends Dialog
 	 * 
 	 * @return the result
 	 */
-	public Survey open()
+	public Survey open( Survey survey )
 	{
 		createContents();
+		txtSurveyName.setText( survey.getName() );
+		//txtSurveyDate.setDate( survey.g, arg1, arg2 )
+		textSurveyLoad.setText( survey.getLoad().toString() );
 		shell.open();
 		shell.layout();
 		Display display = getParent().getDisplay();

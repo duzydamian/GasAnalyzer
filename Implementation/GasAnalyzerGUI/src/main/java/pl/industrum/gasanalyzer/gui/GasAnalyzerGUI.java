@@ -9,7 +9,6 @@ import java.io.PrintStream;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 import pl.industrum.gasanalyzer.gui.dialogs.SendExceptionCatched;
 import pl.industrum.gasanalyzer.hibernate.Hibernate;

@@ -9,8 +9,11 @@ import org.eclipse.swt.widgets.MenuItem;
 
 import pl.industrum.gasanalyzer.gui.EmailSystem;
 import pl.industrum.gasanalyzer.gui.dialogs.About;
+import pl.industrum.gasanalyzer.gui.dialogs.EditSurvey;
 import pl.industrum.gasanalyzer.gui.dialogs.NewSurvey;
+import pl.industrum.gasanalyzer.gui.dialogs.OpenSurvey;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.model.Survey;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
 /**
@@ -47,15 +50,31 @@ public abstract class MainMenu extends Menu
 			public void widgetSelected( SelectionEvent e )
 			{
 				NewSurvey newSurvey = new NewSurvey( getShell(), SWT.NONE );
-				newSurvey.open();
-				newSurveyCreated();
-				enableSurvey();
+				Survey survey = newSurvey.open();
+				if ( survey != null )
+				{
+					newSurveyCreated(survey);
+					enableSurvey();
+				}				
 			}
 		} );
 		
 		MenuItem mntmOpenSurvey = new MenuItem( menuFile, SWT.NONE );
 		mntmOpenSurvey.setText( Messages.getString( "MainMenu.OpenSurvey" ) );
 		mntmOpenSurvey.setImage( UsefulImage.OPEN_SURVEY.getImage() );
+		mntmOpenSurvey.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				OpenSurvey newSurvey = new OpenSurvey( getShell(), SWT.NONE );
+				Survey survey = newSurvey.open();
+				if ( survey != null )
+				{
+					newSurveyCreated(survey);
+					enableSurvey();
+				}				
+			}
+		} );
 		
 		new MenuItem( menuFile, SWT.SEPARATOR );
 		
@@ -89,6 +108,20 @@ public abstract class MainMenu extends Menu
 		mntmPreferences.setImage( UsefulImage.PREFERENCES.getImage() );
 		mntmPreferences.setText( Messages.getString( "MainMenu.Preferences" ) ); //$NON-NLS-1$
 		mntmPreferences.setAccelerator( SWT.MOD1 + 'P' );
+		mntmPreferences.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				Survey survey = getSurveyToEdit();
+				EditSurvey editSurvey = new EditSurvey( getShell(), SWT.NONE );
+				survey = editSurvey.open( survey );
+				if ( survey != null )
+				{
+					newSurveyCreated(survey);
+					enableSurvey();
+				}				
+			}
+		} );
 
 		mntmNetwork = new MenuItem( this, SWT.CASCADE );
 		mntmNetwork.setText( Messages.getString( "MainMenu.Network" ) ); //$NON-NLS-1$
@@ -162,12 +195,13 @@ public abstract class MainMenu extends Menu
 	public void enableSurvey()
 	{
 		mntmSurvey.setEnabled( true );
-		mntmNetwork.setEnabled( true );
+		mntmNetwork.setEnabled( true );		
 	}
 	
 	public abstract void closeApplication();
 	public abstract void refreshDeviceTree();	
-	public abstract void newSurveyCreated();
+	public abstract void newSurveyCreated(Survey survey);
+	public abstract Survey getSurveyToEdit();
 	
 	protected void checkSubclass()
 	{

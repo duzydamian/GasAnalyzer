@@ -28,19 +28,21 @@ import pl.industrum.gasanalyzer.gui.frames.Problems;
 import pl.industrum.gasanalyzer.gui.frames.StatusBar;
 import pl.industrum.gasanalyzer.gui.frames.ToolBar;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.model.Survey;
 import pl.industrum.gasanalyzer.types.Error;
 import pl.industrum.gasanalyzer.types.Warning;
 
 public class GasAnalyzerMainWindow implements Observer
 {
 	private ELANConnectionWrapper connectionWrapper;
+	private Survey currentSurveyObject;
 	protected Shell shlGasAnalyzer;
 
 	/**
 	 * GUI Element's
 	 */
-	MainMenu menu;
-	StatusBar statusBar;
+	private MainMenu menu;
+	private StatusBar statusBar;
 
 	private ToolBar toolBar;
 	private SashForm sashDeviceTreeNetworkDevice;
@@ -133,9 +135,16 @@ public class GasAnalyzerMainWindow implements Observer
 			}
 
 			@Override
-			public void newSurveyCreated()
+			public void newSurveyCreated(Survey survey)
 			{
+				currentSurveyObject = survey;
 				enableSurveyMainWIndow();				
+			}
+
+			@Override
+			public Survey getSurveyToEdit()
+			{
+				return currentSurveyObject;
 			}		
 		};
 		
@@ -156,9 +165,16 @@ public class GasAnalyzerMainWindow implements Observer
 			}
 
 			@Override
-			public void newSurveyCreated()
+			public void newSurveyCreated(Survey survey)
 			{
+				currentSurveyObject = survey;
 				enableSurveyMainWIndow();
+			}
+
+			@Override
+			public Survey getSurveyToEdit()
+			{
+				return currentSurveyObject;
 			}
 		};	
 
@@ -291,12 +307,12 @@ public class GasAnalyzerMainWindow implements Observer
 	
 	public void enableSurveyMainWIndow()
 	{
+		menu.enableSurvey();
 		toolBar.enableSurvey();
-		deviceTree.setEnabled( true );
-		deviceTree.refreshTree();
+		deviceTree.setEnabled( true );		
 		networkCollection.setEnabled( true );
 		deviceCollection.setEnabled( true );
-		//styledText.setEnabled( true );
+		deviceTree.refreshTree();
 	}
 
 	public ELANConnectionState connect(String port)

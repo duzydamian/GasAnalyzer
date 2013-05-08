@@ -9,9 +9,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolItem;
 
 import pl.industrum.gasanalyzer.gui.dialogs.NewSurvey;
+import pl.industrum.gasanalyzer.gui.dialogs.OpenSurvey;
 import pl.industrum.gasanalyzer.gui.dialogs.PdfDialog;
 import pl.industrum.gasanalyzer.gui.dialogs.XlsDialog;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.model.Survey;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
 /**
@@ -55,15 +57,31 @@ public abstract class ToolBar extends Composite
 			public void widgetSelected( SelectionEvent e )
 			{
 				NewSurvey newSurvey = new NewSurvey( getShell(), SWT.NONE );
-				newSurvey.open();
-				newSurveyCreated();
-				enableSurvey();
+				Survey survey = newSurvey.open();
+				if ( survey != null )
+				{
+					newSurveyCreated(survey);
+					enableSurvey();
+				}
 			}
 		} );
 		
 		btnOpenSurvey = new ToolItem( bar, SWT.PUSH );
 		btnOpenSurvey.setToolTipText(Messages.getString("ToolBar.btnOpenSurvey.toolTipText")); //$NON-NLS-1$
 		btnOpenSurvey.setImage( UsefulImage.OPEN_SURVEY.getImage() );
+		btnOpenSurvey.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				OpenSurvey newSurvey = new OpenSurvey( getShell(), SWT.NONE );
+				Survey survey = newSurvey.open();
+				if ( survey != null )
+				{
+					newSurveyCreated(survey);
+					enableSurvey();
+				}
+			}
+		} );
 		
 		btnExit = new ToolItem( bar, SWT.PUSH );
 		btnExit.setToolTipText(Messages.getString("ToolBar.btnExit.toolTipText")); //$NON-NLS-1$
@@ -146,5 +164,6 @@ public abstract class ToolBar extends Composite
 
 	public abstract void refreshDeviceTree();
 	public abstract void closeApplication();
-	public abstract void newSurveyCreated();
+	public abstract void newSurveyCreated(Survey survey);
+	public abstract Survey getSurveyToEdit();
 }

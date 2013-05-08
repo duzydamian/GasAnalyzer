@@ -25,7 +25,7 @@ import pl.industrum.gasanalyzer.model.Survey;
 import pl.industrum.gasanalyzer.types.UsefulColor;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
-public class NewSurvey extends Dialog
+public class OpenSurvey extends Dialog
 {
 	protected Survey result;
 	protected Shell shell;
@@ -72,7 +72,7 @@ public class NewSurvey extends Dialog
 	 * @param parent
 	 * @param style
 	 */
-	public NewSurvey( Shell parent, int style )
+	public OpenSurvey( Shell parent, int style )
 	{
 		super( parent, style );
 		setText( "Dane pomiaru" ); //$NON-NLS-1$
@@ -104,14 +104,7 @@ public class NewSurvey extends Dialog
 		txtSurveyName = new Text( surveyForm, SWT.BORDER );
 		txtSurveyName.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
 				false, 2, 1 ) );
-		txtSurveyName.addModifyListener( new ModifyListener()
-		{
-			
-			public void modifyText( ModifyEvent arg0 )
-			{
-				validateName();
-			}
-		} );
+		txtSurveyName.setEnabled( false );
 		
 		icoSUrveyName = new Label(surveyForm, SWT.NONE);
 
@@ -122,6 +115,7 @@ public class NewSurvey extends Dialog
 		txtSurveyDate = new DateTime( surveyForm, SWT.DATE );
 		txtSurveyDate.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
 				false, 1, 1 ) );
+		txtSurveyDate.setEnabled( false );
 
 		btnSelectDate = new Button( surveyForm, SWT.NONE );
 		btnSelectDate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -151,14 +145,7 @@ public class NewSurvey extends Dialog
 				false, false, 1, 1 ) );
 		listSurveyUser.add( "Jan Wężyk" );
 		listSurveyUser.add( "Kuba guzik" );
-		listSurveyUser.addModifyListener( new ModifyListener()
-		{
-			
-			public void modifyText( ModifyEvent arg0 )
-			{
-				validateUser();
-			}
-		} );
+		listSurveyUser.setEnabled( false );
 
 		btnNewSurveyUser = new Button( surveyForm, SWT.NONE );
 		btnNewSurveyUser.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -188,14 +175,7 @@ public class NewSurvey extends Dialog
 				false, false, 1, 1 ) );
 		listSurveyPlace.add( "Narnia" );
 		listSurveyPlace.add( "Mordor" );
-		listSurveyPlace.addModifyListener( new ModifyListener()
-		{
-			
-			public void modifyText( ModifyEvent arg0 )
-			{
-				validatePlace();
-			}
-		} );
+		listSurveyPlace.setEnabled( false );
 
 		btnNewSurveyPlace = new Button( surveyForm, SWT.NONE );
 		btnNewSurveyPlace.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -223,14 +203,7 @@ public class NewSurvey extends Dialog
 		textSurveyLoad = new Text( surveyForm, SWT.BORDER );
 		textSurveyLoad.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
 				false, false, 2, 1 ) );
-		textSurveyLoad.addModifyListener( new ModifyListener()
-		{
-			
-			public void modifyText( ModifyEvent arg0 )
-			{
-				validateLoad();
-			}
-		} );
+		textSurveyLoad.setEnabled( false );
 		
 		icoSurveyLoad = new Label(surveyForm, SWT.NONE);
 
@@ -246,14 +219,7 @@ public class NewSurvey extends Dialog
 				SWT.FILL, SWT.CENTER, false, false, 2, 2 );
 		gd_styledTextSurveySpecialConditions.heightHint = 48;
 		styledTextSurveySpecialConditions.setLayoutData( gd_styledTextSurveySpecialConditions );
-		styledTextSurveySpecialConditions.addModifyListener( new ModifyListener()
-		{
-			
-			public void modifyText( ModifyEvent arg0 )
-			{
-				validateSpecialConditions();
-			}
-		} );
+		styledTextSurveySpecialConditions.setEnabled( false );
 		new Label(surveyForm, SWT.NONE);
 		
 		icoSurveySpecialConditions = new Label(surveyForm, SWT.NONE);
@@ -269,14 +235,7 @@ public class NewSurvey extends Dialog
 				false, false, 2, 3 );
 		gd_styledTextComment.heightHint = 71;
 		styledTextComment.setLayoutData( gd_styledTextComment );
-		styledTextComment.addModifyListener( new ModifyListener()
-		{
-			
-			public void modifyText( ModifyEvent arg0 )
-			{
-				validateComment();
-			}
-		} );
+		styledTextComment.setEnabled( false );
 		new Label(surveyForm, SWT.NONE);
 		
 		icoComment = new Label(surveyForm, SWT.NONE);
@@ -292,7 +251,7 @@ public class NewSurvey extends Dialog
 			@Override
 			public void widgetSelected( SelectionEvent arg0 )
 			{
-				if ( validateAll() )
+				if ( !txtSurveyName.getText().isEmpty() )
 				{
 					saveAction();
 					shell.dispose();
@@ -337,133 +296,6 @@ public class NewSurvey extends Dialog
 	{
 		System.out.println( txtSurveyName.getText() + " " );
 		result = new Survey();
-	}
-
-	private boolean validateName()
-	{
-		if ( txtSurveyName.getText().isEmpty() | txtSurveyName.getText() == null )
-		{
-			setFormFieldError( lblSurveyName, txtSurveyName, icoSUrveyName );
-			return false;
-		} else
-		{
-			setFormFieldOK( lblSurveyName, txtSurveyName, icoSUrveyName );
-			return true;
-		}
-	}
-	
-	private boolean validateDate()
-	{
-		if ( txtSurveyDate.getData() == null )
-		{
-			setFormFieldError( lblSurveyDate, txtSurveyDate, icoSurveyDate );
-			return false;
-		} else
-		{
-			setFormFieldOK( lblSurveyDate, txtSurveyDate, icoSurveyDate );
-			return true;
-		}
-	}
-	
-	private boolean validateUser()
-	{
-		if ( listSurveyUser.getText().isEmpty() | listSurveyUser.getText() == null )
-		{
-			setFormFieldError( lblSurveyUser, listSurveyUser, icoSurveyUser );
-			return false;
-		} else
-		{
-			setFormFieldOK( lblSurveyUser, listSurveyUser, icoSurveyUser );
-			return true;
-		}
-	}
-
-	private boolean validatePlace()
-	{
-		if ( listSurveyPlace.getText().isEmpty() | listSurveyPlace.getText() == null )
-		{
-			setFormFieldError( lblSurveyPlace, listSurveyPlace, icoSurveyPlace );
-			return false;
-		} else
-		{
-			setFormFieldOK( lblSurveyPlace, listSurveyPlace, icoSurveyPlace );
-			return true;
-		}
-	}
-	
-	private void validateLoad()
-	{
-		if ( textSurveyLoad.getText().isEmpty() | textSurveyLoad.getText() == null )
-		{
-			setFormFieldWarning( lblSurveyLoad, textSurveyLoad, icoSurveyLoad );
-		} else
-		{
-			setFormFieldOK( lblSurveyLoad, textSurveyLoad, icoSurveyLoad );
-		}
-	}
-	
-	private void validateSpecialConditions()
-	{
-		if ( styledTextSurveySpecialConditions.getText().isEmpty() | styledTextSurveySpecialConditions.getText() == null )
-		{
-			setFormFieldWarning( lblSurveySpecialConditions, styledTextSurveySpecialConditions, icoSurveySpecialConditions );
-		} else
-		{
-			setFormFieldOK( lblSurveySpecialConditions, styledTextSurveySpecialConditions, icoSurveySpecialConditions );
-		}
-	}
-	
-	private void validateComment()
-	{
-		if ( styledTextComment.getText().isEmpty() | styledTextComment.getText() == null )
-		{
-			setFormFieldWarning( lblComment, styledTextComment, icoComment );
-		} else
-		{
-			setFormFieldOK( lblComment, styledTextComment, icoComment );
-		}
-	}
-	
-	private boolean validateAll()
-	{
-		boolean isValid = true;
-
-		isValid = validateName();
-		
-		isValid = validateDate();
-
-		isValid = validateUser();
-		
-		isValid = validatePlace();
-
-		validateLoad();
-		
-		validateSpecialConditions();
-		
-		validateComment();
-		
-		return isValid;
-	}
-
-	private void setFormFieldError( Label label, Control textField, Label ico )
-	{
-		ico.setImage( UsefulImage.ERROR.getImage() );
-		ico.getParent().layout();
-		textField.setBackground( UsefulColor.RED_ERROR.getColor() );
-	}
-
-	private void setFormFieldWarning( Label label, Control textField, Label ico )
-	{
-		ico.setImage( UsefulImage.WARNING.getImage() );
-		ico.getParent().layout();
-		textField.setBackground( UsefulColor.YELLOW_WARNING.getColor() );
-	}
-	
-	private void setFormFieldOK( Label label, Control textField, Label ico )
-	{
-		ico.setImage( UsefulImage.OK.getImage() );
-		ico.getParent().layout();
-		textField.setBackground( UsefulColor.WHITE.getColor() );
 	}
 	
 	private void refreshListSurveyUser()
