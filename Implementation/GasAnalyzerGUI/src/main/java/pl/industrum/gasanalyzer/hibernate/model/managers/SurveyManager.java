@@ -1,4 +1,4 @@
-package pl.industrum.gasanalyzer.hibernate.model.survey;
+package pl.industrum.gasanalyzer.hibernate.model.managers;
 
 import java.util.Date;
 import java.util.List;
@@ -12,10 +12,6 @@ public abstract class SurveyManager
 {
 	public static Integer addSurvey( String name, String load, String specialConditions, String comment, Integer objectID, Integer userID, Date date )
 	{
-		//Create session and begin transaction
-		Session session = Hibernate.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		//Create survey object
 		Survey survey = new Survey();
 		survey.setTimestamp( date );
 		survey.setName( name );
@@ -24,7 +20,9 @@ public abstract class SurveyManager
 		survey.setComment( comment );
 		survey.setApplicationUser( ApplicationUserManager.getApplicationUser( userID ) );
 		survey.setObject( MeasuredObjectManager.getObject( objectID ) );
-		//Save survey, commit transaction and return new ID
+		
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
 		session.save( survey );
 		session.getTransaction().commit();
 		
@@ -33,11 +31,11 @@ public abstract class SurveyManager
 	
 	public static void deleteSurvey( Integer surveyID )
 	{
-		//Create session and begin transaction
+		Survey survey = SurveyManager.getSurvey( surveyID );
+		
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		//Delete survey and commit transaction
-		session.delete( SurveyManager.getSurvey( surveyID ) );
+		session.delete( survey );
 		session.getTransaction().commit();
 	}
 	

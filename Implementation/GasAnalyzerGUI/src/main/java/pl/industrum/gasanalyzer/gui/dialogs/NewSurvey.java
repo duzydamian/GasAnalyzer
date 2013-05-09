@@ -24,8 +24,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import pl.industrum.gasanalyzer.hibernate.model.survey.ApplicationUserManager;
-import pl.industrum.gasanalyzer.hibernate.model.survey.SurveyManager;
+import pl.industrum.gasanalyzer.hibernate.model.managers.ApplicationUserManager;
+import pl.industrum.gasanalyzer.hibernate.model.managers.SurveyManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
 import pl.industrum.gasanalyzer.model.ApplicationUser;
 import pl.industrum.gasanalyzer.model.Survey;

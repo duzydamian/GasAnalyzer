@@ -21,6 +21,7 @@ public class TestVector extends Vector<Test>
 		super();
 		add( new LibRxTxTest() );
 		add( new ComPortAccessibilityTest() );
+		add( new DatabaseConnectionTest() );
 	}
 
 }

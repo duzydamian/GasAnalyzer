@@ -1,4 +1,4 @@
-package pl.industrum.gasanalyzer.hibernate.model.survey;
+package pl.industrum.gasanalyzer.hibernate.model.managers;
 
 import java.util.List;
 
@@ -11,15 +11,13 @@ public abstract class MeasuredObjectManager
 {
 	public static Integer addObject( String name, String description, Integer placeID )
 	{
-		//Create session and begin transaction
-		Session session = Hibernate.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		//Create survey object
 		MeasuredObject object = new MeasuredObject();
 		object.setName( name );
 		object.setDescription( description );
 		object.setPlace( PlaceManager.getPlace( placeID ) );
-		//Save survey and commit transaction
+		
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
 		session.save( object );
 		session.getTransaction().commit();
 		
@@ -28,11 +26,11 @@ public abstract class MeasuredObjectManager
 	
 	public static void deleteObject( Integer objectID )
 	{
-		//Create session and begin transaction
+		MeasuredObject object = MeasuredObjectManager.getObject( objectID );
+		
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		//Delete survey and commit transaction
-		session.delete( MeasuredObjectManager.getObject( objectID ) );
+		session.delete( object );
 		session.getTransaction().commit();
 	}
 	

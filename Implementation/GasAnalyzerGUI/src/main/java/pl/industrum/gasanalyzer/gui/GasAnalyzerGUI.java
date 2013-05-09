@@ -3,15 +3,12 @@
  */
 package pl.industrum.gasanalyzer.gui;
 
-
 import java.io.PrintStream;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
-import org.hibernate.Session;
 
 import pl.industrum.gasanalyzer.gui.dialogs.SendExceptionCatched;
-import pl.industrum.gasanalyzer.hibernate.Hibernate;
 
 /**
  * @author duzydamian(Damian Karbowiak)
@@ -62,10 +59,7 @@ public class GasAnalyzerGUI
 			splashScreen.open();
 
 			if ( splashScreen.isAllTestComplete() )
-			{
-				Session session = Hibernate.getSessionFactory().getCurrentSession();
-				session.beginTransaction();
-				session.getTransaction().commit();
+			{				
 				GasAnalyzerMainWindow window = new GasAnalyzerMainWindow();
 				window.open();
 			}

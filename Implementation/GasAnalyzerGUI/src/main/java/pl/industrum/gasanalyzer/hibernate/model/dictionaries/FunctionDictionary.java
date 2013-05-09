@@ -1,50 +1,53 @@
-package pl.industrum.gasanalyzer.hibernate.model.survey;
+package pl.industrum.gasanalyzer.hibernate.model.dictionaries;
 
 import java.util.List;
 
 import org.hibernate.Session;
 
 import pl.industrum.gasanalyzer.hibernate.Hibernate;
-import pl.industrum.gasanalyzer.model.Degree;
+import pl.industrum.gasanalyzer.model.Function;
 
-public abstract class DegreeDictionary
+public abstract class FunctionDictionary
 {
 	public static Integer add( String name )
 	{
+		Function function = new Function();
+		function.setName( name );
+		
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		Degree degree = new Degree();
-		degree.setName( name );
-		session.save( degree );
+		session.save( function );
 		session.getTransaction().commit();
 		//TODO reindexing table
-		return degree.getId();
+		return function.getId();
 	}
 	
 	public static void delete( Integer id )
 	{
+		Function function = FunctionDictionary.get( id );
+		
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		session.delete( DegreeDictionary.get( id ) );
+		session.delete( function );
 		//TODO reindexing table
 		session.getTransaction().commit();
 	}
 	
-	public static Degree get( Integer functionID )
+	public static Function get( Integer functionID )
 	{
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		Degree degree = ( Degree ) session.createQuery( "from Degree where id='" + functionID.toString() + "'" ).list().get( 0 );
+		Function function = ( Function ) session.createQuery( "from Function where id='" + functionID.toString() + "'" ).list().get( 0 );
 		session.getTransaction().commit();
-		return degree;
+		return function;
 	}
 	
 	@SuppressWarnings( "unchecked" )
-	public static List<Degree> getAll()
+	public static List<Function> getAll()
 	{
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		List<Degree> functions = ( List<Degree> ) session.createQuery( "from Degree" ).list();
+		List<Function> functions = ( List<Function> ) session.createQuery( "from Function" ).list();
 		session.getTransaction().commit();
 		return functions;
 	}
