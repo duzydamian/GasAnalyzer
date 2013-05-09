@@ -5,13 +5,17 @@ import java.util.List;
 import org.hibernate.Session;
 
 import pl.industrum.gasanalyzer.hibernate.Hibernate;
+import pl.industrum.gasanalyzer.hibernate.model.dictionaries.DeviceTypeDictionary;
 import pl.industrum.gasanalyzer.model.Device;
 
 public abstract class DeviceManager
 {
-	public static Integer addDevice( Integer functionID, Integer degreeID, String name, String surname )
+	public static Integer addDevice( Integer deviceTypeID, String name, Integer address )
 	{
 		Device device = new Device();
+		device.setDeviceType( DeviceTypeDictionary.get( deviceTypeID ) );
+		device.setName( name );
+		device.setAddress( address.intValue() );
 		
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
