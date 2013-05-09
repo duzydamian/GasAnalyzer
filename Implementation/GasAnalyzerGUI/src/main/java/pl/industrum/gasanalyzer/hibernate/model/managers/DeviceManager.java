@@ -42,7 +42,6 @@ public abstract class DeviceManager
 	
 	public static Device getDevice( Integer deviceID )
 	{
-		//Create session and return survey
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		Device device = ( Device  ) session.createQuery( "from Device where id='" + deviceID.toString() + "'" ).list().get( 0 );

@@ -34,6 +34,7 @@ public abstract class MeasurementSnapshotManager
 		
 		for( ELANMeasurementDevice elanMeasurementDevice : network )
 		{
+			//MeasurementSetManager.addMeasurementSet( DeviceManager.getDevice( elanMe, snapshotID, timestamp )
 			MeasurementSet set = new MeasurementSet();
 			set.setDevice( DeviceManager.getDevice( DeviceManager.addDevice( DeviceTypeDictionary.add( "test" ), "test", 2 ) ) ); //alllle chujowo TODO
 			set.setMeasurementSnapshot( snapshot );
