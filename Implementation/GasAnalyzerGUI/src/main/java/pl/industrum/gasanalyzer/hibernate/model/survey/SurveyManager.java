@@ -11,7 +11,7 @@ import pl.industrum.gasanalyzer.model.Survey;
 
 public abstract class SurveyManager
 {
-	public static void addSurvey( String name, String load, String specialConditions, String comment, Integer objectID, Integer userID )
+	public static Integer addSurvey( String name, String load, String specialConditions, String comment, Integer objectID, Integer userID )
 	{
 		//Create session and begin transaction
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
@@ -25,9 +25,11 @@ public abstract class SurveyManager
 		survey.setComment( comment );
 		survey.setApplicationUser( ( ApplicationUser ) session.createQuery( "from application_user where id='" + userID.toString() + "'" ).list().get( 0 ) );
 		survey.setObject( ( MeasuredObject ) session.createQuery( "from object where id='" + objectID.toString() + "'" ).list().get( 0 ) );
-		//Save survey and commit transaction
-		session.save( survey );
+		//Save survey, commit transaction and return new ID
+		Integer id = ( ( Survey ) session.save( survey ) ).getId();
 		session.getTransaction().commit();
+		
+		return id;
 	}
 	
 	public static void deleteSurvey( Integer surveyID )

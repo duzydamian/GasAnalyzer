@@ -8,7 +8,7 @@ import pl.industrum.gasanalyzer.model.Place;
 
 public abstract class MeasuredObjectManager
 {
-	public static void addObject( String name, String description, Integer placeID )
+	public static Integer addObject( String name, String description, Integer placeID )
 	{
 		//Create session and begin transaction
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
@@ -19,8 +19,10 @@ public abstract class MeasuredObjectManager
 		object.setDescription( description );
 		object.setPlace( ( Place ) session.createQuery( "from place where id='" + placeID.toString() + "'" ).list().get( 0 ) );
 		//Save survey and commit transaction
-		session.save( object );
+		Integer id = ( ( MeasuredObject ) session.save( object ) ).getId();
 		session.getTransaction().commit();
+		
+		return id;
 	}
 	
 	public static void deleteObject( Integer objectID )

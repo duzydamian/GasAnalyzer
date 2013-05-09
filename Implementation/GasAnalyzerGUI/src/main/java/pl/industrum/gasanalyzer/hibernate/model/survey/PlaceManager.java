@@ -7,7 +7,7 @@ import pl.industrum.gasanalyzer.model.Place;
 
 public abstract class PlaceManager
 {
-	public static void addPlace( String name, String city, String postCode, String address )
+	public static Integer addPlace( String name, String city, String postCode, String address )
 	{
 		//Create session and begin transaction
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
@@ -19,8 +19,10 @@ public abstract class PlaceManager
 		place.setPostCode( postCode );
 		place.setAddress( address );
 		//Save place and commit transaction
-		session.save( place );
+		Integer id = ( ( Place ) session.save( place ) ).getId();
 		session.getTransaction().commit();
+		
+		return id;
 	}
 	
 	public static void deletePlace( Integer placeID )
