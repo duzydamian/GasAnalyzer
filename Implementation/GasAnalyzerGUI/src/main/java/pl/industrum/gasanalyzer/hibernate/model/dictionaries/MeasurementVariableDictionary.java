@@ -22,6 +22,19 @@ public abstract class MeasurementVariableDictionary
 		return variable.getId();
 	}
 	
+	public static void add( Integer id, String name )
+	{
+		MeasurementVariable variable = new MeasurementVariable();
+		variable.setId( id );
+		variable.setName( name );
+		
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.save( variable );
+		session.getTransaction().commit();
+		//TODO reindexing table
+	}
+	
 	public static void delete( Integer id )
 	{
 		MeasurementVariable variable = MeasurementVariableDictionary.get( id );
@@ -29,6 +42,19 @@ public abstract class MeasurementVariableDictionary
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		session.delete( variable );
+		//TODO reindexing table
+		session.getTransaction().commit();
+	}
+	
+	public static void deleteAll()
+	{
+		List<MeasurementVariable> all = getAll();
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();		
+		for( MeasurementVariable measurementVariable: all )
+		{
+			session.delete( measurementVariable );
+		}
 		//TODO reindexing table
 		session.getTransaction().commit();
 	}

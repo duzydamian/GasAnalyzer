@@ -6,7 +6,7 @@
     <class name="pl.industrum.gasanalyzer.model.DeviceType" table="device_type" schema="public">
         <id name="id" type="int">
             <column name="id" />
-            <generator class="identity" />
+            <generator class="assigned" />
         </id>
         <property name="type" type="string">
             <column name="type" length="30" not-null="true" />

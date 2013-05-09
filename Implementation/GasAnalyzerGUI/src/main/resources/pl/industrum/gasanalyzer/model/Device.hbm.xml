@@ -6,7 +6,7 @@
     <class name="pl.industrum.gasanalyzer.model.Device" table="device" schema="public">
         <id name="id" type="int">
             <column name="id" />
-            <generator class="identity" />
+            <generator class="assigned" />
         </id>
         <many-to-one name="deviceType" class="pl.industrum.gasanalyzer.model.DeviceType" fetch="select" lazy="false">
             <column name="device_type_id" not-null="true" />

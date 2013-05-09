@@ -22,6 +22,10 @@ public class TestVector extends Vector<Test>
 		add( new LibRxTxTest() );
 		add( new ComPortAccessibilityTest() );
 		add( new DatabaseConnectionTest() );
+		add( new DatabaseMeasurementDimensionCorrectTest() );
+		add( new DatabaseMeasurementVariableCorrectTest() );
+		add( new DatabaseDeviceTypeCorrectTest() );
+		add( new DatabaseDeviceCorrectTest() );
 	}
 
 }

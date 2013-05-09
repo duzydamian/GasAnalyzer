@@ -34,6 +34,20 @@ public abstract class DeviceManager
 		session.delete( device );
 		session.getTransaction().commit();
 	}
+
+	public static void deleteAllDevices()
+	{
+		List<Device> allDevices = getAllDevices();
+		
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		for( Device device: allDevices )
+		{
+			session.delete( device );
+		}
+		
+		session.getTransaction().commit();
+	}
 	
 	public static void updateDevice()
 	{
