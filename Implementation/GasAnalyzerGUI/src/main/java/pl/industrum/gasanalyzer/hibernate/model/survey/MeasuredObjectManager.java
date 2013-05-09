@@ -1,5 +1,8 @@
 package pl.industrum.gasanalyzer.hibernate.model.survey;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.hibernate.Session;
 
 import pl.industrum.gasanalyzer.hibernate.Hibernate;
@@ -44,14 +47,19 @@ public abstract class MeasuredObjectManager
 	{
 		//Create session and return survey
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
-		return ( MeasuredObject  ) session.createQuery( "from object where id='" + objectID.toString() + "'" ).list().get( 0 );
+		session.beginTransaction();
+		MeasuredObject object =  ( MeasuredObject  ) session.createQuery( "from object where id='" + objectID.toString() + "'" ).list().get( 0 );
+		session.getTransaction().commit();
+		return object;
 	}
 	
 	@SuppressWarnings( "unchecked" )
-	public static Iterable<MeasuredObject> getAllObjects()
+	public static Iterator<MeasuredObject> getAllObjects()
 	{
 		//Create session and return survey collection
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
-		return ( Iterable<MeasuredObject>  ) session.createQuery( "from object" ).list().iterator();
+		session.beginTransaction();
+		List<MeasuredObject> objects = ( List<MeasuredObject>  ) session.createQuery( "from object" ).list();
+		return ( Iterator<MeasuredObject> ) objects.iterator();
 	}
 }
