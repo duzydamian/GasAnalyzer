@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Vector;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
@@ -25,9 +26,13 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import pl.industrum.gasanalyzer.hibernate.model.managers.ApplicationUserManager;
+import pl.industrum.gasanalyzer.hibernate.model.managers.MeasuredObjectManager;
+import pl.industrum.gasanalyzer.hibernate.model.managers.PlaceManager;
 import pl.industrum.gasanalyzer.hibernate.model.managers.SurveyManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
 import pl.industrum.gasanalyzer.model.ApplicationUser;
+import pl.industrum.gasanalyzer.model.MeasuredObject;
+import pl.industrum.gasanalyzer.model.Place;
 import pl.industrum.gasanalyzer.model.Survey;
 import pl.industrum.gasanalyzer.types.UsefulColor;
 import pl.industrum.gasanalyzer.types.UsefulImage;
@@ -75,6 +80,18 @@ public class NewSurvey extends Dialog
 	private Label icoSurveySpecialConditions;
 	private Label icoComment;
 
+	private Label icoSurveyObject;
+
+	private Button btnNewSurveyObject;
+
+	private Combo listSurveyObject;
+
+	private Label lblSurveyObject;
+	
+	private Vector<ApplicationUser> avaibleUsers;
+	private Vector<Place> avaiblePlaces;
+	private Vector<MeasuredObject> avaibleObjects;
+
 	/**
 	 * Create the dialog.
 	 * 
@@ -85,6 +102,9 @@ public class NewSurvey extends Dialog
 	{
 		super( parent, style );
 		setText( "Dane pomiaru" ); //$NON-NLS-1$
+		avaibleUsers = new Vector<ApplicationUser>();
+		avaiblePlaces = new Vector<Place>();
+		avaibleObjects = new Vector<MeasuredObject>();
 	}
 
 	/**
@@ -93,8 +113,9 @@ public class NewSurvey extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 470, 370 );
+		shell.setSize( 460, 400 );
 		shell.setText( getText() );
+		shell.setImage( UsefulImage.ADD.getImage() );
 		
 		surveyFrameData = new GridData( GridData.FILL, GridData.CENTER, true,
 				false );
@@ -195,14 +216,17 @@ public class NewSurvey extends Dialog
 		listSurveyPlace = new Combo( surveyForm, SWT.NONE );
 		listSurveyPlace.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
 				false, false, 1, 1 ) );
-		listSurveyPlace.add( "Narnia" );
-		listSurveyPlace.add( "Mordor" );
+		refreshListSurveyPlace();
 		listSurveyPlace.addModifyListener( new ModifyListener()
 		{
 			
+			private boolean isPlaceSelected;
+
 			public void modifyText( ModifyEvent arg0 )
 			{
-				validatePlace();
+				isPlaceSelected = validatePlace();
+				listSurveyObject.setEnabled( isPlaceSelected );
+				btnNewSurveyObject.setEnabled( isPlaceSelected );
 			}
 		} );
 
@@ -225,6 +249,43 @@ public class NewSurvey extends Dialog
 		
 		icoSurveyPlace = new Label(surveyForm, SWT.NONE);
 
+		lblSurveyObject = new Label( surveyForm, SWT.NONE );
+		lblSurveyObject.setText( Messages
+				.getString( "SurveyFrame.lblSurveyObject.text" ) ); //$NON-NLS-1$
+
+		listSurveyObject = new Combo( surveyForm, SWT.NONE );
+		listSurveyObject.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
+				false, false, 1, 1 ) );
+		refreshListSurveyObject();
+		listSurveyObject.addModifyListener( new ModifyListener()
+		{
+			
+			public void modifyText( ModifyEvent arg0 )
+			{
+				validateObject();
+			}
+		} );
+
+		btnNewSurveyObject = new Button( surveyForm, SWT.NONE );
+		btnNewSurveyObject.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		btnNewSurveyObject.setImage( UsefulImage.ADD.getImage() );
+		btnNewSurveyObject.setText( Messages
+				.getString( "SurveyFrame.btnNewSurveyObject.text" ) ); //$NON-NLS-1$
+		btnNewSurveyObject.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				Integer placeID = avaiblePlaces.get( listSurveyPlace.getSelectionIndex() ).getId();
+				NewSurveyObject newSurveyObject = new NewSurveyObject( getParent()
+						.getShell(), SWT.NONE, placeID );
+				newSurveyObject.open();
+
+				refreshListSurveyObject();
+			}
+		} );
+		
+		icoSurveyObject = new Label(surveyForm, SWT.NONE);
+		
 		lblSurveyLoad = new Label( surveyForm, SWT.NONE );
 		lblSurveyLoad.setText( Messages
 				.getString( "SurveyFrame.lblSurveyLoad.text" ) ); //$NON-NLS-1$
@@ -256,8 +317,7 @@ public class NewSurvey extends Dialog
 		gd_styledTextSurveySpecialConditions.heightHint = 48;
 		styledTextSurveySpecialConditions.setLayoutData( gd_styledTextSurveySpecialConditions );
 		styledTextSurveySpecialConditions.addModifyListener( new ModifyListener()
-		{
-			
+		{			
 			public void modifyText( ModifyEvent arg0 )
 			{
 				validateSpecialConditions();
@@ -321,6 +381,9 @@ public class NewSurvey extends Dialog
 				shell.dispose();
 			}
 		} );
+		
+		listSurveyObject.setEnabled( false );
+		btnNewSurveyObject.setEnabled( false );
 	}
 	
 	/**
@@ -348,8 +411,8 @@ public class NewSurvey extends Dialog
 	{
 		try
 		{		
-			Integer userID = 1; //TODO
-			Integer objectID = 1; //TODO
+			Integer userID = avaibleUsers.get( listSurveyUser.getSelectionIndex() ).getId();
+			Integer objectID = avaibleObjects.get( listSurveyPlace.getSelectionIndex() ).getId();
 			Date date = dateFormater.parse( txtSurveyDate.getText() );
 			
 			result = SurveyManager.getSurvey( SurveyManager.addSurvey( txtSurveyName.getText(), textSurveyLoad.getText(), styledTextSurveySpecialConditions.getText(), styledTextComment.getText(), objectID, userID, date ));
@@ -412,6 +475,19 @@ public class NewSurvey extends Dialog
 		}
 	}
 	
+	private boolean validateObject()
+	{
+		if ( listSurveyObject.getText().isEmpty() | listSurveyPlace.getText() == null )
+		{
+			setFormFieldError( lblSurveyObject, listSurveyObject, icoSurveyObject );
+			return false;
+		} else
+		{
+			setFormFieldOK( lblSurveyObject, listSurveyObject, icoSurveyObject );
+			return true;
+		}
+	}
+	
 	private void validateLoad()
 	{
 		if ( textSurveyLoad.getText().isEmpty() | textSurveyLoad.getText() == null )
@@ -456,6 +532,8 @@ public class NewSurvey extends Dialog
 		isValid = validateUser();
 		
 		isValid = validatePlace();
+		
+		isValid = validateObject();
 
 		validateLoad();
 		
@@ -490,16 +568,37 @@ public class NewSurvey extends Dialog
 	private void refreshListSurveyUser()
 	{
 		listSurveyUser.removeAll();
+		avaibleUsers.clear();
 		
 		for( ApplicationUser user: ApplicationUserManager.getAllApplicationUsers() )
 		{
 			listSurveyUser.add( user.toString() );
+			avaibleUsers.add( user );
 		}
 	}
 
 	private void refreshListSurveyPlace()
 	{
+		listSurveyPlace.removeAll();
+		avaiblePlaces.clear();
+		
+		for( Place place: PlaceManager.getAllPlaces() )
+		{
+			listSurveyPlace.add( place.toString() );
+			avaiblePlaces.add( place );
+		}
+	}
 
+	private void refreshListSurveyObject()
+	{
+		listSurveyObject.removeAll();
+		avaibleObjects.clear();
+		
+		for( MeasuredObject object: MeasuredObjectManager.getAllObjects() )
+		{
+			listSurveyObject.add( object.toString() );
+			avaibleObjects.add( object );
+		}
 	}
 	
 	@Override

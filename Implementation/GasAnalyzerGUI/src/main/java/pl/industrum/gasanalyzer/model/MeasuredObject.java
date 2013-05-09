@@ -90,4 +90,9 @@ public class MeasuredObject implements java.io.Serializable
 		this.surveys = surveys;
 	}
 
+	@Override
+	public String toString()
+	{
+		return getName() + " ( " + getDescription() + " )";
+	}
 }

@@ -15,15 +15,15 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import pl.industrum.gasanalyzer.hibernate.model.dictionaries.FunctionDictionary;
+import pl.industrum.gasanalyzer.hibernate.model.managers.MeasuredObjectManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
-import pl.industrum.gasanalyzer.model.Function;
+import pl.industrum.gasanalyzer.model.MeasuredObject;
 import pl.industrum.gasanalyzer.types.UsefulColor;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
-public class NewSurveyPlace extends Dialog
+public class NewSurveyObject extends Dialog
 {
-	protected Function result;
+	protected MeasuredObject result;
 	protected Shell shell;
 	private Text textName;	
 	private Label lblName;
@@ -31,6 +31,10 @@ public class NewSurveyPlace extends Dialog
 	private Button btnCancel;
 	private Display display;
 	private Label icoName;
+	private Integer placeID;
+	private Label icoDesciption;
+	private Text textDesciption;
+	private Label lblDesciption;
 
 	/**
 	 * Create the dialog.
@@ -38,10 +42,11 @@ public class NewSurveyPlace extends Dialog
 	 * @param parent
 	 * @param style
 	 */
-	public NewSurveyPlace( Shell parent, int style )
+	public NewSurveyObject( Shell parent, int style, Integer givenPlaceID )
 	{
 		super( parent, style );
-		setText( Messages.getString( "NewSurveyUserFunction.this.text" ) ); //$NON-NLS-1$
+		setText( Messages.getString( "NewSurveyObject.this.text" ) ); //$NON-NLS-1$
+		placeID = givenPlaceID;
 	}
 
 	/**
@@ -49,7 +54,7 @@ public class NewSurveyPlace extends Dialog
 	 * 
 	 * @return the result
 	 */
-	public Function open()
+	public MeasuredObject open()
 	{
 		createContents();
 		shell.open();
@@ -71,12 +76,12 @@ public class NewSurveyPlace extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 250, 100 );
+		shell.setSize( 255, 135 );
 		shell.setText( getText() );
 		shell.setLayout( new GridLayout( 4, false ) );
 
 		lblName = new Label( shell, SWT.RIGHT );
-		lblName.setText( Messages.getString( "NewSurveyUserFunction.lblName.text" ) ); //$NON-NLS-1$
+		lblName.setText( Messages.getString( "NewSurveyObject.lblName.text" ) ); //$NON-NLS-1$
 
 		textName = new Text( shell, SWT.BORDER );
 		textName.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
@@ -93,6 +98,24 @@ public class NewSurveyPlace extends Dialog
 		icoName = new Label(shell, SWT.NONE);
 		icoName.setImage( null );
 
+		lblDesciption = new Label( shell, SWT.RIGHT );
+		lblDesciption.setText( Messages.getString( "NewSurveyObject.lblDescription.text" ) ); //$NON-NLS-1$
+
+		textDesciption = new Text( shell, SWT.BORDER );
+		textDesciption.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
+				false, 2, 1 ) );
+		textDesciption.addModifyListener( new ModifyListener()
+		{
+			
+			public void modifyText( ModifyEvent arg0 )
+			{
+				validateDesciption();
+			}
+		} );
+		
+		icoDesciption = new Label(shell, SWT.NONE);
+		icoDesciption.setImage( null );
+		
 		new Label( shell, SWT.NONE );
 
 		btnOk = new Button( shell, SWT.NONE );
@@ -130,7 +153,7 @@ public class NewSurveyPlace extends Dialog
 
 	protected void saveAction()
 	{
-		result = FunctionDictionary.get( FunctionDictionary.add( textName.getText() ) );
+		result = MeasuredObjectManager.getObject( MeasuredObjectManager.addObject( textName.getText(), textDesciption.getText(), placeID ) );
 	}
 	
 	private boolean validateName()
@@ -146,11 +169,26 @@ public class NewSurveyPlace extends Dialog
 		}
 	}
 
+	private boolean validateDesciption()
+	{
+		if ( textDesciption.getText().isEmpty() | textDesciption.getText() == null )
+		{
+			setFormFieldWarning( lblDesciption, textDesciption, icoDesciption );
+			return false;
+		} else
+		{
+			setFormFieldOK( lblDesciption, textDesciption, icoDesciption );
+			return true;
+		}
+	}
+	
 	private boolean validateAll()
 	{
 		boolean isValid = true;
 		
 		isValid = validateName();
+		
+		isValid = validateDesciption();
 		
 		return isValid;
 	}
@@ -162,6 +200,13 @@ public class NewSurveyPlace extends Dialog
 		textField.setBackground( UsefulColor.RED_ERROR.getColor() );
 	}
 	
+	private void setFormFieldWarning( Label label, Control textField, Label ico )
+	{
+		ico.setImage( UsefulImage.WARNING.getImage() );
+		ico.getParent().layout();
+		textField.setBackground( UsefulColor.YELLOW_WARNING.getColor() );
+	}
+	
 	private void setFormFieldOK( Label label, Control textField, Label ico )
 	{
 		ico.setImage( UsefulImage.OK.getImage() );
@@ -169,4 +214,3 @@ public class NewSurveyPlace extends Dialog
 		textField.setBackground( UsefulColor.WHITE.getColor() );
 	}
 }
-

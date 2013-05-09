@@ -100,4 +100,9 @@ public class Place implements java.io.Serializable
 		this.objects = objects;
 	}
 
+	@Override
+	public String toString()
+	{
+		return getName() + " - " + getAddress() + ", " + getPostCode() + " " + getCity();
+	}
 }
