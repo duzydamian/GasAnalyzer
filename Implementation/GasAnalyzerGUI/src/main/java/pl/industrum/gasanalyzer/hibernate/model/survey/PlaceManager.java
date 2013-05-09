@@ -1,5 +1,8 @@
 package pl.industrum.gasanalyzer.hibernate.model.survey;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.hibernate.Session;
 
 import pl.industrum.gasanalyzer.hibernate.Hibernate;
@@ -44,14 +47,20 @@ public abstract class PlaceManager
 	{
 		//Create session and return place
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
-		return ( Place  ) session.createQuery( "from place where id='" + placeID.toString() + "'" ).list().get( 0 );
+		session.beginTransaction();
+		Place place = ( Place ) session.createQuery( "from place where id='" + placeID.toString() + "'" ).list().get( 0 );
+		session.getTransaction().commit();
+		return place;
 	}
 	
 	@SuppressWarnings( "unchecked" )
-	public static Iterable<Place> getAllPlaces()
+	public static Iterator<Place> getAllPlaces()
 	{
 		//Create session and return place collection
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
-		return ( Iterable<Place>  ) session.createQuery( "from place" ).list().iterator();
+		session.beginTransaction();
+		List<Place> places = ( List<Place>  ) session.createQuery( "from place" ).list().iterator();
+		session.getTransaction().commit();
+		return ( Iterator<Place> ) places.iterator();
 	}
 }

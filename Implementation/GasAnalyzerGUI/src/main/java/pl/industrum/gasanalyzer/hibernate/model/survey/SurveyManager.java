@@ -1,6 +1,8 @@
 package pl.industrum.gasanalyzer.hibernate.model.survey;
 
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import org.hibernate.Session;
 
@@ -51,14 +53,19 @@ public abstract class SurveyManager
 	{
 		//Create session and return survey
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
-		return ( Survey  ) session.createQuery( "from survey where id='" + surveyID.toString() + "'" ).list().get( 0 );
+		session.beginTransaction();
+		Survey survey = ( Survey  ) session.createQuery( "from survey where id='" + surveyID.toString() + "'" ).list().get( 0 );
+		session.getTransaction().commit();
+		return survey;
 	}
 	
 	@SuppressWarnings( "unchecked" )
-	public static Iterable<Survey> getAllSurveys()
+	public static Iterator<Survey> getAllSurveys()
 	{
 		//Create session and return survey collection
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
-		return ( Iterable<Survey>  ) session.createQuery( "from survey" ).list().iterator();
+		session.beginTransaction();
+		List<Survey> surveys = ( List<Survey> )session.createQuery( "from survey" ).list();
+		return surveys.iterator();
 	}
 }
