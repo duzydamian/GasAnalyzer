@@ -18,7 +18,7 @@ public class Survey implements java.io.Serializable
 	private MeasuredObject object;
 	private ApplicationUser applicationUser;
 	private String name;
-	private Double load;
+	private String load;
 	private String specialConditions;
 	private String comment;
 	private Set measurementSnapshots = new HashSet( 0 );
@@ -37,7 +37,7 @@ public class Survey implements java.io.Serializable
 	}
 
 	public Survey( int id, MeasuredObject object, ApplicationUser applicationUser,
-			String name, Double load, String specialConditions, String comment,
+			String name, String load, String specialConditions, String comment,
 			Set measurementSnapshots )
 	{
 		this.id = id;
@@ -100,12 +100,12 @@ public class Survey implements java.io.Serializable
 		this.name = name;
 	}
 
-	public Double getLoad()
+	public String getLoad()
 	{
 		return this.load;
 	}
 
-	public void setLoad( Double load )
+	public void setLoad( String load )
 	{
 		this.load = load;
 	}

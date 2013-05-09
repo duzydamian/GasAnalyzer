@@ -11,7 +11,7 @@ import pl.industrum.gasanalyzer.model.Survey;
 
 public abstract class SurveyManager
 {
-	public static void addSurvey( String name, Double load, String specialConditions, String comment, Integer objectID, Integer userID )
+	public static void addSurvey( String name, String load, String specialConditions, String comment, Integer objectID, Integer userID )
 	{
 		//Create session and begin transaction
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
