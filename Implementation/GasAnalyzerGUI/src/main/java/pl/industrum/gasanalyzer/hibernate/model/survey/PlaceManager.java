@@ -1,6 +1,5 @@
 package pl.industrum.gasanalyzer.hibernate.model.survey;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -22,10 +21,10 @@ public abstract class PlaceManager
 		place.setPostCode( postCode );
 		place.setAddress( address );
 		//Save place and commit transaction
-		Integer id = ( ( Place ) session.save( place ) ).getId();
+		session.save( place );
 		session.getTransaction().commit();
 		
-		return id;
+		return place.getId();
 	}
 	
 	public static void deletePlace( Integer placeID )
@@ -34,7 +33,7 @@ public abstract class PlaceManager
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		//Delete place and commit transaction
-		session.delete( ( Place  ) session.createQuery( "from survey where id='" + placeID.toString() + "'" ).list().get( 0 ) );
+		session.delete( PlaceManager.getPlace( placeID ) );
 		session.getTransaction().commit();
 	}
 	
@@ -48,19 +47,19 @@ public abstract class PlaceManager
 		//Create session and return place
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		Place place = ( Place ) session.createQuery( "from place where id='" + placeID.toString() + "'" ).list().get( 0 );
+		Place place = ( Place ) session.createQuery( "from Place where id='" + placeID.toString() + "'" ).list().get( 0 );
 		session.getTransaction().commit();
 		return place;
 	}
 	
 	@SuppressWarnings( "unchecked" )
-	public static Iterator<Place> getAllPlaces()
+	public static List<Place> getAllPlaces()
 	{
 		//Create session and return place collection
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		List<Place> places = ( List<Place>  ) session.createQuery( "from place" ).list().iterator();
+		List<Place> places = ( List<Place>  ) session.createQuery( "from Place" ).list();
 		session.getTransaction().commit();
-		return ( Iterator<Place> ) places.iterator();
+		return places;
 	}
 }

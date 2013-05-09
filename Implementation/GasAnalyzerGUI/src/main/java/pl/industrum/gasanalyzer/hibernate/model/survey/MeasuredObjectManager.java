@@ -1,13 +1,11 @@
 package pl.industrum.gasanalyzer.hibernate.model.survey;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Session;
 
 import pl.industrum.gasanalyzer.hibernate.Hibernate;
 import pl.industrum.gasanalyzer.model.MeasuredObject;
-import pl.industrum.gasanalyzer.model.Place;
 
 public abstract class MeasuredObjectManager
 {
@@ -20,12 +18,12 @@ public abstract class MeasuredObjectManager
 		MeasuredObject object = new MeasuredObject();
 		object.setName( name );
 		object.setDescription( description );
-		object.setPlace( ( Place ) session.createQuery( "from place where id='" + placeID.toString() + "'" ).list().get( 0 ) );
+		object.setPlace( PlaceManager.getPlace( placeID ) );
 		//Save survey and commit transaction
-		Integer id = ( ( MeasuredObject ) session.save( object ) ).getId();
+		session.save( object );
 		session.getTransaction().commit();
 		
-		return id;
+		return object.getId();
 	}
 	
 	public static void deleteObject( Integer objectID )
@@ -34,7 +32,7 @@ public abstract class MeasuredObjectManager
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		//Delete survey and commit transaction
-		session.delete( ( MeasuredObject  ) session.createQuery( "from survey where id='" + objectID.toString() + "'" ).list().get( 0 ) );
+		session.delete( MeasuredObjectManager.getObject( objectID ) );
 		session.getTransaction().commit();
 	}
 	
@@ -48,18 +46,19 @@ public abstract class MeasuredObjectManager
 		//Create session and return survey
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		MeasuredObject object =  ( MeasuredObject  ) session.createQuery( "from object where id='" + objectID.toString() + "'" ).list().get( 0 );
+		MeasuredObject object =  ( MeasuredObject  ) session.createQuery( "from MeasuredObject where id='" + objectID.toString() + "'" ).list().get( 0 );
 		session.getTransaction().commit();
 		return object;
 	}
 	
 	@SuppressWarnings( "unchecked" )
-	public static Iterator<MeasuredObject> getAllObjects()
+	public static List<MeasuredObject> getAllObjects()
 	{
 		//Create session and return survey collection
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		List<MeasuredObject> objects = ( List<MeasuredObject>  ) session.createQuery( "from object" ).list();
-		return ( Iterator<MeasuredObject> ) objects.iterator();
+		List<MeasuredObject> objects = ( List<MeasuredObject>  ) session.createQuery( "from MeasuredObject" ).list();
+		session.getTransaction().commit();
+		return objects;
 	}
 }
