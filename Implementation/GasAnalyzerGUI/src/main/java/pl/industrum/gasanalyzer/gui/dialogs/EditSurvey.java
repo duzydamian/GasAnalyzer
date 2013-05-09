@@ -1,5 +1,9 @@
 package pl.industrum.gasanalyzer.gui.dialogs;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ModifyEvent;
@@ -13,7 +17,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
@@ -28,6 +31,8 @@ import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class EditSurvey extends Dialog
 {
+	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "dd/MM/yyyy HH:mm", Locale.getDefault() );
+	
 	protected Survey result;
 	protected Shell shell;
 	
@@ -36,7 +41,7 @@ public class EditSurvey extends Dialog
 	private Text txtSurveyName;
 
 	private Label lblSurveyDate;
-	private DateTime txtSurveyDate;
+	private Text txtSurveyDate;
 
 	private Label lblSurveyUser;
 	private Combo listSurveyUser;
@@ -121,9 +126,10 @@ public class EditSurvey extends Dialog
 		lblSurveyDate.setText( Messages
 				.getString( "SurveyFrame.lblSurveyDate.text" ) ); //$NON-NLS-1$
 
-		txtSurveyDate = new DateTime( surveyForm, SWT.DATE );
+		txtSurveyDate = new Text( surveyForm, SWT.BORDER );
 		txtSurveyDate.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
 				false, 1, 1 ) );
+		txtSurveyDate.setText( dateFormater.format( new Date() ) );;
 
 		btnSelectDate = new Button( surveyForm, SWT.NONE );
 		btnSelectDate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -136,9 +142,7 @@ public class EditSurvey extends Dialog
 			{
 				DatePicker datePicker = new DatePicker( getParent().getShell(),
 						SWT.NONE );
-				int[] date = datePicker.open();
-				if ( date != null )
-					txtSurveyDate.setDate( date[0], date[1], date[2] );
+				txtSurveyDate.setText( dateFormater.format( datePicker.open() ) );
 			}
 		} );
 		

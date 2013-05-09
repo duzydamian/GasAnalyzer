@@ -1,5 +1,7 @@
 package pl.industrum.gasanalyzer.gui.dialogs;
 
+import java.util.Date;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -15,7 +17,7 @@ import pl.industrum.gasanalyzer.i18n.Messages;
 public class DatePicker extends Dialog
 {
 
-	protected int[] result;
+	protected Date result;
 	protected Shell shell;
 	private DateTime calendar;
 	private Button ok;
@@ -37,7 +39,7 @@ public class DatePicker extends Dialog
 	 * 
 	 * @return the result
 	 */
-	public int[] open()
+	public Date open()
 	{
 		createContents();
 		shell.pack();
@@ -71,13 +73,10 @@ public class DatePicker extends Dialog
 		ok.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false, false ) );
 		ok.addSelectionListener( new SelectionAdapter()
 		{
+			@SuppressWarnings( "deprecation" )
 			public void widgetSelected( SelectionEvent e )
 			{
-//				System.out.println( "Calendar date selected (MM/DD/YYYY) = "
-//						+ ( calendar.getMonth() + 1 ) + "/" + calendar.getDay()
-//						+ "/" + calendar.getYear() );
-				result = new int[]
-				{ calendar.getYear(), calendar.getMonth(), calendar.getDay() };
+				result = new Date( calendar.getYear(), calendar.getMonth(), calendar.getDay(), 12, 0 );
 				shell.close();
 			}
 		} );

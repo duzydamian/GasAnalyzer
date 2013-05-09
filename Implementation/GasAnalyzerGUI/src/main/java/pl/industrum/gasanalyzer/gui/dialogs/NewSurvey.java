@@ -1,5 +1,10 @@
 package pl.industrum.gasanalyzer.gui.dialogs;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ModifyEvent;
@@ -13,21 +18,24 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import pl.industrum.gasanalyzer.hibernate.model.survey.ApplicationUserManager;
 import pl.industrum.gasanalyzer.hibernate.model.survey.SurveyManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.model.ApplicationUser;
 import pl.industrum.gasanalyzer.model.Survey;
 import pl.industrum.gasanalyzer.types.UsefulColor;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class NewSurvey extends Dialog
 {
+	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "dd/MM/yyyy HH:mm", Locale.getDefault() );
+	
 	protected Survey result;
 	protected Shell shell;
 	
@@ -36,7 +44,7 @@ public class NewSurvey extends Dialog
 	private Text txtSurveyName;
 
 	private Label lblSurveyDate;
-	private DateTime txtSurveyDate;
+	private Text txtSurveyDate;
 
 	private Label lblSurveyUser;
 	private Combo listSurveyUser;
@@ -120,9 +128,10 @@ public class NewSurvey extends Dialog
 		lblSurveyDate.setText( Messages
 				.getString( "SurveyFrame.lblSurveyDate.text" ) ); //$NON-NLS-1$
 
-		txtSurveyDate = new DateTime( surveyForm, SWT.DATE );
+		txtSurveyDate = new Text( surveyForm, SWT.BORDER );
 		txtSurveyDate.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
 				false, 1, 1 ) );
+		txtSurveyDate.setText( dateFormater.format( new Date() ) );
 
 		btnSelectDate = new Button( surveyForm, SWT.NONE );
 		btnSelectDate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -135,9 +144,7 @@ public class NewSurvey extends Dialog
 			{
 				DatePicker datePicker = new DatePicker( getParent().getShell(),
 						SWT.NONE );
-				int[] date = datePicker.open();
-				if ( date != null )
-					txtSurveyDate.setDate( date[0], date[1], date[2] );
+				txtSurveyDate.setText( dateFormater.format( datePicker.open() ) );
 			}
 		} );
 		
@@ -150,8 +157,9 @@ public class NewSurvey extends Dialog
 		listSurveyUser = new Combo( surveyForm, SWT.NONE );
 		listSurveyUser.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
 				false, false, 1, 1 ) );
-		listSurveyUser.add( "Jan Wężyk" );
-		listSurveyUser.add( "Kuba guzik" );
+		
+		refreshListSurveyUser();
+		
 		listSurveyUser.addModifyListener( new ModifyListener()
 		{
 			
@@ -338,9 +346,18 @@ public class NewSurvey extends Dialog
 
 	protected void saveAction()
 	{
-		Integer userID = 1; //TODO
-		Integer objectID = 1; //TODO
-		result = SurveyManager.getSurvey( SurveyManager.addSurvey( txtSurveyName.getText(), textSurveyLoad.getText(), styledTextSurveySpecialConditions.getText(), styledTextComment.getText(), objectID, userID ));		
+		try
+		{		
+			Integer userID = 1; //TODO
+			Integer objectID = 1; //TODO
+			Date date = dateFormater.parse( txtSurveyDate.getText() );
+			
+			result = SurveyManager.getSurvey( SurveyManager.addSurvey( txtSurveyName.getText(), textSurveyLoad.getText(), styledTextSurveySpecialConditions.getText(), styledTextComment.getText(), objectID, userID, date ));
+		}
+		catch ( ParseException e )
+		{
+			e.printStackTrace();
+		}				
 	}
 
 	private boolean validateName()
@@ -472,7 +489,12 @@ public class NewSurvey extends Dialog
 	
 	private void refreshListSurveyUser()
 	{
-
+		listSurveyUser.removeAll();
+		
+		for( ApplicationUser user: ApplicationUserManager.getAllApplicationUsers() )
+		{
+			listSurveyUser.add( user.toString() );
+		}
 	}
 
 	private void refreshListSurveyPlace()

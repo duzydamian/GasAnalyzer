@@ -105,4 +105,9 @@ public class ApplicationUser implements java.io.Serializable
 		this.surveys = surveys;
 	}
 
+	@Override
+	public String toString()
+	{
+		return getDegree().getName() + " " + getName() + " " + getSurname() + ", " + getFunction().getName();
+	}
 }

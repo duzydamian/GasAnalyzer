@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import pl.industrum.gasanalyzer.hibernate.model.survey.FunctionDictionary;
 import pl.industrum.gasanalyzer.i18n.Messages;
 import pl.industrum.gasanalyzer.model.Function;
 import pl.industrum.gasanalyzer.types.UsefulColor;
@@ -129,8 +130,7 @@ public class NewSurveyUserFunction extends Dialog
 
 	protected void saveAction()
 	{
-		Function function = new Function( 1, textName.getText() );
-		result = function;
+		result = FunctionDictionary.get( FunctionDictionary.add( textName.getText() ) );
 	}
 	
 	private boolean validateName()

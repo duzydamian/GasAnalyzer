@@ -1,5 +1,7 @@
 package pl.industrum.gasanalyzer.gui.dialogs;
 
+import java.util.Vector;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -16,6 +18,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import pl.industrum.gasanalyzer.hibernate.model.survey.ApplicationUserManager;
+import pl.industrum.gasanalyzer.hibernate.model.survey.DegreeDictionary;
+import pl.industrum.gasanalyzer.hibernate.model.survey.FunctionDictionary;
 import pl.industrum.gasanalyzer.i18n.Messages;
 import pl.industrum.gasanalyzer.model.ApplicationUser;
 import pl.industrum.gasanalyzer.model.Degree;
@@ -44,6 +49,9 @@ public class NewSurveyUser extends Dialog
 	private Label icoFunction;
 	private Button btnNewTitle;
 	private Button btnNewFunction;
+	
+	private Vector<Degree> avaibleDegrees;
+	private Vector<Function> avaibleFunctions;
 
 	/**
 	 * Create the dialog.
@@ -55,6 +63,8 @@ public class NewSurveyUser extends Dialog
 	{
 		super( parent, style );
 		setText( Messages.getString( "NewSurveyUser.this.text" ) ); //$NON-NLS-1$
+		avaibleDegrees = new Vector<Degree>();
+		avaibleFunctions = new Vector<Function>();
 	}
 
 	/**
@@ -94,6 +104,7 @@ public class NewSurveyUser extends Dialog
 		textTitle = new Combo( shell, SWT.BORDER );
 		textTitle.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 1, 1 ) );
+		refreshListTitle();
 		textTitle.addModifyListener( new ModifyListener()
 		{
 			
@@ -165,6 +176,7 @@ public class NewSurveyUser extends Dialog
 		textFunction = new Combo( shell, SWT.BORDER );
 		textFunction.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 1, 1 ) );
+		refreshListFunction();
 		textFunction.addModifyListener( new ModifyListener()
 		{
 			
@@ -230,22 +242,33 @@ public class NewSurveyUser extends Dialog
 
 	protected void refreshListFunction()
 	{
-		// TODO Auto-generated method stub
+		textFunction.removeAll();
+		avaibleFunctions.clear();
 		
+		for( Function function: FunctionDictionary.getAll() )
+		{
+			textFunction.add( function.getName() );
+			avaibleFunctions.add( function );
+		}
 	}
 
 	protected void refreshListTitle()
 	{
-		// TODO Auto-generated method stub
+		textTitle.removeAll();
+		avaibleDegrees.clear();
 		
+		for( Degree degree: DegreeDictionary.getAll() )
+		{
+			textTitle.add( degree.getName() );
+			avaibleDegrees.add( degree );
+		}
 	}
 
 	protected void saveAction()
 	{
-		System.out.println( textTitle.getText() + " " + textName.getText()
-				+ " " + textSurname.getText() );
-		ApplicationUser user = new ApplicationUser( 1, new Function(), new Degree(), textName.getText(), textSurname.getText() );
-		result = user;
+		Integer functionID = avaibleFunctions.get( textFunction.getSelectionIndex() ).getId();
+		Integer degreeID = avaibleDegrees.get( textTitle.getSelectionIndex() ).getId();
+		result = ApplicationUserManager.getApplicationUser( ApplicationUserManager.addApplicationUser( functionID, degreeID, textName.getText(), textSurname.getText() ) );
 	}
 
 	private void validateTitle()

@@ -15,14 +15,15 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import pl.industrum.gasanalyzer.hibernate.model.survey.DegreeDictionary;
 import pl.industrum.gasanalyzer.i18n.Messages;
-import pl.industrum.gasanalyzer.model.Function;
+import pl.industrum.gasanalyzer.model.Degree;
 import pl.industrum.gasanalyzer.types.UsefulColor;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class NewSurveyUserTitle extends Dialog
 {
-	protected Function result;
+	protected Degree result;
 	protected Shell shell;
 	private Text textName;	
 	private Label lblName;
@@ -48,7 +49,7 @@ public class NewSurveyUserTitle extends Dialog
 	 * 
 	 * @return the result
 	 */
-	public Function open()
+	public Degree open()
 	{
 		createContents();
 		shell.open();
@@ -129,8 +130,7 @@ public class NewSurveyUserTitle extends Dialog
 
 	protected void saveAction()
 	{
-		Function function = new Function( 1, textName.getText() );
-		result = function;
+		result = DegreeDictionary.get( DegreeDictionary.add( textName.getText() ) );
 	}
 	
 	private boolean validateName()

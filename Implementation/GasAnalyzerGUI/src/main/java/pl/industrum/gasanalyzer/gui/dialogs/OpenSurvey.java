@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import pl.industrum.gasanalyzer.hibernate.model.survey.SurveyManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
 import pl.industrum.gasanalyzer.model.Survey;
 
@@ -199,10 +200,10 @@ public class OpenSurvey extends Dialog
 	
 	private void loadSurveys()
 	{
-//		for( Survey survey: SurveyManager.getAllSurveys() )
-//		{
-//			comboAllSurvey.add( survey.getName() );
-//		}
+		for( Survey survey: SurveyManager.getAllSurveys() )
+		{
+			comboAllSurvey.add( survey.getName() );
+		}
 	}
 
 	/**
