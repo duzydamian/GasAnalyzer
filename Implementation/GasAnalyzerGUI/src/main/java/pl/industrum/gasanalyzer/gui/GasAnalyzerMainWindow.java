@@ -1,5 +1,6 @@
 package pl.industrum.gasanalyzer.gui;
 
+import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -27,6 +28,7 @@ import pl.industrum.gasanalyzer.gui.frames.NetworkCollection;
 import pl.industrum.gasanalyzer.gui.frames.Problems;
 import pl.industrum.gasanalyzer.gui.frames.StatusBar;
 import pl.industrum.gasanalyzer.gui.frames.ToolBar;
+import pl.industrum.gasanalyzer.hibernate.model.managers.MeasurementSnapshotManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
 import pl.industrum.gasanalyzer.model.Survey;
 import pl.industrum.gasanalyzer.types.Error;
@@ -338,6 +340,7 @@ public class GasAnalyzerMainWindow implements Observer
 		if( arg instanceof ELANNetworkNotification )
 		{
 			ELANNetworkNotification notification = ( ELANNetworkNotification )arg;
+			MeasurementSnapshotManager.addMeasurementSnapshot( currentSurveyObject.getId(), new Date(), connectionWrapper.getNetwork( notification.getData() ), "CHUJ" );
 			for( ELANMeasurementDevice device: connectionWrapper.getNetwork( notification.getData() ) )
 			{
 				if ( device != null )

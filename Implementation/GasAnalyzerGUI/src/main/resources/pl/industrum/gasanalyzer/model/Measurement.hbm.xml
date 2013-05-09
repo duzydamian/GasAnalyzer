@@ -8,13 +8,13 @@
             <column name="id" />
             <generator class="identity" />
         </id>
-        <many-to-one name="measurementSet" class="pl.industrum.gasanalyzer.model.MeasurementSet" fetch="select">
+        <many-to-one name="measurementSet" class="pl.industrum.gasanalyzer.model.MeasurementSet" fetch="select" lazy="false">
             <column name="measurement_set_id" not-null="true" />
         </many-to-one>
-        <many-to-one name="measurementDimension" class="pl.industrum.gasanalyzer.model.MeasurementDimension" fetch="select">
+        <many-to-one name="measurementDimension" class="pl.industrum.gasanalyzer.model.MeasurementDimension" fetch="select" lazy="false">
             <column name="measurement_dimension_id" not-null="true" />
         </many-to-one>
-        <many-to-one name="measurementVariable" class="pl.industrum.gasanalyzer.model.MeasurementVariable" fetch="select">
+        <many-to-one name="measurementVariable" class="pl.industrum.gasanalyzer.model.MeasurementVariable" fetch="select" lazy="false">
             <column name="measurement_variable_id" not-null="true" />
         </many-to-one>
         <property name="value" type="double">

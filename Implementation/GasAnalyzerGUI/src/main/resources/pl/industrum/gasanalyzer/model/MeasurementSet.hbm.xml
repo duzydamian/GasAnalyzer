@@ -9,13 +9,13 @@
             <generator class="identity" />
         </id>
         <timestamp name="timestamp" column="timestamp" />
-        <many-to-one name="device" class="pl.industrum.gasanalyzer.model.Device" fetch="select">
+        <many-to-one name="device" class="pl.industrum.gasanalyzer.model.Device" fetch="select" lazy="false">
             <column name="device_id" not-null="true" />
         </many-to-one>
-        <many-to-one name="measurementSnapshot" class="pl.industrum.gasanalyzer.model.MeasurementSnapshot" fetch="select">
+        <many-to-one name="measurementSnapshot" class="pl.industrum.gasanalyzer.model.MeasurementSnapshot" fetch="select" lazy="false">
             <column name="measurement_snapshot_id" />
         </many-to-one>
-        <set name="measurements" table="measurement" inverse="true" lazy="true" fetch="select">
+        <set name="measurements" table="measurement" inverse="true" lazy="false" fetch="select">
             <key>
                 <column name="measurement_set_id" not-null="true" />
             </key>

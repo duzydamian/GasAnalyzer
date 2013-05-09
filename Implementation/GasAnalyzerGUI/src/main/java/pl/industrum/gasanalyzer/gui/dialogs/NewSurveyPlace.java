@@ -15,15 +15,15 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import pl.industrum.gasanalyzer.hibernate.model.dictionaries.FunctionDictionary;
+import pl.industrum.gasanalyzer.hibernate.model.managers.PlaceManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
-import pl.industrum.gasanalyzer.model.Function;
+import pl.industrum.gasanalyzer.model.Place;
 import pl.industrum.gasanalyzer.types.UsefulColor;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class NewSurveyPlace extends Dialog
 {
-	protected Function result;
+	protected Place result;
 	protected Shell shell;
 	private Text textName;	
 	private Label lblName;
@@ -31,6 +31,15 @@ public class NewSurveyPlace extends Dialog
 	private Button btnCancel;
 	private Display display;
 	private Label icoName;
+	private Label icoAddress;
+	private Text textAddress;
+	private Label lblAddress;
+	private Label lblCity;
+	private Text textCity;
+	private Label icoCity;
+	private Label lblPostCode;
+	private Text textPostCode;
+	private Label icoPostCode;
 
 	/**
 	 * Create the dialog.
@@ -41,7 +50,7 @@ public class NewSurveyPlace extends Dialog
 	public NewSurveyPlace( Shell parent, int style )
 	{
 		super( parent, style );
-		setText( Messages.getString( "NewSurveyUserFunction.this.text" ) ); //$NON-NLS-1$
+		setText( Messages.getString( "NewSurveyPlace.this.text" ) ); //$NON-NLS-1$
 	}
 
 	/**
@@ -49,7 +58,7 @@ public class NewSurveyPlace extends Dialog
 	 * 
 	 * @return the result
 	 */
-	public Function open()
+	public Place open()
 	{
 		createContents();
 		shell.open();
@@ -71,12 +80,12 @@ public class NewSurveyPlace extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 250, 100 );
+		shell.setSize( 260, 195 );
 		shell.setText( getText() );
 		shell.setLayout( new GridLayout( 4, false ) );
 
 		lblName = new Label( shell, SWT.RIGHT );
-		lblName.setText( Messages.getString( "NewSurveyUserFunction.lblName.text" ) ); //$NON-NLS-1$
+		lblName.setText( Messages.getString( "NewSurveyPlace.lblName.text" ) ); //$NON-NLS-1$
 
 		textName = new Text( shell, SWT.BORDER );
 		textName.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
@@ -92,7 +101,60 @@ public class NewSurveyPlace extends Dialog
 		
 		icoName = new Label(shell, SWT.NONE);
 		icoName.setImage( null );
+//////////////////////////////////
+		lblCity = new Label( shell, SWT.RIGHT );
+		lblCity.setText( Messages.getString( "NewSurveyPlace.lblCity.text" ) ); //$NON-NLS-1$
 
+		textCity = new Text( shell, SWT.BORDER );
+		textCity.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
+				false, 2, 1 ) );
+		textCity.addModifyListener( new ModifyListener()
+		{
+			
+			public void modifyText( ModifyEvent arg0 )
+			{
+				validateCity();
+			}
+		} );
+		
+		icoCity = new Label(shell, SWT.NONE);
+		icoCity.setImage( null );
+///////////////////////////////////
+		lblPostCode = new Label( shell, SWT.RIGHT );
+		lblPostCode.setText( Messages.getString( "NewSurveyPlace.lblPostCode.text" ) ); //$NON-NLS-1$
+
+		textPostCode = new Text( shell, SWT.BORDER );
+		textPostCode.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
+				false, 2, 1 ) );
+		textPostCode.addModifyListener( new ModifyListener()
+		{
+			
+			public void modifyText( ModifyEvent arg0 )
+			{
+				validatePostCode();
+			}
+		} );
+		
+		icoPostCode = new Label(shell, SWT.NONE);
+		icoPostCode.setImage( null );
+//////////////////////////////////////////////////////////////
+		lblAddress = new Label( shell, SWT.RIGHT );
+		lblAddress.setText( Messages.getString( "NewSurveyPlace.lblAddress.text" ) ); //$NON-NLS-1$
+
+		textAddress = new Text( shell, SWT.BORDER );
+		textAddress.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
+				false, 2, 1 ) );
+		textAddress.addModifyListener( new ModifyListener()
+		{
+			
+			public void modifyText( ModifyEvent arg0 )
+			{
+				validateAddress();
+			}
+		} );
+		
+		icoAddress = new Label(shell, SWT.NONE);
+		icoAddress.setImage( null );
 		new Label( shell, SWT.NONE );
 
 		btnOk = new Button( shell, SWT.NONE );
@@ -130,7 +192,7 @@ public class NewSurveyPlace extends Dialog
 
 	protected void saveAction()
 	{
-		result = FunctionDictionary.get( FunctionDictionary.add( textName.getText() ) );
+		result = PlaceManager.getPlace( PlaceManager.addPlace( textName.getText(), textCity.getText(), textPostCode.getText(), textAddress.getText() ) );
 	}
 	
 	private boolean validateName()
@@ -146,11 +208,56 @@ public class NewSurveyPlace extends Dialog
 		}
 	}
 
+	private boolean validateAddress()
+	{
+		if ( textAddress.getText().isEmpty() | textAddress.getText() == null )
+		{
+			setFormFieldWarning( lblAddress, textAddress, icoAddress );
+			return false;
+		} else
+		{
+			setFormFieldOK( lblAddress, textAddress, icoAddress );
+			return true;
+		}
+	}
+
+	private boolean validatePostCode()
+	{
+		if ( textPostCode.getText().isEmpty() | textPostCode.getText() == null )
+		{
+			setFormFieldWarning( lblPostCode, textPostCode, icoPostCode );
+			return false;
+		} else
+		{
+			setFormFieldOK( lblPostCode, textPostCode, icoPostCode );
+			return true;
+		}
+	}
+
+	private boolean validateCity()
+	{
+		if ( textCity.getText().isEmpty() | textCity.getText() == null )
+		{
+			setFormFieldWarning( lblCity, textCity, icoCity );
+			return false;
+		} else
+		{
+			setFormFieldOK( lblCity, textCity, icoCity );
+			return true;
+		}
+	}
+	
 	private boolean validateAll()
 	{
 		boolean isValid = true;
 		
 		isValid = validateName();
+		
+		isValid = validateCity();
+		
+		isValid = validatePostCode();
+		
+		isValid = validateAddress();
 		
 		return isValid;
 	}
@@ -160,6 +267,13 @@ public class NewSurveyPlace extends Dialog
 		ico.setImage( UsefulImage.ERROR.getImage() );
 		ico.getParent().layout();
 		textField.setBackground( UsefulColor.RED_ERROR.getColor() );
+	}
+	
+	private void setFormFieldWarning( Label label, Control textField, Label ico )
+	{
+		ico.setImage( UsefulImage.WARNING.getImage() );
+		ico.getParent().layout();
+		textField.setBackground( UsefulColor.YELLOW_WARNING.getColor() );
 	}
 	
 	private void setFormFieldOK( Label label, Control textField, Label ico )

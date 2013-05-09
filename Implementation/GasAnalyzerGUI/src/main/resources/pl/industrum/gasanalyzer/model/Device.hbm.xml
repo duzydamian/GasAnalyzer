@@ -8,7 +8,7 @@
             <column name="id" />
             <generator class="identity" />
         </id>
-        <many-to-one name="deviceType" class="pl.industrum.gasanalyzer.model.DeviceType" fetch="select">
+        <many-to-one name="deviceType" class="pl.industrum.gasanalyzer.model.DeviceType" fetch="select" lazy="false">
             <column name="device_type_id" not-null="true" />
         </many-to-one>
         <property name="name" type="string">
