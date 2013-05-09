@@ -16,11 +16,9 @@ import org.eclipse.swt.widgets.Shell;
 
 import pl.industrum.gasanalyzer.elan.communication.network.ELANMeasurementDevice;
 import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
-import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
-import pl.industrum.gasanalyzer.elan.frames.ELANRxFrame;
+import pl.industrum.gasanalyzer.elan.exceptions.NullDeviceException;
 import pl.industrum.gasanalyzer.elan.notifications.ELANNetworkNotification;
 import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
-import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
 import pl.industrum.gasanalyzer.gui.frames.DeviceCollection;
 import pl.industrum.gasanalyzer.gui.frames.DeviceTree;
 import pl.industrum.gasanalyzer.gui.frames.MainMenu;
@@ -28,8 +26,10 @@ import pl.industrum.gasanalyzer.gui.frames.NetworkCollection;
 import pl.industrum.gasanalyzer.gui.frames.Problems;
 import pl.industrum.gasanalyzer.gui.frames.StatusBar;
 import pl.industrum.gasanalyzer.gui.frames.ToolBar;
+import pl.industrum.gasanalyzer.hibernate.model.managers.DeviceManager;
 import pl.industrum.gasanalyzer.hibernate.model.managers.MeasurementSnapshotManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.model.Device;
 import pl.industrum.gasanalyzer.model.Survey;
 import pl.industrum.gasanalyzer.types.Error;
 import pl.industrum.gasanalyzer.types.Warning;
@@ -218,9 +218,18 @@ public class GasAnalyzerMainWindow implements Observer
 			}
 
 			@Override
-			public void addDeviceToDeviceCollection( ELANMeasurementDevice device )
-			{
-				deviceCollection.addDevice( device );
+			public void addDeviceToDeviceCollection( ELANMeasurementDevice device, String port )
+			{				
+				try
+				{
+					deviceCollection.addDevice( device );
+					//TODO change method
+					Device deviceByAddress = DeviceManager.getDeviceByAddress( device.getDeviceAddress() );
+					connectionWrapper.getNetwork( port ).getDevice( device.getDeviceAddress() ).getDeviceInformation().setDeviceIDInDatabase( deviceByAddress.getId() );
+				} catch ( NullDeviceException e )
+				{
+					e.printStackTrace();
+				}
 			}
 
 			@Override
@@ -341,20 +350,20 @@ public class GasAnalyzerMainWindow implements Observer
 		{
 			ELANNetworkNotification notification = ( ELANNetworkNotification )arg;
 			MeasurementSnapshotManager.addMeasurementSnapshot( currentSurveyObject.getId(), new Date(), connectionWrapper.getNetwork( notification.getData() ), "CHUJ" );
-			for( ELANMeasurementDevice device: connectionWrapper.getNetwork( notification.getData() ) )
-			{
-				if ( device != null )
-				{
-					ELANRxFrame poll = device.pollAndClear();
-					ELANRxBroadcastFrame frame = ( ELANRxBroadcastFrame )poll;
-					System.out.println(device.getDeviceAddress() + " @ " + frame.getTimeStamp());
-					for( ELANMeasurement elanMeasurement: frame )
-					{
-						System.out.println(elanMeasurement.toString());
-					}
-					deviceCollection.updateMeasurmentFormDevice( device.getDeviceAddress(), frame );					
-				}
-			}			
+//			for( ELANMeasurementDevice device: connectionWrapper.getNetwork( notification.getData() ) )
+//			{
+//				if ( device != null )
+//				{
+//					ELANRxFrame poll = device.pollAndClear();
+//					ELANRxBroadcastFrame frame = ( ELANRxBroadcastFrame )poll;
+//					System.out.println(device.getDeviceAddress() + " @ " + frame.getTimeStamp());
+//					for( ELANMeasurement elanMeasurement: frame )
+//					{
+//						System.out.println(elanMeasurement.toString());
+//					}
+//					deviceCollection.updateMeasurmentFormDevice( device.getDeviceAddress(), frame );					
+//				}
+//			}			
 		}		
 	}
 }

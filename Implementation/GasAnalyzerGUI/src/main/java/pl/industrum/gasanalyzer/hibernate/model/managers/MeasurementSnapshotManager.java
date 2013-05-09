@@ -41,7 +41,7 @@ public abstract class MeasurementSnapshotManager
 			session = Hibernate.getSessionFactory().getCurrentSession();
 			session.beginTransaction();
 			session.save( set );
-			session.getTransaction().commit();
+			session.getTransaction().commit();			
 			
 			for( ELANMeasurement elanMeasurement : ( ELANRxBroadcastFrame )elanMeasurementDevice.pollAndClear() )
 			{
@@ -55,7 +55,9 @@ public abstract class MeasurementSnapshotManager
 				session.beginTransaction();
 				session.save( measurement );
 				session.getTransaction().commit();				
-			}				
+			}
+			
+			System.out.println( set.toString());
 		}				
 		
 		return snapshot.getId();

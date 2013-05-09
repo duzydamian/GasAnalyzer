@@ -50,6 +50,16 @@ public abstract class DeviceManager
 		return device;
 	}
 	
+	public static Device getDeviceByAddress( Integer deviceAddress )
+	{
+		//Create session and return survey
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		Device device = ( Device  ) session.createQuery( "from Device where address='" + deviceAddress.toString() + "'" ).list().get( 0 );
+		session.getTransaction().commit();
+		return device;
+	}
+	
 	@SuppressWarnings( "unchecked" )
 	public static List<Device> getAllDevices()
 	{

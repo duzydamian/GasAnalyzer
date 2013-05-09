@@ -1,7 +1,13 @@
 package pl.industrum.gasanalyzer.gui.dialogs;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.Vector;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -23,6 +29,8 @@ import pl.industrum.gasanalyzer.model.Survey;
 
 public class OpenSurvey extends Dialog
 {
+	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "dd/MM/yyyy HH:mm", Locale.getDefault() );
+	
 	protected Survey result;
 	protected Shell shell;
 	
@@ -51,7 +59,12 @@ public class OpenSurvey extends Dialog
 	private Composite surveyForm;
 	private Button btnCancel;
 	private Button btnOk;
+	
 	private Combo comboAllSurvey;
+	private Vector<Survey> avaibleSurveys;
+	
+	private Label lblSurveyObject;
+	private Combo listSurveyObject;
 
 	/**
 	 * Create the dialog.
@@ -63,6 +76,7 @@ public class OpenSurvey extends Dialog
 	{
 		super( parent, style );
 		setText( "Dane pomiaru" ); //$NON-NLS-1$
+		avaibleSurveys = new Vector<Survey>();
 	}
 
 	/**
@@ -71,7 +85,7 @@ public class OpenSurvey extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 350, 400 );
+		shell.setSize( 350, 449 );
 		shell.setText( getText() );
 		
 		surveyFrameData = new GridData( GridData.FILL, GridData.CENTER, true,
@@ -86,7 +100,13 @@ public class OpenSurvey extends Dialog
 		comboAllSurvey = new Combo( surveyForm, SWT.BORDER );
 		comboAllSurvey.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
 				false, 3, 1 ) );
-
+		comboAllSurvey.addModifyListener( new ModifyListener()
+		{			
+			public void modifyText( ModifyEvent arg0 )
+			{
+				loadSurvaeyData( avaibleSurveys.get( comboAllSurvey.getSelectionIndex() ) );
+			}
+		} );
 		loadSurveys();
 		
 		lblSurveyName = new Label( surveyForm, SWT.NONE );
@@ -115,20 +135,25 @@ public class OpenSurvey extends Dialog
 		listSurveyUser = new Combo( surveyForm, SWT.NONE );
 		listSurveyUser.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
 				false, false, 2, 1 ) );
-		listSurveyUser.add( "Jan Wężyk" );
-		listSurveyUser.add( "Kuba guzik" );
 		listSurveyUser.setEnabled( false );
 		
 		lblSurveyPlace = new Label( surveyForm, SWT.NONE );
 		lblSurveyPlace.setText( Messages
 				.getString( "SurveyFrame.lblSurveyPlace.text" ) ); //$NON-NLS-1$
-
+		
 		listSurveyPlace = new Combo( surveyForm, SWT.NONE );
 		listSurveyPlace.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
-				false, false, 2, 1 ) );
-		listSurveyPlace.add( "Narnia" );
-		listSurveyPlace.add( "Mordor" );
+				false, false, 2, 1 ) );		
 		listSurveyPlace.setEnabled( false );
+		
+		lblSurveyObject = new Label( surveyForm, SWT.NONE );
+		lblSurveyObject.setText( Messages
+				.getString( "SurveyFrame.lblSurveyObject.text" ) ); //$NON-NLS-1$
+
+		listSurveyObject = new Combo( surveyForm, SWT.NONE );
+		listSurveyObject.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
+				false, false, 2, 1 ) );
+		listSurveyObject.setEnabled( false );
 		
 		lblSurveyLoad = new Label( surveyForm, SWT.NONE );
 		lblSurveyLoad.setText( Messages
@@ -188,6 +213,7 @@ public class OpenSurvey extends Dialog
 		btnCancel = new Button(surveyForm, SWT.NONE);
 		btnCancel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnCancel.setText(Messages.getString("NewSurvey.btnAnuluj.text")); //$NON-NLS-1$
+		new Label(surveyForm, SWT.NONE);
 		btnCancel.addSelectionListener( new SelectionAdapter()
 		{
 			@Override
@@ -203,6 +229,7 @@ public class OpenSurvey extends Dialog
 		for( Survey survey: SurveyManager.getAllSurveys() )
 		{
 			comboAllSurvey.add( survey.getName() );
+			avaibleSurveys.add( survey );
 		}
 	}
 
@@ -231,6 +258,39 @@ public class OpenSurvey extends Dialog
 	{
 		System.out.println( txtSurveyName.getText() + " " );
 		result = new Survey();
+	}
+	
+	private void loadSurvaeyData(Survey survey)
+	{
+		if ( survey.getName() != null )
+		{
+			txtSurveyName.setText( survey.getName() );
+		}
+		
+		if ( survey.getTimestamp() != null )
+		{
+			txtSurveyName.setText( survey.getName() );
+		}
+		
+		if ( survey.getName() != null )
+		{
+			txtSurveyName.setText( survey.getName() );
+		}
+		
+		if ( survey.getLoad() != null )
+		{
+			textSurveyLoad.setText( survey.getLoad().toString() );
+		}
+		
+		if ( survey.getSpecialConditions() != null )
+		{
+			styledTextSurveySpecialConditions.setText( survey.getSpecialConditions() );
+		}
+		
+		if ( survey.getComment() != null )
+		{
+			styledTextComment.setText( survey.getComment() );
+		}
 	}
 	
 	@Override

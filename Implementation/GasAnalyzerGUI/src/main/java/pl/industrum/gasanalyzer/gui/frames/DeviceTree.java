@@ -106,7 +106,7 @@ public abstract class DeviceTree extends Composite
 											{
 												TreeItem itemTreeItem = new TreeItem( treeItem, SWT.COLOR_GRAY );
 												itemTreeItem.setText( device.getName() );
-												addDeviceToDeviceCollection(device);
+												addDeviceToDeviceCollection(device, port);
 												layout();
 											}
 										}
@@ -230,7 +230,7 @@ public abstract class DeviceTree extends Composite
 	public abstract ELANConnectionState connectWithNetwork(String port);
 	public abstract void disconnectFromDevice( String text );	
 	public abstract ELANConnectionWrapper getGUIConnectionWrapper();
-	public abstract void addDeviceToDeviceCollection( ELANMeasurementDevice device );
+	public abstract void addDeviceToDeviceCollection( ELANMeasurementDevice device, String port );
 	public abstract void addNetworkToNetworkCollection(String networkName);
 	public abstract void setSelectedDeviceVisible(String text );
 	public abstract void setSelectedNetworkVisible(String text );

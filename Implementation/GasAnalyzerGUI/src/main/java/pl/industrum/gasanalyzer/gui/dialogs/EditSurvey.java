@@ -357,7 +357,7 @@ public class EditSurvey extends Dialog
 		{
 			styledTextComment.setText( survey.getComment() );
 		}
-		//txtSurveyDate.setDate( survey.g, arg1, arg2 )
+		
 		shell.open();
 		shell.layout();
 		Display display = getParent().getDisplay();
