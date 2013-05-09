@@ -8,6 +8,22 @@
   <property name="hibernate.connection.url">jdbc:postgresql://localhost/GasAnalyzer</property>
   <property name="hibernate.connection.username">GasAnalyzer</property>
   <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+  <property name="hibernate.hbm2ddl.auto">update</property>
   <property name="hibernate.current_session_context_class">thread</property>
+    	
+	<mapping resource="pl/industrum/gasanalyzer/model/ApplicationUser.hbm.xml"/>
+	<mapping resource="pl/industrum/gasanalyzer/model/Degree.hbm.xml"/>
+	<mapping resource="pl/industrum/gasanalyzer/model/Device.hbm.xml"/>
+	<mapping resource="pl/industrum/gasanalyzer/model/DeviceType.hbm.xml"/>
+	<mapping resource="pl/industrum/gasanalyzer/model/Function.hbm.xml"/>		
+	<mapping resource="pl/industrum/gasanalyzer/model/MeasurementDimension.hbm.xml"/>
+	<mapping resource="pl/industrum/gasanalyzer/model/Measurement.hbm.xml"/>
+	<mapping resource="pl/industrum/gasanalyzer/model/MeasuredObject.hbm.xml"/>
+	<mapping resource="pl/industrum/gasanalyzer/model/MeasurementSet.hbm.xml"/>
+	<mapping resource="pl/industrum/gasanalyzer/model/MeasurementSnapshot.hbm.xml"/>
+	<mapping resource="pl/industrum/gasanalyzer/model/MeasurementVariable.hbm.xml"/>
+	<mapping resource="pl/industrum/gasanalyzer/model/Place.hbm.xml"/>
+	<mapping resource="pl/industrum/gasanalyzer/model/Survey.hbm.xml"/>
+	<mapping resource="pl/industrum/gasanalyzer/model/SurveySection.hbm.xml"/>
  </session-factory>
 </hibernate-configuration>

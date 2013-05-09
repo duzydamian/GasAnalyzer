@@ -94,7 +94,7 @@ public class GasAnalyzerMainWindow implements Observer
 				}
 			}
 		} );
-
+		
 		shlGasAnalyzer.pack();
 		shlGasAnalyzer.open();
 		shlGasAnalyzer.layout();

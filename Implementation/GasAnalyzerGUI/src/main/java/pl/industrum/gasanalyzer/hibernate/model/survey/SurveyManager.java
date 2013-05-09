@@ -25,13 +25,13 @@ public abstract class SurveyManager
 		survey.setLoad( load );
 		survey.setSpecialConditions( specialConditions );
 		survey.setComment( comment );
-		survey.setApplicationUser( ( ApplicationUser ) session.createQuery( "from application_user where id='" + userID.toString() + "'" ).list().get( 0 ) );
-		survey.setObject( ( MeasuredObject ) session.createQuery( "from object where id='" + objectID.toString() + "'" ).list().get( 0 ) );
+		survey.setApplicationUser( ( ApplicationUser ) session.createQuery( "from ApplicationUser where id='" + userID.toString() + "'" ).list().get( 0 ) );
+		survey.setObject( ( MeasuredObject ) session.createQuery( "from MeasuredObject where id='" + objectID.toString() + "'" ).list().get( 0 ) );
 		//Save survey, commit transaction and return new ID
-		Integer id = ( ( Survey ) session.save( survey ) ).getId();
+		session.save( survey );
 		session.getTransaction().commit();
 		
-		return id;
+		return survey.getId();
 	}
 	
 	public static void deleteSurvey( Integer surveyID )
@@ -40,7 +40,7 @@ public abstract class SurveyManager
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		//Delete survey and commit transaction
-		session.delete( ( Survey  ) session.createQuery( "from survey where id='" + surveyID.toString() + "'" ).list().get( 0 ) );
+		session.delete( ( Survey  ) session.createQuery( "from Survey where id='" + surveyID.toString() + "'" ).list().get( 0 ) );
 		session.getTransaction().commit();
 	}
 	
@@ -54,7 +54,7 @@ public abstract class SurveyManager
 		//Create session and return survey
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		Survey survey = ( Survey  ) session.createQuery( "from survey where id='" + surveyID.toString() + "'" ).list().get( 0 );
+		Survey survey = ( Survey  ) session.createQuery( "from Survey where id='" + surveyID.toString() + "'" ).list().get( 0 );
 		session.getTransaction().commit();
 		return survey;
 	}
@@ -65,7 +65,7 @@ public abstract class SurveyManager
 		//Create session and return survey collection
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		List<Survey> surveys = ( List<Survey> )session.createQuery( "from survey" ).list();
+		List<Survey> surveys = ( List<Survey> )session.createQuery( "from Survey" ).list();
 		return surveys.iterator();
 	}
 }

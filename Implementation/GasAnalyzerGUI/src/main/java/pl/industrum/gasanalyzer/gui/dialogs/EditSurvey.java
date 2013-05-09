@@ -369,7 +369,7 @@ public class EditSurvey extends Dialog
 
 	protected void saveAction()
 	{
-		result = new Survey(1, null, new ApplicationUser(), txtSurveyName.getText(), 1.1, styledTextSurveySpecialConditions.getText(), styledTextComment.getText(), null);
+		result = new Survey(1, null, new ApplicationUser(), txtSurveyName.getText(), textSurveyLoad.getText(), styledTextSurveySpecialConditions.getText(), styledTextComment.getText(), null);
 	}
 
 	private boolean validateName()

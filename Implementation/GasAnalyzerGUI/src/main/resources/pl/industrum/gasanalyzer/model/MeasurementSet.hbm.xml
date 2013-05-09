@@ -3,23 +3,23 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated 2013-05-07 14:42:07 by Hibernate Tools 4.0.0 -->
 <hibernate-mapping>
-    <class name="MeasurementSet" table="measurement_set" schema="public">
+    <class name="pl.industrum.gasanalyzer.model.MeasurementSet" table="measurement_set" schema="public">
         <id name="id" type="int">
             <column name="id" />
-            <generator class="assigned" />
+            <generator class="identity" />
         </id>
         <timestamp name="timestamp" column="timestamp" />
-        <many-to-one name="device" class="Device" fetch="select">
+        <many-to-one name="device" class="pl.industrum.gasanalyzer.model.Device" fetch="select">
             <column name="device_id" not-null="true" />
         </many-to-one>
-        <many-to-one name="measurementSnapshot" class="MeasurementSnapshot" fetch="select">
+        <many-to-one name="measurementSnapshot" class="pl.industrum.gasanalyzer.model.MeasurementSnapshot" fetch="select">
             <column name="measurement_snapshot_id" />
         </many-to-one>
         <set name="measurements" table="measurement" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="measurement_set_id" not-null="true" />
             </key>
-            <one-to-many class="Measurement" />
+            <one-to-many class="pl.industrum.gasanalyzer.model.Measurement" />
         </set>
     </class>
 </hibernate-mapping>

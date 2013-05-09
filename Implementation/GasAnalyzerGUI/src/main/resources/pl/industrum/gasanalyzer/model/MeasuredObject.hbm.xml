@@ -7,9 +7,9 @@
   schema="public" table="object">
   <id name="id" type="int">
    <column name="id"/>
-   <generator class="assigned"/>
+   <generator class="identity"/>
   </id>
-  <many-to-one class="Place" fetch="select" name="place">
+  <many-to-one class="pl.industrum.gasanalyzer.model.Place" fetch="select" name="place">
    <column name="place_id" not-null="true"/>
   </many-to-one>
   <property generated="never" lazy="false" name="name" type="string">
@@ -23,7 +23,7 @@
    <key>
     <column name="object_id" not-null="true"/>
    </key>
-   <one-to-many class="Survey"/>
+   <one-to-many class="pl.industrum.gasanalyzer.model.Survey"/>
   </set>
  </class>
 </hibernate-mapping>

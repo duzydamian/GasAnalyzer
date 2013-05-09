@@ -3,10 +3,10 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated 2013-05-07 14:42:07 by Hibernate Tools 4.0.0 -->
 <hibernate-mapping>
-    <class name="SurveySection" table="survey_section" schema="public">
+    <class name="pl.industrum.gasanalyzer.model.SurveySection" table="survey_section" schema="public">
         <id name="id" type="int">
             <column name="id" />
-            <generator class="assigned" />
+            <generator class="identity" />
         </id>
         <property name="name" type="string">
             <column name="name" length="30" not-null="true" />
@@ -15,7 +15,7 @@
             <key>
                 <column name="survey_section_id" not-null="true" />
             </key>
-            <one-to-many class="MeasurementSnapshot" />
+            <one-to-many class="pl.industrum.gasanalyzer.model.MeasurementSnapshot" />
         </set>
     </class>
 </hibernate-mapping>

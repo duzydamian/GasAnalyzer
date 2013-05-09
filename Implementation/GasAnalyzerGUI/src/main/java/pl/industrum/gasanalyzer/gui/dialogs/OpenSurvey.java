@@ -199,9 +199,10 @@ public class OpenSurvey extends Dialog
 	
 	private void loadSurveys()
 	{
-		// TODO Auto-generated method stub
-		comboAllSurvey.add( "sssssssssssssssssssssssssssssssssssssssssss" );
-		comboAllSurvey.add( "sssssssssssssssssssssssssssssssssssssssssss" );
+//		for( Survey survey: SurveyManager.getAllSurveys() )
+//		{
+//			comboAllSurvey.add( survey.getName() );
+//		}
 	}
 
 	/**

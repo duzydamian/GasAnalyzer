@@ -20,8 +20,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import pl.industrum.gasanalyzer.hibernate.model.survey.SurveyManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
-import pl.industrum.gasanalyzer.model.ApplicationUser;
 import pl.industrum.gasanalyzer.model.Survey;
 import pl.industrum.gasanalyzer.types.UsefulColor;
 import pl.industrum.gasanalyzer.types.UsefulImage;
@@ -338,7 +338,9 @@ public class NewSurvey extends Dialog
 
 	protected void saveAction()
 	{
-		result = new Survey(1, null, new ApplicationUser(), txtSurveyName.getText(), 1.1, styledTextSurveySpecialConditions.getText(), styledTextComment.getText(), null);
+		Integer userID = 1; //TODO
+		Integer objectID = 1; //TODO
+		result = SurveyManager.getSurvey( SurveyManager.addSurvey( txtSurveyName.getText(), textSurveyLoad.getText(), styledTextSurveySpecialConditions.getText(), styledTextComment.getText(), objectID, userID ));		
 	}
 
 	private boolean validateName()

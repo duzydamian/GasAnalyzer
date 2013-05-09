@@ -3,16 +3,16 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated 2013-05-07 14:42:07 by Hibernate Tools 4.0.0 -->
 <hibernate-mapping>
-    <class name="MeasurementSnapshot" table="measurement_snapshot" schema="public">
+    <class name="pl.industrum.gasanalyzer.model.MeasurementSnapshot" table="measurement_snapshot" schema="public">
         <id name="id" type="int">
             <column name="id" />
-            <generator class="assigned" />
+            <generator class="identity" />
         </id>
         <timestamp name="timestamp" column="timestamp" />
-        <many-to-one name="surveySection" class="SurveySection" fetch="select">
+        <many-to-one name="surveySection" class="pl.industrum.gasanalyzer.model.SurveySection" fetch="select">
             <column name="survey_section_id" not-null="true" />
         </many-to-one>
-        <many-to-one name="survey" class="Survey" fetch="select">
+        <many-to-one name="survey" class="pl.industrum.gasanalyzer.model.Survey" fetch="select">
             <column name="survey_id" not-null="true" />
         </many-to-one>
         <property name="comment" type="string">
@@ -22,7 +22,7 @@
             <key>
                 <column name="measurement_snapshot_id" />
             </key>
-            <one-to-many class="MeasurementSet" />
+            <one-to-many class="pl.industrum.gasanalyzer.model.MeasurementSet" />
         </set>
     </class>
 </hibernate-mapping>
