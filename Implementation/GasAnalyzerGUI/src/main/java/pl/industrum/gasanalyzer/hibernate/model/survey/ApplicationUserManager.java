@@ -6,8 +6,6 @@ import org.hibernate.Session;
 
 import pl.industrum.gasanalyzer.hibernate.Hibernate;
 import pl.industrum.gasanalyzer.model.ApplicationUser;
-import pl.industrum.gasanalyzer.model.Degree;
-import pl.industrum.gasanalyzer.model.Function;
 
 public abstract class ApplicationUserManager
 {
@@ -18,8 +16,8 @@ public abstract class ApplicationUserManager
 		session.beginTransaction();
 		//Create survey object
 		ApplicationUser user = new ApplicationUser();
-		user.setDegree( ( Degree ) session.createQuery( "from Degree where id='" + degreeID.toString() + "'" ).list().get( 0 ) );
-		user.setFunction( ( Function ) session.createQuery( "from Function where id='" + functionID.toString() + "'" ).list().get( 0 ) );
+		user.setDegree( DegreeDictionary.get( degreeID ) );
+		user.setFunction( FunctionDictionary.get( functionID ) ); 
 		user.setName( name );
 		user.setSurname( surname );
 		//Save survey, commit transaction and return new ID
