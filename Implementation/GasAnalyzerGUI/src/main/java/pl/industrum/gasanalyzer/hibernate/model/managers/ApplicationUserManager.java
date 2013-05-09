@@ -1,26 +1,26 @@
-package pl.industrum.gasanalyzer.hibernate.model.survey;
+package pl.industrum.gasanalyzer.hibernate.model.managers;
 
 import java.util.List;
 
 import org.hibernate.Session;
 
 import pl.industrum.gasanalyzer.hibernate.Hibernate;
+import pl.industrum.gasanalyzer.hibernate.model.dictionaries.DegreeDictionary;
+import pl.industrum.gasanalyzer.hibernate.model.dictionaries.FunctionDictionary;
 import pl.industrum.gasanalyzer.model.ApplicationUser;
 
 public abstract class ApplicationUserManager
 {
 	public static Integer addApplicationUser( Integer functionID, Integer degreeID, String name, String surname )
 	{
-		//Create session and begin transaction
-		Session session = Hibernate.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		//Create survey object
 		ApplicationUser user = new ApplicationUser();
 		user.setDegree( DegreeDictionary.get( degreeID ) );
 		user.setFunction( FunctionDictionary.get( functionID ) ); 
 		user.setName( name );
 		user.setSurname( surname );
-		//Save survey, commit transaction and return new ID
+		
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
 		session.save( user );
 		session.getTransaction().commit();
 		
@@ -29,11 +29,11 @@ public abstract class ApplicationUserManager
 	
 	public static void deleteApplicationUser( Integer userID )
 	{
-		//Create session and begin transaction
+		ApplicationUser user = ApplicationUserManager.getApplicationUser( userID );
+		
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		//Delete survey and commit transaction
-		session.delete( ApplicationUserManager.getApplicationUser( userID ) );
+		session.delete( user );
 		session.getTransaction().commit();
 	}
 	

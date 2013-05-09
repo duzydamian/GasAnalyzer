@@ -1,51 +1,54 @@
-package pl.industrum.gasanalyzer.hibernate.model.survey;
+package pl.industrum.gasanalyzer.hibernate.model.dictionaries;
 
 import java.util.List;
 
 import org.hibernate.Session;
 
 import pl.industrum.gasanalyzer.hibernate.Hibernate;
-import pl.industrum.gasanalyzer.model.Function;
+import pl.industrum.gasanalyzer.model.SurveySection;
 
-public abstract class FunctionDictionary
+public abstract class SurveySectionDictionary
 {
 	public static Integer add( String name )
 	{
+		SurveySection section = new SurveySection();
+		section.setName( name );
+		
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		Function function = new Function();
-		function.setName( name );
-		session.save( function );
+		session.save( section );
 		session.getTransaction().commit();
 		//TODO reindexing table
-		return function.getId();
+		return section.getId();
 	}
 	
 	public static void delete( Integer id )
 	{
+		SurveySection section = SurveySectionDictionary.get( id );
+		
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		session.delete( FunctionDictionary.get( id ) );
+		session.delete( section );
 		//TODO reindexing table
 		session.getTransaction().commit();
 	}
 	
-	public static Function get( Integer functionID )
+	public static SurveySection get( Integer sectionID )
 	{
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		Function function = ( Function ) session.createQuery( "from Function where id='" + functionID.toString() + "'" ).list().get( 0 );
+		SurveySection section = ( SurveySection ) session.createQuery( "from SurveySection where id='" + sectionID.toString() + "'" ).list().get( 0 );
 		session.getTransaction().commit();
-		return function;
+		return section;
 	}
 	
 	@SuppressWarnings( "unchecked" )
-	public static List<Function> getAll()
+	public static List<SurveySection> getAll()
 	{
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		List<Function> functions = ( List<Function> ) session.createQuery( "from Function" ).list();
+		List<SurveySection> sections = ( List<SurveySection> ) session.createQuery( "from SurveySection" ).list();
 		session.getTransaction().commit();
-		return functions;
+		return sections;
 	}
 }
