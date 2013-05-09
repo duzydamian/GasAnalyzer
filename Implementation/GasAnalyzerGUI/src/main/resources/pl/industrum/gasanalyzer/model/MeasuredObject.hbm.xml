@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2013-05-07 14:42:07 by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+ <class name="pl.industrum.gasanalyzer.model.MeasuredObject"
+  schema="public" table="object">
+  <id name="id" type="int">
+   <column name="id"/>
+   <generator class="assigned"/>
+  </id>
+  <many-to-one class="Place" fetch="select" name="place">
+   <column name="place_id" not-null="true"/>
+  </many-to-one>
+  <property generated="never" lazy="false" name="name" type="string">
+   <column length="50" name="name" not-null="true"/>
+  </property>
+  <property generated="never" lazy="false" name="description" type="string">
+   <column length="100" name="description"/>
+  </property>
+  <set fetch="select" inverse="true" lazy="true" name="surveys"
+   sort="unsorted" table="survey">
+   <key>
+    <column name="object_id" not-null="true"/>
+   </key>
+   <one-to-many class="Survey"/>
+  </set>
+ </class>
+</hibernate-mapping>
