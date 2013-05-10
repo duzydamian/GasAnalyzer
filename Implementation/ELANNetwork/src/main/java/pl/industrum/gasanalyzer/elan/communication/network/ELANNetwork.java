@@ -6,7 +6,9 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Queue;
 
+import pl.industrum.gasanalyzer.elan.alarms.Alarm;
 import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
+import pl.industrum.gasanalyzer.elan.communication.rx.ELANAlarmNotification;
 import pl.industrum.gasanalyzer.elan.communication.rx.ELANDataParser;
 import pl.industrum.gasanalyzer.elan.communication.rx.ELANDeviceInformationParser;
 import pl.industrum.gasanalyzer.elan.exceptions.DuplicateDeviceException;
@@ -44,13 +46,18 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 	private boolean[] measurementDevicesNotifications;
 	private ELANConnection connection;
 	
+	private Alarm alarm;
+	
 	public ELANNetwork( Integer id, String port )
 	{
 		this.id = id;
 		this.name = "";
 		this.port = port ;
 		this.connection = new ELANConnection();
+		
 		initializeDevicesPool();
+		
+		this.alarm = new Alarm( name, this );
 	}
 	
 	public void update( Observable obj, Object arg )
@@ -93,15 +100,24 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 			}
 			else if( arg instanceof ELANMeasurementDeviceNotification )
 			{
-				Integer deviceAddress = ( ( ELANMeasurementDeviceNotification ) arg ).getData();
-				measurementDevicesNotifications[ deviceAddress ] = true;
+				//Integer deviceAddress = ( ( ELANMeasurementDeviceNotification ) arg ).getData();
+				//measurementDevicesNotifications[ deviceAddress ] = true;
 				//Check if all notification received
-				if( checkNotifications() )
-				{
-					setChanged();
-					notifyObservers( new ELANNetworkNotification( getPort() ) );
-					clearNotifications();
-				}
+				//FIXME another kind of strategy, sending notification only when all devices came
+//				if( checkNotifications() )
+//				{
+//					setChanged();
+//					notifyObservers( new ELANNetworkNotification( getPort() ) );
+//					clearNotifications();
+//				}
+				
+				setChanged();
+				notifyObservers( new ELANMeasurementDeviceNotification( ( ( ELANMeasurementDeviceNotification ) arg ).getData() ) );
+			}
+			else if( arg instanceof ELANAlarmNotification )
+			{
+				setChanged();
+				notifyObservers( new ELANNetworkNotification( getPort() ) );
 			}
 			else
 			{

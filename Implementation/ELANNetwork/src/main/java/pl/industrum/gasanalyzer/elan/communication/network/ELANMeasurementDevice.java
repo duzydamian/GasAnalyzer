@@ -16,6 +16,7 @@ public class ELANMeasurementDevice extends Observable implements Observer
 	//Frames buffers
 	private Queue<ELANRxFrame> rxFrameBuffer; 
 	private Queue<ELANRxBroadcastFrame> rxBroadcastFrameBuffer; 
+	private ELANRxBroadcastFrame rxBroadcastFrameForSnaphot;
 	
 	private ELANMeasurementDeviceInformation deviceInformation;
 	
@@ -48,6 +49,8 @@ public class ELANMeasurementDevice extends Observable implements Observer
 					if( isEmpty() )
 					{
 						rxFrameBuffer.add( rx );
+						//FIXME we have only ELANRxBroadcastFrame for now
+						rxBroadcastFrameForSnaphot = ( ELANRxBroadcastFrame ) rx;
 						setChanged();
 						notifyObservers( new ELANMeasurementDeviceNotification( getDeviceAddress() ) );
 					}
@@ -130,5 +133,8 @@ public class ELANMeasurementDevice extends Observable implements Observer
 		getDeviceInformation().setDeviceAddress( deviceAddress );
 	}
 	
-	
+	public ELANRxFrame getSnapshot()
+	{
+		return rxBroadcastFrameForSnaphot;
+	}
 }
