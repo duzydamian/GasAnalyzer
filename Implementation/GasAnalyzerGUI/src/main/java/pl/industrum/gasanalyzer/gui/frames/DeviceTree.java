@@ -133,6 +133,7 @@ public abstract class DeviceTree extends Composite
 									treeItem.setText( port );
 									treeItem.setImage( imageDisconnect );
 									treeItem.setForeground( UsefulColor.GRAY_DISCONNECT.getColor() );
+									setStatusBarInformation( -1, "Rozłączono z "+ port );
 								}
 							}
 					});

@@ -17,8 +17,12 @@ import org.eclipse.swt.widgets.Shell;
 import pl.industrum.gasanalyzer.elan.communication.network.ELANMeasurementDevice;
 import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
 import pl.industrum.gasanalyzer.elan.exceptions.NullDeviceException;
+import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
+import pl.industrum.gasanalyzer.elan.frames.ELANRxFrame;
+import pl.industrum.gasanalyzer.elan.notifications.ELANMeasurementDeviceNotification;
 import pl.industrum.gasanalyzer.elan.notifications.ELANNetworkNotification;
 import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
+import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
 import pl.industrum.gasanalyzer.gui.frames.DeviceCollection;
 import pl.industrum.gasanalyzer.gui.frames.DeviceTree;
 import pl.industrum.gasanalyzer.gui.frames.MainMenu;
@@ -363,7 +367,33 @@ public class GasAnalyzerMainWindow implements Observer
 	
 	public void update( Observable obj, Object arg )
 	{
-		if( arg instanceof ELANNetworkNotification )
+		if( arg instanceof ELANMeasurementDeviceNotification )
+		{
+			try
+			{
+				ELANMeasurementDeviceNotification notification = ( ELANMeasurementDeviceNotification )arg;
+				Integer data = notification.getData();
+				ELANMeasurementDevice device;
+				
+					device = connectionWrapper.getNetwork( "/dev/ttyUSB0" ).getDevice( data );
+				
+				ELANRxFrame poll = device.pollAndClear();
+				ELANRxBroadcastFrame frame = ( ELANRxBroadcastFrame )poll;
+				System.out.println(device.getDeviceAddress() + " @ " + frame.getTimeStamp());
+				
+				for( ELANMeasurement elanMeasurement: frame )
+				{
+					System.out.println(elanMeasurement.toString());
+				}
+				
+				deviceCollection.updateMeasurmentFormDevice( device.getDeviceAddress(), frame );
+			} catch ( NullDeviceException e )
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}		
+		else if( arg instanceof ELANNetworkNotification )
 		{
 			ELANNetworkNotification notification = ( ELANNetworkNotification )arg;
 			MeasurementSnapshotManager.addMeasurementSnapshot( currentSurveyObject.getId(), new Date(), connectionWrapper.getNetwork( notification.getData() ), nextSnapshotComment );

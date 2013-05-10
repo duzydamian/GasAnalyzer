@@ -31,7 +31,7 @@ public abstract class MeasurementSnapshotManager
 		{
 			Integer addMeasurementSetId = MeasurementSetManager.addMeasurementSet( DeviceManager.getDevice( elanMeasurementDevice.getDeviceInformation().getDeviceIDInDatabase() ).getId(), snapshot.getId(), timestamp );
 			
-			for( ELANMeasurement elanMeasurement : ( ELANRxBroadcastFrame )elanMeasurementDevice.pollAndClear() )
+			for( ELANMeasurement elanMeasurement : ( ELANRxBroadcastFrame )elanMeasurementDevice.getSnapshot() )
 			{
 				MeasurementManager.addMeasurement( addMeasurementSetId, elanMeasurement );				
 			}			

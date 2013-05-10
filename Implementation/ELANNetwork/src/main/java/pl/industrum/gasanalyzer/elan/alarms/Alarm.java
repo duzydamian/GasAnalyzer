@@ -13,8 +13,11 @@ public class Alarm extends Timer
 	{
 		super( name, true );
 		this.name = name;
-		this.step = 500;
+		this.step = 2000;
 		this.observer = observer;
+		//TODO przenieść to uruchomienie gdzieś później
+		//FIXME przenieść to uruchomienie gdzieś później
+		schedule( new AlarmNotifyTask( name, observer ), step, step );
 	}
 	
 	public Integer getStep()
