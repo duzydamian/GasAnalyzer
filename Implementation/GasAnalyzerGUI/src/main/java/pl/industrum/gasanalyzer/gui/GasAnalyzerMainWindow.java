@@ -37,6 +37,8 @@ import pl.industrum.gasanalyzer.types.Warning;
 public class GasAnalyzerMainWindow implements Observer
 {
 	private ELANConnectionWrapper connectionWrapper;
+	private String nextSnapshotComment;
+	
 	private Survey currentSurveyObject;
 	protected Shell shlGasAnalyzer;
 
@@ -58,7 +60,8 @@ public class GasAnalyzerMainWindow implements Observer
 	public GasAnalyzerMainWindow( )
 	{
 		super();
-		connectionWrapper = new ELANConnectionWrapper();		
+		connectionWrapper = new ELANConnectionWrapper();	
+		nextSnapshotComment = "";
 	}
 
 	/**
@@ -97,9 +100,15 @@ public class GasAnalyzerMainWindow implements Observer
 			}
 		} );
 		
+//		shlGasAnalyzer.setMaximized( true );
+//		shlGasAnalyzer.setFullScreen( true );
+		
 		shlGasAnalyzer.pack();
 		shlGasAnalyzer.open();
 		shlGasAnalyzer.layout();
+		
+		shlGasAnalyzer.setMaximized( true );
+		
 		while ( !shlGasAnalyzer.isDisposed() )
 		{
 			if ( !display.readAndDispatch() )
@@ -117,11 +126,11 @@ public class GasAnalyzerMainWindow implements Observer
 	protected void createContents()
 	{
 		shlGasAnalyzer = new Shell();
-		shlGasAnalyzer.setSize( 650, 500 );
+		//shlGasAnalyzer.setSize( 650, 500 );
 		shlGasAnalyzer.setText( Messages
 				.getString( "GasAnalyzerMainWindow.shlGasAnalyzer.text" ) ); //$NON-NLS-1$
-		shlGasAnalyzer.setLayout( new GridLayout( 6, false ) );
-
+		shlGasAnalyzer.setLayout( new GridLayout( 6, false ) );		
+		
 		menu = new MainMenu( shlGasAnalyzer, SWT.BAR )
 		{
 			@Override
@@ -195,7 +204,7 @@ public class GasAnalyzerMainWindow implements Observer
 			@Override
 			public void setSurveyStep( int step )
 			{
-				//TODO
+				//TODO set survey step in network
 			}
 
 			@Override
@@ -299,6 +308,12 @@ public class GasAnalyzerMainWindow implements Observer
 				Error error = Error.CONNECTION_PROBLEM;
 				error.setDescription( connectWithNetworkState.getMessage() );
 				problems.addError( error, source );
+			}
+
+			@Override
+			public void setMeasurementComment( String comment )
+			{
+				nextSnapshotComment = comment;
 			}	
 		};
 		deviceTree.setEnabled( false );
@@ -349,7 +364,13 @@ public class GasAnalyzerMainWindow implements Observer
 		if( arg instanceof ELANNetworkNotification )
 		{
 			ELANNetworkNotification notification = ( ELANNetworkNotification )arg;
-			MeasurementSnapshotManager.addMeasurementSnapshot( currentSurveyObject.getId(), new Date(), connectionWrapper.getNetwork( notification.getData() ), "CHUJ" );
+			MeasurementSnapshotManager.addMeasurementSnapshot( currentSurveyObject.getId(), new Date(), connectionWrapper.getNetwork( notification.getData() ), nextSnapshotComment );
+			
+			if ( !nextSnapshotComment.isEmpty() )
+			{
+				deviceTree.enableNextComment();
+				nextSnapshotComment = "";
+			}
 //			for( ELANMeasurementDevice device: connectionWrapper.getNetwork( notification.getData() ) )
 //			{
 //				if ( device != null )

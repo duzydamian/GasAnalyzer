@@ -51,7 +51,7 @@ public abstract class DeviceManager
 	
 	public static void updateDevice()
 	{
-		//TODO
+		//TODO complete mehod
 	}
 	
 	public static Device getDevice( Integer deviceID )

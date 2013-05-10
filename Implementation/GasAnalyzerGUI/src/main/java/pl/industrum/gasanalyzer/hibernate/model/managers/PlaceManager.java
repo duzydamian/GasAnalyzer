@@ -37,7 +37,7 @@ public abstract class PlaceManager
 	
 	public static void updatePlace()
 	{
-		//TODO
+		//TODO complete mehod
 	}
 	
 	public static Place getPlace( Integer placeID )

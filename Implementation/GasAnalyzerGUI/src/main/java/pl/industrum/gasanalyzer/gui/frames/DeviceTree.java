@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
@@ -37,6 +38,9 @@ public abstract class DeviceTree extends Composite
 	private Button btnOk;
 	private Image imageDisconnect;
 	private Image imageConnect;
+	private Button btnSetMeasurementComment;
+	private Label lblMeasurementComment;
+	private Text textMeasurementComment;
 
 	/**
 	 * Create the composite.
@@ -168,7 +172,7 @@ public abstract class DeviceTree extends Composite
 		surveyStep.setMinimum( 1 );
 		surveyStep.setMaximum( 9999 );
 		surveyStep.setSelection( 60 );
-		surveyStep.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
+		surveyStep.setLayoutData( new GridData( SWT.FILL, SWT.FILL, false,
 				false, 1, 1 ) );
 		surveyStep.addModifyListener( new ModifyListener()
 		{
@@ -179,6 +183,7 @@ public abstract class DeviceTree extends Composite
 		} );
 
 		btnOk = new Button( this, SWT.NONE );
+		btnOk.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		btnOk.setText( Messages.getString( "DeviceTree.btnOk.text" ) ); //$NON-NLS-1$
 		btnOk.addSelectionListener( new SelectionAdapter()
 		{
@@ -186,6 +191,26 @@ public abstract class DeviceTree extends Composite
 			{
 				setSurveyStep(surveyStep.getSelection());
 				btnOk.setEnabled( false );
+			}
+		} );
+		
+		lblMeasurementComment = new Label( this, SWT.NONE );
+		lblMeasurementComment.setText( Messages
+				.getString( "DeviceTree.lblMeasurementComment.text" ) ); //$NON-NLS-1$
+
+		textMeasurementComment = new Text( this, SWT.BORDER | SWT.MULTI );		
+		textMeasurementComment.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true,
+				true, 1, 1 ) );
+
+		btnSetMeasurementComment = new Button( this, SWT.NONE );
+		btnSetMeasurementComment.setText( Messages.getString( "DeviceTree.btnSet.text" ) ); //$NON-NLS-1$
+		btnSetMeasurementComment.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				setMeasurementComment( textMeasurementComment.getText() );
+				btnSetMeasurementComment.setEnabled( false );
+				textMeasurementComment.setEnabled( false );
 			}
 		} );
 	}
@@ -218,6 +243,12 @@ public abstract class DeviceTree extends Composite
 		}
 	}
 	
+	public void enableNextComment()
+	{
+		btnSetMeasurementComment.setEnabled( true );
+		textMeasurementComment.setEnabled( true );
+	}
+	
 	@Override
 	public void setEnabled( boolean arg0 )
 	{		
@@ -227,6 +258,7 @@ public abstract class DeviceTree extends Composite
 		btnOk.setEnabled( arg0 );
 	}
 	public abstract void setSurveyStep(int step);
+	public abstract void setMeasurementComment( String comment );
 	public abstract ELANConnectionState connectWithNetwork(String port);
 	public abstract void disconnectFromDevice( String text );	
 	public abstract ELANConnectionWrapper getGUIConnectionWrapper();

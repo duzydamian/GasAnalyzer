@@ -42,12 +42,12 @@ public abstract class MeasurementSnapshotManager
 	
 	public static void updateComment( Integer device )
 	{
-		//TODO
+		//TODO complete mehod
 	}
 	
 	public static void deleteMeasurementSnapshot( Integer deviceID )
 	{
-		//TODO
+		//TODO complete mehod
 	}
 	
 	

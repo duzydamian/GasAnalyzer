@@ -148,6 +148,29 @@ public class Device extends Composite
 			tableHistory.getColumn (i).pack ();
 			tableHistory.getColumn (i).setMoveable(true);
 		}
+		
+		refreshDeviceMeasurements();
+	}
+
+	private void refreshDeviceMeasurements()
+	{
+		//TODO read from database
+//		for( MeasurementSet set: MeasurementSetManager.get( 1 ) )
+//		{
+//			
+//		}
+		
+		for (int i=0; i<columnsHistory.length; i++)
+		{
+			TableColumn column = new TableColumn (tableHistory, SWT.NONE);
+			column.setText (columnsHistory [i]);
+		}
+		
+		for (int i=0; i<columnsHistory.length; i++)
+		{
+			tableHistory.getColumn (i).pack ();
+			tableHistory.getColumn (i).setMoveable(true);
+		}
 	}
 
 	@Override

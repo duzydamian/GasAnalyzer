@@ -53,7 +53,7 @@ public abstract class DeviceTypeDictionary
 	
 	public static void addDocument( Integer id )
 	{
-		//TODO
+		//TODO complete mehod
 	}
 	
 	public static void delete( Integer id )
