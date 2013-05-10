@@ -51,6 +51,21 @@ public abstract class DeviceTypeDictionary
 		return deviceType.getId();
 	}
 	
+	public static Integer update( Integer id, String type, byte[] document )
+	{
+		DeviceType deviceType = new DeviceType();
+		deviceType.setId( id );
+		deviceType.setType( type );
+		deviceType.setDocument( document );
+		
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.saveOrUpdate( deviceType );
+		session.getTransaction().commit();
+		//TODO reindexing table
+		return deviceType.getId();
+	}
+	
 	public static void addDocument( Integer id )
 	{
 		//TODO complete mehod

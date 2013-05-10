@@ -29,7 +29,7 @@ public class DatabaseMeasurementDimensionCorrectTest extends Test
 		messageDialog = new MessageBox( shell, SWT.ICON_WARNING );
 		messageDialog.setText( "Ostrzeżenie" );
 		messageDialog
-				.setMessage( "Problem z naprawieniem słownika" );
+				.setMessage( "Problem z naprawieniem słownika Measurement dimension" );
 	}
 
 	public void test()
@@ -38,17 +38,18 @@ public class DatabaseMeasurementDimensionCorrectTest extends Test
 		{
 			try
 			{
-				System.out.println( "Run dictionary repair from test: " + this.getName() );
-				
-				MeasurementDimensionDictionary.deleteAll();
+				System.out.println( "Run Measurement dimension dictionary repair." );
 				
 				for( ELANDimension dimension: ELANDimension.values() )
 				{
-					MeasurementDimensionDictionary.add( dimension.ordinal(), dimension.getPrintable() );
+					MeasurementDimensionDictionary.update( dimension.ordinal(), dimension.getPrintable() );
 				}
+				
+				System.out.println( "Successful repair Measurement dimension dictionary: " );
 			}
 			catch(Exception e)
 			{
+				e.printStackTrace();
 				messageDialog.open();
 			}
 		}

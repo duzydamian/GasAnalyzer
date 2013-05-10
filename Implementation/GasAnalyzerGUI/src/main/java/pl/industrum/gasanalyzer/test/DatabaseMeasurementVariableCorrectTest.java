@@ -29,7 +29,7 @@ public class DatabaseMeasurementVariableCorrectTest extends Test
 		messageDialog = new MessageBox( shell, SWT.ICON_WARNING );
 		messageDialog.setText( "Ostrzeżenie" );
 		messageDialog
-				.setMessage( "Problem z naprawieniem słownika" );
+				.setMessage( "Problem z naprawieniem słownika Measurement variable." );
 	}
 
 	public void test()
@@ -38,14 +38,14 @@ public class DatabaseMeasurementVariableCorrectTest extends Test
 		{
 			try
 			{
-				System.out.println( "Run dictionary repair from test: " + this.getName() );
-				
-				MeasurementVariableDictionary.deleteAll();
+				System.out.println( "Run Measurement variable dictionary repair." );
 				
 				for( ELANMeasuredVariable measuredVariable: ELANMeasuredVariable.values() )
 				{
-					MeasurementVariableDictionary.add( measuredVariable.ordinal(), measuredVariable.getPrintable() );
-				}	
+					MeasurementVariableDictionary.update( measuredVariable.ordinal(), measuredVariable.getPrintable() );
+				}
+				
+				System.out.println( "Successful repair Measurement variable dictionary: " );
 			}
 			catch(Exception e)
 			{

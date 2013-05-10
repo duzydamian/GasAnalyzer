@@ -205,6 +205,8 @@ public class GasAnalyzerMainWindow implements Observer
 			public void setSurveyStep( int step )
 			{
 				//TODO set survey step in network
+				//FIXME need to be implemented as soon as possible 
+				//XXX what the hell ?
 			}
 
 			@Override

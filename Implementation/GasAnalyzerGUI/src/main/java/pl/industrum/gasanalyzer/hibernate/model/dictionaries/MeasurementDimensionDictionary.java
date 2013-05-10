@@ -35,6 +35,19 @@ public abstract class MeasurementDimensionDictionary
 		//TODO reindexing table
 	}
 	
+	public static void update( Integer id, String name )
+	{
+		MeasurementDimension dimension = new MeasurementDimension();
+		dimension.setId( id );
+		dimension.setName( name );
+		
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.saveOrUpdate( dimension );
+		session.getTransaction().commit();
+		//TODO reindexing table
+	}
+	
 	public static void delete( Integer id )
 	{
 		MeasurementDimension dimension = MeasurementDimensionDictionary.get( id );

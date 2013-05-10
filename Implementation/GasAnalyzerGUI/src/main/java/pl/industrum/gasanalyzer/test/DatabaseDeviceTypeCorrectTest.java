@@ -9,7 +9,6 @@ import org.eclipse.swt.widgets.Shell;
 
 import pl.industrum.gasanalyzer.elan.types.ELANDeviceType;
 import pl.industrum.gasanalyzer.hibernate.model.dictionaries.DeviceTypeDictionary;
-import pl.industrum.gasanalyzer.hibernate.model.managers.DeviceManager;
 
 /**
  * @author duzydamian (Damian Karbowiak)
@@ -30,7 +29,7 @@ public class DatabaseDeviceTypeCorrectTest extends Test
 		messageDialog = new MessageBox( shell, SWT.ICON_WARNING );
 		messageDialog.setText( "Ostrzeżenie" );
 		messageDialog
-				.setMessage( "Problem z naprawieniem słownika" );
+				.setMessage( "Problem z naprawieniem słownika Device type" );
 	}
 
 	public void test()
@@ -39,15 +38,14 @@ public class DatabaseDeviceTypeCorrectTest extends Test
 		{			
 			try
 			{
-				System.out.println( "Run dictionary repair from test: " + this.getName() );
-				
-				DeviceManager.deleteAllDevices();
-				DeviceTypeDictionary.deleteAll();
+				System.out.println( "Run Device type dictionary repair." );				
 				
 				for( ELANDeviceType deviceType: ELANDeviceType.values() )
 				{
-					DeviceTypeDictionary.add( deviceType.ordinal(), deviceType.name(), null );
+					DeviceTypeDictionary.update( deviceType.ordinal(), deviceType.name(), null );
 				}
+				
+				System.out.println( "Successful repair Device type dictionary: " );
 			}
 			catch(Exception e)
 			{
