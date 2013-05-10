@@ -16,7 +16,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
@@ -39,7 +38,7 @@ public class OpenSurvey extends Dialog
 	private Text txtSurveyName;
 
 	private Label lblSurveyDate;
-	private DateTime txtSurveyDate;
+	private Text txtSurveyDate;
 
 	private Label lblSurveyUser;
 	private Combo listSurveyUser;
@@ -123,7 +122,7 @@ public class OpenSurvey extends Dialog
 		lblSurveyDate.setText( Messages
 				.getString( "SurveyFrame.lblSurveyDate.text" ) ); //$NON-NLS-1$
 
-		txtSurveyDate = new DateTime( surveyForm, SWT.DATE );
+		txtSurveyDate = new Text( surveyForm, SWT.BORDER );
 		txtSurveyDate.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
 				false, 2, 1 ) );
 		txtSurveyDate.setEnabled( false );
@@ -256,8 +255,7 @@ public class OpenSurvey extends Dialog
 
 	protected void saveAction()
 	{
-		System.out.println( txtSurveyName.getText() + " " );
-		result = new Survey();
+		result = avaibleSurveys.get( comboAllSurvey.getSelectionIndex() );
 	}
 	
 	private void loadSurvaeyData(Survey survey)
@@ -269,13 +267,23 @@ public class OpenSurvey extends Dialog
 		
 		if ( survey.getTimestamp() != null )
 		{
-			txtSurveyName.setText( survey.getName() );
+			txtSurveyDate.setText( dateFormater.format( survey.getTimestamp() ) );
 		}
 		
-		if ( survey.getName() != null )
-		{
-			txtSurveyName.setText( survey.getName() );
-		}
+//		if ( survey.getApplicationUser() != null )
+//		{
+//			listSurveyUser.setText( survey.getApplicationUser().toString() );
+//		}
+//		
+//		if ( survey.getObject().getPlace() != null )
+//		{
+//			listSurveyPlace.setText( survey.getObject().getPlace().toString() );
+//		}
+//		
+//		if ( survey.getObject() != null )
+//		{
+//			listSurveyObject.setText( survey.getObject().toString() );
+//		}
 		
 		if ( survey.getLoad() != null )
 		{

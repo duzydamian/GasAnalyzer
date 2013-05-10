@@ -5,7 +5,6 @@ import java.util.Date;
 import org.hibernate.Session;
 
 import pl.industrum.gasanalyzer.hibernate.Hibernate;
-import pl.industrum.gasanalyzer.model.Device;
 import pl.industrum.gasanalyzer.model.MeasurementSet;
 
 public abstract class MeasurementSetManager
