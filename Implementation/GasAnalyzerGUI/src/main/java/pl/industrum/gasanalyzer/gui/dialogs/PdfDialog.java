@@ -92,5 +92,6 @@ public class PdfDialog extends Dialog
 			}
 		} );
 		btnBrowse.setText( Messages.getString( "PdfDialog.btnBrowse.text" ) ); //$NON-NLS-1$
+		//TODO Damian implement generate pdf file
 	}
 }

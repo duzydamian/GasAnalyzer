@@ -38,7 +38,7 @@ import pl.industrum.gasanalyzer.types.UsefulColor;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class NewSurvey extends Dialog
-{
+{//TODO check and implement if necessary
 	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "dd/MM/yyyy HH:mm", Locale.getDefault() );
 	
 	protected Survey result;

@@ -32,4 +32,6 @@ public abstract class MeasurementSetManager
 		session.getTransaction().commit();
 		return set;
 	}
+	
+	//TODO getAllMeasurementSetFromDevicePerSurvey - to fill history tab item
 }

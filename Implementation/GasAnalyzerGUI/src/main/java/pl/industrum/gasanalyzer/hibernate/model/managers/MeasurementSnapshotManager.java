@@ -60,4 +60,6 @@ public abstract class MeasurementSnapshotManager
 		session.getTransaction().commit();
 		return snapshot;
 	}
+	
+	//TODO getAllMeasurementSnapshotPerSurvey - to generate report files
 }

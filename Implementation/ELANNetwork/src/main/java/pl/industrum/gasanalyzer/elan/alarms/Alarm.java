@@ -27,6 +27,7 @@ public class Alarm extends Timer
 	
 	public void setStep( Integer step )
 	{
+		//FIXME here should start timer first time
 		this.step = step;
 		cancel();
 		schedule( new AlarmNotifyTask( name, observer ), step, step );

@@ -389,7 +389,6 @@ public class GasAnalyzerMainWindow implements Observer
 				deviceCollection.updateMeasurmentFormDevice( device.getDeviceAddress(), frame );
 			} catch ( NullDeviceException e )
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}		
@@ -400,6 +399,7 @@ public class GasAnalyzerMainWindow implements Observer
 			
 			if ( !nextSnapshotComment.isEmpty() )
 			{
+				//FIXME thread access exception yhrow from this method 
 				deviceTree.enableNextComment();
 				nextSnapshotComment = "";
 			}

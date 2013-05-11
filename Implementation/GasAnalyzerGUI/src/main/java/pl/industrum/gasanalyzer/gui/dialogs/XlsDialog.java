@@ -92,5 +92,6 @@ public class XlsDialog extends Dialog
 			}
 		} );
 		btnBrowse.setText( Messages.getString( "XlsDialog.btnBrowse.text" ) ); //$NON-NLS-1$
+		//TODO Grzegorz implement generate excel file
 	}
 }
