@@ -10,6 +10,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -246,8 +247,14 @@ public abstract class DeviceTree extends Composite
 	
 	public void enableNextComment()
 	{
-		btnSetMeasurementComment.setEnabled( true );
-		textMeasurementComment.setEnabled( true );
+		Display.getDefault().asyncExec( new Runnable()
+		{
+			public void run()
+			{
+				btnSetMeasurementComment.setEnabled( true );
+				textMeasurementComment.setEnabled( true );
+			}
+		});		
 	}
 	
 	@Override

@@ -399,7 +399,6 @@ public class GasAnalyzerMainWindow implements Observer
 			
 			if ( !nextSnapshotComment.isEmpty() )
 			{
-				//FIXME thread access exception yhrow from this method 
 				deviceTree.enableNextComment();
 				nextSnapshotComment = "";
 			}
