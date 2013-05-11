@@ -375,7 +375,7 @@ public class GasAnalyzerMainWindow implements Observer
 				Integer data = notification.getData();
 				ELANMeasurementDevice device;
 				
-					device = connectionWrapper.getNetwork( "/dev/ttyUSB0" ).getDevice( data );
+				device = connectionWrapper.getNetwork( "/dev/ttyUSB0" ).getDevice( data );
 				
 				ELANRxFrame poll = device.pollAndClear();
 				ELANRxBroadcastFrame frame = ( ELANRxBroadcastFrame )poll;
@@ -401,21 +401,7 @@ public class GasAnalyzerMainWindow implements Observer
 			{
 				deviceTree.enableNextComment();
 				nextSnapshotComment = "";
-			}
-//			for( ELANMeasurementDevice device: connectionWrapper.getNetwork( notification.getData() ) )
-//			{
-//				if ( device != null )
-//				{
-//					ELANRxFrame poll = device.pollAndClear();
-//					ELANRxBroadcastFrame frame = ( ELANRxBroadcastFrame )poll;
-//					System.out.println(device.getDeviceAddress() + " @ " + frame.getTimeStamp());
-//					for( ELANMeasurement elanMeasurement: frame )
-//					{
-//						System.out.println(elanMeasurement.toString());
-//					}
-//					deviceCollection.updateMeasurmentFormDevice( device.getDeviceAddress(), frame );					
-//				}
-//			}			
+			}		
 		}		
 	}
 }

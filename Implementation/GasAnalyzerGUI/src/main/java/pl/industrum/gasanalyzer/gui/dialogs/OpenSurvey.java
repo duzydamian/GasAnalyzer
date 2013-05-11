@@ -22,8 +22,14 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import pl.industrum.gasanalyzer.hibernate.model.managers.ApplicationUserManager;
+import pl.industrum.gasanalyzer.hibernate.model.managers.MeasuredObjectManager;
+import pl.industrum.gasanalyzer.hibernate.model.managers.PlaceManager;
 import pl.industrum.gasanalyzer.hibernate.model.managers.SurveyManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.model.ApplicationUser;
+import pl.industrum.gasanalyzer.model.MeasuredObject;
+import pl.industrum.gasanalyzer.model.Place;
 import pl.industrum.gasanalyzer.model.Survey;
 
 public class OpenSurvey extends Dialog
@@ -64,6 +70,10 @@ public class OpenSurvey extends Dialog
 	
 	private Label lblSurveyObject;
 	private Combo listSurveyObject;
+	
+	private Vector<ApplicationUser> avaibleUsers;
+	private Vector<Place> avaiblePlaces;
+	private Vector<MeasuredObject> avaibleObjects;
 
 	/**
 	 * Create the dialog.
@@ -76,6 +86,9 @@ public class OpenSurvey extends Dialog
 		super( parent, style );
 		setText( "Dane pomiaru" ); //$NON-NLS-1$
 		avaibleSurveys = new Vector<Survey>();
+		avaibleUsers = new Vector<ApplicationUser>();
+		avaiblePlaces = new Vector<Place>();
+		avaibleObjects = new Vector<MeasuredObject>();
 	}
 
 	/**
@@ -221,6 +234,10 @@ public class OpenSurvey extends Dialog
 				shell.dispose();
 			}
 		} );
+		
+		refreshListSurveyUser();
+		refreshListSurveyPlace();
+		refreshListSurveyObject();
 	}
 	
 	private void loadSurveys()
@@ -270,20 +287,38 @@ public class OpenSurvey extends Dialog
 			txtSurveyDate.setText( dateFormater.format( survey.getTimestamp() ) );
 		}
 		
-//		if ( survey.getApplicationUser() != null )
-//		{
-//			listSurveyUser.setText( survey.getApplicationUser().toString() );
-//		}
-//		
-//		if ( survey.getObject().getPlace() != null )
-//		{
-//			listSurveyPlace.setText( survey.getObject().getPlace().toString() );
-//		}
-//		
-//		if ( survey.getObject() != null )
-//		{
-//			listSurveyObject.setText( survey.getObject().toString() );
-//		}
+		if ( survey.getApplicationUser().toString() != null )
+		{
+			int i = 0;
+			for( String userInList: listSurveyUser.getItems() )
+			{
+				if( userInList.equalsIgnoreCase( survey.getApplicationUser().toString() ) )
+					listSurveyUser.select( i );
+				i++;
+			}			
+		}
+		
+		if ( survey.getObject().toString() != null )
+		{
+			int i = 0;
+			for( String objectInList: listSurveyObject.getItems() )
+			{
+				if( objectInList.equalsIgnoreCase( survey.getObject().toString() ) )
+					listSurveyObject.select( i );
+				i++;
+			}
+		}
+		
+		if ( survey.getObject().getPlace().toString() != null )
+		{
+			int i = 0;
+			for( String placeInList: listSurveyPlace.getItems() )
+			{
+				if( placeInList.equalsIgnoreCase( survey.getObject().getPlace().toString() ) )
+					listSurveyPlace.select( i );
+				i++;
+			}
+		}
 		
 		if ( survey.getLoad() != null )
 		{
@@ -298,6 +333,42 @@ public class OpenSurvey extends Dialog
 		if ( survey.getComment() != null )
 		{
 			styledTextComment.setText( survey.getComment() );
+		}
+	}
+	
+	private void refreshListSurveyUser()
+	{
+		listSurveyUser.removeAll();
+		avaibleUsers.clear();
+		
+		for( ApplicationUser user: ApplicationUserManager.getAllApplicationUsers() )
+		{
+			listSurveyUser.add( user.toString() );
+			avaibleUsers.add( user );
+		}
+	}
+
+	private void refreshListSurveyPlace()
+	{
+		listSurveyPlace.removeAll();
+		avaiblePlaces.clear();
+		
+		for( Place place: PlaceManager.getAllPlaces() )
+		{
+			listSurveyPlace.add( place.toString() );
+			avaiblePlaces.add( place );
+		}
+	}
+
+	private void refreshListSurveyObject()
+	{
+		listSurveyObject.removeAll();
+		avaibleObjects.clear();
+		
+		for( MeasuredObject object: MeasuredObjectManager.getAllObjects() )
+		{
+			listSurveyObject.add( object.toString() );
+			avaibleObjects.add( object );
 		}
 	}
 	

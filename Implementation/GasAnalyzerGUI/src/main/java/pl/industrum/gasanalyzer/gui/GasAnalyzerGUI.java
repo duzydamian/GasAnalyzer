@@ -54,7 +54,7 @@ public class GasAnalyzerGUI
 			{
 				e.printStackTrace();
 			}
-			
+						
 			SplashScreen splashScreen = new SplashScreen();
 			splashScreen.open();
 

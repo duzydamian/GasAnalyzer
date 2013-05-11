@@ -101,7 +101,7 @@ public class NewSurvey extends Dialog
 	public NewSurvey( Shell parent, int style )
 	{
 		super( parent, style );
-		setText( "Dane pomiaru" ); //$NON-NLS-1$
+		setText( "Dane nowego pomiaru" ); //$NON-NLS-1$
 		avaibleUsers = new Vector<ApplicationUser>();
 		avaiblePlaces = new Vector<Place>();
 		avaibleObjects = new Vector<MeasuredObject>();
@@ -412,7 +412,7 @@ public class NewSurvey extends Dialog
 		try
 		{		
 			Integer userID = avaibleUsers.get( listSurveyUser.getSelectionIndex() ).getId();
-			Integer objectID = avaibleObjects.get( listSurveyPlace.getSelectionIndex() ).getId();
+			Integer objectID = avaibleObjects.get( listSurveyObject.getSelectionIndex() ).getId();
 			Date date = dateFormater.parse( txtSurveyDate.getText() );
 			
 			result = SurveyManager.getSurvey( SurveyManager.addSurvey( txtSurveyName.getText(), textSurveyLoad.getText(), styledTextSurveySpecialConditions.getText(), styledTextComment.getText(), objectID, userID, date ));

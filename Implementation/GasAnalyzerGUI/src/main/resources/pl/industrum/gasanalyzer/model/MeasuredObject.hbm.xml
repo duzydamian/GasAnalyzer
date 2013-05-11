@@ -9,7 +9,7 @@
    <column name="id"/>
    <generator class="identity"/>
   </id>
-  <many-to-one class="pl.industrum.gasanalyzer.model.Place" fetch="select" name="place">
+  <many-to-one class="pl.industrum.gasanalyzer.model.Place" fetch="select" name="place" lazy="false">
    <column name="place_id" not-null="true"/>
   </many-to-one>
   <property generated="never" lazy="false" name="name" type="string">
