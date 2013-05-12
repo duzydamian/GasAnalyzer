@@ -64,19 +64,16 @@ public abstract class MeasurementSnapshotManager
 
 	/**
 	 * Get all measurement snapshots between fromID and toID from survey with surveyID.
-	 * @param fromID
-	 * @param toID
 	 * @param surveyID
 	 * @return
 	 */
 	@SuppressWarnings( "unchecked" )
-	public static List<MeasurementSnapshot> getAllMeasurementSnapshots( Integer fromID, Integer toID, Integer surveyID )
+	public static List<MeasurementSnapshot> getAllMeasurementSnapshots( Integer surveyID )
 	{
 		//Create session and return snapshots collection
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		String query = "from MeasurementSnapshot snapshot where snapshot.id >= " + fromID.toString();
-		query += " and snapshot.id <= " + toID.toString();
+		String query = "from MeasurementSnapshot snapshot where";
 		query += " and snapshot.survey.id = " + surveyID.toString();
 		List<MeasurementSnapshot> snapshots = ( List<MeasurementSnapshot> )session.createQuery( query ).list();
 		session.getTransaction().commit();
