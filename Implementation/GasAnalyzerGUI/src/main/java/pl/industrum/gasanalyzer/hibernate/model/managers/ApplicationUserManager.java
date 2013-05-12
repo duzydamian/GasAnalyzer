@@ -39,7 +39,7 @@ public abstract class ApplicationUserManager
 	
 	public static void updateApplicationUser()
 	{
-		//TODO
+		//TODO complete mehod
 	}
 	
 	public static ApplicationUser getApplicationUser( Integer userID )

@@ -89,4 +89,16 @@ public class MeasurementSet implements java.io.Serializable
 		this.measurements = measurements;
 	}
 
+	@Override
+	public String toString()
+	{
+		String printableSet = "";
+		for( Object measurement: getMeasurements().toArray() )
+		{
+			Measurement measurement2 = (Measurement)measurement;
+			printableSet += measurement2.getMeasurementVariable().getName()+" "+measurement2.getValue()+" "+measurement2.getMeasurementDimension().getName();
+		}
+		
+		return printableSet;
+	}
 }

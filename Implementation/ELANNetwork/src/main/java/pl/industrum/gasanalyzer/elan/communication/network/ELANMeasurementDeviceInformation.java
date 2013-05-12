@@ -12,6 +12,7 @@ public class ELANMeasurementDeviceInformation implements Iterable<ELANVariableDi
 	private String name;
 	private ELANDeviceType deviceType;
 	private Integer deviceAddress;
+	private Integer deviceIDInDatabase;
 	private Queue<ELANVariableDimensionPair> measuredVariables;
 	
 	public ELANMeasurementDeviceInformation()
@@ -78,5 +79,21 @@ public class ELANMeasurementDeviceInformation implements Iterable<ELANVariableDi
 	public void setDeviceAddress( Integer deviceAddress )
 	{
 		this.deviceAddress = deviceAddress;
+	}
+
+	/**
+	 * @return the deviceIDInDatabase
+	 */
+	public Integer getDeviceIDInDatabase()
+	{
+		return deviceIDInDatabase;
+	}
+
+	/**
+	 * @param deviceIDInDatabase the deviceIDInDatabase to set
+	 */
+	public void setDeviceIDInDatabase( Integer deviceIDInDatabase )
+	{
+		this.deviceIDInDatabase = deviceIDInDatabase;
 	}
 }

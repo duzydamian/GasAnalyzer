@@ -10,10 +10,10 @@
   </id>
   <timestamp column="timestamp" generated="never" name="timestamp"
    source="vm" unsaved-value="null"/>
-  <many-to-one class="pl.industrum.gasanalyzer.model.MeasuredObject" fetch="select" name="object">
+  <many-to-one class="pl.industrum.gasanalyzer.model.MeasuredObject" fetch="select" name="object" lazy="false">
    <column name="object_id" not-null="true"/>
   </many-to-one>
-  <many-to-one class="pl.industrum.gasanalyzer.model.ApplicationUser" fetch="select" name="applicationUser">
+  <many-to-one class="pl.industrum.gasanalyzer.model.ApplicationUser" fetch="select" name="applicationUser" lazy="false">
    <column name="application_user_id" not-null="true"/>
   </many-to-one>
   <property generated="never" lazy="false" name="name" type="string">

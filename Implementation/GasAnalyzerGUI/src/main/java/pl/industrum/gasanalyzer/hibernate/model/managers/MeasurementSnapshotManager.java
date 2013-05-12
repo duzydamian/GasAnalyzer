@@ -9,12 +9,7 @@ import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
 import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
 import pl.industrum.gasanalyzer.hibernate.Hibernate;
-import pl.industrum.gasanalyzer.hibernate.model.dictionaries.DeviceTypeDictionary;
-import pl.industrum.gasanalyzer.hibernate.model.dictionaries.MeasurementDimensionDictionary;
-import pl.industrum.gasanalyzer.hibernate.model.dictionaries.MeasurementVariableDictionary;
 import pl.industrum.gasanalyzer.hibernate.model.dictionaries.SurveySectionDictionary;
-import pl.industrum.gasanalyzer.model.Measurement;
-import pl.industrum.gasanalyzer.model.MeasurementSet;
 import pl.industrum.gasanalyzer.model.MeasurementSnapshot;
 
 public abstract class MeasurementSnapshotManager
@@ -34,29 +29,12 @@ public abstract class MeasurementSnapshotManager
 		
 		for( ELANMeasurementDevice elanMeasurementDevice : network )
 		{
-			//MeasurementSetManager.addMeasurementSet( DeviceManager.getDevice( elanMe, snapshotID, timestamp )
-			MeasurementSet set = new MeasurementSet();
-			set.setDevice( DeviceManager.getDevice( DeviceManager.addDevice( DeviceTypeDictionary.add( "test" ), "test", 2 ) ) ); //alllle chujowo TODO
-			set.setMeasurementSnapshot( snapshot );
+			Integer addMeasurementSetId = MeasurementSetManager.addMeasurementSet( DeviceManager.getDevice( elanMeasurementDevice.getDeviceInformation().getDeviceIDInDatabase() ).getId(), snapshot.getId(), timestamp );
 			
-			session = Hibernate.getSessionFactory().getCurrentSession();
-			session.beginTransaction();
-			session.save( set );
-			session.getTransaction().commit();
-			
-			for( ELANMeasurement elanMeasurement : ( ELANRxBroadcastFrame )elanMeasurementDevice.pollAndClear() )
+			for( ELANMeasurement elanMeasurement : ( ELANRxBroadcastFrame )elanMeasurementDevice.getSnapshot() )
 			{
-				Measurement measurement = new Measurement();
-				measurement.setMeasurementDimension( MeasurementDimensionDictionary.get( elanMeasurement.getDimension().ordinal() ) );
-				measurement.setMeasurementVariable( MeasurementVariableDictionary.get( elanMeasurement.getMeasuredVariable().ordinal() ) );
-				measurement.setValue( elanMeasurement.getValue() );
-				measurement.setMeasurementSet( set );
-				
-				session = Hibernate.getSessionFactory().getCurrentSession();
-				session.beginTransaction();
-				session.save( measurement );
-				session.getTransaction().commit();				
-			}				
+				MeasurementManager.addMeasurement( addMeasurementSetId, elanMeasurement );				
+			}			
 		}				
 		
 		return snapshot.getId();
@@ -64,12 +42,12 @@ public abstract class MeasurementSnapshotManager
 	
 	public static void updateComment( Integer device )
 	{
-		//TODO
+		//TODO complete mehod
 	}
 	
 	public static void deleteMeasurementSnapshot( Integer deviceID )
 	{
-		//TODO
+		//TODO complete mehod
 	}
 	
 	
@@ -82,4 +60,6 @@ public abstract class MeasurementSnapshotManager
 		session.getTransaction().commit();
 		return snapshot;
 	}
+	
+	//TODO getAllMeasurementSnapshotPerSurvey - to generate report files
 }

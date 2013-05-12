@@ -16,11 +16,15 @@ import org.eclipse.swt.widgets.Shell;
 
 import pl.industrum.gasanalyzer.elan.communication.network.ELANMeasurementDevice;
 import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
+import pl.industrum.gasanalyzer.elan.exceptions.NullDeviceException;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxFrame;
+import pl.industrum.gasanalyzer.elan.notifications.ELANMeasurementDeviceNotification;
 import pl.industrum.gasanalyzer.elan.notifications.ELANNetworkNotification;
 import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
 import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
+import pl.industrum.gasanalyzer.gui.dialogs.PdfDialog;
+import pl.industrum.gasanalyzer.gui.dialogs.XlsDialog;
 import pl.industrum.gasanalyzer.gui.frames.DeviceCollection;
 import pl.industrum.gasanalyzer.gui.frames.DeviceTree;
 import pl.industrum.gasanalyzer.gui.frames.MainMenu;
@@ -28,8 +32,10 @@ import pl.industrum.gasanalyzer.gui.frames.NetworkCollection;
 import pl.industrum.gasanalyzer.gui.frames.Problems;
 import pl.industrum.gasanalyzer.gui.frames.StatusBar;
 import pl.industrum.gasanalyzer.gui.frames.ToolBar;
+import pl.industrum.gasanalyzer.hibernate.model.managers.DeviceManager;
 import pl.industrum.gasanalyzer.hibernate.model.managers.MeasurementSnapshotManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.model.Device;
 import pl.industrum.gasanalyzer.model.Survey;
 import pl.industrum.gasanalyzer.types.Error;
 import pl.industrum.gasanalyzer.types.Warning;
@@ -37,6 +43,8 @@ import pl.industrum.gasanalyzer.types.Warning;
 public class GasAnalyzerMainWindow implements Observer
 {
 	private ELANConnectionWrapper connectionWrapper;
+	private String nextSnapshotComment;
+	
 	private Survey currentSurveyObject;
 	protected Shell shlGasAnalyzer;
 
@@ -58,7 +66,8 @@ public class GasAnalyzerMainWindow implements Observer
 	public GasAnalyzerMainWindow( )
 	{
 		super();
-		connectionWrapper = new ELANConnectionWrapper();		
+		connectionWrapper = new ELANConnectionWrapper();	
+		nextSnapshotComment = "";
 	}
 
 	/**
@@ -97,9 +106,15 @@ public class GasAnalyzerMainWindow implements Observer
 			}
 		} );
 		
+//		shlGasAnalyzer.setMaximized( true );
+//		shlGasAnalyzer.setFullScreen( true );
+		
 		shlGasAnalyzer.pack();
 		shlGasAnalyzer.open();
 		shlGasAnalyzer.layout();
+		
+		shlGasAnalyzer.setMaximized( true );
+		
 		while ( !shlGasAnalyzer.isDisposed() )
 		{
 			if ( !display.readAndDispatch() )
@@ -117,11 +132,11 @@ public class GasAnalyzerMainWindow implements Observer
 	protected void createContents()
 	{
 		shlGasAnalyzer = new Shell();
-		shlGasAnalyzer.setSize( 650, 500 );
+		//shlGasAnalyzer.setSize( 650, 500 );
 		shlGasAnalyzer.setText( Messages
 				.getString( "GasAnalyzerMainWindow.shlGasAnalyzer.text" ) ); //$NON-NLS-1$
-		shlGasAnalyzer.setLayout( new GridLayout( 6, false ) );
-
+		shlGasAnalyzer.setLayout( new GridLayout( 6, false ) );		
+		
 		menu = new MainMenu( shlGasAnalyzer, SWT.BAR )
 		{
 			@Override
@@ -178,6 +193,20 @@ public class GasAnalyzerMainWindow implements Observer
 			{
 				return currentSurveyObject;
 			}
+
+			@Override
+			public void generatePDFReport()
+			{
+				PdfDialog pdfDialog = new PdfDialog( getShell(), SWT.NONE );
+				pdfDialog.open( currentSurveyObject );
+			}
+
+			@Override
+			public void generateXLSReport()
+			{
+				XlsDialog xlsDialog = new XlsDialog( getShell(), SWT.NONE );
+				xlsDialog.open();
+			}
 		};	
 
 		sashELANNetworkProblems = new SashForm(shlGasAnalyzer,SWT.VERTICAL);
@@ -195,7 +224,13 @@ public class GasAnalyzerMainWindow implements Observer
 			@Override
 			public void setSurveyStep( int step )
 			{
-				//TODO
+				//TODO set survey step in network
+				//FIXME need to be implemented as soon as possible 
+				//XXX what the hell ?
+//				for( ELANNetwork network: connectionWrapper )
+//				{
+//					network.setStep();
+//				}
 			}
 
 			@Override
@@ -218,9 +253,18 @@ public class GasAnalyzerMainWindow implements Observer
 			}
 
 			@Override
-			public void addDeviceToDeviceCollection( ELANMeasurementDevice device )
-			{
-				deviceCollection.addDevice( device );
+			public void addDeviceToDeviceCollection( ELANMeasurementDevice device, String port )
+			{				
+				try
+				{
+					deviceCollection.addDevice( device );
+					//TODO change method
+					Device deviceByAddress = DeviceManager.getDeviceByAddress( device.getDeviceAddress() );
+					connectionWrapper.getNetwork( port ).getDevice( device.getDeviceAddress() ).getDeviceInformation().setDeviceIDInDatabase( deviceByAddress.getId() );
+				} catch ( NullDeviceException e )
+				{
+					e.printStackTrace();
+				}
 			}
 
 			@Override
@@ -290,6 +334,12 @@ public class GasAnalyzerMainWindow implements Observer
 				Error error = Error.CONNECTION_PROBLEM;
 				error.setDescription( connectWithNetworkState.getMessage() );
 				problems.addError( error, source );
+			}
+
+			@Override
+			public void setMeasurementComment( String comment )
+			{
+				nextSnapshotComment = comment;
 			}	
 		};
 		deviceTree.setEnabled( false );
@@ -337,24 +387,41 @@ public class GasAnalyzerMainWindow implements Observer
 	
 	public void update( Observable obj, Object arg )
 	{
-		if( arg instanceof ELANNetworkNotification )
+		if( arg instanceof ELANMeasurementDeviceNotification )
+		{
+			try
+			{
+				ELANMeasurementDeviceNotification notification = ( ELANMeasurementDeviceNotification )arg;
+				Integer data = notification.getData();
+				ELANMeasurementDevice device;
+				
+				device = connectionWrapper.getNetwork( "/dev/ttyUSB0" ).getDevice( data );
+				
+				ELANRxFrame poll = device.pollAndClear();
+				ELANRxBroadcastFrame frame = ( ELANRxBroadcastFrame )poll;
+				System.out.println(device.getDeviceAddress() + " @ " + frame.getTimeStamp());
+				
+				for( ELANMeasurement elanMeasurement: frame )
+				{
+					System.out.println(elanMeasurement.toString());
+				}
+				
+				deviceCollection.updateMeasurmentFormDevice( device.getDeviceAddress(), frame );
+			} catch ( NullDeviceException e )
+			{
+				e.printStackTrace();
+			}
+		}		
+		else if( arg instanceof ELANNetworkNotification )
 		{
 			ELANNetworkNotification notification = ( ELANNetworkNotification )arg;
-			MeasurementSnapshotManager.addMeasurementSnapshot( currentSurveyObject.getId(), new Date(), connectionWrapper.getNetwork( notification.getData() ), "CHUJ" );
-			for( ELANMeasurementDevice device: connectionWrapper.getNetwork( notification.getData() ) )
+			MeasurementSnapshotManager.addMeasurementSnapshot( currentSurveyObject.getId(), new Date(), connectionWrapper.getNetwork( notification.getData() ), nextSnapshotComment );
+			
+			if ( !nextSnapshotComment.isEmpty() )
 			{
-				if ( device != null )
-				{
-					ELANRxFrame poll = device.pollAndClear();
-					ELANRxBroadcastFrame frame = ( ELANRxBroadcastFrame )poll;
-					System.out.println(device.getDeviceAddress() + " @ " + frame.getTimeStamp());
-					for( ELANMeasurement elanMeasurement: frame )
-					{
-						System.out.println(elanMeasurement.toString());
-					}
-					deviceCollection.updateMeasurmentFormDevice( device.getDeviceAddress(), frame );					
-				}
-			}			
+				deviceTree.enableNextComment();
+				nextSnapshotComment = "";
+			}		
 		}		
 	}
 }

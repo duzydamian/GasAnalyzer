@@ -22,12 +22,51 @@ public abstract class MeasurementDimensionDictionary
 		return dimension.getId();
 	}
 	
+	public static void add( Integer id, String name )
+	{
+		MeasurementDimension dimension = new MeasurementDimension();
+		dimension.setId( id );
+		dimension.setName( name );
+		
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.save( dimension );
+		session.getTransaction().commit();
+		//TODO reindexing table
+	}
+	
+	public static void update( Integer id, String name )
+	{
+		MeasurementDimension dimension = new MeasurementDimension();
+		dimension.setId( id );
+		dimension.setName( name );
+		
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.saveOrUpdate( dimension );
+		session.getTransaction().commit();
+		//TODO reindexing table
+	}
+	
 	public static void delete( Integer id )
 	{
 		MeasurementDimension dimension = MeasurementDimensionDictionary.get( id );
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		session.delete( dimension );
+		//TODO reindexing table
+		session.getTransaction().commit();
+	}
+	
+	public static void deleteAll()
+	{		
+		List<MeasurementDimension> all = getAll();
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		for( MeasurementDimension dimension: all )
+		{
+			session.delete( dimension );
+		}
 		//TODO reindexing table
 		session.getTransaction().commit();
 	}

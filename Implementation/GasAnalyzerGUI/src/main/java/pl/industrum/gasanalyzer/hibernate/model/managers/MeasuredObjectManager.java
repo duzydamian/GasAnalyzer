@@ -36,7 +36,7 @@ public abstract class MeasuredObjectManager
 	
 	public static void updateObject()
 	{
-		//TODO
+		//TODO complete mehod
 	}
 	
 	public static MeasuredObject getObject( Integer objectID )

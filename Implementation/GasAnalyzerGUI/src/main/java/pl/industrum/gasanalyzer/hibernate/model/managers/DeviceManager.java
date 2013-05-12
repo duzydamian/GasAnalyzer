@@ -34,10 +34,24 @@ public abstract class DeviceManager
 		session.delete( device );
 		session.getTransaction().commit();
 	}
+
+	public static void deleteAllDevices()
+	{
+		List<Device> allDevices = getAllDevices();
+		
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		for( Device device: allDevices )
+		{
+			session.delete( device );
+		}
+		
+		session.getTransaction().commit();
+	}
 	
 	public static void updateDevice()
 	{
-		//TODO
+		//TODO complete mehod
 	}
 	
 	public static Device getDevice( Integer deviceID )
@@ -45,6 +59,16 @@ public abstract class DeviceManager
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		Device device = ( Device  ) session.createQuery( "from Device where id='" + deviceID.toString() + "'" ).list().get( 0 );
+		session.getTransaction().commit();
+		return device;
+	}
+	
+	public static Device getDeviceByAddress( Integer deviceAddress )
+	{
+		//Create session and return survey
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		Device device = ( Device  ) session.createQuery( "from Device where address='" + deviceAddress.toString() + "'" ).list().get( 0 );
 		session.getTransaction().commit();
 		return device;
 	}

@@ -39,9 +39,10 @@ public abstract class SurveyManager
 		session.getTransaction().commit();
 	}
 	
-	public static void updateSurvey()
+	public static Integer updateSurvey( Integer updateSurveyID, String name, String load, String specialConditions, String comment, Integer objectID, Integer userID, Date date )
 	{
-		//TODO
+		//TODO implement update to available edit survey data in GUI
+		return 0;
 	}
 	
 	public static Survey getSurvey( Integer surveyID )
