@@ -268,6 +268,16 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 		return connection;
 	}
 	
+	public void stopAlarming()
+	{
+		alarm.stop();
+	}
+	
+	public void startAlarmingWithStep(int step)
+	{
+		alarm.runWithStep( step );
+	}
+	
 	public Integer getSize()
 	{
 		Integer size = 0;

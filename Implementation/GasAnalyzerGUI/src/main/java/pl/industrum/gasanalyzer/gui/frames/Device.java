@@ -1,5 +1,7 @@
 package pl.industrum.gasanalyzer.gui.frames;
 
+import java.util.Date;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -18,14 +20,17 @@ import pl.industrum.gasanalyzer.elan.communication.network.ELANMeasurementDevice
 import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
 import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
 import pl.industrum.gasanalyzer.elan.types.ELANVariableDimensionPair;
+import pl.industrum.gasanalyzer.hibernate.model.managers.DeviceManager;
+import pl.industrum.gasanalyzer.hibernate.model.managers.MeasurementSetManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.model.MeasurementSet;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
 /**
  * @author duzydamian (Damian Karbowiak)
  * 
  */
-public class Device extends Composite
+public abstract class Device extends Composite
 {
 	GridData tableData;
 	private Group grpOneDIvice;
@@ -44,6 +49,7 @@ public class Device extends Composite
 	private Table table;
 	private Table tableHistory;
 	private Composite historyBody;
+	private Integer deviceID ;
 
 	/**
 	 * Create the composite.
@@ -61,6 +67,8 @@ public class Device extends Composite
 		//this.setLayoutData( compositeData );
 		this.deviceName = device.getName() ;
 		this.deviceAddress = device.getDeviceAddress();
+		pl.industrum.gasanalyzer.model.Device deviceByAddress = DeviceManager.getDeviceByAddress( device.getDeviceAddress() );
+		this.deviceID = deviceByAddress.getId();
 
 		grpOneDIvice = new Group( this, SWT.NONE );
 		grpOneDIvice.setText( deviceName );
@@ -155,10 +163,13 @@ public class Device extends Composite
 	private void refreshDeviceMeasurements()
 	{
 		//TODO read from database
-//		for( MeasurementSet set: MeasurementSetManager.get( 1 ) )
-//		{
-//			
-//		}
+		//FIXME discuss with Grzegorz
+		for( MeasurementSet set: MeasurementSetManager.getAllMeasurementSets( new Date(), getSurveyID(), deviceID, 10 ) )
+		{
+			TableItem item = new TableItem( tableHistory, SWT.NONE );
+			item.setText( 0, set.getTimestamp().toString() );
+			item.setText( 1, set.toString() );
+		}
 		
 		for (int i=0; i<columnsHistory.length; i++)
 		{
@@ -225,4 +236,6 @@ public class Device extends Composite
 	{
 		// Disable the check that prevents subclassing of SWT components
 	}
+	
+	public abstract Integer getSurveyID();
 }

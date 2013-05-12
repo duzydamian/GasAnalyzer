@@ -40,6 +40,14 @@ public enum UsefulImage
 		imagePath = newImagePath;
 	}
 
+	/**
+	 * @return the imagePath
+	 */
+	public String getImagePath()
+	{
+		return imagePath;
+	}
+
 	public Image getImage()
 	{
 		return SWTResourceManager.getImage( UsefulImage.class, imagePath );

@@ -64,6 +64,7 @@ public class PdfDialog extends Dialog
 	private Vector<ApplicationUser> avaibleUsers;
 	private Vector<Place> avaiblePlaces;
 	private Vector<MeasuredObject> avaibleObjects;
+	private Survey surveyToGenerateReport;
 	
 	/**
 	 * Create the dialog.
@@ -90,6 +91,7 @@ public class PdfDialog extends Dialog
 		createContents();
 		shell.open();
 		shell.layout();
+		surveyToGenerateReport = survey;
 		loadSurvaeyData( survey );
 		Display display = getParent().getDisplay();
 		while ( !shell.isDisposed() )
@@ -272,9 +274,10 @@ public class PdfDialog extends Dialog
 	protected void saveAction()
 	{
 		//TODO Damian implement generate pdf file
+		String path = textFilePath.getText();
 		PDFGenerator generator = new PDFGenerator();
-//		generator.generate();
-//		generator.open();
+		generator.create( surveyToGenerateReport, path);
+		generator.open( path );
 	}
 	
 	private void loadSurvaeyData(Survey survey)

@@ -227,10 +227,10 @@ public class GasAnalyzerMainWindow implements Observer
 				//TODO set survey step in network
 				//FIXME need to be implemented as soon as possible 
 				//XXX what the hell ?
-//				for( ELANNetwork network: connectionWrapper )
-//				{
-//					network.setStep();
-//				}
+				for( ELANNetwork network: connectionWrapper )
+				{
+					network.startAlarmingWithStep( step );
+				}
 			}
 
 			@Override
@@ -347,7 +347,14 @@ public class GasAnalyzerMainWindow implements Observer
 		networkCollection = new NetworkCollection( sashDeviceTreeNetworkDevice, SWT.NONE, "" );
 		networkCollection.setEnabled( false );
 		networkCollection.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
-		deviceCollection = new DeviceCollection( sashDeviceTreeNetworkDevice, SWT.NONE, "Test" );
+		deviceCollection = new DeviceCollection( sashDeviceTreeNetworkDevice, SWT.NONE, "Test" )
+		{
+			@Override
+			public Integer getSurveyIDFromGUI()
+			{
+				return currentSurveyObject.getId();
+			}			
+		};
 		deviceCollection.setEnabled( false );
 		deviceCollection.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
 
@@ -368,13 +375,14 @@ public class GasAnalyzerMainWindow implements Observer
 	}
 
 	public ELANConnectionState connect(String port)
-	{
+	{		
 		return connectionWrapper.connectWithNetwork( port, this );		
 	}
 	
 	public void disconnect(String port)
 	{
-		connectionWrapper.getNetwork( port ).getConnection().disconnect();
+		connectionWrapper.getNetwork( port ).stopAlarming();
+		connectionWrapper.getNetwork( port ).getConnection().disconnect();		
 	}
 	
 	/**
@@ -395,16 +403,18 @@ public class GasAnalyzerMainWindow implements Observer
 				Integer data = notification.getData();
 				ELANMeasurementDevice device;
 				
-				device = connectionWrapper.getNetwork( "/dev/ttyUSB0" ).getDevice( data );
+				//FIXME need information about network in this notification
+				//device = connectionWrapper.getNetwork( "/dev/ttyUSB0" ).getDevice( data );
+				device = connectionWrapper.getNetwork( "/dev/ttyS0" ).getDevice( data );
 				
 				ELANRxFrame poll = device.pollAndClear();
 				ELANRxBroadcastFrame frame = ( ELANRxBroadcastFrame )poll;
-				System.out.println(device.getDeviceAddress() + " @ " + frame.getTimeStamp());
-				
-				for( ELANMeasurement elanMeasurement: frame )
-				{
-					System.out.println(elanMeasurement.toString());
-				}
+//				System.out.println(device.getDeviceAddress() + " @ " + frame.getTimeStamp());
+//				
+//				for( ELANMeasurement elanMeasurement: frame )
+//				{
+//					System.out.println(elanMeasurement.toString());
+//				}
 				
 				deviceCollection.updateMeasurmentFormDevice( device.getDeviceAddress(), frame );
 			} catch ( NullDeviceException e )
