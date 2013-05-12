@@ -9,15 +9,15 @@ public class Alarm extends Timer
 	private String name;
 	private Observer observer;
 	
+	private boolean running;
+	
 	public Alarm( String name, Observer observer )
 	{
 		super( name, true );
 		this.name = name;
-		this.step = 2000;
 		this.observer = observer;
-		//TODO przenieść to uruchomienie gdzieś później
-		//FIXME przenieść to uruchomienie gdzieś później
-		schedule( new AlarmNotifyTask( name, observer ), step, step );
+		
+		running = false;
 	}
 	
 	public Integer getStep()
@@ -25,11 +25,29 @@ public class Alarm extends Timer
 		return step;
 	}
 	
-	public void setStep( Integer step )
+	public boolean isRunning()
 	{
-		//FIXME here should start timer first time
+		return running;
+	}
+	
+	public void runWithStep( Integer step )
+	{
 		this.step = step;
-		cancel();
+		
+		if( running == true )
+		{
+			cancel();			
+		}
+		else
+		{
+			running = true;
+		}
 		schedule( new AlarmNotifyTask( name, observer ), step, step );
+	}
+	
+	public void stop()
+	{
+		cancel();
+		running = false;
 	}
 }
