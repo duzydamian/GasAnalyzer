@@ -13,6 +13,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.model.Survey;
+import pl.industrum.gasanalyzer.report.PDFGenerator;
+import pl.industrum.gasanalyzer.types.UsefulColor;
 
 public class PdfDialog extends Dialog
 {
@@ -23,6 +26,9 @@ public class PdfDialog extends Dialog
 	private Button btnBrowse;
 	private Label lblFilePath;
 
+	private Button btnCancel;
+	private Button btnOk;
+	
 	/**
 	 * Create the dialog.
 	 * 
@@ -40,7 +46,7 @@ public class PdfDialog extends Dialog
 	 * 
 	 * @return the result
 	 */
-	public Object open()
+	public Object open( Survey survey)
 	{
 		createContents();
 		shell.open();
@@ -92,6 +98,48 @@ public class PdfDialog extends Dialog
 			}
 		} );
 		btnBrowse.setText( Messages.getString( "PdfDialog.btnBrowse.text" ) ); //$NON-NLS-1$
+		
+		new Label( shell, SWT.NONE );
+		
+		btnOk = new Button(shell, SWT.RIGHT);
+		btnOk.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		btnOk.setText(Messages.getString("NewSurvey.btnOk.text")); //$NON-NLS-1$
+		btnOk.addSelectionListener( new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected( SelectionEvent arg0 )
+			{
+				if ( !textFilePath.getText().isEmpty() )
+				{
+					saveAction();
+					shell.dispose();
+				}
+				else
+				{
+					textFilePath.setBackground( UsefulColor.RED_ERROR.getColor() );
+				}
+			}
+		} );
+		
+		btnCancel = new Button(shell, SWT.NONE);
+		btnCancel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		btnCancel.setText(Messages.getString("NewSurvey.btnAnuluj.text")); //$NON-NLS-1$
+		new Label(shell, SWT.NONE);
+		btnCancel.addSelectionListener( new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected( SelectionEvent arg0 )
+			{
+				shell.dispose();
+			}
+		} );
+	}
+	
+	protected void saveAction()
+	{
 		//TODO Damian implement generate pdf file
+		PDFGenerator generator = new PDFGenerator();
+//		generator.generate();
+//		generator.open();
 	}
 }

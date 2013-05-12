@@ -23,6 +23,8 @@ import pl.industrum.gasanalyzer.elan.notifications.ELANMeasurementDeviceNotifica
 import pl.industrum.gasanalyzer.elan.notifications.ELANNetworkNotification;
 import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
 import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
+import pl.industrum.gasanalyzer.gui.dialogs.PdfDialog;
+import pl.industrum.gasanalyzer.gui.dialogs.XlsDialog;
 import pl.industrum.gasanalyzer.gui.frames.DeviceCollection;
 import pl.industrum.gasanalyzer.gui.frames.DeviceTree;
 import pl.industrum.gasanalyzer.gui.frames.MainMenu;
@@ -191,6 +193,20 @@ public class GasAnalyzerMainWindow implements Observer
 			{
 				return currentSurveyObject;
 			}
+
+			@Override
+			public void generatePDFReport()
+			{
+				PdfDialog pdfDialog = new PdfDialog( getShell(), SWT.NONE );
+				pdfDialog.open( currentSurveyObject );
+			}
+
+			@Override
+			public void generateXLSReport()
+			{
+				XlsDialog xlsDialog = new XlsDialog( getShell(), SWT.NONE );
+				xlsDialog.open();
+			}
 		};	
 
 		sashELANNetworkProblems = new SashForm(shlGasAnalyzer,SWT.VERTICAL);
@@ -211,6 +227,10 @@ public class GasAnalyzerMainWindow implements Observer
 				//TODO set survey step in network
 				//FIXME need to be implemented as soon as possible 
 				//XXX what the hell ?
+//				for( ELANNetwork network: connectionWrapper )
+//				{
+//					network.setStep();
+//				}
 			}
 
 			@Override

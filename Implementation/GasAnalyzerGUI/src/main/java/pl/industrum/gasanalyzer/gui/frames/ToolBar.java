@@ -10,8 +10,6 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import pl.industrum.gasanalyzer.gui.dialogs.NewSurvey;
 import pl.industrum.gasanalyzer.gui.dialogs.OpenSurvey;
-import pl.industrum.gasanalyzer.gui.dialogs.PdfDialog;
-import pl.industrum.gasanalyzer.gui.dialogs.XlsDialog;
 import pl.industrum.gasanalyzer.i18n.Messages;
 import pl.industrum.gasanalyzer.model.Survey;
 import pl.industrum.gasanalyzer.types.UsefulImage;
@@ -122,10 +120,8 @@ public abstract class ToolBar extends Composite
 		{
 			@Override
 			public void widgetSelected( SelectionEvent arg0 )
-			{
-				PdfDialog pdfDialog = new PdfDialog( parent.getShell(),
-						SWT.NONE );
-				pdfDialog.open();
+			{				
+				generatePDFReport();				
 			}
 		} );
 		btnPdf.setEnabled( false );
@@ -138,10 +134,8 @@ public abstract class ToolBar extends Composite
 		{
 			@Override
 			public void widgetSelected( SelectionEvent arg0 )
-			{
-				XlsDialog xlsDialog = new XlsDialog( parent.getShell(),
-						SWT.NONE );
-				xlsDialog.open();
+			{				
+				generateXLSReport();
 			}
 		} );
 		btnXls.setEnabled( false );
@@ -166,4 +160,6 @@ public abstract class ToolBar extends Composite
 	public abstract void closeApplication();
 	public abstract void newSurveyCreated(Survey survey);
 	public abstract Survey getSurveyToEdit();
+	public abstract void generatePDFReport();
+	public abstract void generateXLSReport();
 }
