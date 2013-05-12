@@ -205,7 +205,7 @@ public class GasAnalyzerMainWindow implements Observer
 			public void generateXLSReport()
 			{
 				XlsDialog xlsDialog = new XlsDialog( getShell(), SWT.NONE );
-				xlsDialog.open();
+				xlsDialog.open( currentSurveyObject );
 			}
 		};	
 
