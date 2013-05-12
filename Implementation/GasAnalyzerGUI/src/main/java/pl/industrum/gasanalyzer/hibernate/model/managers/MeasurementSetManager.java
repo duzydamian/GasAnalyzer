@@ -36,22 +36,21 @@ public abstract class MeasurementSetManager
 	
 	/**
 	 * Get all measurement sets between fromID and toID from specific device and survey.
-	 * @param fromID
-	 * @param toID
+	 * @param timestamp
 	 * @param surveyID
 	 * @param deviceID
 	 * @return
 	 */
 	@SuppressWarnings( "unchecked" )
-	public static List<MeasurementSet> getAllMeasurementSets( Integer fromID, Integer toID, Integer surveyID, Integer deviceID )
+	public static List<MeasurementSet> getAllMeasurementSets( Date timestamp, Integer surveyID, Integer deviceID, Integer limit )
 	{
 		//Create session and return survey collection
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		String query = "from MeasurementSet set where set.id >= " + fromID.toString();
-		query += " and set.id <= " + toID.toString();
+		String query = "from MeasurementSet set where set.timestamp < " + timestamp;
 		query += " and set.device.id = " + deviceID.toString();
 		query += " and set.measurementSnapshot.survey.id = " + surveyID.toString();
+		query += " LIMIT " + limit.toString();
 		List<MeasurementSet> sets = ( List<MeasurementSet> )session.createQuery( query ).list();
 		session.getTransaction().commit();
 		return sets;
