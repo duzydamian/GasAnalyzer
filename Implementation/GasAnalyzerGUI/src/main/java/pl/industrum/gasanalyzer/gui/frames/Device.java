@@ -162,8 +162,6 @@ public abstract class Device extends Composite
 
 	private void refreshDeviceMeasurements()
 	{
-		//TODO read from database
-		//FIXME discuss with Grzegorz
 		for( MeasurementSet set: MeasurementSetManager.getAllMeasurementSets( new Date(), getSurveyID(), deviceID, 10 ) )
 		{
 			TableItem item = new TableItem( tableHistory, SWT.NONE );
