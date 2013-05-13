@@ -1,6 +1,5 @@
 package pl.industrum.gasanalyzer.hibernate.model.managers;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -48,22 +47,17 @@ public abstract class MeasurementSetManager
 	{
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		try{
-		//Create session and return survey collection
-		Timestamp timestamp2 = new Timestamp( timestamp.getTime() );		
-		session.beginTransaction();
-		String queryString = "from MeasurementSet measurementSetObject where measurementSetObject.timestamp < '" + timestamp;
-		queryString += "' and measurementSetObject.device.id = " + deviceID.toString();
-		queryString += " and measurementSetObject.measurementSnapshot.survey.id = " + surveyID.toString();
-		queryString += " order by measurementSetObject.timestamp";
-//		String query = "from MeasurementSet where timestamp < '" + timestamp2;
-//		query += "' and device.id = " + deviceID.toString();
-//		query += " and measurementSnapshot.survey.id = " + surveyID.toString();
-//		//query += " LIMIT " + limit.toString();
-		Query query = session.createQuery( queryString );
-		query.setMaxResults( 10 );
-		List<MeasurementSet> sets = ( List<MeasurementSet> )query.list();
-		session.getTransaction().commit();
-		return sets;
+			//Create session and return survey collection
+			session.beginTransaction();
+			String queryString = "from MeasurementSet measurementSetObject where measurementSetObject.timestamp < '" + timestamp;
+			queryString += "' and measurementSetObject.device.id = " + deviceID.toString();
+			queryString += " and measurementSetObject.measurementSnapshot.survey.id = " + surveyID.toString();
+			queryString += " order by measurementSetObject.timestamp";
+			Query query = session.createQuery( queryString );
+			query.setMaxResults( 10 );
+			List<MeasurementSet> sets = ( List<MeasurementSet> )query.list();
+			session.getTransaction().commit();
+			return sets;
 		} 
 		catch(Exception e)
 		{

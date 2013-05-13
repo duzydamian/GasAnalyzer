@@ -74,7 +74,7 @@ public abstract class MeasurementSnapshotManager
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		String query = "from MeasurementSnapshot snapshot where";
-		query += " and snapshot.survey.id = " + surveyID.toString();
+		query += " snapshot.survey.id = " + surveyID.toString();
 		List<MeasurementSnapshot> snapshots = ( List<MeasurementSnapshot> )session.createQuery( query ).list();
 		session.getTransaction().commit();
 		return snapshots;
