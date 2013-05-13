@@ -10,6 +10,8 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -117,6 +119,17 @@ public class OpenSurvey extends Dialog
 			public void modifyText( ModifyEvent arg0 )
 			{
 				loadSurvaeyData( avaibleSurveys.get( comboAllSurvey.getSelectionIndex() ) );
+			}
+		} );
+		comboAllSurvey.addTraverseListener( new TraverseListener()
+		{			
+			public void keyTraversed( TraverseEvent arg0 )
+			{
+				if ( arg0.detail == SWT.TRAVERSE_RETURN )
+				{
+					saveAction();
+					shell.dispose();
+				}				
 			}
 		} );
 		loadSurveys();

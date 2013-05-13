@@ -230,8 +230,10 @@ public abstract class DeviceTree extends Composite
 			boolean toAdd = true;
 			for( TreeItem item: deviceTree.getItems() )
 			{
-				if( item.getText().contains( port ));
+				if( item.getText().contains( port ))
+				{
 					toAdd = false;
+				}
 			}
 			
 			if ( toAdd )
@@ -265,6 +267,7 @@ public abstract class DeviceTree extends Composite
 		surveyStep.setEnabled( arg0 );
 		btnOk.setEnabled( arg0 );
 	}
+	
 	public abstract void setSurveyStep(int step);
 	public abstract void setMeasurementComment( String comment );
 	public abstract ELANConnectionState connectWithNetwork(String port);
