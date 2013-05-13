@@ -12,8 +12,9 @@ import java.util.Locale;
 
 import org.eclipse.swt.program.Program;
 
+import pl.industrum.gasanalyzer.hibernate.model.managers.MeasurementSnapshotManager;
+import pl.industrum.gasanalyzer.model.MeasurementSnapshot;
 import pl.industrum.gasanalyzer.model.Survey;
-import pl.industrum.gasanalyzer.types.UsefulImage;
 
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -32,6 +33,7 @@ import com.itextpdf.text.pdf.PdfWriter;
  *
  * @author duzydamian
  */
+@SuppressWarnings( "unused" )
 public class PDFGenerator
 {
 
@@ -44,7 +46,7 @@ public class PDFGenerator
 	private Font czcionka10;
 	private Font czcionka10b;
 	private Font czcionka16;
-	private Font czcionka16u;
+	private Font czcionka16u;	
 	private Font czcionka20;
 	private Font czcionka16b;
 
@@ -166,14 +168,13 @@ public class PDFGenerator
 			measurementSnapshotList.addCell(new PdfPCell(new Paragraph("Lp.",czcionka10b)));
 			measurementSnapshotList.addCell(new PdfPCell(new Paragraph("Godzina",czcionka10b)));
 			
-//			int i = 1;
-//			for( MeasurementSnapshot snapshot: MeasurementSnapshotManager.getAllMeasurementSnapshots( survey.getId() ) )
-//			{
-//				
-//				measurementSnapshotList.addCell(new PdfPCell(new Paragraph(String.valueOf(i),czcionka10)));
-//				measurementSnapshotList.addCell(new PdfPCell(new Paragraph(hourFormater.format( snapshot.getTimestamp() ),czcionka10)));
-//				i++;
-//			}
+			int i = 1;
+			for( MeasurementSnapshot snapshot: MeasurementSnapshotManager.getAllMeasurementSnapshots( survey.getId() ) )
+			{				
+				measurementSnapshotList.addCell(new PdfPCell(new Paragraph(String.valueOf(i),czcionka10)));
+				measurementSnapshotList.addCell(new PdfPCell(new Paragraph(hourFormater.format( snapshot.getTimestamp() ),czcionka10)));
+				i++;
+			}
 
 			document.add(logo);
             document.add(header);

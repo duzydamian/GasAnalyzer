@@ -14,8 +14,9 @@ import pl.industrum.gasanalyzer.elan.types.ELANDeviceType;
 public class ELANMeasurementDevice extends Observable implements Observer
 {
 	//Frames buffers
-	private Queue<ELANRxFrame> rxFrameBuffer; 
-	private Queue<ELANRxBroadcastFrame> rxBroadcastFrameBuffer; 
+	private Queue<ELANRxFrame> rxFrameBuffer;
+	//TODO should be used correct buffer type to each frame type 
+	//private Queue<ELANRxBroadcastFrame> rxBroadcastFrameBuffer; 
 	private ELANRxBroadcastFrame rxBroadcastFrameForSnaphot;
 	
 	private ELANMeasurementDeviceInformation deviceInformation;

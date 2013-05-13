@@ -22,7 +22,6 @@ import pl.industrum.gasanalyzer.elan.frames.ELANRxFrame;
 import pl.industrum.gasanalyzer.elan.notifications.ELANMeasurementDeviceNotification;
 import pl.industrum.gasanalyzer.elan.notifications.ELANNetworkNotification;
 import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
-import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
 import pl.industrum.gasanalyzer.gui.dialogs.PdfDialog;
 import pl.industrum.gasanalyzer.gui.dialogs.XlsDialog;
 import pl.industrum.gasanalyzer.gui.frames.DeviceCollection;
@@ -404,8 +403,8 @@ public class GasAnalyzerMainWindow implements Observer
 				ELANMeasurementDevice device;
 				
 				//FIXME need information about network in this notification
-				//device = connectionWrapper.getNetwork( "/dev/ttyUSB0" ).getDevice( data );
-				device = connectionWrapper.getNetwork( "/dev/ttyS0" ).getDevice( data );
+				device = connectionWrapper.getNetwork( "/dev/ttyUSB0" ).getDevice( data );
+				//device = connectionWrapper.getNetwork( "/dev/ttyS0" ).getDevice( data );
 				
 				ELANRxFrame poll = device.pollAndClear();
 				ELANRxBroadcastFrame frame = ( ELANRxBroadcastFrame )poll;
