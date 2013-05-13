@@ -36,13 +36,13 @@ public class Alarm extends Timer
 		
 		if( running == true )
 		{
-			cancel();			
+			this.cancel();
 		}
 		else
 		{
 			running = true;
 		}
-		schedule( new AlarmNotifyTask( name, observer ), step, step );
+		this.schedule( new AlarmNotifyTask( name, observer ), step, step );
 	}
 	
 	public void stop()

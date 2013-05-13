@@ -1,6 +1,8 @@
 package pl.industrum.gasanalyzer.gui.frames;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -10,8 +12,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -32,6 +36,8 @@ import pl.industrum.gasanalyzer.types.UsefulImage;
  */
 public abstract class Device extends Composite
 {
+	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "HH:mm:ss dd/MM/yyyy", Locale.getDefault() );
+	
 	GridData tableData;
 	private Group grpOneDIvice;
 	private CTabFolder tabFolder;
@@ -136,6 +142,20 @@ public abstract class Device extends Composite
 		tbitmHistory = new CTabItem( tabFolder, SWT.NONE );
 		tbitmHistory.setImage( UsefulImage.CALENDAR.getImage() );
 		tbitmHistory.setText( Messages.getString( "Device.tbtmNewItem.text" ) ); //$NON-NLS-1$
+		tbitmHistory.addListener( SWT.Selection, new Listener()
+		{			
+			public void handleEvent( Event arg0 )
+			{
+				refreshDeviceMeasurements();
+			}
+		} );
+		tbitmHistory.addListener( SWT.Show, new Listener()
+		{			
+			public void handleEvent( Event arg0 )
+			{
+				refreshDeviceMeasurements();
+			}
+		} );
 
 		historyBody = new Composite( tabFolder, SWT.NONE );
 		tbitmHistory.setControl( historyBody );
@@ -155,19 +175,18 @@ public abstract class Device extends Composite
 		{
 			tableHistory.getColumn (i).pack ();
 			tableHistory.getColumn (i).setMoveable(true);
-		}
+		}		
 		
 		refreshDeviceMeasurements();
 	}
 
 	private void refreshDeviceMeasurements()
 	{
-		//TODO read from database
-		//FIXME discuss with Grzegorz
+		//TODO implement browse history
 		for( MeasurementSet set: MeasurementSetManager.getAllMeasurementSets( new Date(), getSurveyID(), deviceID, 10 ) )
 		{
 			TableItem item = new TableItem( tableHistory, SWT.NONE );
-			item.setText( 0, set.getTimestamp().toString() );
+			item.setText( 0, dateFormater.format( set.getTimestamp() ) );
 			item.setText( 1, set.toString() );
 		}
 		

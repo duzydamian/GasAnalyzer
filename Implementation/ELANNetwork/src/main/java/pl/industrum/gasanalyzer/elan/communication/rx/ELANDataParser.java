@@ -32,6 +32,8 @@ public class ELANDataParser extends Observable implements Runnable, ELANParser
 		
 		//collective channel state (1 byte)
 		Integer collectiveChannelStateByte = dataBuffer.poll();
+		if( collectiveChannelStateByte == null)
+			return;
 		
 		//channel state (could be few bytes, every byte means different option)
 		Integer channelStateByte;

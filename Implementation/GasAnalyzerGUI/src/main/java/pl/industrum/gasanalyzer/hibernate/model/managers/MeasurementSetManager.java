@@ -52,7 +52,7 @@ public abstract class MeasurementSetManager
 			String queryString = "from MeasurementSet measurementSetObject where measurementSetObject.timestamp < '" + timestamp;
 			queryString += "' and measurementSetObject.device.id = " + deviceID.toString();
 			queryString += " and measurementSetObject.measurementSnapshot.survey.id = " + surveyID.toString();
-			queryString += " order by measurementSetObject.timestamp";
+			queryString += " order by measurementSetObject.timestamp desc";
 			Query query = session.createQuery( queryString );
 			query.setMaxResults( 10 );
 			List<MeasurementSet> sets = ( List<MeasurementSet> )query.list();
