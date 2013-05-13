@@ -30,6 +30,7 @@ import pl.industrum.gasanalyzer.model.Place;
 import pl.industrum.gasanalyzer.model.Survey;
 import pl.industrum.gasanalyzer.report.PDFGenerator;
 import pl.industrum.gasanalyzer.types.UsefulColor;
+import org.eclipse.swt.widgets.ProgressBar;
 
 public class PdfDialog extends Dialog
 {
@@ -65,6 +66,8 @@ public class PdfDialog extends Dialog
 	private Vector<Place> avaiblePlaces;
 	private Vector<MeasuredObject> avaibleObjects;
 	private Survey surveyToGenerateReport;
+	private Label lblGeneration;
+	private ProgressBar progressBar;
 	
 	/**
 	 * Create the dialog.
@@ -110,7 +113,7 @@ public class PdfDialog extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 450, 450 );
+		shell.setSize( 450, 470 );
 		shell.setText( getText() );
 		shell.setLayout( new GridLayout( 3, false ) );
 
@@ -229,6 +232,15 @@ public class PdfDialog extends Dialog
 		styledTextComment.setEnabled( false );
 		new Label(surveyForm, SWT.NONE);
 		
+		lblGeneration = new Label(shell, SWT.NONE);
+		lblGeneration.setText(Messages.getString("PdfDialog.lblGenerowanie.text")); //$NON-NLS-1$
+		lblGeneration.setVisible( false );
+		
+		progressBar = new ProgressBar(shell, SWT.NONE);
+		progressBar.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
+				false, 2, 1 ) );
+		progressBar.setVisible( false );
+		
 		new Label( shell, SWT.NONE );
 		
 		btnOk = new Button(shell, SWT.RIGHT);
@@ -273,9 +285,17 @@ public class PdfDialog extends Dialog
 	
 	protected void saveAction()
 	{
-		//TODO Damian implement generate pdf file
+		lblGeneration.setVisible( true );
+		progressBar.setVisible( true );
 		String path = textFilePath.getText();
-		PDFGenerator generator = new PDFGenerator();
+		PDFGenerator generator = new PDFGenerator()
+		{
+			@Override
+			public void progressIncrement()
+			{
+				progressBar.setSelection( progressBar.getSelection()+1 );
+			}
+		};
 		generator.create( surveyToGenerateReport, path);
 		generator.open( path );
 	}

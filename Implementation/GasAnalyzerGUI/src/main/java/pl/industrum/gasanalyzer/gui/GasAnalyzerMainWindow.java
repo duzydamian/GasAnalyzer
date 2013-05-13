@@ -226,7 +226,6 @@ public class GasAnalyzerMainWindow implements Observer
 			{
 				//TODO set survey step in network
 				//FIXME need to be implemented as soon as possible 
-				//XXX what the hell ?
 				for( ELANNetwork network: connectionWrapper )
 				{
 					network.startAlarmingWithStep( step );
