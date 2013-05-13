@@ -30,9 +30,9 @@ public class Alarm extends Timer
 		return running;
 	}
 	
-	public void runWithStep( Integer step )
+	public void runWithStep( Integer newStep )
 	{
-		this.step = step * 1000;
+		this.step = newStep * 1000;
 		
 		if( running == true )
 		{
