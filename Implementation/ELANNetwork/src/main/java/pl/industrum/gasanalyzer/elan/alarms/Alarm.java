@@ -32,7 +32,7 @@ public class Alarm extends Timer
 	
 	public void runWithStep( Integer step )
 	{
-		this.step = step;
+		this.step = step * 1000;
 		
 		if( running == true )
 		{

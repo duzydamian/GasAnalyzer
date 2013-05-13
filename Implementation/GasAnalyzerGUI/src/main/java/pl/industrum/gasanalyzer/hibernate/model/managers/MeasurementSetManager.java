@@ -1,5 +1,6 @@
 package pl.industrum.gasanalyzer.hibernate.model.managers;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -45,12 +46,17 @@ public abstract class MeasurementSetManager
 	public static List<MeasurementSet> getAllMeasurementSets( Date timestamp, Integer surveyID, Integer deviceID, Integer limit )
 	{
 		//Create session and return survey collection
+		Timestamp timestamp2 = new java.sql.Timestamp( timestamp.getTime() );
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		String query = "from MeasurementSet set where set.timestamp < " + timestamp;
-		query += " and set.device.id = " + deviceID.toString();
-		query += " and set.measurementSnapshot.survey.id = " + surveyID.toString();
-		query += " LIMIT " + limit.toString();
+//		String query = "from MeasurementSet set where set.timestamp < '" + timestamp2;
+//		query += "' and set.device.id = " + deviceID.toString();
+//		query += " and set.measurementSnapshot.survey.id = " + surveyID.toString();
+//		query += " LIMIT " + limit.toString();
+		String query = "from MeasurementSet where timestamp < '" + timestamp2;
+		query += "' and device.id = " + deviceID.toString();
+		query += " and measurementSnapshot.survey.id = " + surveyID.toString();
+		//query += " LIMIT " + limit.toString();
 		List<MeasurementSet> sets = ( List<MeasurementSet> )session.createQuery( query ).list();
 		session.getTransaction().commit();
 		return sets;

@@ -15,7 +15,7 @@ import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
  * @author duzydamian (Damian Karbowiak)
  * 
  */
-public class DeviceCollection extends Composite
+public abstract class DeviceCollection extends Composite
 {
 	GridData compositeData;
 	private Composite currentBody;
@@ -49,7 +49,16 @@ public class DeviceCollection extends Composite
 	
 	public void addDevice( ELANMeasurementDevice device )
 	{
-		Device addedDevice = new Device( currentBody, SWT.NONE, device );
+		Device addedDevice = new Device( currentBody, SWT.NONE, device )
+		{
+
+			@Override
+			public Integer getSurveyID()
+			{
+				return getSurveyIDFromGUI();
+			}
+			
+		};
 		addedDevice.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
 		devices.add( addedDevice );
 	}
@@ -89,4 +98,6 @@ public class DeviceCollection extends Composite
 				device.updateMeasurment( frame );			
 		}
 	}
+	
+	public abstract Integer getSurveyIDFromGUI();
 }
