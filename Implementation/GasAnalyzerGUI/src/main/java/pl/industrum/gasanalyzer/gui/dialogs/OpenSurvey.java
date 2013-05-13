@@ -5,7 +5,6 @@ import java.util.Locale;
 import java.util.Vector;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -58,10 +57,10 @@ public class OpenSurvey extends Dialog
 	private Text textSurveyLoad;
 
 	private Label lblSurveySpecialConditions;
-	private StyledText styledTextSurveySpecialConditions;
+	private Text styledTextSurveySpecialConditions;
 
 	private Label lblComment;
-	private StyledText styledTextComment;
+	private Text styledTextComment;
 
 	private Composite surveyForm;
 	private Button btnCancel;
@@ -195,8 +194,8 @@ public class OpenSurvey extends Dialog
 		lblSurveySpecialConditions.setLayoutData( new GridData(
 				SWT.FILL, SWT.CENTER, false, false, 1, 2 ) );
 
-		styledTextSurveySpecialConditions = new StyledText( surveyForm,
-				SWT.BORDER | SWT.WRAP );
+		styledTextSurveySpecialConditions = new Text( surveyForm,
+				SWT.BORDER | SWT.WRAP | SWT.MULTI );
 		GridData gd_styledTextSurveySpecialConditions = new GridData(
 				SWT.FILL, SWT.CENTER, false, false, 2, 2 );
 		gd_styledTextSurveySpecialConditions.heightHint = 48;
@@ -209,7 +208,7 @@ public class OpenSurvey extends Dialog
 		lblComment.setLayoutData( new GridData(
 				SWT.FILL, SWT.CENTER, false, false, 1, 2 ) );
 
-		styledTextComment = new StyledText( surveyForm, SWT.BORDER | SWT.WRAP );
+		styledTextComment = new Text( surveyForm, SWT.BORDER | SWT.WRAP | SWT.MULTI );
 		GridData gd_styledTextComment = new GridData( SWT.FILL, SWT.FILL,
 				false, false, 2, 3 );
 		gd_styledTextComment.heightHint = 71;
