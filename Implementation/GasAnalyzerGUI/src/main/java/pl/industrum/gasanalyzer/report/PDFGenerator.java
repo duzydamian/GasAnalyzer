@@ -81,31 +81,57 @@ public class PDFGenerator
                              new FileOutputStream(path));
             document.open();
 
-            Paragraph naglowekorglewy = new Paragraph();
-            Paragraph naglowekorgprawy = new Paragraph();
-            naglowekorglewy.setAlignment(Paragraph.ALIGN_LEFT);
-            naglowekorgprawy.setAlignment(Paragraph.ALIGN_LEFT);
-            naglowekorglewy.add(new Chunk("Faktura VAT\n", czcionka20));          
-            naglowekorglewy.add("\n");
-            naglowekorglewy.add(new Chunk("ORYGINAŁ \n", czcionka16));
-            naglowekorglewy.add("\n");
-//			Image logo = Image.getInstance(UsefulImage.POLSL_LOGO.getImagePath());
-//			logo.scalePercent(50);
-//			naglowekorglewy.add(new Image(logo) {});
-            naglowekorgprawy.add(new Chunk("POLITECHNIKA ŚLĄSKA \n", czcionka16b));
-            naglowekorgprawy.add(new Chunk("WYDZIAŁ INŻYNIERII ŚRODOWISKA \nI ENERGETYKI \n", czcionka10b));
-            naglowekorgprawy.add(new Chunk("WYDZIAŁ INŻYNIERII ŚRODOWISKA \nI ENERGETYKI \n", czcionka10b));
+            Paragraph headerLeftImgages = new Paragraph();
+            headerLeftImgages.setAlignment(Paragraph.ALIGN_LEFT);
+            
+            headerLeftImgages.add(new Chunk("ORYGINAŁ \n", czcionka16));
+            headerLeftImgages.add("\n");
+			Image logo = Image.getInstance("src/main/resources/pl/industrum/gasanalyzer/gui/PolslLogo.png");
+			logo.scalePercent(50);
+			headerLeftImgages.add(logo);
+            
+			Paragraph headerRight = new Paragraph();            
+            headerRight.setAlignment(Paragraph.ALIGN_LEFT);
+			headerRight.add(new Chunk("POLITECHNIKA ŚLĄSKA \n", czcionka16b));          
+            headerRight.add(new Chunk("\n", czcionka16b));
+            
+            Paragraph headerRightInstitute = new Paragraph();
+            headerRightInstitute.add(new Chunk("WYDZIAŁ INŻYNIERII ŚRODOWISKA \nI ENERGETYKI \n", czcionka10b));
+            headerRightInstitute.add("\n");
+            headerRightInstitute.add(new Chunk("INSTYTUT MASZYN I URZĄDZEŃ \nENERGETYCZNYCH \n", czcionka10b));
+            headerRightInstitute.add("\n");
+            headerRightInstitute.add(new Chunk("ZAKŁAD KOTŁÓW I WYTORNIC PARY \nwww.kotly.polsl.pl \n", czcionka10b));
+            Paragraph headerRightAdrress = new Paragraph();
+            headerRightAdrress.add(new Chunk("UL. KONARSKIEGO 20 \n", czcionka8));
+            headerRightAdrress.add("\n");
+            headerRightAdrress.add(new Chunk("44-100  GLIWICE \n", czcionka8));
+            headerRightAdrress.add("\n");
+            headerRightAdrress.add(new Chunk("T: +48 32 237 12 73 \n", czcionka8));
+            headerRightAdrress.add("\n");
+            headerRightAdrress.add(new Chunk("F: +48 32 237 21 93 \n", czcionka8));
+            headerRightAdrress.add("\n");
+            headerRightAdrress.add(new Chunk("kotly@polsl.pl \n", czcionka8));
+            
+			PdfPTable headerRightTable = new PdfPTable(2);
+			headerRightTable.setWidthPercentage(100);
+			PdfPCell headerRL = new PdfPCell(headerRightInstitute);
+			headerRL.setBorder(Rectangle.NO_BORDER);
+			PdfPCell headerRR = new PdfPCell(headerRightAdrress);
+			headerRR.setBorder(Rectangle.NO_BORDER);
+			headerRightTable.addCell(headerRL);
+			headerRightTable.addCell(headerRR);
 			
+			headerRight.add( headerRightTable );
 			
-			PdfPTable oryg = new PdfPTable(2);
-			oryg.setWidthPercentage(100);
-			PdfPCell orgl = new PdfPCell(naglowekorglewy);
-			orgl.setBorder(Rectangle.NO_BORDER);
-			PdfPCell orgp = new PdfPCell(naglowekorgprawy);
-			orgp.setBorder(Rectangle.NO_BORDER);
-			orgp.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-			oryg.addCell(orgl);
-			oryg.addCell(orgp);
+			PdfPTable header = new PdfPTable(2);
+			header.setWidthPercentage(100);
+			PdfPCell headerL = new PdfPCell(headerLeftImgages);
+			headerL.setBorder(Rectangle.NO_BORDER);
+			PdfPCell headerR = new PdfPCell(headerRight);
+			headerR.setBorder(Rectangle.NO_BORDER);
+			headerR.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+			header.addCell(headerL);
+			header.addCell(headerR);
 			
 			Paragraph surveyData = new Paragraph();
 			surveyData.setAlignment(Paragraph.ALIGN_LEFT);	
@@ -149,29 +175,19 @@ public class PDFGenerator
 //				i++;
 //			}
 
-            document.add(oryg);
-//            PdfContentByte cb = writer.getDirectContent();
-//            cb.setLineWidth(2.0f);	 // Make a bit thicker than 1.0 default
-//            cb.moveTo(30, writer.getVerticalPosition(true));
-//            cb.lineTo(PageSize.A4.getWidth()-30, writer.getVerticalPosition(true));
-//            cb.stroke();
-            document.add(sd);
-//            cb.moveTo(30, writer.getVerticalPosition(true));
-//            cb.lineTo(PageSize.A4.getWidth()-30, writer.getVerticalPosition(true));
-//            cb.stroke();
+			document.add(logo);
+            document.add(header);
+
+            document.add(surveyData);
+            document.add(new Paragraph("\n"));
             document.add(new Paragraph("\n"));
             document.add(measurementSnapshotList);
-            document.add(new Paragraph("\n"));
-
-            //document.add(list);
-            //document.add(new Paragraph("\n"));
-            //document.add(overview);
 
 //            document.addAuthor("duzydamian");
 //            document.addProducer();
 //            document.addCreator(sp.getNazwa());
 //            document.addSubject("Faktrura Vat");
-//            document.addTitle("Faktura nr " + numer);
+            document.addTitle("Gas Analyzer " + survey.getName());
 //            document.addCreationDate();
 //            document.addKeywords("faktura, vat, firma, klient, produkt");
 //            document.addHeader(numer, numer);
