@@ -399,11 +399,11 @@ public class GasAnalyzerMainWindow implements Observer
 			try
 			{
 				ELANMeasurementDeviceNotification notification = ( ELANMeasurementDeviceNotification )arg;
-				Integer data = notification.getData();
+				Integer deviceAddress = notification.getData().getDeviceAddress();
+				String networkPort = notification.getData().getNetworkPort();
 				ELANMeasurementDevice device;
 				
-				//FIXME need information about network in this notification
-				device = connectionWrapper.getNetwork( "/dev/ttyUSB0" ).getDevice( data );
+				device = connectionWrapper.getNetwork( networkPort ).getDevice( deviceAddress );
 				//device = connectionWrapper.getNetwork( "/dev/ttyS0" ).getDevice( data );
 				
 				ELANRxFrame poll = device.pollAndClear();

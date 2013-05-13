@@ -53,7 +53,7 @@ public class ELANMeasurementDevice extends Observable implements Observer
 						//FIXME we have only ELANRxBroadcastFrame for now
 						rxBroadcastFrameForSnaphot = ( ELANRxBroadcastFrame ) rx;
 						setChanged();
-						notifyObservers( new ELANMeasurementDeviceNotification( getDeviceAddress() ) );
+						notifyObservers( new ELANMeasurementDeviceNotification( "unknown", getDeviceAddress() ) );
 					}
 					else
 					{

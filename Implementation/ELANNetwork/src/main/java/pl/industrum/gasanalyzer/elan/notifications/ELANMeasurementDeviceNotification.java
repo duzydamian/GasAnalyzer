@@ -1,16 +1,18 @@
 package pl.industrum.gasanalyzer.elan.notifications;
 
+import pl.industrum.gasanalyzer.elan.types.ELANNetworkDevicePair;
+
 public class ELANMeasurementDeviceNotification implements ELANNotification
 {
-	private Integer deviceAddress;
+	private ELANNetworkDevicePair data;
 	
-	public ELANMeasurementDeviceNotification( Integer deviceAddress )
+	public ELANMeasurementDeviceNotification( String networkPort, Integer deviceAddress )
 	{
-		this.deviceAddress = deviceAddress;
+		data = new ELANNetworkDevicePair( networkPort, deviceAddress );
 	}
 	
-	public Integer getData()
+	public ELANNetworkDevicePair getData()
 	{
-		return deviceAddress;
+		return data;
 	}
 }
