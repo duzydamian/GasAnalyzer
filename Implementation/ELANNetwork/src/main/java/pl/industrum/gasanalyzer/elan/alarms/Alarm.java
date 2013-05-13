@@ -3,8 +3,10 @@ package pl.industrum.gasanalyzer.elan.alarms;
 import java.util.Observer;
 import java.util.Timer;
 
-public class Alarm extends Timer
+public class Alarm
 {
+	private Timer timer;
+	
 	private Integer step;
 	private String name;
 	private Observer observer;
@@ -13,7 +15,6 @@ public class Alarm extends Timer
 	
 	public Alarm( String name, Observer observer )
 	{
-		super( name, true );
 		this.name = name;
 		this.observer = observer;
 		
@@ -30,24 +31,29 @@ public class Alarm extends Timer
 		return running;
 	}
 	
-	public void runWithStep( Integer newStep )
+	public void runWithStep( Integer step )
 	{
-		this.step = newStep * 1000;
+		this.step = step * 1000;
 		
 		if( running == true )
 		{
-			this.cancel();
+			timer.cancel();
 		}
 		else
 		{
 			running = true;
 		}
-		this.schedule( new AlarmNotifyTask( name, observer ), step, step );
+		
+		timer = new Timer();
+		timer.schedule( new AlarmNotifyTask( name, observer ), this.step, this.step );
 	}
 	
 	public void stop()
 	{
-		cancel();
-		running = false;
+		if( running == true )
+		{
+			timer.cancel();
+			running = false;
+		}
 	}
 }
