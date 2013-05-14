@@ -17,6 +17,7 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 
 import pl.industrum.gasanalyzer.hibernate.model.managers.MeasurementSnapshotManager;
+import pl.industrum.gasanalyzer.model.Measurement;
 import pl.industrum.gasanalyzer.model.MeasurementSet;
 import pl.industrum.gasanalyzer.model.MeasurementSnapshot;
 import pl.industrum.gasanalyzer.model.Survey;
@@ -53,14 +54,44 @@ public abstract class XLSGenerator
 		{
 			MeasurementSet measurementSet = ( MeasurementSet )set;
 			
-			CellRangeAddress mergedRegion = new CellRangeAddress( currRow, currRow, currColumn + 1, currColumn + 5 );
+			CellRangeAddress mergedRegion = new CellRangeAddress( currRow, currRow, currColumn + 1, currColumn + measurementSet.getMeasurements().size() - 1 );
 	        sheet.addMergedRegion( mergedRegion );
 	        rowhead.createCell( currColumn + 1 ).setCellValue( measurementSet.getDevice().getName() );
-	        currColumn += 5;
+	        currColumn += 4;
 			
 			progressIncrement();
 		}
 		
+		//Add free cells above L.p. and Timestamp
+        HSSFRow rowVariable = sheet.createRow( 1 );
+        HSSFRow rowDimension = sheet.createRow( 2 );
+        rowVariable.createCell( 1 ).setCellValue("L.p.");
+        rowVariable.createCell( 2 ).setCellValue("Godzina");
+        
+        currRow = 1;
+        currColumn = 2;
+		
+        //Add measurement variables and dimension names
+        for( Object set: snapshotForHeader.getMeasurementSetsSorted() )
+		{
+			MeasurementSet measurementSet = ( MeasurementSet )set;
+			for( Object measurement: measurementSet.getMeasurementsSorted() )
+			{
+				if ( !( ( Measurement )measurement  ).getMeasurementVariable().getName().equalsIgnoreCase( "Process preassure" ) )
+				{
+					currColumn++;
+					rowVariable.createCell( currColumn ).setCellValue( ( ( Measurement )measurement  ).getMeasurementVariable().getName() );
+					rowDimension.createCell( currColumn ).setCellValue( ( ( Measurement )measurement  ).getMeasurementDimension().getName() );
+					progressIncrement();
+				}					
+			}
+		}
+        currColumn++;
+        rowVariable.createCell( currColumn ).setCellValue("Uwagi");
+        
+        currRow = 3;
+        currColumn = 1;
+        
 		try
 		{
 			FileOutputStream outputStream = new FileOutputStream( path );
