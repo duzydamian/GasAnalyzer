@@ -475,8 +475,8 @@ public class EditSurvey extends Dialog
 			Integer userID = avaibleUsers.get( listSurveyUser.getSelectionIndex() ).getId();
 			Integer objectID = avaibleObjects.get( listSurveyPlace.getSelectionIndex() ).getId();
 			Date date = dateFormater.parse( txtSurveyDate.getText() );
-			
-			result = SurveyManager.getSurvey( SurveyManager.updateSurvey( editedSurveyID, txtSurveyName.getText(), textSurveyLoad.getText(), styledTextSurveySpecialConditions.getText(), styledTextComment.getText(), objectID, userID, date ));
+			SurveyManager.updateSurvey( editedSurveyID, txtSurveyName.getText(), textSurveyLoad.getText(), styledTextSurveySpecialConditions.getText(), styledTextComment.getText(), objectID, userID, date );
+			result = SurveyManager.getSurvey( editedSurveyID );
 		}
 		catch ( ParseException e )
 		{
