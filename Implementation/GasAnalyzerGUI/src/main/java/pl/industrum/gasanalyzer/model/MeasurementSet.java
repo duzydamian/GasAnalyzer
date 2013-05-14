@@ -3,12 +3,11 @@ package pl.industrum.gasanalyzer.model;
 // default package
 // Generated 2013-05-07 14:42:04 by Hibernate Tools 4.0.0
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.Vector;
 
 /**
@@ -95,7 +94,8 @@ public class MeasurementSet implements java.io.Serializable
 			newMeasurements.put( ( ( Measurement) measurement ).getMeasurementVariable().toString(), (Measurement)measurement );
 		}
 		
-		SortedSet<String> keys = new TreeSet<String>( newMeasurements.keySet() );
+		Vector<String> keys = new Vector<String>( newMeasurements.keySet() );
+		Collections.sort( keys );
 		Vector<Measurement> measurementsObjectsVector = new Vector<Measurement>();
 		for (String key : keys)
 		{ 

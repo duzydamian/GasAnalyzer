@@ -39,10 +39,21 @@ public abstract class SurveyManager
 		session.getTransaction().commit();
 	}
 	
-	public static Integer updateSurvey( Integer updateSurveyID, String name, String load, String specialConditions, String comment, Integer objectID, Integer userID, Date date )
+	public static void updateSurvey( Integer surveyID, String name, String load, String specialConditions, String comment, Integer objectID, Integer userID, Date date )
 	{
-		//TODO implement update to available edit survey data in GUI
-		return 0;
+		Survey survey = SurveyManager.getSurvey( surveyID );
+		survey.setName( name );
+		survey.setLoad( load );
+		survey.setSpecialConditions( specialConditions );
+		survey.setComment( comment );
+		survey.setObject( MeasuredObjectManager.getObject( objectID ) );
+		survey.setApplicationUser( ApplicationUserManager.getApplicationUser( userID ) );
+		survey.setTimestamp( date );
+		
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.update( survey );
+		session.getTransaction().commit();
 	}
 	
 	public static Survey getSurvey( Integer surveyID )
