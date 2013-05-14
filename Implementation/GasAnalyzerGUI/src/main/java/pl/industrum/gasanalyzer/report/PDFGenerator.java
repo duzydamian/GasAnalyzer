@@ -190,7 +190,7 @@ public abstract class PDFGenerator
 			for( Object set: snapshotForHeader.getMeasurementSets() )
 			{
 				MeasurementSet measurementSet = ( MeasurementSet )set;
-				for( Object measurement: measurementSet.getMeasurements() )
+				for( Object measurement: measurementSet.getMeasurementsSorted() )
 				{
 					Measurement measurement2 = ( Measurement )measurement;
 					if ( !measurement2.getMeasurementVariable().getName().equalsIgnoreCase( "Process preassure" ) )
@@ -210,7 +210,7 @@ public abstract class PDFGenerator
 				for( Object set: snapshot.getMeasurementSets() )
 				{
 					MeasurementSet measurementSet = ( MeasurementSet )set;
-					for( Object measurement: measurementSet.getMeasurements() )
+					for( Object measurement: measurementSet.getMeasurementsSorted() )
 					{
 						Measurement measurement2 = ( Measurement )measurement;
 						if ( !measurement2.getMeasurementVariable().getName().equalsIgnoreCase( "Process preassure" ) )
