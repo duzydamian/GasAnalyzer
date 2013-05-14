@@ -28,6 +28,7 @@ import pl.industrum.gasanalyzer.model.ApplicationUser;
 import pl.industrum.gasanalyzer.model.MeasuredObject;
 import pl.industrum.gasanalyzer.model.Place;
 import pl.industrum.gasanalyzer.model.Survey;
+import pl.industrum.gasanalyzer.report.XLSGenerator;
 import pl.industrum.gasanalyzer.types.UsefulColor;
 
 public class XlsDialog extends Dialog
@@ -269,6 +270,19 @@ public class XlsDialog extends Dialog
 	protected void saveAction()
 	{
 		//TODO Grzegorz implement generate excel file
+		XLSGenerator generator = new XLSGenerator()
+		{
+
+			@Override
+			public void progressIncrement()
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+		};
+		//generator.create( //surv, path )
+		//generator.open();
 	}
 	
 	private void loadSurvaeyData(Survey survey)
