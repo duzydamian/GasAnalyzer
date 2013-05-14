@@ -88,6 +88,8 @@ public class GasAnalyzerMainWindow implements Observer
 						.setMessage( "Czy na pewno chcesz zamknąć aplikację?" );
 				if ( messageBox.open() == SWT.YES )
 				{
+					networkCollection.setVisible( false );
+					deviceCollection.setVisible( false );
 					statusBar.setStatusText( "Trwa rozłączanie sieci" );
 					statusBar.showProgressBar();
 					statusBar.setProgress( 50 );

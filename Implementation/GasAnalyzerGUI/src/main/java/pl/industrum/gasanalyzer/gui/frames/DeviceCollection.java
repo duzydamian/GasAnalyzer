@@ -91,6 +91,17 @@ public abstract class DeviceCollection extends Composite
 	}
 	
 	@Override
+	public void setVisible( boolean arg0 )
+	{
+		for( Device device: devices )
+		{
+			device.setVisible( arg0 );
+		}
+		currentBody.layout();
+		super.setVisible( arg0 );
+	}
+	
+	@Override
 	protected void checkSubclass()
 	{
 		// Disable the check that prevents subclassing of SWT components

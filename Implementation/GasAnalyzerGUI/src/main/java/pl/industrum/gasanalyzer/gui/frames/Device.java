@@ -9,18 +9,13 @@ import java.util.TimerTask;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -154,73 +149,12 @@ public abstract class Device extends Composite
 
 		historyBody = new Composite( tabFolder, SWT.NONE );
 		tbitmHistory.setControl( historyBody );
-		tbitmHistory.addListener( SWT.FocusIn, new Listener()
-		{
-			
-			public void handleEvent( Event arg0 )
-			{
-				refreshDeviceMeasurements();
-				System.out.println( "FocusIn z tbitm: "+arg0 );
-			}
-		} );
-		
-		tbitmHistory.addListener( SWT.FocusOut, new Listener()
-		{
-			
-			public void handleEvent( Event arg0 )
-			{
-				refreshDeviceMeasurements();
-				System.out.println( "FocusOut z tbitm: "+arg0 );
-			}
-		} );
-		
-		tbitmHistory.addListener( SWT.FOCUSED, new Listener()
-		{
-			
-			public void handleEvent( Event arg0 )
-			{
-				refreshDeviceMeasurements();
-				System.out.println( "Focused z tbitm: "+arg0 );
-			}
-		} );
 		
 		historyBody.setLayout(new FillLayout(SWT.HORIZONTAL));
-
-		historyBody.addFocusListener( new FocusListener()
-		{
-			
-			public void focusLost( FocusEvent arg0 )
-			{
-				refreshDeviceMeasurements();
-				System.out.println( "Lost z body: "+arg0 );
-			}
-			
-			public void focusGained( FocusEvent arg0 )
-			{
-				refreshDeviceMeasurements();
-				System.out.println( "Gained z body: "+arg0 );
-			}
-		} );
 		
 		tableHistory = new Table (historyBody, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		tableHistory.setLinesVisible (true);
 		tableHistory.setHeaderVisible (true);
-		
-		tableHistory.addFocusListener( new FocusListener()
-		{
-			
-			public void focusLost( FocusEvent arg0 )
-			{
-				refreshDeviceMeasurements();
-				System.out.println( "Lost z table: "+arg0 );
-			}
-			
-			public void focusGained( FocusEvent arg0 )
-			{
-				refreshDeviceMeasurements();
-				System.out.println( "Gained z table: "+arg0 );
-			}
-		} );
 		
 		for (int i=0; i<columnsHistory.length; i++)
 		{
@@ -234,49 +168,8 @@ public abstract class Device extends Composite
 			tableHistory.getColumn (i).setMoveable(true);
 		}		
 		
-		tabFolder.addSelectionListener(new SelectionAdapter()
-		{
-		      public void widgetSelected(org.eclipse.swt.events.SelectionEvent event)
-		      {
-		          System.out.println(tabFolder.getSelection().getText() + " selected");
-		          if( tabFolder.getSelection().equals( tbitmHistory ) )
-		          {
-		        	  startRefreshTimer();
-		          }
-		        }
-		});
-		
-		tabFolder.addFocusListener( new FocusListener()
-		{
-			
-			public void focusLost( FocusEvent arg0 )
-			{
-				stopRefreshTimer();
-				System.out.println( "Lost z tab: "+arg0 );
-			}
-			
-			public void focusGained( FocusEvent arg0 )
-			{
-				System.out.println( "Gained z tab: "+arg0 );
-			}
-		} );
-		
 		refreshDeviceMeasurements();
-				
-		refreshTimerTask = new TimerTask()
-		{			
-			@Override
-			public void run()
-			{
-				Display.getDefault().asyncExec( new Runnable()
-				{
-					public void run()
-					{
-						refreshDeviceMeasurements();
-					}
-				});					
-			}
-		};		
+								
 		runningRefreshTimer = false;
 	}
 
@@ -291,21 +184,39 @@ public abstract class Device extends Composite
 	}
 	
 	private void startRefreshTimer()
-	{
-		System.out.println( "Timer start" );
+	{		
 		int step = getStep() * 1000;
 		
 		if( runningRefreshTimer == true )
 		{
+			System.out.println( "Timer stop" );
 			refreshTimer.cancel();
+			runningRefreshTimer = false;
 		}
 		else
 		{
-			runningRefreshTimer = true;
-		}		
+			System.out.println( "Timer start" );
+			runningRefreshTimer = true;			
+		}						
 		
+		System.out.println( "Create timer and task" );
+		refreshTimerTask = new TimerTask()
+		{
+			
+			@Override
+			public void run()
+			{
+				Display.getDefault().asyncExec( new Runnable()
+				{
+					public void run()
+					{
+						refreshDeviceMeasurements();
+					}
+				});				
+			}
+		};		
 		refreshTimer = new Timer();
-		refreshTimer.schedule( refreshTimerTask, step, step );		
+		refreshTimer.schedule( refreshTimerTask, step, step );	
 	}
 	
 	private void refreshDeviceMeasurements()
@@ -384,6 +295,21 @@ public abstract class Device extends Composite
 	{
 		tabFolder.showItem( tbitmCurrent );
 		tabFolder.forceFocus();
+	}
+	
+	@Override
+	public void setVisible( boolean arg0 )
+	{
+		if( arg0)
+		{
+			startRefreshTimer();
+		}
+		else
+		{
+			stopRefreshTimer();
+		}
+		
+		super.setVisible( arg0 );
 	}
 	
 	@Override
