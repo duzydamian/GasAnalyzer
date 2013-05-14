@@ -75,8 +75,8 @@ public class GasAnalyzerMainWindow implements Observer
 	public void open()
 	{
 		Display display = Display.getDefault();
-		createContents();
-
+		createContents();		
+		
 		shlGasAnalyzer.addListener( SWT.Close, new Listener()
 		{
 			public void handleEvent( Event event )
@@ -106,14 +106,13 @@ public class GasAnalyzerMainWindow implements Observer
 			}
 		} );
 		
-//		shlGasAnalyzer.setMaximized( true );
-//		shlGasAnalyzer.setFullScreen( true );
 		
 		shlGasAnalyzer.pack();
 		shlGasAnalyzer.open();
 		shlGasAnalyzer.layout();
 		
 		shlGasAnalyzer.setMaximized( true );
+		problems.showWarning();
 		
 		while ( !shlGasAnalyzer.isDisposed() )
 		{
@@ -324,7 +323,7 @@ public class GasAnalyzerMainWindow implements Observer
 			@Override
 			public void noDeviceFound( String source )
 			{
-				problems.addWarning( Warning.NO_DEVICE, source );
+				problems.addWarning( Warning.NO_DEVICE, source );				
 			}
 
 			@Override
@@ -360,7 +359,9 @@ public class GasAnalyzerMainWindow implements Observer
 		problems = new Problems( sashELANNetworkProblems, SWT.NONE );		
 
 		statusBar = new StatusBar( shlGasAnalyzer, SWT.BORDER );	
-		//composite.setWeights(new int[] {30,40,30});
+		
+		sashELANNetworkProblems.setWeights( new int[] {80,20} );
+		sashDeviceTreeNetworkDevice.setWeights(new int[] {50,70,70});		
 	}
 	
 	public void enableSurveyMainWIndow()
@@ -370,7 +371,7 @@ public class GasAnalyzerMainWindow implements Observer
 		deviceTree.setEnabled( true );		
 		networkCollection.setEnabled( true );
 		deviceCollection.setEnabled( true );
-		deviceTree.refreshTree();
+		deviceTree.refreshTree();		
 	}
 
 	public ELANConnectionState connect(String port)
