@@ -3,12 +3,15 @@ package pl.industrum.gasanalyzer.gui.frames;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -39,6 +42,10 @@ import pl.industrum.gasanalyzer.types.UsefulImage;
 public abstract class Device extends Composite
 {
 	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "HH:mm:ss dd/MM/yyyy", Locale.getDefault() );
+	
+	private Timer refreshTimer;
+	private TimerTask refreshTimerTask;
+	private boolean runningRefreshTimer;
 	
 	GridData tableData;
 	private Group grpOneDIvice;
@@ -227,10 +234,80 @@ public abstract class Device extends Composite
 			tableHistory.getColumn (i).setMoveable(true);
 		}		
 		
-		//tabFolder.add
+		tabFolder.addSelectionListener(new SelectionAdapter()
+		{
+		      public void widgetSelected(org.eclipse.swt.events.SelectionEvent event)
+		      {
+		          System.out.println(tabFolder.getSelection().getText() + " selected");
+		          if( tabFolder.getSelection().equals( tbitmHistory ) )
+		          {
+		        	  startRefreshTimer();
+		          }
+		        }
+		});
+		
+		tabFolder.addFocusListener( new FocusListener()
+		{
+			
+			public void focusLost( FocusEvent arg0 )
+			{
+				stopRefreshTimer();
+				System.out.println( "Lost z tab: "+arg0 );
+			}
+			
+			public void focusGained( FocusEvent arg0 )
+			{
+				System.out.println( "Gained z tab: "+arg0 );
+			}
+		} );
+		
 		refreshDeviceMeasurements();
+				
+		refreshTimerTask = new TimerTask()
+		{			
+			@Override
+			public void run()
+			{
+				Display.getDefault().asyncExec( new Runnable()
+				{
+					public void run()
+					{
+						refreshDeviceMeasurements();
+					}
+				});					
+			}
+		};		
+		runningRefreshTimer = false;
 	}
 
+	public void stopRefreshTimer()
+	{
+		System.out.println( "Timer stop" );
+		if( runningRefreshTimer == true )
+		{
+			refreshTimer.cancel();
+			runningRefreshTimer = false;
+		}
+	}
+	
+	private void startRefreshTimer()
+	{
+		System.out.println( "Timer start" );
+		int step = getStep() * 1000;
+		
+		if( runningRefreshTimer == true )
+		{
+			refreshTimer.cancel();
+		}
+		else
+		{
+			runningRefreshTimer = true;
+		}		
+		
+		refreshTimer = new Timer();
+		refreshTimer.schedule( refreshTimerTask, step, step );		
+	}
+	
 	private void refreshDeviceMeasurements()
 	{
 		//TODO implement browse history
@@ -316,4 +393,5 @@ public abstract class Device extends Composite
 	}
 	
 	public abstract Integer getSurveyID();
+	public abstract Integer getStep();
 }

@@ -272,6 +272,11 @@ public abstract class DeviceTree extends Composite
 		btnOk.setEnabled( arg0 );
 	}
 	
+	public Integer getStep()
+	{
+		return surveyStep.getSelection();
+	}
+	
 	public abstract void setSurveyStep(int step);
 	public abstract void setMeasurementComment( String comment );
 	public abstract ELANConnectionState connectWithNetwork(String port);

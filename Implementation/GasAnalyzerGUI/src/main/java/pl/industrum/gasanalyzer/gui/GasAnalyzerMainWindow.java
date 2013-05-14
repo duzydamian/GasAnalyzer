@@ -349,6 +349,12 @@ public class GasAnalyzerMainWindow implements Observer
 			public Integer getSurveyIDFromGUI()
 			{
 				return currentSurveyObject.getId();
+			}
+
+			@Override
+			public Integer getStepFromGUI()
+			{
+				return deviceTree.getStep();
 			}			
 		};
 		deviceCollection.setEnabled( false );

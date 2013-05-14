@@ -57,6 +57,12 @@ public abstract class DeviceCollection extends Composite
 			{
 				return getSurveyIDFromGUI();
 			}
+
+			@Override
+			public Integer getStep()
+			{
+				return getStepFromGUI();
+			}
 			
 		};
 		addedDevice.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
@@ -101,4 +107,5 @@ public abstract class DeviceCollection extends Composite
 	}
 	
 	public abstract Integer getSurveyIDFromGUI();
+	public abstract Integer getStepFromGUI();
 }
