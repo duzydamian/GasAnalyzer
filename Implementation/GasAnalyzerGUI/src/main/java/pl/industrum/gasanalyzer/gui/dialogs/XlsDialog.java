@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
@@ -64,6 +65,9 @@ public class XlsDialog extends Dialog
 	private Vector<ApplicationUser> avaibleUsers;
 	private Vector<Place> avaiblePlaces;
 	private Vector<MeasuredObject> avaibleObjects;
+	private Survey surveyToGenerateReport;
+	private Label lblGeneration;
+	private ProgressBar progressBar;
 	
 	/**
 	 * Create the dialog.
@@ -90,6 +94,7 @@ public class XlsDialog extends Dialog
 		createContents();
 		shell.open();
 		shell.layout();
+		surveyToGenerateReport = survey;
 		loadSurvaeyData( survey );
 		Display display = getParent().getDisplay();
 		while ( !shell.isDisposed() )
@@ -227,6 +232,15 @@ public class XlsDialog extends Dialog
 		styledTextComment.setEnabled( false );
 		new Label(surveyForm, SWT.NONE);
 		
+		lblGeneration = new Label(shell, SWT.NONE);
+		lblGeneration.setText(Messages.getString("PdfDialog.lblGenerowanie.text")); //$NON-NLS-1$
+		lblGeneration.setVisible( false );
+		
+		progressBar = new ProgressBar(shell, SWT.NONE);
+		progressBar.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
+				false, 2, 1 ) );
+		progressBar.setVisible( false );
+		
 		new Label( shell, SWT.NONE );
 		
 		btnOk = new Button(shell, SWT.RIGHT);
@@ -269,20 +283,21 @@ public class XlsDialog extends Dialog
 	
 	protected void saveAction()
 	{
-		//TODO Grzegorz implement generate excel file
+		lblGeneration.setVisible( true );
+		progressBar.setVisible( true );
+		String path = textFilePath.getText();
 		XLSGenerator generator = new XLSGenerator()
 		{
 
 			@Override
 			public void progressIncrement()
 			{
-				// TODO Auto-generated method stub
-				
+				progressBar.setSelection( progressBar.getSelection()+1 );
 			}
 			
 		};
-		//generator.create( //surv, path )
-		//generator.open();
+		generator.create( surveyToGenerateReport, path );
+		generator.open( path );
 	}
 	
 	private void loadSurvaeyData(Survey survey)
