@@ -73,6 +73,7 @@ public abstract class DeviceCollection extends Composite
 						true, true );
 				deviceLayoutData.verticalSpan = 3;
 				device.setLayoutData( deviceLayoutData );
+				device.showCurrent();
 				device.setVisible( true );
 			}
 			else

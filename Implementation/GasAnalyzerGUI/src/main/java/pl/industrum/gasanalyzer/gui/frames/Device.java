@@ -7,17 +7,17 @@ import java.util.Locale;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -147,35 +147,47 @@ public abstract class Device extends Composite
 
 		historyBody = new Composite( tabFolder, SWT.NONE );
 		tbitmHistory.setControl( historyBody );
-		historyBody.setLayout(new FillLayout(SWT.HORIZONTAL));
-		historyBody.addTraverseListener( new TraverseListener()
-		{			
-			public void keyTraversed( TraverseEvent arg0 )
+		tbitmHistory.addListener( SWT.FOCUSED, new Listener()
+		{
+			
+			public void handleEvent( Event arg0 )
 			{
-				if ( arg0.detail == SWT.TRAVERSE_RETURN )
-				{
-					refreshDeviceMeasurements();
-				}								
+				refreshDeviceMeasurements();
 			}
 		} );
-		historyBody.addKeyListener( new KeyListener()
-		{			
-			public void keyReleased( KeyEvent arg0 )
+		historyBody.setLayout(new FillLayout(SWT.HORIZONTAL));
+
+		historyBody.addFocusListener( new FocusListener()
+		{
+			
+			public void focusLost( FocusEvent arg0 )
 			{
-				if ( arg0.keyCode == SWT.F1)
-				{
-					refreshDeviceMeasurements();
-				}				 
+				refreshDeviceMeasurements();
 			}
 			
-			public void keyPressed( KeyEvent arg0 )
+			public void focusGained( FocusEvent arg0 )
 			{
+				refreshDeviceMeasurements();
 			}
 		} );
 		
 		tableHistory = new Table (historyBody, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		tableHistory.setLinesVisible (true);
 		tableHistory.setHeaderVisible (true);
+		
+		tableHistory.addFocusListener( new FocusListener()
+		{
+			
+			public void focusLost( FocusEvent arg0 )
+			{
+				refreshDeviceMeasurements();
+			}
+			
+			public void focusGained( FocusEvent arg0 )
+			{
+				refreshDeviceMeasurements();
+			}
+		} );
 		
 		for (int i=0; i<columnsHistory.length; i++)
 		{
@@ -264,6 +276,12 @@ public abstract class Device extends Composite
 		return deviceAddress;
 	}
 
+	public void showCurrent()
+	{
+		tabFolder.showItem( tbitmCurrent );
+		tabFolder.forceFocus();
+	}
+	
 	@Override
 	protected void checkSubclass()
 	{

@@ -223,8 +223,6 @@ public class GasAnalyzerMainWindow implements Observer
 			@Override
 			public void setSurveyStep( int step )
 			{
-				//TODO set survey step in network
-				//FIXME need to be implemented as soon as possible 
 				for( ELANNetwork network: connectionWrapper )
 				{
 					network.startAlarmingWithStep( step );
@@ -393,6 +391,7 @@ public class GasAnalyzerMainWindow implements Observer
 		return connectionWrapper;
 	}
 	
+
 	public void update( Observable obj, Object arg )
 	{
 		if( arg instanceof ELANMeasurementDeviceNotification )

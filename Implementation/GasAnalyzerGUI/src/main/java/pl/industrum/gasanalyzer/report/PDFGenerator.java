@@ -174,7 +174,7 @@ public abstract class PDFGenerator
 			emptyPdfPCell.setColspan( 2 );
 			measurementSnapshotList.addCell(emptyPdfPCell);
 			MeasurementSnapshot snapshotForHeader = MeasurementSnapshotManager.getLastMeasurementSnapshot( survey.getId() );
-			for( Object set: snapshotForHeader.getMeasurementSets() )
+			for( Object set: snapshotForHeader.getMeasurementSetsSorted() )
 			{
 				MeasurementSet measurementSet = ( MeasurementSet )set;
 				PdfPCell devicePdfPCell = new PdfPCell(new Paragraph( measurementSet.getDevice().getName(), czcionka10b ));
@@ -187,7 +187,7 @@ public abstract class PDFGenerator
 			measurementSnapshotList.addCell(new PdfPCell(new Paragraph("Lp.",czcionka10b)));
 			measurementSnapshotList.addCell(new PdfPCell(new Paragraph("Godzina",czcionka10b)));
 			
-			for( Object set: snapshotForHeader.getMeasurementSets() )
+			for( Object set: snapshotForHeader.getMeasurementSetsSorted() )
 			{
 				MeasurementSet measurementSet = ( MeasurementSet )set;
 				for( Object measurement: measurementSet.getMeasurementsSorted() )
@@ -207,7 +207,7 @@ public abstract class PDFGenerator
 			{				
 				measurementSnapshotList.addCell(new PdfPCell(new Paragraph(String.valueOf(i),czcionka10)));
 				measurementSnapshotList.addCell(new PdfPCell(new Paragraph(hourFormater.format( snapshot.getTimestamp() ),czcionka10)));
-				for( Object set: snapshot.getMeasurementSets() )
+				for( Object set: snapshot.getMeasurementSetsSorted() )
 				{
 					MeasurementSet measurementSet = ( MeasurementSet )set;
 					for( Object measurement: measurementSet.getMeasurementsSorted() )
