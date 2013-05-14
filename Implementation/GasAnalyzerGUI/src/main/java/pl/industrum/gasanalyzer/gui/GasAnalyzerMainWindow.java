@@ -94,6 +94,7 @@ public class GasAnalyzerMainWindow implements Observer
 					for( ELANNetwork iter: connectionWrapper )
 					{
 						statusBar.setStatusText( "Trwa rozłączanie z " + iter.getName());
+						iter.stopAlarming();
 						iter.getConnection().disconnect();
 					}
 					statusBar.setStatusText( "Trwa zamykanie aplikacji" );
@@ -225,7 +226,6 @@ public class GasAnalyzerMainWindow implements Observer
 			{
 				//TODO set survey step in network
 				//FIXME need to be implemented as soon as possible 
-				//XXX what the hell ?
 				for( ELANNetwork network: connectionWrapper )
 				{
 					network.startAlarmingWithStep( step );
@@ -404,16 +404,9 @@ public class GasAnalyzerMainWindow implements Observer
 				ELANMeasurementDevice device;
 				
 				device = connectionWrapper.getNetwork( networkPort ).getDevice( deviceAddress );
-				//device = connectionWrapper.getNetwork( "/dev/ttyS0" ).getDevice( data );
 				
 				ELANRxFrame poll = device.pollAndClear();
 				ELANRxBroadcastFrame frame = ( ELANRxBroadcastFrame )poll;
-//				System.out.println(device.getDeviceAddress() + " @ " + frame.getTimeStamp());
-//				
-//				for( ELANMeasurement elanMeasurement: frame )
-//				{
-//					System.out.println(elanMeasurement.toString());
-//				}
 				
 				deviceCollection.updateMeasurmentFormDevice( device.getDeviceAddress(), frame );
 			} catch ( NullDeviceException e )

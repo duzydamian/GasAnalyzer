@@ -13,6 +13,8 @@ import java.util.Locale;
 import org.eclipse.swt.program.Program;
 
 import pl.industrum.gasanalyzer.hibernate.model.managers.MeasurementSnapshotManager;
+import pl.industrum.gasanalyzer.model.Measurement;
+import pl.industrum.gasanalyzer.model.MeasurementSet;
 import pl.industrum.gasanalyzer.model.MeasurementSnapshot;
 import pl.industrum.gasanalyzer.model.Survey;
 
@@ -34,11 +36,11 @@ import com.itextpdf.text.pdf.PdfWriter;
  * @author duzydamian
  */
 @SuppressWarnings( "unused" )
-public class PDFGenerator
+public abstract class PDFGenerator
 {
 
 	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "dd/MM/yyyy", Locale.getDefault() );
-	private static SimpleDateFormat hourFormater = new SimpleDateFormat( "HH:mm", Locale.getDefault() );
+	private static SimpleDateFormat hourFormater = new SimpleDateFormat( "HH:mm:ss", Locale.getDefault() );
     
 	static BaseFont font;
     
@@ -154,26 +156,72 @@ public class PDFGenerator
 			surveyData.add("\n");
 			surveyData.add(new Chunk("Prowadzący pomiary: ", czcionka16));
 			surveyData.add(new Chunk(survey.getApplicationUser().toString(), czcionka16b));
+		
+			progressIncrement();
 			
-			PdfPTable sd = new PdfPTable(1);
-			sd.setWidthPercentage(100);
-			//sn.getDefaultCell().setBorder(0);
-			sd.addCell(new PdfPCell(surveyData));
+			float[] colsWidth = new float[MeasurementSnapshotManager.getMeasurementSnapshotMeasuredVariableCount( survey.getId() )+2];
+			colsWidth[0] = 4f;
+			colsWidth[1] = 20f;
+			for( int i = 2; i < colsWidth.length; i++ )
+			{
+				colsWidth[i] = 10f;
+			}
 			
-			//float[] colsWidth = {4f, 38f, 10f, 5f, 5f, 7f, 8f, 7f, 8f, 8f};
-			float[] colsWidth = {4f, 38f};
 			PdfPTable measurementSnapshotList = new PdfPTable(colsWidth);
 			measurementSnapshotList.setWidthPercentage(100);
 			measurementSnapshotList.setHorizontalAlignment(Element.ALIGN_CENTER);
+			PdfPCell emptyPdfPCell = new PdfPCell();
+			emptyPdfPCell.setColspan( 2 );
+			measurementSnapshotList.addCell(emptyPdfPCell);
+			MeasurementSnapshot snapshotForHeader = MeasurementSnapshotManager.getLastMeasurementSnapshot( survey.getId() );
+			for( Object set: snapshotForHeader.getMeasurementSets() )
+			{
+				MeasurementSet measurementSet = ( MeasurementSet )set;
+				PdfPCell devicePdfPCell = new PdfPCell(new Paragraph( measurementSet.getDevice().getName(), czcionka10b ));
+				devicePdfPCell.setColspan( measurementSet.getMeasurements().size()-1 );
+				devicePdfPCell.setHorizontalAlignment( Paragraph.ALIGN_CENTER );
+				measurementSnapshotList.addCell(devicePdfPCell);
+				progressIncrement();
+			}
+			
 			measurementSnapshotList.addCell(new PdfPCell(new Paragraph("Lp.",czcionka10b)));
 			measurementSnapshotList.addCell(new PdfPCell(new Paragraph("Godzina",czcionka10b)));
+			
+			for( Object set: snapshotForHeader.getMeasurementSets() )
+			{
+				MeasurementSet measurementSet = ( MeasurementSet )set;
+				for( Object measurement: measurementSet.getMeasurements() )
+				{
+					Measurement measurement2 = ( Measurement )measurement;
+					if ( !measurement2.getMeasurementVariable().getName().equalsIgnoreCase( "Process preassure" ) )
+					{
+						measurementSnapshotList.addCell(new PdfPCell(new Paragraph(measurement2.getMeasurementVariable().getName()+"\n["+measurement2.getMeasurementDimension().getName()+"]" ,czcionka10b)));
+						progressIncrement();
+					}					
+				}
+			}
+			
 			
 			int i = 1;
 			for( MeasurementSnapshot snapshot: MeasurementSnapshotManager.getAllMeasurementSnapshots( survey.getId() ) )
 			{				
 				measurementSnapshotList.addCell(new PdfPCell(new Paragraph(String.valueOf(i),czcionka10)));
 				measurementSnapshotList.addCell(new PdfPCell(new Paragraph(hourFormater.format( snapshot.getTimestamp() ),czcionka10)));
+				for( Object set: snapshot.getMeasurementSets() )
+				{
+					MeasurementSet measurementSet = ( MeasurementSet )set;
+					for( Object measurement: measurementSet.getMeasurements() )
+					{
+						Measurement measurement2 = ( Measurement )measurement;
+						if ( !measurement2.getMeasurementVariable().getName().equalsIgnoreCase( "Process preassure" ) )
+						{
+							measurementSnapshotList.addCell(new PdfPCell(new Paragraph(String.valueOf( measurement2.getValue() ) ,czcionka10)));
+						}						
+					}
+					
+				}
 				i++;
+				progressIncrement();
 			}
 
 			document.add(logo);
@@ -209,4 +257,6 @@ public class PDFGenerator
     {
             Program.launch( path );
     }
+    
+    public abstract void progressIncrement();
 }

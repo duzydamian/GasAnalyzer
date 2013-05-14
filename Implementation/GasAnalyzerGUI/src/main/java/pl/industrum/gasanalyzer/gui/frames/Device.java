@@ -7,15 +7,17 @@ import java.util.Locale;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -142,24 +144,34 @@ public abstract class Device extends Composite
 		tbitmHistory = new CTabItem( tabFolder, SWT.NONE );
 		tbitmHistory.setImage( UsefulImage.CALENDAR.getImage() );
 		tbitmHistory.setText( Messages.getString( "Device.tbtmNewItem.text" ) ); //$NON-NLS-1$
-		tbitmHistory.addListener( SWT.Selection, new Listener()
-		{			
-			public void handleEvent( Event arg0 )
-			{
-				refreshDeviceMeasurements();
-			}
-		} );
-		tbitmHistory.addListener( SWT.Show, new Listener()
-		{			
-			public void handleEvent( Event arg0 )
-			{
-				refreshDeviceMeasurements();
-			}
-		} );
 
 		historyBody = new Composite( tabFolder, SWT.NONE );
 		tbitmHistory.setControl( historyBody );
 		historyBody.setLayout(new FillLayout(SWT.HORIZONTAL));
+		historyBody.addTraverseListener( new TraverseListener()
+		{			
+			public void keyTraversed( TraverseEvent arg0 )
+			{
+				if ( arg0.detail == SWT.TRAVERSE_RETURN )
+				{
+					refreshDeviceMeasurements();
+				}								
+			}
+		} );
+		historyBody.addKeyListener( new KeyListener()
+		{			
+			public void keyReleased( KeyEvent arg0 )
+			{
+				if ( arg0.keyCode == SWT.F1)
+				{
+					refreshDeviceMeasurements();
+				}				 
+			}
+			
+			public void keyPressed( KeyEvent arg0 )
+			{
+			}
+		} );
 		
 		tableHistory = new Table (historyBody, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		tableHistory.setLinesVisible (true);
@@ -183,6 +195,8 @@ public abstract class Device extends Composite
 	private void refreshDeviceMeasurements()
 	{
 		//TODO implement browse history
+		tableHistory.removeAll();
+		
 		for( MeasurementSet set: MeasurementSetManager.getAllMeasurementSets( new Date(), getSurveyID(), deviceID, 10 ) )
 		{
 			TableItem item = new TableItem( tableHistory, SWT.NONE );
