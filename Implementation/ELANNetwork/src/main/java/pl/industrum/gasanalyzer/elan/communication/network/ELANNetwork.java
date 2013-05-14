@@ -57,7 +57,7 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 		
 		initializeDevicesPool();
 		
-		this.alarm = new Alarm( name, this );
+		this.alarm = new Alarm( "ALARMING FROM NETWORK["+getName()+"]", this );
 	}
 	
 	public void update( Observable obj, Object arg )

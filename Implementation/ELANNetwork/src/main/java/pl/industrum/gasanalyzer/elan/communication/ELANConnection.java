@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.Observer;
+import java.util.Set;
 import java.util.Vector;
 
 import pl.industrum.gasanalyzer.elan.communication.rx.ELANRxByteBuffer;
@@ -102,8 +104,17 @@ public class ELANConnection
 		}
 		else
 		{
-			commPort = portIdentifier.open(this.getClass().getName(), 2000);			
-
+			commPort = portIdentifier.open(this.getClass().getName(), 2000);
+			Map<Thread, StackTraceElement[]> allStackTraces = Thread.getAllStackTraces();
+			Set<Thread> keySet = allStackTraces.keySet();
+			for( Thread thread: keySet )
+			{
+				if ( thread.getClass().getCanonicalName().equalsIgnoreCase( "gnu.io.RXTXPort.MonitorThread" ) )
+				{
+					thread.setName( "COMM_PORT OPEN[" + portName + "]" );
+				}				
+			}
+			
 			if (commPort instanceof SerialPort)
 			{
 				//System.out.println("Port " + portName + " successfull open.");

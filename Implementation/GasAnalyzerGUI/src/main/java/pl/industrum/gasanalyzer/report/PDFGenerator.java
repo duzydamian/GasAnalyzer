@@ -44,6 +44,7 @@ public abstract class PDFGenerator
     
 	static BaseFont font;
     
+	private Font czcionka6;
 	private Font czcionka8;
 	private Font czcionka10;
 	private Font czcionka10b;
@@ -57,6 +58,7 @@ public abstract class PDFGenerator
         try
         {
             font = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.CP1250, BaseFont.EMBEDDED);
+            czcionka6 = new Font(font,6,Font.NORMAL);
             czcionka8 = new Font(font,8,Font.NORMAL);
             czcionka10 = new Font(font,10,Font.NORMAL);
             czcionka10b = new Font(font,10,Font.BOLD);
@@ -84,40 +86,44 @@ public abstract class PDFGenerator
             PdfWriter writer = PdfWriter.getInstance((com.itextpdf.text.Document) document,
                              new FileOutputStream(path));
             document.open();
-
-            Paragraph headerLeftImgages = new Paragraph();
-            headerLeftImgages.setAlignment(Paragraph.ALIGN_LEFT);
             
-            headerLeftImgages.add(new Chunk("ORYGINAŁ \n", czcionka16));
-            headerLeftImgages.add("\n");
-			Image logo = Image.getInstance("src/main/resources/pl/industrum/gasanalyzer/gui/PolslLogo.png");
-			logo.scalePercent(50);
-			headerLeftImgages.add(logo);
+			Image logoPolsl = Image.getInstance("src/main/resources/pl/industrum/gasanalyzer/gui/PolslLogo.png");
+			Image logoZkiwp = Image.getInstance("src/main/resources/pl/industrum/gasanalyzer/gui/ZKiWPLogo.png");
+			Image logoImiue = Image.getInstance("src/main/resources/pl/industrum/gasanalyzer/gui/IMIUELogo.png");
+
+			PdfPTable imagesTable = new PdfPTable(3);
+			imagesTable.setWidthPercentage(30);
+			imagesTable.setHorizontalAlignment(Element.ALIGN_LEFT);
+			//imagesTable.
+			
+			PdfPCell logoPolslPdfPCell = new PdfPCell( logoPolsl );
+			logoPolslPdfPCell.setBorder( Rectangle.NO_BORDER );
+			PdfPCell logoImiuePdfPCell = new PdfPCell( logoImiue );
+			logoImiuePdfPCell.setBorder( Rectangle.NO_BORDER );
+			PdfPCell logoZkiwpPdfPCell = new PdfPCell( logoZkiwp );
+			logoZkiwpPdfPCell.setBorder( Rectangle.NO_BORDER );
+			imagesTable.addCell( logoPolslPdfPCell );
+			imagesTable.addCell( logoImiuePdfPCell );
+			imagesTable.addCell( logoZkiwpPdfPCell );	
             
 			Paragraph headerRight = new Paragraph();            
             headerRight.setAlignment(Paragraph.ALIGN_LEFT);
 			headerRight.add(new Chunk("POLITECHNIKA ŚLĄSKA \n", czcionka16b));          
-            headerRight.add(new Chunk("\n", czcionka16b));
             
             Paragraph headerRightInstitute = new Paragraph();
-            headerRightInstitute.add(new Chunk("WYDZIAŁ INŻYNIERII ŚRODOWISKA \nI ENERGETYKI \n", czcionka10b));
-            headerRightInstitute.add("\n");
-            headerRightInstitute.add(new Chunk("INSTYTUT MASZYN I URZĄDZEŃ \nENERGETYCZNYCH \n", czcionka10b));
-            headerRightInstitute.add("\n");
-            headerRightInstitute.add(new Chunk("ZAKŁAD KOTŁÓW I WYTORNIC PARY \nwww.kotly.polsl.pl \n", czcionka10b));
+            headerRightInstitute.add(new Chunk("WYDZIAŁ INŻYNIERII ŚRODOWISKA \nI ENERGETYKI \n", czcionka10));
+            headerRightInstitute.add(new Chunk("INSTYTUT MASZYN I URZĄDZEŃ \nENERGETYCZNYCH \n", czcionka10));
+            headerRightInstitute.add(new Chunk("ZAKŁAD KOTŁÓW I WYTORNIC PARY \nwww.kotly.polsl.pl \n", czcionka10));
+            
             Paragraph headerRightAdrress = new Paragraph();
-            headerRightAdrress.add(new Chunk("UL. KONARSKIEGO 20 \n", czcionka8));
-            headerRightAdrress.add("\n");
-            headerRightAdrress.add(new Chunk("44-100  GLIWICE \n", czcionka8));
-            headerRightAdrress.add("\n");
-            headerRightAdrress.add(new Chunk("T: +48 32 237 12 73 \n", czcionka8));
-            headerRightAdrress.add("\n");
-            headerRightAdrress.add(new Chunk("F: +48 32 237 21 93 \n", czcionka8));
-            headerRightAdrress.add("\n");
-            headerRightAdrress.add(new Chunk("kotly@polsl.pl \n", czcionka8));
+            headerRightAdrress.add(new Chunk("UL. KONARSKIEGO 20 \n", czcionka6));
+            headerRightAdrress.add(new Chunk("44-100  GLIWICE \n", czcionka6));
+            headerRightAdrress.add(new Chunk("T: +48 32 237 12 73 \n", czcionka6));
+            headerRightAdrress.add(new Chunk("F: +48 32 237 21 93 \n", czcionka6));
+            headerRightAdrress.add(new Chunk("kotly@polsl.pl \n", czcionka6));
             
 			PdfPTable headerRightTable = new PdfPTable(2);
-			headerRightTable.setWidthPercentage(100);
+			headerRightTable.setWidthPercentage(30);
 			PdfPCell headerRL = new PdfPCell(headerRightInstitute);
 			headerRL.setBorder(Rectangle.NO_BORDER);
 			PdfPCell headerRR = new PdfPCell(headerRightAdrress);
@@ -129,7 +135,7 @@ public abstract class PDFGenerator
 			
 			PdfPTable header = new PdfPTable(2);
 			header.setWidthPercentage(100);
-			PdfPCell headerL = new PdfPCell(headerLeftImgages);
+			PdfPCell headerL = new PdfPCell(imagesTable);
 			headerL.setBorder(Rectangle.NO_BORDER);
 			PdfPCell headerR = new PdfPCell(headerRight);
 			headerR.setBorder(Rectangle.NO_BORDER);
@@ -228,14 +234,17 @@ public abstract class PDFGenerator
 				i++;				
 				progressIncrement();
 			}
-
-			document.add(logo);
+						
             document.add(header);
-
-            document.add(surveyData);
             document.add(new Paragraph("\n"));
+            
+            document.add(surveyData);            
             document.add(new Paragraph("\n"));
+            
             document.add(measurementSnapshotList);
+            
+            document.add( headerRightInstitute );
+            document.add( headerRightAdrress );
 
 //            document.addAuthor("duzydamian");
 //            document.addProducer();

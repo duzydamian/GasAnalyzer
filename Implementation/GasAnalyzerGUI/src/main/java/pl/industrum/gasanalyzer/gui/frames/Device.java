@@ -193,30 +193,30 @@ public abstract class Device extends Composite
 			refreshTimer.cancel();
 			runningRefreshTimer = false;
 		}
-		else
+		
+		if( runningRefreshTimer == false )
 		{
 			System.out.println( "Timer start" );
-			runningRefreshTimer = true;			
-		}						
-		
-		System.out.println( "Create timer and task" );
-		refreshTimerTask = new TimerTask()
-		{
-			
-			@Override
-			public void run()
+			System.out.println( "Create timer and task" );
+			refreshTimerTask = new TimerTask()
 			{
-				Display.getDefault().asyncExec( new Runnable()
+				
+				@Override
+				public void run()
 				{
-					public void run()
+					Display.getDefault().asyncExec( new Runnable()
 					{
-						refreshDeviceMeasurements();
-					}
-				});				
-			}
-		};		
-		refreshTimer = new Timer();
-		refreshTimer.schedule( refreshTimerTask, step, step );	
+						public void run()
+						{
+							refreshDeviceMeasurements();
+						}
+					});				
+				}
+			};		
+			refreshTimer = new Timer("REFRESHING HISTORY FROM DEVICE["+deviceName+"]");
+			refreshTimer.schedule( refreshTimerTask, step, step );
+			runningRefreshTimer = true;			
+		}									
 	}
 	
 	private void refreshDeviceMeasurements()

@@ -8,6 +8,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -17,6 +19,7 @@ import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
@@ -30,7 +33,6 @@ import pl.industrum.gasanalyzer.model.Place;
 import pl.industrum.gasanalyzer.model.Survey;
 import pl.industrum.gasanalyzer.report.PDFGenerator;
 import pl.industrum.gasanalyzer.types.UsefulColor;
-import org.eclipse.swt.widgets.ProgressBar;
 
 public class PdfDialog extends Dialog
 {
@@ -126,6 +128,17 @@ public class PdfDialog extends Dialog
 		textFilePath = new Text( shell, SWT.BORDER );
 		textFilePath.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 1, 1 ) );
+		textFilePath.addTraverseListener( new TraverseListener()
+		{			
+			public void keyTraversed( TraverseEvent arg0 )
+			{
+				if ( arg0.detail == SWT.TRAVERSE_RETURN )
+				{
+					saveAction();
+					shell.dispose();
+				}				
+			}
+		} );
 
 		btnBrowse = new Button( shell, SWT.NONE );
 		btnBrowse.addSelectionListener( new SelectionAdapter()
@@ -139,7 +152,26 @@ public class PdfDialog extends Dialog
 				{ "*.pdf" } );
 				String path = fileDialog.open();
 				if ( path != null )
+				{
+					if( !path.endsWith( ".pdf" ) )
+					{
+						int indexOf = path.lastIndexOf( "." );
+						if ( indexOf == -1 )
+						{
+							path = path.substring( 0, path.length() );
+						}
+						else
+						{
+							path = path.substring( 0, indexOf );
+						}
+						
+						path += ".pdf";
+					}
+
 					textFilePath.setText( path );
+					textFilePath.getParent().setFocus();
+					textFilePath.setFocus();
+				}
 			}
 		} );
 		btnBrowse.setText( Messages.getString( "PdfDialog.btnBrowse.text" ) ); //$NON-NLS-1$
@@ -282,7 +314,7 @@ public class PdfDialog extends Dialog
 		refreshListSurveyPlace();
 		refreshListSurveyObject();
 	}
-	
+
 	protected void saveAction()
 	{
 		lblGeneration.setVisible( true );
