@@ -57,7 +57,7 @@ public abstract class XLSGenerator
 			CellRangeAddress mergedRegion = new CellRangeAddress( currRow, currRow, currColumn + 1, currColumn + measurementSet.getMeasurements().size() - 1 );
 	        sheet.addMergedRegion( mergedRegion );
 	        rowhead.createCell( currColumn + 1 ).setCellValue( measurementSet.getDevice().getName() );
-	        currColumn += 4;
+	        currColumn += ( measurementSet.getMeasurements().size() - 1 );
 			
 			progressIncrement();
 		}
@@ -91,6 +91,35 @@ public abstract class XLSGenerator
         
         currRow = 3;
         currColumn = 1;
+        
+        int i = 1;
+        HSSFRow dataRow;
+		for( MeasurementSnapshot snapshot: MeasurementSnapshotManager.getAllMeasurementSnapshots( survey.getId() ) )
+		{	
+			currColumn = 1;
+			dataRow = sheet.createRow( currRow ); currRow++;
+			
+			dataRow.createCell( currColumn ).setCellValue( String.valueOf( i ) ); currColumn++;
+			dataRow.createCell( currColumn ).setCellValue( hourFormater.format( snapshot.getTimestamp() ) ); currColumn++;
+			
+			for( Object set: snapshot.getMeasurementSetsSorted() )
+			{
+				MeasurementSet measurementSet = ( MeasurementSet )set;
+				for( Object measurement: measurementSet.getMeasurementsSorted() )
+				{
+					if ( !( ( Measurement )measurement  ).getMeasurementVariable().getName().equalsIgnoreCase( "Process preassure" ) )
+					{
+						dataRow.createCell( currColumn ).setCellValue( String.valueOf( ( ( Measurement )measurement  ).getValue() ) ); currColumn++;
+					}						
+				}
+				
+			}
+			
+			dataRow.createCell( currColumn ).setCellValue( snapshot.getComment() );
+			
+			i++;				
+			progressIncrement();
+		}
         
 		try
 		{

@@ -91,7 +91,7 @@ public class MeasurementSet implements java.io.Serializable
 		HashMap<String, Measurement> newMeasurements = new HashMap<String, Measurement>();
 		for( Object measurement: getMeasurements().toArray() )
 		{
-			newMeasurements.put( ( ( Measurement) measurement ).getMeasurementVariable().toString(), (Measurement)measurement );
+			newMeasurements.put( ( ( Measurement) measurement ).getMeasurementVariable().getName(), (Measurement)measurement );
 		}
 		
 		Vector<String> keys = new Vector<String>( newMeasurements.keySet() );
