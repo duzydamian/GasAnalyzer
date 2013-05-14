@@ -52,7 +52,7 @@ public abstract class DeviceTree extends Composite
 	public DeviceTree( final Composite parent, int style )
 	{
 		super( parent, style );
-		setLayout( new GridLayout( 3, false ) );
+		setLayout( new GridLayout( 3, true ) );
 
 		imageDisconnect = UsefulImage.DISCONNECT.getImage();
 		imageConnect = UsefulImage.CONNECT.getImage();
@@ -199,13 +199,17 @@ public abstract class DeviceTree extends Composite
 		lblMeasurementComment = new Label( this, SWT.NONE );
 		lblMeasurementComment.setText( Messages
 				.getString( "DeviceTree.lblMeasurementComment.text" ) ); //$NON-NLS-1$
+		lblMeasurementComment.setLayoutData( new GridData( SWT.LEFT, SWT.FILL, true,
+				false, 3, 1 ) );
 
 		textMeasurementComment = new Text( this, SWT.BORDER | SWT.MULTI );		
-		textMeasurementComment.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true,
-				true, 1, 1 ) );
+		textMeasurementComment.setLayoutData( new GridData( SWT.FILL, SWT.FILL, false,
+				true, 3, 1 ) );
 
 		btnSetMeasurementComment = new Button( this, SWT.NONE );
 		btnSetMeasurementComment.setText( Messages.getString( "DeviceTree.btnSet.text" ) ); //$NON-NLS-1$
+		btnSetMeasurementComment.setLayoutData( new GridData( SWT.FILL, SWT.FILL, false,
+				false, 3, 1 ) );
 		btnSetMeasurementComment.addSelectionListener( new SelectionAdapter()
 		{
 			public void widgetSelected( SelectionEvent e )

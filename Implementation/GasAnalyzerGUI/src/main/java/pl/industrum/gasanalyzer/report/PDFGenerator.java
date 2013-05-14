@@ -159,13 +159,14 @@ public abstract class PDFGenerator
 		
 			progressIncrement();
 			
-			float[] colsWidth = new float[MeasurementSnapshotManager.getMeasurementSnapshotMeasuredVariableCount( survey.getId() )+2];
+			float[] colsWidth = new float[MeasurementSnapshotManager.getMeasurementSnapshotMeasuredVariableCount( survey.getId() )+3];
 			colsWidth[0] = 4f;
 			colsWidth[1] = 20f;
-			for( int i = 2; i < colsWidth.length; i++ )
+			for( int i = 2; i < colsWidth.length-1; i++ )
 			{
 				colsWidth[i] = 10f;
 			}
+			colsWidth[colsWidth.length-1] = 20f;
 			
 			PdfPTable measurementSnapshotList = new PdfPTable(colsWidth);
 			measurementSnapshotList.setWidthPercentage(100);
@@ -174,7 +175,7 @@ public abstract class PDFGenerator
 			emptyPdfPCell.setColspan( 2 );
 			measurementSnapshotList.addCell(emptyPdfPCell);
 			MeasurementSnapshot snapshotForHeader = MeasurementSnapshotManager.getLastMeasurementSnapshot( survey.getId() );
-			for( Object set: snapshotForHeader.getMeasurementSets() )
+			for( Object set: snapshotForHeader.getMeasurementSetsSorted() )
 			{
 				MeasurementSet measurementSet = ( MeasurementSet )set;
 				PdfPCell devicePdfPCell = new PdfPCell(new Paragraph( measurementSet.getDevice().getName(), czcionka10b ));
@@ -182,12 +183,15 @@ public abstract class PDFGenerator
 				devicePdfPCell.setHorizontalAlignment( Paragraph.ALIGN_CENTER );
 				measurementSnapshotList.addCell(devicePdfPCell);
 				progressIncrement();
-			}
+			}			
+			
+			emptyPdfPCell.setColspan( 1 );
+			measurementSnapshotList.addCell(emptyPdfPCell);
 			
 			measurementSnapshotList.addCell(new PdfPCell(new Paragraph("Lp.",czcionka10b)));
 			measurementSnapshotList.addCell(new PdfPCell(new Paragraph("Godzina",czcionka10b)));
 			
-			for( Object set: snapshotForHeader.getMeasurementSets() )
+			for( Object set: snapshotForHeader.getMeasurementSetsSorted() )
 			{
 				MeasurementSet measurementSet = ( MeasurementSet )set;
 				for( Object measurement: measurementSet.getMeasurementsSorted() )
@@ -200,14 +204,14 @@ public abstract class PDFGenerator
 					}					
 				}
 			}
-			
+			measurementSnapshotList.addCell(new PdfPCell(new Paragraph("Uwagi",czcionka10b)));
 			
 			int i = 1;
 			for( MeasurementSnapshot snapshot: MeasurementSnapshotManager.getAllMeasurementSnapshots( survey.getId() ) )
 			{				
 				measurementSnapshotList.addCell(new PdfPCell(new Paragraph(String.valueOf(i),czcionka10)));
 				measurementSnapshotList.addCell(new PdfPCell(new Paragraph(hourFormater.format( snapshot.getTimestamp() ),czcionka10)));
-				for( Object set: snapshot.getMeasurementSets() )
+				for( Object set: snapshot.getMeasurementSetsSorted() )
 				{
 					MeasurementSet measurementSet = ( MeasurementSet )set;
 					for( Object measurement: measurementSet.getMeasurementsSorted() )
@@ -220,7 +224,8 @@ public abstract class PDFGenerator
 					}
 					
 				}
-				i++;
+				measurementSnapshotList.addCell(new PdfPCell(new Paragraph(snapshot.getComment(),czcionka10)));
+				i++;				
 				progressIncrement();
 			}
 

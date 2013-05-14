@@ -36,6 +36,7 @@ public class Problems extends Composite
 	private Table tableError;
 	private Table tableWarning;
 	private String[] columns;
+	private MenuItem menuItemWarning;
 
 	/**
 	 * Create the composite.
@@ -99,10 +100,6 @@ public class Problems extends Composite
 		}
 		itemError.setControl(tableError);
 		
-		folder.forceFocus();
-		folder.showItem( itemError );
-		folder.forceFocus();
-		
 		folder.addCTabFolder2Listener(new CTabFolder2Adapter() {
 			public void minimize(CTabFolderEvent event) {
 				folder.setMinimized(true);
@@ -130,9 +127,9 @@ public class Problems extends Composite
 		
 		Menu menuWarning = new Menu (body.getShell(), SWT.POP_UP);
 		tableWarning.setMenu (menuWarning);
-		MenuItem itemWarning = new MenuItem (menuWarning, SWT.PUSH);
-		itemWarning.setText ("Delete Selection");
-		itemWarning.addListener (SWT.Selection, new Listener () {
+		menuItemWarning = new MenuItem (menuWarning, SWT.PUSH);
+		menuItemWarning.setText ("Delete Selection");
+		menuItemWarning.addListener (SWT.Selection, new Listener () {
 			public void handleEvent (Event event) {
 				tableWarning.remove (tableWarning.getSelectionIndices ());
 			}
@@ -148,8 +145,8 @@ public class Problems extends Composite
 			}
 		});
 		
-		body.layout();
-		layout();		
+		this.body.layout();
+		this.layout();		
 	}
 
 	@Override
@@ -182,6 +179,12 @@ public class Problems extends Composite
 			tableWarning.getColumn (i).pack ();
 			tableWarning.getColumn (i).setMoveable(true);
 		}
+		
+		showWarning();
+	}
+	
+	public void showWarning()
+	{
 		folder.showItem( itemWarning );
 		folder.forceFocus();
 	}
@@ -198,7 +201,13 @@ public class Problems extends Composite
 			tableError.getColumn (i).pack ();
 			tableError.getColumn (i).setMoveable(true);
 		}
+		
+		showError();
+	}
+	
+	public void showError()
+	{
 		folder.showItem( itemError );
 		folder.forceFocus();
-	}
+	}	
 }
