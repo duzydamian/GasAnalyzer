@@ -147,14 +147,36 @@ public abstract class Device extends Composite
 
 		historyBody = new Composite( tabFolder, SWT.NONE );
 		tbitmHistory.setControl( historyBody );
+		tbitmHistory.addListener( SWT.FocusIn, new Listener()
+		{
+			
+			public void handleEvent( Event arg0 )
+			{
+				refreshDeviceMeasurements();
+				System.out.println( "FocusIn z tbitm: "+arg0 );
+			}
+		} );
+		
+		tbitmHistory.addListener( SWT.FocusOut, new Listener()
+		{
+			
+			public void handleEvent( Event arg0 )
+			{
+				refreshDeviceMeasurements();
+				System.out.println( "FocusOut z tbitm: "+arg0 );
+			}
+		} );
+		
 		tbitmHistory.addListener( SWT.FOCUSED, new Listener()
 		{
 			
 			public void handleEvent( Event arg0 )
 			{
 				refreshDeviceMeasurements();
+				System.out.println( "Focused z tbitm: "+arg0 );
 			}
 		} );
+		
 		historyBody.setLayout(new FillLayout(SWT.HORIZONTAL));
 
 		historyBody.addFocusListener( new FocusListener()
@@ -163,11 +185,13 @@ public abstract class Device extends Composite
 			public void focusLost( FocusEvent arg0 )
 			{
 				refreshDeviceMeasurements();
+				System.out.println( "Lost z body: "+arg0 );
 			}
 			
 			public void focusGained( FocusEvent arg0 )
 			{
 				refreshDeviceMeasurements();
+				System.out.println( "Gained z body: "+arg0 );
 			}
 		} );
 		
@@ -181,11 +205,13 @@ public abstract class Device extends Composite
 			public void focusLost( FocusEvent arg0 )
 			{
 				refreshDeviceMeasurements();
+				System.out.println( "Lost z table: "+arg0 );
 			}
 			
 			public void focusGained( FocusEvent arg0 )
 			{
 				refreshDeviceMeasurements();
+				System.out.println( "Gained z table: "+arg0 );
 			}
 		} );
 		
@@ -201,6 +227,7 @@ public abstract class Device extends Composite
 			tableHistory.getColumn (i).setMoveable(true);
 		}		
 		
+		//tabFolder.add
 		refreshDeviceMeasurements();
 	}
 

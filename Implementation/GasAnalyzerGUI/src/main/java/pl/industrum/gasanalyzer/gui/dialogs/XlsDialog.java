@@ -113,7 +113,7 @@ public class XlsDialog extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 450, 450 );
+		shell.setSize( 450, 470 );
 		shell.setText( getText() );
 		shell.setLayout( new GridLayout( 3, false ) );
 
