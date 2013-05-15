@@ -270,6 +270,8 @@ public abstract class DeviceTree extends Composite
 		deviceTree.setEnabled( arg0 );
 		surveyStep.setEnabled( arg0 );
 		btnOk.setEnabled( arg0 );
+		textMeasurementComment.setEnabled( arg0 );
+		btnSetMeasurementComment.setEnabled( arg0 );
 	}
 	
 	public Integer getStep()

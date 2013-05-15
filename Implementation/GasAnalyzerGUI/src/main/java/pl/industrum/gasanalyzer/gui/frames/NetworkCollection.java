@@ -3,6 +3,7 @@ package pl.industrum.gasanalyzer.gui.frames;
 import java.util.Vector;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -14,7 +15,7 @@ import org.eclipse.swt.widgets.Composite;
 public class NetworkCollection extends Composite
 {
 	GridData compositeData;
-	private Composite currentBody;
+	private SashForm currentBody;
 	private Vector<Network> networks;
 
 	/**
@@ -33,7 +34,7 @@ public class NetworkCollection extends Composite
 		//this.setLayoutData( compositeData );
 		this.networks = new Vector<Network>();
 
-		currentBody = new Composite( this, SWT.NONE );
+		currentBody = new SashForm( this, SWT.NONE );
 		currentBody.setLayout( new FillLayout( SWT.VERTICAL ) );
 	}
 

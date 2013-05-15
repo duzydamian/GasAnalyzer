@@ -113,6 +113,9 @@ public class GasAnalyzerMainWindow implements Observer
 		shlGasAnalyzer.open();
 		shlGasAnalyzer.layout();
 		
+		sashELANNetworkProblems.layout();
+		sashDeviceTreeNetworkDevice.layout();
+		
 		shlGasAnalyzer.setMaximized( true );
 		problems.showWarning();
 		
@@ -271,8 +274,8 @@ public class GasAnalyzerMainWindow implements Observer
 				networkCollection.setVisible( false );
 				deviceCollection.setVisible( true );
 				deviceCollection.setVisibleDivice( text );
+				
 				sashDeviceTreeNetworkDevice.layout();
-				sashDeviceTreeNetworkDevice.getParent().layout();
 			}
 
 			@Override
@@ -287,10 +290,8 @@ public class GasAnalyzerMainWindow implements Observer
 				deviceCollection.setVisible( false );
 				networkCollection.setVisible( true );
 				networkCollection.setVisibleNetwork( text );
-				networkCollection.layout(true);
-				sashDeviceTreeNetworkDevice.layout(true);
-				sashDeviceTreeNetworkDevice.getParent().layout(true);
 				
+				sashDeviceTreeNetworkDevice.layout();
 			}
 
 			@Override

@@ -3,6 +3,7 @@ package pl.industrum.gasanalyzer.gui.frames;
 import java.util.Vector;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -18,7 +19,7 @@ import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
 public abstract class DeviceCollection extends Composite
 {
 	GridData compositeData;
-	private Composite currentBody;
+	private SashForm currentBody;
 	private Vector<Device> devices;
 
 	/**
@@ -37,7 +38,7 @@ public abstract class DeviceCollection extends Composite
 		//this.setLayoutData( compositeData );
 		this.devices = new Vector<Device>();
 
-		currentBody = new Composite( this, SWT.NONE );
+		currentBody = new SashForm( this, SWT.NONE );
 		currentBody.setLayout( new GridLayout( 1, false ) );
 	}
 
