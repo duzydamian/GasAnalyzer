@@ -175,7 +175,6 @@ public abstract class Device extends Composite
 
 	public void stopRefreshTimer()
 	{
-		System.out.println( "Timer stop" );
 		if( runningRefreshTimer == true )
 		{
 			refreshTimer.cancel();
@@ -189,15 +188,12 @@ public abstract class Device extends Composite
 		
 		if( runningRefreshTimer == true )
 		{
-			System.out.println( "Timer stop" );
 			refreshTimer.cancel();
 			runningRefreshTimer = false;
 		}
 		
 		if( runningRefreshTimer == false )
-		{
-			System.out.println( "Timer start" );
-			System.out.println( "Create timer and task" );
+		{			
 			refreshTimerTask = new TimerTask()
 			{
 				
@@ -213,6 +209,7 @@ public abstract class Device extends Composite
 					});				
 				}
 			};		
+			
 			refreshTimer = new Timer("REFRESHING HISTORY FROM DEVICE["+deviceName+"]");
 			refreshTimer.schedule( refreshTimerTask, step, step );
 			runningRefreshTimer = true;			

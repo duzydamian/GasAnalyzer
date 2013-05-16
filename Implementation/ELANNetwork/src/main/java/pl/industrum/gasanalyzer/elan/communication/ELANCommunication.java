@@ -1,5 +1,6 @@
 package pl.industrum.gasanalyzer.elan.communication;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -51,6 +52,10 @@ public class ELANCommunication
     		}
     		while ( !( (previousCharacter==16) & (curentCharacter==3) ) );
     		
+    		System.out.println( new Date() );
+        	System.out.println( data );
+        	System.out.println( );
+        	
     		//Add CRC16 to frame
 			int CRCLow = elanConnection.read();
 			int CRCHigh = elanConnection.read();		

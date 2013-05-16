@@ -55,6 +55,9 @@ public class GasAnalyzerGUI
 				e.printStackTrace();
 			}
 						
+			System.setErr( new PrintStream( "err.log" ) );
+			System.setOut( new PrintStream( "out.log" ) );
+			
 			SplashScreen splashScreen = new SplashScreen();
 			splashScreen.open();
 

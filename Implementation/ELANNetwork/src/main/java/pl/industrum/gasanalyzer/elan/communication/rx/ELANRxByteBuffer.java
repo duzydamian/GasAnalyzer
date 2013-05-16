@@ -1,5 +1,6 @@
 package pl.industrum.gasanalyzer.elan.communication.rx;
 
+import java.util.Date;
 import java.util.Observable;
 import java.util.Queue;
 
@@ -24,12 +25,15 @@ public class ELANRxByteBuffer extends Observable implements Runnable
 			try
 			{				
 				//Read all frames and send every correct frame to ELANRxBufferObserver.
-	        	Queue<Integer> frame = communication.readFrame();
+	        	Queue<Integer> frame = communication.readFrame();	        	
 	        	if(frame != null)
 	        	{	        		
 		        	setChanged();
 		        	notifyObservers( new ELANRxByteBufferNotification( frame ) );
 	        	}
+	        	System.out.println( new Date() );
+	        	System.out.println( frame );
+	        	System.out.println( );
 			}
 			catch( Exception e )
 			{

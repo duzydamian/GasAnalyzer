@@ -80,6 +80,11 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 					//address = channel_address * 16 + component_address ()
 					Integer deviceAddress = ( parser.parseAddresses( dataBuffer ) ).get( "source" );
 					
+					if ( deviceAddress == 0 )
+					{
+						return;
+					}
+					
 					//Add new device
 	            	if( measurementDevices[deviceAddress] == null )
 	            	{

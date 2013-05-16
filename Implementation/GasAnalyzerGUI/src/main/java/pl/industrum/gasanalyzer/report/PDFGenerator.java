@@ -44,6 +44,7 @@ public abstract class PDFGenerator
     
 	static BaseFont font;
     
+	private Font czcionka2;
 	private Font czcionka6;
 	private Font czcionka8;
 	private Font czcionka10;
@@ -58,6 +59,7 @@ public abstract class PDFGenerator
         try
         {
             font = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.CP1250, BaseFont.EMBEDDED);
+            czcionka2 = new Font(font,2,Font.NORMAL);
             czcionka6 = new Font(font,6,Font.NORMAL);
             czcionka8 = new Font(font,8,Font.NORMAL);
             czcionka10 = new Font(font,10,Font.NORMAL);
@@ -106,24 +108,33 @@ public abstract class PDFGenerator
 			imagesTable.addCell( logoImiuePdfPCell );
 			imagesTable.addCell( logoZkiwpPdfPCell );	
             
-			Paragraph headerRight = new Paragraph();            
-            headerRight.setAlignment(Paragraph.ALIGN_LEFT);
-			headerRight.add(new Chunk("POLITECHNIKA ŚLĄSKA \n", czcionka16b));          
+			PdfPTable headerRight = new PdfPTable(1);  
+			headerRight.setWidthPercentage( 50 );
+			PdfPCell headerRightCell = new PdfPCell(new Paragraph("POLITECHNIKA ŚLĄSKA \n", czcionka16b));
+			headerRightCell.setBorder(Rectangle.NO_BORDER);
+			headerRight.addCell( headerRightCell );
             
             Paragraph headerRightInstitute = new Paragraph();
-            headerRightInstitute.add(new Chunk("WYDZIAŁ INŻYNIERII ŚRODOWISKA \nI ENERGETYKI \n", czcionka10));
-            headerRightInstitute.add(new Chunk("INSTYTUT MASZYN I URZĄDZEŃ \nENERGETYCZNYCH \n", czcionka10));
-            headerRightInstitute.add(new Chunk("ZAKŁAD KOTŁÓW I WYTORNIC PARY \nwww.kotly.polsl.pl \n", czcionka10));
+            headerRightInstitute.add(new Chunk("WYDZIAŁ INŻYNIERII ŚRODOWISKA \nI ENERGETYKI \n", czcionka8));
+            headerRightInstitute.add(new Chunk("\n", czcionka6));
+            headerRightInstitute.add(new Chunk("INSTYTUT MASZYN I URZĄDZEŃ \nENERGETYCZNYCH \n", czcionka8));
+            headerRightInstitute.add(new Chunk("\n", czcionka6));
+            headerRightInstitute.add(new Chunk("ZAKŁAD KOTŁÓW I WYTORNIC PARY \nwww.kotly.polsl.pl \n", czcionka8));
             
             Paragraph headerRightAdrress = new Paragraph();
+            headerRightAdrress.setAlignment( Element.ALIGN_BOTTOM );
             headerRightAdrress.add(new Chunk("UL. KONARSKIEGO 20 \n", czcionka6));
+            headerRightAdrress.add(new Chunk("\n", czcionka2));
             headerRightAdrress.add(new Chunk("44-100  GLIWICE \n", czcionka6));
+            headerRightAdrress.add(new Chunk("\n", czcionka2));
             headerRightAdrress.add(new Chunk("T: +48 32 237 12 73 \n", czcionka6));
+            headerRightAdrress.add(new Chunk("\n", czcionka2));
             headerRightAdrress.add(new Chunk("F: +48 32 237 21 93 \n", czcionka6));
+            headerRightAdrress.add(new Chunk("\n", czcionka2));
             headerRightAdrress.add(new Chunk("kotly@polsl.pl \n", czcionka6));
             
-			PdfPTable headerRightTable = new PdfPTable(2);
-			headerRightTable.setWidthPercentage(30);
+			PdfPTable headerRightTable = new PdfPTable(new float[]{ 70f, 30f});
+			headerRightTable.setWidthPercentage(30);			
 			PdfPCell headerRL = new PdfPCell(headerRightInstitute);
 			headerRL.setBorder(Rectangle.NO_BORDER);
 			PdfPCell headerRR = new PdfPCell(headerRightAdrress);
@@ -131,7 +142,9 @@ public abstract class PDFGenerator
 			headerRightTable.addCell(headerRL);
 			headerRightTable.addCell(headerRR);
 			
-			headerRight.add( headerRightTable );
+			PdfPCell headerRightTableCell = new PdfPCell( headerRightTable );
+			headerRightTableCell.setBorder(Rectangle.NO_BORDER);
+			headerRight.addCell( headerRightTableCell );
 			
 			PdfPTable header = new PdfPTable(2);
 			header.setWidthPercentage(100);
@@ -166,7 +179,7 @@ public abstract class PDFGenerator
 			progressIncrement();
 			
 			float[] colsWidth = new float[MeasurementSnapshotManager.getMeasurementSnapshotMeasuredVariableCount( survey.getId() )+3];
-			colsWidth[0] = 4f;
+			colsWidth[0] = 10f;
 			colsWidth[1] = 20f;
 			for( int i = 2; i < colsWidth.length-1; i++ )
 			{
@@ -241,10 +254,7 @@ public abstract class PDFGenerator
             document.add(surveyData);            
             document.add(new Paragraph("\n"));
             
-            document.add(measurementSnapshotList);
-            
-            document.add( headerRightInstitute );
-            document.add( headerRightAdrress );
+            document.add(measurementSnapshotList);                
 
 //            document.addAuthor("duzydamian");
 //            document.addProducer();
