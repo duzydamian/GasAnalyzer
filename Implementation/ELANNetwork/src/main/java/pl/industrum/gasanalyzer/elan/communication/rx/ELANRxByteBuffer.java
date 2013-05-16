@@ -31,7 +31,7 @@ public class ELANRxByteBuffer extends Observable implements Runnable
 		        	setChanged();
 		        	notifyObservers( new ELANRxByteBufferNotification( frame ) );
 	        	}
-	        	System.out.println( new Date() );
+	        	System.out.println( new Date() + " : Ramka z ELANRxByte Buffer" );
 	        	System.out.println( frame );
 	        	System.out.println( );
 			}

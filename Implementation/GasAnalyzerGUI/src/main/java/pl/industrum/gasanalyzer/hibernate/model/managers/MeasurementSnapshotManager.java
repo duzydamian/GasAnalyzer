@@ -18,7 +18,7 @@ import pl.industrum.gasanalyzer.model.MeasurementSnapshot;
 public abstract class MeasurementSnapshotManager
 {
 	public static Integer addMeasurementSnapshot( Integer surveyID, Date timestamp, ELANNetwork network, String comment )
-	{
+	{//FIXME sprawdzić czy wszystkie urządzenia mają jakieś pomiary i dopiero po tym tworzyć wszystkie obikety i ładować je do bazy
 		MeasurementSnapshot snapshot = new MeasurementSnapshot();
 		snapshot.setComment( comment );
 		snapshot.setSurveySection( SurveySectionDictionary.get( SurveySectionDictionary.add( "bb" ) ) );

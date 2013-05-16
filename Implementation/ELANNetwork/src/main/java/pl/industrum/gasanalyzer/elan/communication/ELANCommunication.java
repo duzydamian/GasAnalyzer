@@ -52,9 +52,9 @@ public class ELANCommunication
     		}
     		while ( !( (previousCharacter==16) & (curentCharacter==3) ) );
     		
-    		System.out.println( new Date() );
+    		System.out.println( new Date() + " : ramka z ELAN Communication" );
         	System.out.println( data );
-        	System.out.println( );
+        	
         	
     		//Add CRC16 to frame
 			int CRCLow = elanConnection.read();
@@ -63,10 +63,14 @@ public class ELANCommunication
 			
 			if( ELANCRC16.checkCRC16( data, CRC ) )
 			{
+				System.out.println( "Crc correct" );
+				System.out.println( );
 				return data;
 			}
 			else
 			{
+				System.out.println( "Error in crc" );
+				System.out.println( );
 				break;
 			}
     	}

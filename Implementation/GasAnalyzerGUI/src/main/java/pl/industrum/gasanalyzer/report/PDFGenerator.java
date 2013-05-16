@@ -5,6 +5,7 @@
 
 package pl.industrum.gasanalyzer.report;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -17,6 +18,7 @@ import pl.industrum.gasanalyzer.model.Measurement;
 import pl.industrum.gasanalyzer.model.MeasurementSet;
 import pl.industrum.gasanalyzer.model.MeasurementSnapshot;
 import pl.industrum.gasanalyzer.model.Survey;
+import pl.industrum.gasanalyzer.types.UsefulImage;
 
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -53,6 +55,9 @@ public abstract class PDFGenerator
 	private Font czcionka16u;	
 	private Font czcionka20;
 	private Font czcionka16b;
+	private Image logoPolsl;
+	private Image logoZkiwp;
+	private Image logoImiue;
 
     public PDFGenerator()
     {
@@ -89,10 +94,20 @@ public abstract class PDFGenerator
                              new FileOutputStream(path));
             document.open();
             
-			Image logoPolsl = Image.getInstance("src/main/resources/pl/industrum/gasanalyzer/gui/PolslLogo.png");
-			Image logoZkiwp = Image.getInstance("src/main/resources/pl/industrum/gasanalyzer/gui/ZKiWPLogo.png");
-			Image logoImiue = Image.getInstance("src/main/resources/pl/industrum/gasanalyzer/gui/IMIUELogo.png");
-
+            try
+            {
+				logoPolsl = Image.getInstance("src/main/resources/pl/industrum/gasanalyzer/gui/PolslLogo.png");			
+				logoZkiwp = Image.getInstance("src/main/resources/pl/industrum/gasanalyzer/gui/ZKiWPLogo.png");
+				logoImiue = Image.getInstance("src/main/resources/pl/industrum/gasanalyzer/gui/IMIUELogo.png");
+            }
+            catch (FileNotFoundException ex)
+            {
+            	ex.printStackTrace();            	
+            	logoPolsl = Image.getInstance( getClass().getResource( UsefulImage.POLSL_LOGO.getImagePath() ) );			
+				logoZkiwp = Image.getInstance( getClass().getResource( UsefulImage.ZKIWP_LOGO.getImagePath() ) );
+				logoImiue = Image.getInstance( getClass().getResource( UsefulImage.IMIUE_LOGO.getImagePath() ) );
+            }
+            
 			PdfPTable imagesTable = new PdfPTable(3);
 			imagesTable.setWidthPercentage(30);
 			imagesTable.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -254,7 +269,7 @@ public abstract class PDFGenerator
             document.add(surveyData);            
             document.add(new Paragraph("\n"));
             
-            document.add(measurementSnapshotList);                
+            document.add(measurementSnapshotList);     
 
 //            document.addAuthor("duzydamian");
 //            document.addProducer();
