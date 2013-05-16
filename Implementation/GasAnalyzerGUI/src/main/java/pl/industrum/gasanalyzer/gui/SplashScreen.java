@@ -17,7 +17,7 @@ import pl.industrum.gasanalyzer.test.TestVector;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class SplashScreen
-{
+{//FIXME TODO check on windows
 	private TestVector testVector;
 	private ProgressBar progressBar;
 	private int testsCount;

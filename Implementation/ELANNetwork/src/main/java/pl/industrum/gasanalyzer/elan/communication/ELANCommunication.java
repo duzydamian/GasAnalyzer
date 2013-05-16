@@ -33,7 +33,7 @@ public class ELANCommunication
 	 * Read one frame from network
 	 */
 	public Queue<Integer> readFrame()
-	{
+	{//FIXME analyze read data with interrupt not in loop
 		Queue<Integer> data = new LinkedList<Integer>();
     	int  previousCharacter = -1;
     	//Read first character from new frame

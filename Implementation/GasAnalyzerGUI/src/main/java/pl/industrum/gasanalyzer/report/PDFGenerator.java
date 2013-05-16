@@ -40,7 +40,14 @@ import com.itextpdf.text.pdf.PdfWriter;
 @SuppressWarnings( "unused" )
 public abstract class PDFGenerator
 {
-
+//TODO FIXME
+/*
+ * repeat table header on new page
+ * page numerate
+ * object and place do survey data frame
+ * center/right/left aligment
+ * const double long
+ */
 	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "dd/MM/yyyy", Locale.getDefault() );
 	private static SimpleDateFormat hourFormater = new SimpleDateFormat( "HH:mm:ss", Locale.getDefault() );
     

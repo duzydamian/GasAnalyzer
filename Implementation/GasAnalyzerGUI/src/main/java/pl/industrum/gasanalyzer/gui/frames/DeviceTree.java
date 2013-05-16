@@ -165,7 +165,7 @@ public abstract class DeviceTree extends Composite
 				}
 			}
 		} );
-		
+		//FIXME move dimension (s) to right side of spinner
 		lblSurveyStep = new Label( this, SWT.NONE );
 		lblSurveyStep.setText( Messages
 				.getString( "DeviceTree.lblSurveyStep.text" ) ); //$NON-NLS-1$
@@ -195,7 +195,7 @@ public abstract class DeviceTree extends Composite
 				btnOk.setEnabled( false );
 			}
 		} );
-		
+		//TODO add start/stop button
 		lblMeasurementComment = new Label( this, SWT.NONE );
 		lblMeasurementComment.setText( Messages
 				.getString( "DeviceTree.lblMeasurementComment.text" ) ); //$NON-NLS-1$

@@ -69,6 +69,15 @@ public abstract class Device extends Composite
 	 */
 	public Device( Composite parent, int style, ELANMeasurementDevice device )
 	{
+//TODO FIXME
+/*
+ * history browsing
+ * change refresh step to survey step
+ * to many columns
+ * load data on show
+ * add more data in refresh from 10 to 25
+ * 
+ */
 		super( parent, style );
 //		compositeData = new GridData( GridData.FILL, GridData.GRAB_VERTICAL,
 //				true, false );

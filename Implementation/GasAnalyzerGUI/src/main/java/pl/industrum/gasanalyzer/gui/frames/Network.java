@@ -30,7 +30,7 @@ public class Network extends Composite
 	 * @param style
 	 */
 	public Network( Composite parent, int style, String name )
-	{
+	{//FIXME add all device current measurement to this frame
 		super( parent, style );
 //		compositeData = new GridData( GridData.FILL, GridData.GRAB_VERTICAL,
 //				true, false );
