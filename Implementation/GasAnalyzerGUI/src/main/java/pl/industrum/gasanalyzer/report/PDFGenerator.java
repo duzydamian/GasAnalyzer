@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package pl.industrum.gasanalyzer.report;
 
 import java.io.FileNotFoundException;
@@ -212,9 +207,15 @@ public abstract class PDFGenerator
 			PdfPTable measurementSnapshotList = new PdfPTable(colsWidth);
 			measurementSnapshotList.setWidthPercentage(100);
 			measurementSnapshotList.setHorizontalAlignment(Element.ALIGN_CENTER);
-			PdfPCell emptyPdfPCell = new PdfPCell();
-			emptyPdfPCell.setColspan( 2 );
-			measurementSnapshotList.addCell(emptyPdfPCell);
+			measurementSnapshotList.setHeaderRows( 2 );
+			
+			PdfPCell pdfPCellLP = new PdfPCell(new Paragraph("Lp.",czcionka10b));
+			pdfPCellLP.setRowspan( 2 );
+			PdfPCell pdfPCellHour = new PdfPCell(new Paragraph("Godzina",czcionka10b));
+			pdfPCellHour.setRowspan( 2 );
+			measurementSnapshotList.addCell(pdfPCellLP);
+			measurementSnapshotList.addCell(pdfPCellHour);
+			
 			MeasurementSnapshot snapshotForHeader = MeasurementSnapshotManager.getLastMeasurementSnapshot( survey.getId() );
 			for( Object set: snapshotForHeader.getMeasurementSetsSorted() )
 			{
@@ -226,11 +227,11 @@ public abstract class PDFGenerator
 				progressIncrement();
 			}			
 			
-			emptyPdfPCell.setColspan( 1 );
-			measurementSnapshotList.addCell(emptyPdfPCell);
-			
-			measurementSnapshotList.addCell(new PdfPCell(new Paragraph("Lp.",czcionka10b)));
-			measurementSnapshotList.addCell(new PdfPCell(new Paragraph("Godzina",czcionka10b)));
+			PdfPCell pdfPCellcomment = new PdfPCell(new Paragraph("Uwagi",czcionka10b));
+			pdfPCellcomment.setRowspan( 2 );
+			pdfPCellcomment.setVerticalAlignment( PdfPCell.ALIGN_MIDDLE );
+			pdfPCellcomment.setHorizontalAlignment( PdfPCell.ALIGN_CENTER );
+			measurementSnapshotList.addCell(pdfPCellcomment);
 			
 			for( Object set: snapshotForHeader.getMeasurementSetsSorted() )
 			{
@@ -244,8 +245,7 @@ public abstract class PDFGenerator
 						progressIncrement();
 					}					
 				}
-			}
-			measurementSnapshotList.addCell(new PdfPCell(new Paragraph("Uwagi",czcionka10b)));
+			}			
 			
 			int i = 1;
 			for( MeasurementSnapshot snapshot: MeasurementSnapshotManager.getAllMeasurementSnapshots( survey.getId() ) )
@@ -276,7 +276,7 @@ public abstract class PDFGenerator
             document.add(surveyData);            
             document.add(new Paragraph("\n"));
             
-            document.add(measurementSnapshotList);     
+            document.add(measurementSnapshotList);
 
 //            document.addAuthor("duzydamian");
 //            document.addProducer();

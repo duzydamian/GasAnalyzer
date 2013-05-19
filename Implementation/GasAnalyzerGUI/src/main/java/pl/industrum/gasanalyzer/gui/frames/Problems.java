@@ -2,8 +2,6 @@ package pl.industrum.gasanalyzer.gui.frames;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.custom.CTabFolder2Adapter;
-import org.eclipse.swt.custom.CTabFolderEvent;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -25,7 +23,7 @@ import pl.industrum.gasanalyzer.types.Warning;
  * @author duzydamian (Damian Karbowiak)
  * 
  */
-public class Problems extends Composite
+public abstract class Problems extends Composite
 {//FIXME no show if empty, add extra data.
 	private GridData compositeData;
 	private Composite body;
@@ -37,6 +35,9 @@ public class Problems extends Composite
 	private Table tableWarning;
 	private String[] columns;
 	private MenuItem menuItemWarning;
+	private MenuItem menuitemError;
+	private MenuItem menuItemWarning2;
+	private MenuItem menuitemError2;
 
 	/**
 	 * Create the composite.
@@ -61,8 +62,8 @@ public class Problems extends Composite
 		folder = new CTabFolder(body, SWT.NONE);
 		folder.setLayoutData( globaGridData );
 		folder.setSimple(false);
+		folder.setMaximized(true);
 		folder.setUnselectedCloseVisible(false);
-		folder.setMinimizeVisible(true);
 		
 		columns = new String[] {"Kod", "Nazwa", "Opis", "Lokalizacja"};
 		
@@ -100,53 +101,51 @@ public class Problems extends Composite
 		}
 		itemError.setControl(tableError);
 		
-		folder.addCTabFolder2Listener(new CTabFolder2Adapter() {
-			public void minimize(CTabFolderEvent event) {
-				folder.setMinimized(true);
-				GridData localGridData = new GridData(SWT.FILL, SWT.FILL, true, false);
-				localGridData.horizontalSpan = 2;
-				folder.setLayoutData( localGridData) ;
-				body.layout(true);
-			}
-			public void maximize(CTabFolderEvent event) {
-				folder.setMaximized(true);
-				GridData localGridData = new GridData(SWT.FILL, SWT.FILL, true, true); 
-				localGridData.horizontalSpan = 2;
-				folder.setLayoutData( localGridData );
-				body.layout(true);
-			}
-			public void restore(CTabFolderEvent event) {
-				folder.setMinimized(false);
-				folder.setMaximized(false);
-				GridData localGridData = new GridData(SWT.FILL, SWT.FILL, true, false); 
-				localGridData.horizontalSpan = 2;				
-				folder.setLayoutData( localGridData );
-				body.layout(true);
-			}
-		});
-		
 		Menu menuWarning = new Menu (body.getShell(), SWT.POP_UP);
 		tableWarning.setMenu (menuWarning);
 		menuItemWarning = new MenuItem (menuWarning, SWT.PUSH);
-		menuItemWarning.setText ("Delete Selection");
+		menuItemWarning.setText ("Usuń wybrany");
 		menuItemWarning.addListener (SWT.Selection, new Listener () {
 			public void handleEvent (Event event) {
 				tableWarning.remove (tableWarning.getSelectionIndices ());
+				hideIfEmpty();
 			}
 		});
-
-		Menu menuError = new Menu (body.getShell(), SWT.POP_UP);
-		tableError.setMenu (menuError);
-		MenuItem itemError = new MenuItem (menuError, SWT.PUSH);
-		itemError.setText ("Delete Selection");
-		itemError.addListener (SWT.Selection, new Listener () {
+		new MenuItem( menuWarning, SWT.SEPARATOR );
+		menuItemWarning2 = new MenuItem (menuWarning, SWT.PUSH);
+		menuItemWarning2.setText ("Usuń wszystkie");
+		menuItemWarning2.addListener (SWT.Selection, new Listener () {
 			public void handleEvent (Event event) {
-				tableError.remove (tableError.getSelectionIndices ());
+				tableWarning.removeAll();
+				hideIfEmpty();
 			}
 		});
 		
-		this.body.layout();
-		this.layout();		
+
+		Menu menuError = new Menu (body.getShell(), SWT.POP_UP);
+		tableError.setMenu (menuError);
+		menuitemError = new MenuItem (menuError, SWT.PUSH);
+		menuitemError.setText ("Usuń wybrany");
+		menuitemError.addListener (SWT.Selection, new Listener () {
+			public void handleEvent (Event event) {
+				tableError.remove (tableError.getSelectionIndices ());
+				hideIfEmpty();
+			}			
+		});		
+		new MenuItem( menuError, SWT.SEPARATOR );
+		menuitemError2 = new MenuItem (menuError, SWT.PUSH);
+		menuitemError2.setText ("Usuń szystkie");
+		menuitemError2.addListener (SWT.Selection, new Listener () {
+			public void handleEvent (Event event) {
+				tableError.removeAll();
+				hideIfEmpty();
+			}			
+		});
+		
+		body.layout();
+		layout();		
+		
+		hideIfEmpty();
 	}
 
 	@Override
@@ -155,16 +154,28 @@ public class Problems extends Composite
 		// Disable the check that prevents subclassing of SWT components
 	}
 
-	@SuppressWarnings( "unused" )
-	private void hide()
+	private void hideIfEmpty()
 	{
-		this.setVisible( false );
+		if ( tableWarning.getItems().length == 0 & tableError.getItems().length == 0 )
+		{
+			setVisible( false );
+		}
+		else if ( tableWarning.getItems().length == 0 & tableError.getItems().length != 0 )
+		{
+			showError();
+		}
+		else if ( tableWarning.getItems().length != 0 & tableError.getItems().length == 0 )
+		{
+			showWarning();
+		}		
+		
+		layoutMainWindow();
 	}
 
-	@SuppressWarnings( "unused" )
 	private void show()
 	{
-		this.setVisible( true );
+		setVisible( true );
+		layoutMainWindow();
 	}
 
 	public void addWarning(Warning warning, String source)
@@ -178,6 +189,11 @@ public class Problems extends Composite
 		{
 			tableWarning.getColumn (i).pack ();
 			tableWarning.getColumn (i).setMoveable(true);
+		}
+		
+		if ( !isVisible() )
+		{
+			show();
 		}
 		
 		showWarning();
@@ -203,11 +219,18 @@ public class Problems extends Composite
 		}
 		
 		showError();
+		
+		if ( !isVisible() )
+		{
+			show();
+		}
 	}
 	
 	public void showError()
 	{
 		folder.showItem( itemError );
 		folder.forceFocus();
-	}	
+	}
+	
+	public abstract void layoutMainWindow();
 }

@@ -42,6 +42,8 @@ public abstract class DeviceTree extends Composite
 	private Button btnSetMeasurementComment;
 	private Label lblMeasurementComment;
 	private Text textMeasurementComment;
+	private Label lblSeconds;
+	private Button btnStartStop;
 
 	/**
 	 * Create the composite.
@@ -52,14 +54,16 @@ public abstract class DeviceTree extends Composite
 	public DeviceTree( final Composite parent, int style )
 	{
 		super( parent, style );
-		setLayout( new GridLayout( 3, true ) );
+		GridLayout gridLayout = new GridLayout( 5, false );
+		gridLayout.marginWidth = 0;
+		setLayout( gridLayout );
 
 		imageDisconnect = UsefulImage.DISCONNECT.getImage();
 		imageConnect = UsefulImage.CONNECT.getImage();
 		
 		deviceTree = new Tree( this, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		deviceTree.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true,
-				3, 1 ) );
+				6, 1 ) );
 		deviceTree.addListener (SWT.MenuDetect, new Listener () {
 			public void handleEvent (Event event) {
 				if( deviceTree.getSelection().length == 1 )
@@ -165,7 +169,7 @@ public abstract class DeviceTree extends Composite
 				}
 			}
 		} );
-		//FIXME move dimension (s) to right side of spinner
+
 		lblSurveyStep = new Label( this, SWT.NONE );
 		lblSurveyStep.setText( Messages
 				.getString( "DeviceTree.lblSurveyStep.text" ) ); //$NON-NLS-1$
@@ -174,7 +178,7 @@ public abstract class DeviceTree extends Composite
 		surveyStep.setMinimum( 1 );
 		surveyStep.setMaximum( 9999 );
 		surveyStep.setSelection( 60 );
-		surveyStep.setLayoutData( new GridData( SWT.FILL, SWT.FILL, false,
+		surveyStep.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true,
 				false, 1, 1 ) );
 		surveyStep.addModifyListener( new ModifyListener()
 		{
@@ -183,33 +187,47 @@ public abstract class DeviceTree extends Composite
 				btnOk.setEnabled( true );
 			}
 		} );
-
-		btnOk = new Button( this, SWT.NONE );
-		btnOk.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
-		btnOk.setText( Messages.getString( "DeviceTree.btnOk.text" ) ); //$NON-NLS-1$
-		btnOk.addSelectionListener( new SelectionAdapter()
+		
+		lblSeconds = new Label(this, SWT.NONE);
+		lblSeconds.setText(Messages.getString("DeviceTree.lblSekund.text")); //$NON-NLS-1$
+		
+				btnOk = new Button( this, SWT.NONE );
+				btnOk.setText( Messages.getString( "DeviceTree.btnOk.text" ) ); //$NON-NLS-1$
+				btnOk.addSelectionListener( new SelectionAdapter()
+				{
+					public void widgetSelected( SelectionEvent e )
+					{
+						setSurveyStep(surveyStep.getSelection());
+						btnOk.setEnabled( false );
+					}
+				} );
+		
+		btnStartStop = new Button(this, SWT.NONE);
+		btnStartStop.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		btnStartStop.setText(Messages.getString("DeviceTree.btnStart.text")); //$NON-NLS-1$
+		btnStartStop.addSelectionListener( new SelectionAdapter()
 		{
 			public void widgetSelected( SelectionEvent e )
 			{
-				setSurveyStep(surveyStep.getSelection());
-				btnOk.setEnabled( false );
+				startSurveyAlarming(surveyStep.getSelection());
+				stopSurveyAlarming();
 			}
 		} );
-		//TODO add start/stop button
+
 		lblMeasurementComment = new Label( this, SWT.NONE );
 		lblMeasurementComment.setText( Messages
 				.getString( "DeviceTree.lblMeasurementComment.text" ) ); //$NON-NLS-1$
 		lblMeasurementComment.setLayoutData( new GridData( SWT.LEFT, SWT.FILL, true,
-				false, 3, 1 ) );
+				false, 6, 1 ) );
 
-		textMeasurementComment = new Text( this, SWT.BORDER | SWT.MULTI );		
+		textMeasurementComment = new Text( this, SWT.BORDER | SWT.MULTI | SWT.WRAP );		
 		textMeasurementComment.setLayoutData( new GridData( SWT.FILL, SWT.FILL, false,
-				true, 3, 1 ) );
+				true, 6, 1 ) );
 
 		btnSetMeasurementComment = new Button( this, SWT.NONE );
 		btnSetMeasurementComment.setText( Messages.getString( "DeviceTree.btnSet.text" ) ); //$NON-NLS-1$
 		btnSetMeasurementComment.setLayoutData( new GridData( SWT.FILL, SWT.FILL, false,
-				false, 3, 1 ) );
+				false, 6, 1 ) );
 		btnSetMeasurementComment.addSelectionListener( new SelectionAdapter()
 		{
 			public void widgetSelected( SelectionEvent e )
@@ -270,6 +288,7 @@ public abstract class DeviceTree extends Composite
 		deviceTree.setEnabled( arg0 );
 		surveyStep.setEnabled( arg0 );
 		btnOk.setEnabled( arg0 );
+		btnStartStop.setEnabled( arg0 );
 		textMeasurementComment.setEnabled( arg0 );
 		btnSetMeasurementComment.setEnabled( arg0 );
 	}
@@ -279,6 +298,8 @@ public abstract class DeviceTree extends Composite
 		return surveyStep.getSelection();
 	}
 	
+	public abstract void stopSurveyAlarming();
+	public abstract void startSurveyAlarming(int step);
 	public abstract void setSurveyStep(int step);
 	public abstract void setMeasurementComment( String comment );
 	public abstract ELANConnectionState connectWithNetwork(String port);

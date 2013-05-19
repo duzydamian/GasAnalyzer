@@ -339,6 +339,24 @@ public class GasAnalyzerMainWindow implements Observer
 			public void setMeasurementComment( String comment )
 			{
 				nextSnapshotComment = comment;
+			}
+
+			@Override
+			public void stopSurveyAlarming()
+			{
+				for( ELANNetwork network: connectionWrapper )
+				{
+					network.stopAlarming();
+				}
+			}
+
+			@Override
+			public void startSurveyAlarming( int step )
+			{
+				for( ELANNetwork network: connectionWrapper )
+				{
+					network.startAlarmingWithStep( step );
+				}
 			}	
 		};
 		deviceTree.setEnabled( false );
@@ -363,7 +381,14 @@ public class GasAnalyzerMainWindow implements Observer
 		deviceCollection.setEnabled( false );
 		deviceCollection.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
 
-		problems = new Problems( sashELANNetworkProblems, SWT.NONE );		
+		problems = new Problems( sashELANNetworkProblems, SWT.NONE )
+		{
+			@Override
+			public void layoutMainWindow()
+			{
+				sashELANNetworkProblems.layout();
+			}		
+		};		
 
 		statusBar = new StatusBar( shlGasAnalyzer, SWT.BORDER );	
 		
