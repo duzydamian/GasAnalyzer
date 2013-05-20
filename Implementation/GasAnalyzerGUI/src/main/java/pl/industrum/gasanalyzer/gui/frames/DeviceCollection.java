@@ -118,6 +118,22 @@ public abstract class DeviceCollection extends Composite
 		}
 	}
 	
+	public void updateHistoryRefreshStep(int step)
+	{
+		for( Device device: devices )
+		{
+			device.updateRefreshTimerIfStarted( step );			
+		}
+	}
+	
+	/**
+	 * @return the devices
+	 */
+	public Vector<Device> getDevices()
+	{
+		return devices;
+	}
+	
 	public abstract Integer getSurveyIDFromGUI();
 	public abstract Integer getStepFromGUI();
 }

@@ -209,6 +209,40 @@ public abstract class Device extends Composite
 		}
 	}
 	
+	public void updateRefreshTimerIfStarted(int step)
+	{
+		int step2 = step * 1000;
+		
+		if( runningRefreshTimer == true )
+		{
+			refreshTimer.cancel();
+			runningRefreshTimer = false;
+		}
+		
+		if( runningRefreshTimer == false )
+		{			
+			refreshTimerTask = new TimerTask()
+			{
+				
+				@Override
+				public void run()
+				{
+					Display.getDefault().asyncExec( new Runnable()
+					{
+						public void run()
+						{
+							refreshDeviceMeasurements();
+						}
+					});				
+				}
+			};		
+			
+			refreshTimer = new Timer("REFRESHING HISTORY FROM DEVICE["+deviceName+"]");
+			refreshTimer.schedule( refreshTimerTask, step2, step2 );
+			runningRefreshTimer = true;			
+		}
+	}
+	
 	private void startRefreshTimer()
 	{		
 		int step = getStep() * 1000;

@@ -357,6 +357,8 @@ public class GasAnalyzerMainWindow implements Observer
 				{
 					network.startAlarmingWithStep( step );
 				}
+				
+				deviceCollection.updateHistoryRefreshStep( step );
 			}	
 		};
 		deviceTree.setEnabled( false );

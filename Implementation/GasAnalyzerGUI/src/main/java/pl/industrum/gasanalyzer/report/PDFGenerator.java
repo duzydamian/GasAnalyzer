@@ -3,6 +3,8 @@ package pl.industrum.gasanalyzer.report;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -27,8 +29,6 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.ColumnText;
-import com.itextpdf.text.pdf.PdfAction;
-import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
@@ -52,6 +52,8 @@ public abstract class PDFGenerator
  */
 	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "dd/MM/yyyy", Locale.getDefault() );
 	private static SimpleDateFormat hourFormater = new SimpleDateFormat( "HH:mm:ss", Locale.getDefault() );
+	
+	private static NumberFormat nf = NumberFormat.getInstance();
     
 	static BaseFont font;
     
@@ -226,8 +228,10 @@ public abstract class PDFGenerator
 			
 			PdfPCell pdfPCellLP = new PdfPCell(new Paragraph("Lp.",czcionka10b));
 			pdfPCellLP.setRowspan( 2 );
+			pdfPCellLP.setVerticalAlignment( PdfPCell.ALIGN_MIDDLE );
 			PdfPCell pdfPCellHour = new PdfPCell(new Paragraph("Godzina",czcionka10b));
 			pdfPCellHour.setRowspan( 2 );
+			pdfPCellHour.setVerticalAlignment( PdfPCell.ALIGN_MIDDLE );
 			measurementSnapshotList.addCell(pdfPCellLP);
 			measurementSnapshotList.addCell(pdfPCellHour);
 			
@@ -256,7 +260,9 @@ public abstract class PDFGenerator
 					Measurement measurement2 = ( Measurement )measurement;
 					if ( !measurement2.getMeasurementVariable().getName().equalsIgnoreCase( "Process preassure" ) )
 					{
-						measurementSnapshotList.addCell(new PdfPCell(new Paragraph(measurement2.getMeasurementVariable().getName()+"\n["+measurement2.getMeasurementDimension().getName()+"]" ,czcionka10b)));
+						PdfPCell pdfPCell = new PdfPCell(new Paragraph(measurement2.getMeasurementVariable().getName()+"\n["+measurement2.getMeasurementDimension().getName()+"]" ,czcionka10b));
+						pdfPCell.setHorizontalAlignment( PdfPCell.ALIGN_CENTER );
+						measurementSnapshotList.addCell(pdfPCell);
 						progressIncrement();
 					}					
 				}
@@ -275,7 +281,22 @@ public abstract class PDFGenerator
 						Measurement measurement2 = ( Measurement )measurement;
 						if ( !measurement2.getMeasurementVariable().getName().equalsIgnoreCase( "Process preassure" ) )
 						{
-							measurementSnapshotList.addCell(new PdfPCell(new Paragraph(String.valueOf( measurement2.getValue() ) ,czcionka10)));
+							String valueAsString = "";
+							if ( measurement2.getMeasurementDimension().getId() < 8 )
+							{
+								valueAsString = StringRet( measurement2.getValue(), 0 );
+							}
+							else if ( measurement2.getMeasurementVariable().getId() == 4 )
+							{
+								valueAsString = StringRet( measurement2.getValue(), 3 );
+							} 
+							else
+							{
+								valueAsString = StringRet( measurement2.getValue(), 2 );
+							}
+							PdfPCell pdfPCell = new PdfPCell( new Paragraph( valueAsString, czcionka10 ) );
+							pdfPCell.setHorizontalAlignment( PdfPCell.ALIGN_CENTER );
+							measurementSnapshotList.addCell( pdfPCell );
 						}						
 					}
 					
@@ -319,12 +340,47 @@ public abstract class PDFGenerator
             Program.launch( path );
     }
     
+    public static double doubleRet(double value, int precision)
+    {
+        return new BigDecimal(value).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue();
+    }
+
+    public static double doubleRet(String value, int precision)
+    {
+        return new BigDecimal(value).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue();
+    }
+
+    public static Double DoubleRet(double value, int precision)
+    {
+        return new BigDecimal(value).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue();
+    }
+
+    public static Double DoubleRet(String value, int precision)
+    {
+        return new BigDecimal(value).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue();
+    }
+
+    public static String StringRet(double value, int precision)
+    {
+        nf.setMaximumFractionDigits(precision);
+        nf.setMinimumFractionDigits(precision);
+        return nf.format(new BigDecimal(value).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue()).replace(".", ",");
+    }
+
+    public static String StringRet(String value, int precision)
+    {
+        nf.setMaximumFractionDigits(precision);
+        nf.setMinimumFractionDigits(precision);
+        return nf.format(new BigDecimal(value.replace(',', '.')).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue()).replace(".", ",");
+    }
+    
     public abstract void progressIncrement();
     
     /**
      * Inner class to add a table as header.
      */
-    class TableHeader extends PdfPageEventHelper {
+    class TableHeader extends PdfPageEventHelper
+    {
         /** The header text. */
         String header;
         /** The template with the total number of pages. */
@@ -334,7 +390,8 @@ public abstract class PDFGenerator
          * Allows us to change the content of the header.
          * @param header The new header String
          */
-        public void setHeader(String header) {
+        public void setHeader(String header)
+        {
             this.header = header;
         }
  
@@ -343,7 +400,8 @@ public abstract class PDFGenerator
          * @see com.itextpdf.text.pdf.PdfPageEventHelper#onOpenDocument(
          *      com.itextpdf.text.pdf.PdfWriter, com.itextpdf.text.Document)
          */
-        public void onOpenDocument(PdfWriter writer, Document document) {
+        public void onOpenDocument(PdfWriter writer, Document document)
+        {
             total = writer.getDirectContent().createTemplate(40, 20);
         }
  
@@ -352,9 +410,11 @@ public abstract class PDFGenerator
          * @see com.itextpdf.text.pdf.PdfPageEventHelper#onEndPage(
          *      com.itextpdf.text.pdf.PdfWriter, com.itextpdf.text.Document)
          */
-        public void onEndPage(PdfWriter writer, Document document) {
+        public void onEndPage(PdfWriter writer, Document document)
+        {
             PdfPTable table = new PdfPTable(2);
-            try {
+            try
+            {
                 table.setWidths(new int[]{90, 10});
                 table.setTotalWidth(writer.getPageSize().getWidth());       
                 table.getDefaultCell().setFixedHeight(20);
@@ -366,7 +426,8 @@ public abstract class PDFGenerator
                 table.addCell(cell);
                 table.writeSelectedRows(0, -1, 0f, 20f, writer.getDirectContent());
             }
-            catch(DocumentException de) {
+            catch(DocumentException de)
+            {
                 throw new ExceptionConverter(de);
             }
         }
@@ -376,11 +437,11 @@ public abstract class PDFGenerator
          * @see com.itextpdf.text.pdf.PdfPageEventHelper#onCloseDocument(
          *      com.itextpdf.text.pdf.PdfWriter, com.itextpdf.text.Document)
          */
-        public void onCloseDocument(PdfWriter writer, Document document) {
+        public void onCloseDocument(PdfWriter writer, Document document)
+        {
             ColumnText.showTextAligned(total, Element.ALIGN_LEFT,
                     new Phrase(String.valueOf(writer.getPageNumber() - 1)),
                     0f, 6f, 0);
         }
-    }
-    
+    }    
 }
