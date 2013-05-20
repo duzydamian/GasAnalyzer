@@ -54,7 +54,7 @@ public abstract class MeasurementSetManager
 			queryString += " and measurementSetObject.measurementSnapshot.survey.id = " + surveyID.toString();
 			queryString += " order by measurementSetObject.timestamp desc";
 			Query query = session.createQuery( queryString );
-			query.setMaxResults( 10 );
+			query.setMaxResults( limit );
 			List<MeasurementSet> sets = ( List<MeasurementSet> )query.list();
 			session.getTransaction().commit();
 			return sets;

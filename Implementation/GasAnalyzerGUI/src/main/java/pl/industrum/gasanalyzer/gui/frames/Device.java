@@ -9,6 +9,7 @@ import java.util.TimerTask;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -61,6 +62,10 @@ public abstract class Device extends Composite
 	private Composite historyBody;
 	private Integer deviceID ;
 
+	private Label lblCollectiveState;
+
+	private Label lblCollectiveStateMessage;
+
 	/**
 	 * Create the composite.
 	 * 
@@ -95,21 +100,34 @@ public abstract class Device extends Composite
 
 		tabFolder = new CTabFolder( grpOneDIvice, SWT.NONE );
 		tabFolder.setSimple(false);
+		
+		tabFolder.addSelectionListener(new SelectionAdapter()
+		{
+		      public void widgetSelected(org.eclipse.swt.events.SelectionEvent event)
+		      {
+		    	  refreshDeviceMeasurements();
+		      }
+		});
 
 		tbitmCurrent = new CTabItem( tabFolder, SWT.NONE );
-		tbitmCurrent.setText( Messages.getString( "Device.tbtmBiecy.text" ) ); //$NON-NLS-1$
+		tbitmCurrent.setText( Messages.getString( "Device.tbtmCurrent.text" ) ); //$NON-NLS-1$
 
 		currentBody = new Composite( tabFolder, SWT.NONE );
 		tbitmCurrent.setControl( currentBody );
 		currentBody.setLayout( new GridLayout( 2, false ) );
 
+		lblCollectiveState = new Label( currentBody, SWT.WRAP );
+		lblCollectiveState.setText( Messages.getString( "Device.lblCollectiveState.text" ) );
+		lblCollectiveStateMessage = new Label( currentBody, SWT.NONE );
+		lblCollectiveStateMessage.setText( Messages.getString( "Device.lblOk.text" ) );
+		
 		lblState = new Label( currentBody, SWT.WRAP );
-		lblState.setText( Messages.getString( "Device.lblStan.text" ) );
+		lblState.setText( Messages.getString( "Device.lblState.text" ) );
 		lblStateMessage = new Label( currentBody, SWT.NONE );
 		lblStateMessage.setText( Messages.getString( "Device.lblOk.text" ) );		
 		
 		lblLastMeasure = new Label( currentBody, SWT.WRAP );
-		lblLastMeasure.setText( Messages.getString( "Device.lblStan.text" ) );
+		lblLastMeasure.setText( Messages.getString( "Device.lblLastMeasure.text" ) );
 		lblLastMeasureTimeStamp = new Label( currentBody, SWT.NONE );
 		lblLastMeasureTimeStamp.setText( "" );
 		
@@ -230,7 +248,7 @@ public abstract class Device extends Composite
 		//TODO implement browse history
 		tableHistory.removeAll();
 		
-		for( MeasurementSet set: MeasurementSetManager.getAllMeasurementSets( new Date(), getSurveyID(), deviceID, 10 ) )
+		for( MeasurementSet set: MeasurementSetManager.getAllMeasurementSets( new Date(), getSurveyID(), deviceID, 20 ) )
 		{
 			TableItem item = new TableItem( tableHistory, SWT.NONE );
 			item.setText( 0, dateFormater.format( set.getTimestamp() ) );
@@ -262,10 +280,10 @@ public abstract class Device extends Composite
 	{
 		Display.getDefault().asyncExec( new Runnable()
 		{
-			@SuppressWarnings( "deprecation" )
 			public void run()
 			{
-				lblLastMeasureTimeStamp.setText( frame.getTimeStamp().toGMTString() );
+				lblStateMessage.setText( frame.getChannelStateCollection().get( 0 ).name() );
+				lblLastMeasureTimeStamp.setText( dateFormater.format( frame.getTimeStamp() ) );
 				int i = 0;
 				for( ELANMeasurement elanMeasurement: frame )
 				{

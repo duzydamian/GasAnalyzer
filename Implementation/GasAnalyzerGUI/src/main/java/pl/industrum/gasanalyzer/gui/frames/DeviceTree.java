@@ -32,7 +32,7 @@ import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public abstract class DeviceTree extends Composite
 {
-
+	private boolean started;
 	private Tree deviceTree;	
 	private Label lblSurveyStep;
 	private Spinner surveyStep;
@@ -58,6 +58,8 @@ public abstract class DeviceTree extends Composite
 		gridLayout.marginWidth = 0;
 		setLayout( gridLayout );
 
+		started = false;
+		
 		imageDisconnect = UsefulImage.DISCONNECT.getImage();
 		imageConnect = UsefulImage.CONNECT.getImage();
 		
@@ -209,8 +211,24 @@ public abstract class DeviceTree extends Composite
 		{
 			public void widgetSelected( SelectionEvent e )
 			{
-				startSurveyAlarming(surveyStep.getSelection());
-				stopSurveyAlarming();
+				if ( started )
+				{
+					stopSurveyAlarming();
+					btnStartStop.setText(Messages.getString("DeviceTree.btnStart.text")); //$NON-NLS-1$
+					btnOk.setEnabled( false );
+					textMeasurementComment.setEnabled( false );
+					btnSetMeasurementComment.setEnabled( false );
+					started = false;
+				}
+				else
+				{
+					startSurveyAlarming(surveyStep.getSelection());
+					btnStartStop.setText(Messages.getString("DeviceTree.btnStop.text")); //$NON-NLS-1$
+					btnOk.setEnabled( true );
+					textMeasurementComment.setEnabled( true );
+					btnSetMeasurementComment.setEnabled( true );
+					started = true;
+				}								
 			}
 		} );
 
@@ -286,11 +304,20 @@ public abstract class DeviceTree extends Composite
 	{		
 		super.setEnabled( arg0 );
 		deviceTree.setEnabled( arg0 );
-		surveyStep.setEnabled( arg0 );
-		btnOk.setEnabled( arg0 );
+		surveyStep.setEnabled( arg0 );		
 		btnStartStop.setEnabled( arg0 );
-		textMeasurementComment.setEnabled( arg0 );
-		btnSetMeasurementComment.setEnabled( arg0 );
+		if ( !started )
+		{
+			btnOk.setEnabled( false );
+			textMeasurementComment.setEnabled( false );
+			btnSetMeasurementComment.setEnabled( false );
+		}
+		else
+		{
+			btnOk.setEnabled( arg0 );
+			textMeasurementComment.setEnabled( arg0 );
+			btnSetMeasurementComment.setEnabled( arg0 );
+		}
 	}
 	
 	public Integer getStep()

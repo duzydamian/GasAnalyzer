@@ -20,6 +20,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Header;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
@@ -95,7 +96,7 @@ public abstract class PDFGenerator
             PdfWriter writer = PdfWriter.getInstance((com.itextpdf.text.Document) document,
                              new FileOutputStream(path));
             document.open();
-            
+
             try
             {
 				logoPolsl = Image.getInstance("src/main/resources/pl/industrum/gasanalyzer/gui/PolslLogo.png");			
@@ -181,8 +182,11 @@ public abstract class PDFGenerator
 			surveyData.add(new Chunk("Data pomiarów: ", czcionka16));
 			surveyData.add(new Chunk(dateFormater.format( survey.getTimestamp() ), czcionka16b));
 			surveyData.add("\n");
+			surveyData.add(new Chunk("Miejsce: ", czcionka16));
+			surveyData.add(new Chunk(survey.getObject().getPlace().toString(), czcionka16b));
+			surveyData.add("\n");
 			surveyData.add(new Chunk("Obiekt: ", czcionka16));
-			surveyData.add(new Chunk("", czcionka16b));
+			surveyData.add(new Chunk(survey.getObject().toString(), czcionka16b));
 			surveyData.add("\n");
 			surveyData.add(new Chunk("Obciążenie: ", czcionka16));
 			surveyData.add(new Chunk(survey.getLoad(), czcionka16b));
