@@ -57,7 +57,7 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 		
 		initializeDevicesPool();
 		
-		this.alarm = new Alarm( name, this );
+		this.alarm = new Alarm( "ALARMING FROM NETWORK["+getName()+"]", this );
 	}
 	
 	public void update( Observable obj, Object arg )
@@ -79,6 +79,11 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 					//Parser, used only to get source and target address
 					//address = channel_address * 16 + component_address ()
 					Integer deviceAddress = ( parser.parseAddresses( dataBuffer ) ).get( "source" );
+					
+					if ( deviceAddress == 0 )
+					{
+						return;
+					}
 					
 					//Add new device
 	            	if( measurementDevices[deviceAddress] == null )
@@ -112,7 +117,7 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 //				}
 				
 				setChanged();
-				notifyObservers( new ELANMeasurementDeviceNotification( port, ( ( ELANMeasurementDeviceNotification ) arg ).getData().getDeviceAddress() ) );
+				notifyObservers( new ELANMeasurementDeviceNotification( port, ( ( ELANMeasurementDeviceNotification ) arg ).getData().getDeviceAddress(), ( ( ELANMeasurementDeviceNotification ) arg ).getData().getBufferType() ) );
 			}
 			else if( arg instanceof ELANAlarmNotification )
 			{

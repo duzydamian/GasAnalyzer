@@ -21,6 +21,7 @@ import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxFrame;
 import pl.industrum.gasanalyzer.elan.notifications.ELANMeasurementDeviceNotification;
 import pl.industrum.gasanalyzer.elan.notifications.ELANNetworkNotification;
+import pl.industrum.gasanalyzer.elan.types.ELANBufferType;
 import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
 import pl.industrum.gasanalyzer.gui.dialogs.PdfDialog;
 import pl.industrum.gasanalyzer.gui.dialogs.XlsDialog;
@@ -88,6 +89,8 @@ public class GasAnalyzerMainWindow implements Observer
 						.setMessage( "Czy na pewno chcesz zamknąć aplikację?" );
 				if ( messageBox.open() == SWT.YES )
 				{
+					networkCollection.setVisible( false );
+					deviceCollection.setVisible( false );
 					statusBar.setStatusText( "Trwa rozłączanie sieci" );
 					statusBar.showProgressBar();
 					statusBar.setProgress( 50 );
@@ -110,6 +113,9 @@ public class GasAnalyzerMainWindow implements Observer
 		shlGasAnalyzer.pack();
 		shlGasAnalyzer.open();
 		shlGasAnalyzer.layout();
+		
+		sashELANNetworkProblems.layout();
+		sashDeviceTreeNetworkDevice.layout();
 		
 		shlGasAnalyzer.setMaximized( true );
 		problems.showWarning();
@@ -269,8 +275,8 @@ public class GasAnalyzerMainWindow implements Observer
 				networkCollection.setVisible( false );
 				deviceCollection.setVisible( true );
 				deviceCollection.setVisibleDivice( text );
+				
 				sashDeviceTreeNetworkDevice.layout();
-				sashDeviceTreeNetworkDevice.getParent().layout();
 			}
 
 			@Override
@@ -285,10 +291,8 @@ public class GasAnalyzerMainWindow implements Observer
 				deviceCollection.setVisible( false );
 				networkCollection.setVisible( true );
 				networkCollection.setVisibleNetwork( text );
-				networkCollection.layout(true);
-				sashDeviceTreeNetworkDevice.layout(true);
-				sashDeviceTreeNetworkDevice.getParent().layout(true);
 				
+				sashDeviceTreeNetworkDevice.layout();
 			}
 
 			@Override
@@ -336,6 +340,26 @@ public class GasAnalyzerMainWindow implements Observer
 			public void setMeasurementComment( String comment )
 			{
 				nextSnapshotComment = comment;
+			}
+
+			@Override
+			public void stopSurveyAlarming()
+			{
+				for( ELANNetwork network: connectionWrapper )
+				{
+					network.stopAlarming();
+				}
+			}
+
+			@Override
+			public void startSurveyAlarming( int step )
+			{
+				for( ELANNetwork network: connectionWrapper )
+				{
+					network.startAlarmingWithStep( step );
+				}
+				
+				deviceCollection.updateHistoryRefreshStep( step );
 			}	
 		};
 		deviceTree.setEnabled( false );
@@ -349,12 +373,25 @@ public class GasAnalyzerMainWindow implements Observer
 			public Integer getSurveyIDFromGUI()
 			{
 				return currentSurveyObject.getId();
+			}
+
+			@Override
+			public Integer getStepFromGUI()
+			{
+				return deviceTree.getStep();
 			}			
 		};
 		deviceCollection.setEnabled( false );
 		deviceCollection.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
 
-		problems = new Problems( sashELANNetworkProblems, SWT.NONE );		
+		problems = new Problems( sashELANNetworkProblems, SWT.NONE )
+		{
+			@Override
+			public void layoutMainWindow()
+			{
+				sashELANNetworkProblems.layout();
+			}		
+		};		
 
 		statusBar = new StatusBar( shlGasAnalyzer, SWT.BORDER );	
 		
@@ -401,15 +438,34 @@ public class GasAnalyzerMainWindow implements Observer
 				ELANMeasurementDeviceNotification notification = ( ELANMeasurementDeviceNotification )arg;
 				Integer deviceAddress = notification.getData().getDeviceAddress();
 				String networkPort = notification.getData().getNetworkPort();
+				ELANBufferType bufferType = notification.getData().getBufferType();
 				ELANMeasurementDevice device;
 				
 				device = connectionWrapper.getNetwork( networkPort ).getDevice( deviceAddress );
 				
-				ELANRxFrame poll = device.pollAndClear();
-				ELANRxBroadcastFrame frame = ( ELANRxBroadcastFrame )poll;
-				
-				deviceCollection.updateMeasurmentFormDevice( device.getDeviceAddress(), frame );
-			} catch ( NullDeviceException e )
+				ELANRxFrame frame;
+				try
+				{
+					switch ( bufferType )
+					{
+						case INVALID_FRAME:
+						{
+							break;
+						}
+						case BROADCAST_FRAME:
+						{
+							frame = ( ELANRxBroadcastFrame ) device.pollAndClear( bufferType );
+							deviceCollection.updateMeasurmentFormDevice( device.getDeviceAddress(), ( ELANRxBroadcastFrame )frame );
+							break;
+						}
+					}
+				} 
+				catch ( Exception e )
+				{
+					e.printStackTrace();
+				}
+			} 
+			catch ( NullDeviceException e )
 			{
 				e.printStackTrace();
 			}

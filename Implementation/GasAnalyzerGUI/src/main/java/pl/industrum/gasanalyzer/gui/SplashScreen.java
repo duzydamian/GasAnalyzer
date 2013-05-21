@@ -17,7 +17,7 @@ import pl.industrum.gasanalyzer.test.TestVector;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class SplashScreen
-{
+{//FIXME TODO check on windows
 	private TestVector testVector;
 	private ProgressBar progressBar;
 	private int testsCount;
@@ -75,27 +75,28 @@ public class SplashScreen
 		industrumLogo = new Label(splash, SWT.NONE);
 		industrumLogo.setImage( UsefulImage.INDUSTRUM_LOGO.getImage() );
 		industrumLogoData = new FormData();
+		industrumLogoData.left = new FormAttachment ((image.getBounds().width/2 - industrumLogo.getImage().getBounds().width/2)/4, 0);
 		industrumLogoData.bottom = new FormAttachment (50, -5);
 		industrumLogo.setLayoutData(industrumLogoData);
 	
 		imiueLogo = new Label(splash, SWT.NONE);
 		imiueLogo.setImage( UsefulImage.IMIUE_LOGO.getImage() );
 		imiueLogoData = new FormData();
-		imiueLogoData.left = new FormAttachment (2, 0);	
+		imiueLogoData.left = new FormAttachment (5, 0);	
 		imiueLogoData.bottom = new FormAttachment (80, -5);
 		imiueLogo.setLayoutData(imiueLogoData);
 		
 		zkiwpLogo = new Label(splash, SWT.NONE);
 		zkiwpLogo.setImage( UsefulImage.ZKIWP_LOGO.getImage() );
 		zkiwpLogoData = new FormData();
-		zkiwpLogoData.left = new FormAttachment (28, 0);
+		zkiwpLogoData.left = new FormAttachment ((image.getBounds().width/2 - zkiwpLogo.getImage().getBounds().width/2)/4, 0);
 		zkiwpLogoData.bottom = new FormAttachment (80, -5);
 		zkiwpLogo.setLayoutData(zkiwpLogoData);
 		
 		polslLogo = new Label(splash, SWT.NONE);
 		polslLogo.setImage( UsefulImage.POLSL_LOGO.getImage() );
 		polslLogoData = new FormData();
-		polslLogoData.left = new FormAttachment (72, 0);		
+		polslLogoData.left = new FormAttachment ((image.getBounds().width-polslLogo.getImage().getBounds().width)/4-5, 0);		
 		polslLogoData.bottom = new FormAttachment (80, -5);
 		polslLogo.setLayoutData(polslLogoData);
 		

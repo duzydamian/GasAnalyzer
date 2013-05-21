@@ -3,21 +3,20 @@ package pl.industrum.gasanalyzer.gui.frames;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -40,6 +39,10 @@ public abstract class Device extends Composite
 {
 	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "HH:mm:ss dd/MM/yyyy", Locale.getDefault() );
 	
+	private Timer refreshTimer;
+	private TimerTask refreshTimerTask;
+	private boolean runningRefreshTimer;
+	
 	GridData tableData;
 	private Group grpOneDIvice;
 	private CTabFolder tabFolder;
@@ -59,6 +62,10 @@ public abstract class Device extends Composite
 	private Composite historyBody;
 	private Integer deviceID ;
 
+	private Label lblCollectiveState;
+
+	private Label lblCollectiveStateMessage;
+
 	/**
 	 * Create the composite.
 	 * 
@@ -67,6 +74,15 @@ public abstract class Device extends Composite
 	 */
 	public Device( Composite parent, int style, ELANMeasurementDevice device )
 	{
+//TODO FIXME
+/*
+ * history browsing
+ * change refresh step to survey step
+ * to many columns
+ * load data on show
+ * add more data in refresh from 10 to 25
+ * 
+ */
 		super( parent, style );
 //		compositeData = new GridData( GridData.FILL, GridData.GRAB_VERTICAL,
 //				true, false );
@@ -84,21 +100,34 @@ public abstract class Device extends Composite
 
 		tabFolder = new CTabFolder( grpOneDIvice, SWT.NONE );
 		tabFolder.setSimple(false);
+		
+		tabFolder.addSelectionListener(new SelectionAdapter()
+		{
+		      public void widgetSelected(org.eclipse.swt.events.SelectionEvent event)
+		      {
+		    	  refreshDeviceMeasurements();
+		      }
+		});
 
 		tbitmCurrent = new CTabItem( tabFolder, SWT.NONE );
-		tbitmCurrent.setText( Messages.getString( "Device.tbtmBiecy.text" ) ); //$NON-NLS-1$
+		tbitmCurrent.setText( Messages.getString( "Device.tbtmCurrent.text" ) ); //$NON-NLS-1$
 
 		currentBody = new Composite( tabFolder, SWT.NONE );
 		tbitmCurrent.setControl( currentBody );
 		currentBody.setLayout( new GridLayout( 2, false ) );
 
+		lblCollectiveState = new Label( currentBody, SWT.WRAP );
+		lblCollectiveState.setText( Messages.getString( "Device.lblCollectiveState.text" ) );
+		lblCollectiveStateMessage = new Label( currentBody, SWT.NONE );
+		lblCollectiveStateMessage.setText( Messages.getString( "Device.lblOk.text" ) );
+		
 		lblState = new Label( currentBody, SWT.WRAP );
-		lblState.setText( Messages.getString( "Device.lblStan.text" ) );
+		lblState.setText( Messages.getString( "Device.lblState.text" ) );
 		lblStateMessage = new Label( currentBody, SWT.NONE );
 		lblStateMessage.setText( Messages.getString( "Device.lblOk.text" ) );		
 		
 		lblLastMeasure = new Label( currentBody, SWT.WRAP );
-		lblLastMeasure.setText( Messages.getString( "Device.lblStan.text" ) );
+		lblLastMeasure.setText( Messages.getString( "Device.lblLastMeasure.text" ) );
 		lblLastMeasureTimeStamp = new Label( currentBody, SWT.NONE );
 		lblLastMeasureTimeStamp.setText( "" );
 		
@@ -147,47 +176,12 @@ public abstract class Device extends Composite
 
 		historyBody = new Composite( tabFolder, SWT.NONE );
 		tbitmHistory.setControl( historyBody );
-		tbitmHistory.addListener( SWT.FOCUSED, new Listener()
-		{
-			
-			public void handleEvent( Event arg0 )
-			{
-				refreshDeviceMeasurements();
-			}
-		} );
+		
 		historyBody.setLayout(new FillLayout(SWT.HORIZONTAL));
-
-		historyBody.addFocusListener( new FocusListener()
-		{
-			
-			public void focusLost( FocusEvent arg0 )
-			{
-				refreshDeviceMeasurements();
-			}
-			
-			public void focusGained( FocusEvent arg0 )
-			{
-				refreshDeviceMeasurements();
-			}
-		} );
 		
 		tableHistory = new Table (historyBody, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		tableHistory.setLinesVisible (true);
 		tableHistory.setHeaderVisible (true);
-		
-		tableHistory.addFocusListener( new FocusListener()
-		{
-			
-			public void focusLost( FocusEvent arg0 )
-			{
-				refreshDeviceMeasurements();
-			}
-			
-			public void focusGained( FocusEvent arg0 )
-			{
-				refreshDeviceMeasurements();
-			}
-		} );
 		
 		for (int i=0; i<columnsHistory.length; i++)
 		{
@@ -202,14 +196,93 @@ public abstract class Device extends Composite
 		}		
 		
 		refreshDeviceMeasurements();
+								
+		runningRefreshTimer = false;
 	}
 
+	public void stopRefreshTimer()
+	{
+		if( runningRefreshTimer == true )
+		{
+			refreshTimer.cancel();
+			runningRefreshTimer = false;
+		}
+	}
+	
+	public void updateRefreshTimerIfStarted(int step)
+	{
+		int step2 = step * 1000;
+		
+		if( runningRefreshTimer == true )
+		{
+			refreshTimer.cancel();
+			runningRefreshTimer = false;
+		}
+		
+		if( runningRefreshTimer == false )
+		{			
+			refreshTimerTask = new TimerTask()
+			{
+				
+				@Override
+				public void run()
+				{
+					Display.getDefault().asyncExec( new Runnable()
+					{
+						public void run()
+						{
+							refreshDeviceMeasurements();
+						}
+					});				
+				}
+			};		
+			
+			refreshTimer = new Timer("REFRESHING HISTORY FROM DEVICE["+deviceName+"]");
+			refreshTimer.schedule( refreshTimerTask, step2, step2 );
+			runningRefreshTimer = true;			
+		}
+	}
+	
+	private void startRefreshTimer()
+	{		
+		int step = getStep() * 1000;
+		
+		if( runningRefreshTimer == true )
+		{
+			refreshTimer.cancel();
+			runningRefreshTimer = false;
+		}
+		
+		if( runningRefreshTimer == false )
+		{			
+			refreshTimerTask = new TimerTask()
+			{
+				
+				@Override
+				public void run()
+				{
+					Display.getDefault().asyncExec( new Runnable()
+					{
+						public void run()
+						{
+							refreshDeviceMeasurements();
+						}
+					});				
+				}
+			};		
+			
+			refreshTimer = new Timer("REFRESHING HISTORY FROM DEVICE["+deviceName+"]");
+			refreshTimer.schedule( refreshTimerTask, step, step );
+			runningRefreshTimer = true;			
+		}									
+	}
+	
 	private void refreshDeviceMeasurements()
 	{
 		//TODO implement browse history
 		tableHistory.removeAll();
 		
-		for( MeasurementSet set: MeasurementSetManager.getAllMeasurementSets( new Date(), getSurveyID(), deviceID, 10 ) )
+		for( MeasurementSet set: MeasurementSetManager.getAllMeasurementSets( new Date(), getSurveyID(), deviceID, 20 ) )
 		{
 			TableItem item = new TableItem( tableHistory, SWT.NONE );
 			item.setText( 0, dateFormater.format( set.getTimestamp() ) );
@@ -241,10 +314,10 @@ public abstract class Device extends Composite
 	{
 		Display.getDefault().asyncExec( new Runnable()
 		{
-			@SuppressWarnings( "deprecation" )
 			public void run()
 			{
-				lblLastMeasureTimeStamp.setText( frame.getTimeStamp().toGMTString() );
+				lblStateMessage.setText( frame.getChannelStateCollection().get( 0 ).name() );
+				lblLastMeasureTimeStamp.setText( dateFormater.format( frame.getTimeStamp() ) );
 				int i = 0;
 				for( ELANMeasurement elanMeasurement: frame )
 				{
@@ -283,10 +356,26 @@ public abstract class Device extends Composite
 	}
 	
 	@Override
+	public void setVisible( boolean arg0 )
+	{
+		if( arg0)
+		{
+			startRefreshTimer();
+		}
+		else
+		{
+			stopRefreshTimer();
+		}
+		
+		super.setVisible( arg0 );
+	}
+	
+	@Override
 	protected void checkSubclass()
 	{
 		// Disable the check that prevents subclassing of SWT components
 	}
 	
 	public abstract Integer getSurveyID();
+	public abstract Integer getStep();
 }

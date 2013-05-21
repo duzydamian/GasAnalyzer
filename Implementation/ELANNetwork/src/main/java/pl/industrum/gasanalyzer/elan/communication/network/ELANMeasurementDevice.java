@@ -7,16 +7,18 @@ import java.util.Queue;
 
 import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxFrame;
+import pl.industrum.gasanalyzer.elan.frames.ELANRxInvalidFrame;
 import pl.industrum.gasanalyzer.elan.notifications.ELANDataParserNotification;
 import pl.industrum.gasanalyzer.elan.notifications.ELANMeasurementDeviceNotification;
+import pl.industrum.gasanalyzer.elan.types.ELANBufferType;
 import pl.industrum.gasanalyzer.elan.types.ELANDeviceType;
 
 public class ELANMeasurementDevice extends Observable implements Observer
 {
 	//Frames buffers
-	private Queue<ELANRxFrame> rxFrameBuffer;
+	private Queue<ELANRxInvalidFrame> rxInvalidFrameBuffer;
 	//TODO should be used correct buffer type to each frame type 
-	//private Queue<ELANRxBroadcastFrame> rxBroadcastFrameBuffer; 
+	private Queue<ELANRxBroadcastFrame> rxBroadcastFrameBuffer; 
 	private ELANRxBroadcastFrame rxBroadcastFrameForSnaphot;
 	
 	private ELANMeasurementDeviceInformation deviceInformation;
@@ -26,14 +28,16 @@ public class ELANMeasurementDevice extends Observable implements Observer
 		deviceInformation = new ELANMeasurementDeviceInformation();
 		setName( name );
 		setDeviceAddress( deviceAddress );
-		rxFrameBuffer = new LinkedList<ELANRxFrame>();
+		rxInvalidFrameBuffer = new LinkedList<ELANRxInvalidFrame>();
+		rxBroadcastFrameBuffer = new LinkedList<ELANRxBroadcastFrame>();
 	}
 	
 	public ELANMeasurementDevice( Integer deviceAddress )
 	{
 		deviceInformation = new ELANMeasurementDeviceInformation();
 		setDeviceAddress( deviceAddress );
-		rxFrameBuffer = new LinkedList<ELANRxFrame>();
+		rxInvalidFrameBuffer = new LinkedList<ELANRxInvalidFrame>();
+		rxBroadcastFrameBuffer = new LinkedList<ELANRxBroadcastFrame>();
 	}
 	
 	public void update( Observable obj, Object arg )
@@ -46,20 +50,27 @@ public class ELANMeasurementDevice extends Observable implements Observer
 				
 				if( rx.isValid() )
 				{
-					//Notify Network about received measurement frame
-					if( isEmpty() )
-					{
-						rxFrameBuffer.add( rx );
-						//FIXME we have only ELANRxBroadcastFrame for now
-						rxBroadcastFrameForSnaphot = ( ELANRxBroadcastFrame ) rx;
-						setChanged();
-						notifyObservers( new ELANMeasurementDeviceNotification( "unknown", getDeviceAddress() ) );
-					}
-					else
-					{
-						//Add frame to buffer
-						rxFrameBuffer.add( rx );
-					}
+					//Add frame to broadcasts buffer
+					rxBroadcastFrameBuffer.add( ( ELANRxBroadcastFrame )rx );
+					rxBroadcastFrameForSnaphot = ( ELANRxBroadcastFrame ) rx;
+
+					//Notify Network about received frame
+					setChanged();
+					notifyObservers( new ELANMeasurementDeviceNotification( "unknown", getDeviceAddress(), ELANBufferType.BROADCAST_FRAME ) );
+					//if( isEmpty( ELANBufferType.BROADCAST_FRAME ) )
+					//{
+						//setChanged();
+						//notifyObservers( new ELANMeasurementDeviceNotification( "unknown", getDeviceAddress() ) );
+					//}
+				}
+				else
+				{
+					//Add frame to invalids buffer
+					rxInvalidFrameBuffer.add( ( ELANRxInvalidFrame ) rx );
+					
+					//Notify Network about received frame
+					setChanged();
+					notifyObservers( new ELANMeasurementDeviceNotification( "unknown", getDeviceAddress(), ELANBufferType.INVALID_FRAME ) );
 				}
 			}
 			else 
@@ -73,29 +84,79 @@ public class ELANMeasurementDevice extends Observable implements Observer
 		}
 	}
 
-	public boolean isEmpty()
+	public boolean isEmpty( ELANBufferType type ) throws Exception
 	{
-		if( rxFrameBuffer.peek() != null )
+		switch ( type )
 		{
-			return false;
-		}
-		else
-		{
-			return true;
+			case INVALID_FRAME:
+			{
+				if( rxInvalidFrameBuffer.peek() != null )
+				{
+					return false;
+				}
+				else
+				{
+					return true;
+				}
+			}
+			case BROADCAST_FRAME:
+			{
+				if( rxBroadcastFrameBuffer.peek() != null )
+				{
+					return false;
+				}
+				else
+				{
+					return true;
+				}
+			}
+			default:
+			{
+				throw new Exception("Invalid buffer type!");
+			}
 		}
 	}
 	
-	public ELANRxFrame pollAndClear()
+	public ELANRxFrame pollAndClear( ELANBufferType type ) throws Exception
 	{
-		ELANRxFrame frame = poll();
-		rxFrameBuffer.clear();
-		return frame;
+		switch ( type )
+		{
+			case INVALID_FRAME:
+			{
+				ELANRxInvalidFrame frame = ( ELANRxInvalidFrame ) poll( type );
+				rxInvalidFrameBuffer.clear();
+				return frame;
+			}
+			case BROADCAST_FRAME:
+			{
+					ELANRxBroadcastFrame frame = ( ELANRxBroadcastFrame ) poll( type );
+					rxBroadcastFrameBuffer.clear();
+					return frame;
+			}
+			default:
+			{
+				throw new Exception("Invalid buffer type!");
+			}
+		}
 	}
 	
-	public ELANRxFrame poll()
+	public ELANRxFrame poll( ELANBufferType type ) throws Exception
 	{
-		ELANRxFrame frame = rxFrameBuffer.poll();
-		return frame;
+		switch ( type )
+		{
+			case INVALID_FRAME:
+			{
+				return rxInvalidFrameBuffer.poll();
+			}
+			case BROADCAST_FRAME:
+			{
+				return rxBroadcastFrameBuffer.poll();
+			}
+			default:
+			{
+				throw new Exception("Invalid buffer type!");
+			}
+		}
 	}
 	
 	public ELANMeasurementDeviceInformation getDeviceInformation()

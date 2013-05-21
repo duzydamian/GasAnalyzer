@@ -38,7 +38,7 @@ import pl.industrum.gasanalyzer.types.UsefulColor;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class EditSurvey extends Dialog
-{//TODO check and implement if necessary
+{
 	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "dd/MM/yyyy HH:mm", Locale.getDefault() );
 	
 	protected Survey result;
@@ -227,6 +227,7 @@ public class EditSurvey extends Dialog
 			public void modifyText( ModifyEvent arg0 )
 			{
 				isPlaceSelected = validatePlace();
+				refreshListSurveyObject( avaiblePlaces.get( listSurveyPlace.getSelectionIndex() ).getId() );
 				listSurveyObject.setEnabled( isPlaceSelected );
 				btnNewSurveyObject.setEnabled( isPlaceSelected );
 			}
@@ -258,7 +259,7 @@ public class EditSurvey extends Dialog
 		listSurveyObject = new Combo( surveyForm, SWT.NONE );
 		listSurveyObject.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
 				false, false, 1, 1 ) );
-		refreshListSurveyObject();
+		
 		listSurveyObject.addModifyListener( new ModifyListener()
 		{
 			
@@ -282,7 +283,7 @@ public class EditSurvey extends Dialog
 						.getShell(), SWT.NONE, placeID );
 				newSurveyObject.open();
 
-				refreshListSurveyObject();
+				refreshListSurveyObject( avaiblePlaces.get( listSurveyPlace.getSelectionIndex() ).getId() );
 			}
 		} );
 		
@@ -650,12 +651,12 @@ public class EditSurvey extends Dialog
 		}
 	}
 
-	private void refreshListSurveyObject()
+	private void refreshListSurveyObject(int placeID)
 	{
 		listSurveyObject.removeAll();
 		avaibleObjects.clear();
 		
-		for( MeasuredObject object: MeasuredObjectManager.getAllObjects() )
+		for( MeasuredObject object: MeasuredObjectManager.getObjectsByPlace( placeID ) )
 		{
 			listSurveyObject.add( object.toString() );
 			avaibleObjects.add( object );

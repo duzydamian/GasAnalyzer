@@ -44,7 +44,7 @@ public class Alarm
 			running = true;
 		}
 		
-		timer = new Timer();
+		timer = new Timer(name);
 		timer.schedule( new AlarmNotifyTask( name, observer ), this.step, this.step );
 	}
 	

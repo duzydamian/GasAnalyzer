@@ -112,7 +112,7 @@ public class MeasurementSet implements java.io.Serializable
 
 	@Override
 	public String toString()
-	{
+	{ //FIXME poprawić na bardziej czytalne
 		String printableSet = "";
 		for( Measurement measurement: getMeasurementsSorted() )
 		{

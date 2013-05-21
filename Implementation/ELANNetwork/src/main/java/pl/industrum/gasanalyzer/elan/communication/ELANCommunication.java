@@ -1,5 +1,6 @@
 package pl.industrum.gasanalyzer.elan.communication;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -32,7 +33,7 @@ public class ELANCommunication
 	 * Read one frame from network
 	 */
 	public Queue<Integer> readFrame()
-	{
+	{//FIXME analyze read data with interrupt not in loop
 		Queue<Integer> data = new LinkedList<Integer>();
     	int  previousCharacter = -1;
     	//Read first character from new frame
@@ -51,6 +52,10 @@ public class ELANCommunication
     		}
     		while ( !( (previousCharacter==16) & (curentCharacter==3) ) );
     		
+    		System.out.println( new Date() + " : ramka z ELAN Communication" );
+        	System.out.println( data );
+        	
+        	
     		//Add CRC16 to frame
 			int CRCLow = elanConnection.read();
 			int CRCHigh = elanConnection.read();		
@@ -58,10 +63,14 @@ public class ELANCommunication
 			
 			if( ELANCRC16.checkCRC16( data, CRC ) )
 			{
+				System.out.println( "Crc correct" );
+				System.out.println( );
 				return data;
 			}
 			else
 			{
+				System.out.println( "Error in crc" );
+				System.out.println( );
 				break;
 			}
     	}
