@@ -21,6 +21,7 @@ import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxFrame;
 import pl.industrum.gasanalyzer.elan.notifications.ELANMeasurementDeviceNotification;
 import pl.industrum.gasanalyzer.elan.notifications.ELANNetworkNotification;
+import pl.industrum.gasanalyzer.elan.types.ELANBufferType;
 import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
 import pl.industrum.gasanalyzer.gui.dialogs.PdfDialog;
 import pl.industrum.gasanalyzer.gui.dialogs.XlsDialog;
@@ -410,15 +411,34 @@ public class GasAnalyzerMainWindow implements Observer
 				ELANMeasurementDeviceNotification notification = ( ELANMeasurementDeviceNotification )arg;
 				Integer deviceAddress = notification.getData().getDeviceAddress();
 				String networkPort = notification.getData().getNetworkPort();
+				ELANBufferType bufferType = notification.getData().getBufferType();
 				ELANMeasurementDevice device;
 				
 				device = connectionWrapper.getNetwork( networkPort ).getDevice( deviceAddress );
 				
-				ELANRxFrame poll = device.pollAndClear();
-				ELANRxBroadcastFrame frame = ( ELANRxBroadcastFrame )poll;
-				
-				deviceCollection.updateMeasurmentFormDevice( device.getDeviceAddress(), frame );
-			} catch ( NullDeviceException e )
+				ELANRxFrame frame;
+				try
+				{
+					switch ( bufferType )
+					{
+						case INVALID_FRAME:
+						{
+							break;
+						}
+						case BROADCAST_FRAME:
+						{
+							frame = ( ELANRxBroadcastFrame ) device.pollAndClear( bufferType );
+							deviceCollection.updateMeasurmentFormDevice( device.getDeviceAddress(), ( ELANRxBroadcastFrame )frame );
+							break;
+						}
+					}
+				} 
+				catch ( Exception e )
+				{
+					e.printStackTrace();
+				}
+			} 
+			catch ( NullDeviceException e )
 			{
 				e.printStackTrace();
 			}
