@@ -19,6 +19,7 @@ import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
 import pl.industrum.gasanalyzer.elan.exceptions.NullDeviceException;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxFrame;
+import pl.industrum.gasanalyzer.elan.frames.ELANRxInvalidFrame;
 import pl.industrum.gasanalyzer.elan.notifications.ELANMeasurementDeviceNotification;
 import pl.industrum.gasanalyzer.elan.notifications.ELANNetworkNotification;
 import pl.industrum.gasanalyzer.elan.types.ELANBufferType;
@@ -450,12 +451,14 @@ public class GasAnalyzerMainWindow implements Observer
 					{
 						case INVALID_FRAME:
 						{
+							frame = ( ELANRxInvalidFrame ) device.pollAndClear( bufferType );
+							deviceCollection.updateStateForDevice( device.getDeviceAddress(), ( ELANRxInvalidFrame )frame );
 							break;
 						}
 						case BROADCAST_FRAME:
 						{
 							frame = ( ELANRxBroadcastFrame ) device.pollAndClear( bufferType );
-							deviceCollection.updateMeasurmentFormDevice( device.getDeviceAddress(), ( ELANRxBroadcastFrame )frame );
+							deviceCollection.updateMeasurmentForDevice( device.getDeviceAddress(), ( ELANRxBroadcastFrame )frame );
 							break;
 						}
 					}

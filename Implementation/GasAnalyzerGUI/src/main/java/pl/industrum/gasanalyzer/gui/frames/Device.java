@@ -23,6 +23,8 @@ import org.eclipse.swt.widgets.TableItem;
 
 import pl.industrum.gasanalyzer.elan.communication.network.ELANMeasurementDevice;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
+import pl.industrum.gasanalyzer.elan.frames.ELANRxInvalidFrame;
+import pl.industrum.gasanalyzer.elan.types.ELANCollectiveChannelState;
 import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
 import pl.industrum.gasanalyzer.elan.types.ELANVariableDimensionPair;
 import pl.industrum.gasanalyzer.hibernate.model.managers.DeviceManager;
@@ -310,12 +312,41 @@ public abstract class Device extends Composite
 		tabFolder.setEnabled( arg0 );
 	}	
 	
+	public void updateState( final ELANRxInvalidFrame frame )
+	{
+		Display.getDefault().asyncExec( new Runnable()
+		{
+			public void run()
+			{
+				lblCollectiveStateMessage.setText( "" );
+				for( ELANCollectiveChannelState collectiveChannelState: frame.getCollectiveChannelState() )
+				{
+					lblCollectiveStateMessage.setText( lblCollectiveStateMessage.getText() + collectiveChannelState.name()+", " );
+				}
+				lblCollectiveStateMessage.setText( lblCollectiveStateMessage.getText().substring( 0, lblCollectiveStateMessage.getText().length() ) );				
+				lblStateMessage.setText( frame.getChannelStateCollection().get( 0 ).name() );
+				lblLastMeasureTimeStamp.setText( dateFormater.format( frame.getTimeStamp() ) );
+				
+				int i = 0;
+				for( TableColumn column: table.getColumns() )
+				{
+					table.getItem( i ).setText( 1, "" );
+					column.pack();
+					i++;
+				}
+				
+				table.setEnabled( false );
+			}
+		});
+	}
+	
 	public void updateMeasurment(final ELANRxBroadcastFrame frame)
 	{
 		Display.getDefault().asyncExec( new Runnable()
 		{
 			public void run()
 			{
+				lblCollectiveStateMessage.setText( ELANCollectiveChannelState.TRANSMITTED_MEASRED_VALUES_VALID.name());
 				lblStateMessage.setText( frame.getChannelStateCollection().get( 0 ).name() );
 				lblLastMeasureTimeStamp.setText( dateFormater.format( frame.getTimeStamp() ) );
 				int i = 0;
@@ -324,6 +355,7 @@ public abstract class Device extends Composite
 					table.getItem( i ).setText( 1, elanMeasurement.getValue().toString() );
 					i++;
 				}
+				table.setEnabled( true );
 			}
 		});		
 	}

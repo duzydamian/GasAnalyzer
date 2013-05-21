@@ -25,15 +25,17 @@ public class ELANRxByteBuffer extends Observable implements Runnable
 			try
 			{				
 				//Read all frames and send every correct frame to ELANRxBufferObserver.
-	        	Queue<Integer> frame = communication.readFrame();	        	
+	        	Queue<Integer> frame = communication.readFrame();
+	        	
+	        	System.out.println( new Date() + " : Ramka z ELANRxByte Buffer" );
+	        	System.out.println( frame );
+	        	System.out.println( );
+	        	
 	        	if(frame != null)
 	        	{	        		
 		        	setChanged();
 		        	notifyObservers( new ELANRxByteBufferNotification( frame ) );
-	        	}
-	        	System.out.println( new Date() + " : Ramka z ELANRxByte Buffer" );
-	        	System.out.println( frame );
-	        	System.out.println( );
+	        	}	        	
 			}
 			catch( Exception e )
 			{
