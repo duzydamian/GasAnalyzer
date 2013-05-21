@@ -316,7 +316,7 @@ public abstract class Device extends Composite
 		{
 			public void run()
 			{
-				lblStateMessage.setText( frame.getChannelStateCollection().get( 0 ).name() );
+				lblStateMessage.setText( frame.getChannelState().name() );
 				lblLastMeasureTimeStamp.setText( dateFormater.format( frame.getTimeStamp() ) );
 				int i = 0;
 				for( ELANMeasurement elanMeasurement: frame )
