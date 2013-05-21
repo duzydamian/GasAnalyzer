@@ -16,6 +16,9 @@ import pl.industrum.gasanalyzer.gui.dialogs.SendExceptionCatched;
  */
 public class GasAnalyzerGUI
 {
+	private static boolean debug = false;
+	private static boolean develop = true;
+	
 	private static String AppVersion;
 	private static String RXTXVersion;
 	private static String NativeRXTXVersion;
@@ -39,24 +42,25 @@ public class GasAnalyzerGUI
 				if ( args.length > 0 )
 				{
 					String forwarding = args[0];
-					if ( forwarding.equalsIgnoreCase( "out" ) )
-					{
-						//nothing to do
-					} 
-					else if ( forwarding.equalsIgnoreCase( "file" ) )
+					if ( forwarding.equalsIgnoreCase( "file" ) )
 					{
 						System.setErr( new PrintStream( "err.log" ) );
 						System.setOut( new PrintStream( "out.log" ) );
 					}
 				}
+				else
+				{
+					if ( !develop & !debug )
+					{
+						System.setErr( new PrintStream( "err.log" ) );
+						System.setOut( new PrintStream( "out.log" ) );
+					}					
+				}
 			}
 			catch ( Exception e )
 			{
 				e.printStackTrace();
-			}
-						
-			System.setErr( new PrintStream( "err.log" ) );
-			System.setOut( new PrintStream( "out.log" ) );
+			}									
 			
 			SplashScreen splashScreen = new SplashScreen();
 			splashScreen.open();
@@ -122,5 +126,21 @@ public class GasAnalyzerGUI
 	public static void setNativeRXTXVersion( String nativeRXTXVersion )
 	{
 		NativeRXTXVersion = nativeRXTXVersion;
+	}
+	
+	/**
+	 * @return the debug
+	 */
+	public static boolean isDebug()
+	{
+		return debug;
+	}
+
+	/**
+	 * @return the develop
+	 */
+	public static boolean isDevelop()
+	{
+		return develop;
 	}
 }
