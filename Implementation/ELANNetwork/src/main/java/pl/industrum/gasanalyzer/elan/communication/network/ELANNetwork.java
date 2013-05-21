@@ -11,6 +11,7 @@ import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
 import pl.industrum.gasanalyzer.elan.communication.rx.ELANAlarmNotification;
 import pl.industrum.gasanalyzer.elan.communication.rx.ELANDataParser;
 import pl.industrum.gasanalyzer.elan.communication.rx.ELANDeviceInformationParser;
+import pl.industrum.gasanalyzer.elan.communication.rx.ELANPreparser;
 import pl.industrum.gasanalyzer.elan.exceptions.DuplicateDeviceException;
 import pl.industrum.gasanalyzer.elan.exceptions.NullDeviceException;
 import pl.industrum.gasanalyzer.elan.notifications.ELANMeasurementDeviceNotification;
@@ -73,6 +74,10 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 				//Last time check dataBuffer non-zero size condition.
 				if( dataBuffer.size() > 0 )
 				{
+					//Preparsing
+					ELANPreparser preparser = new ELANPreparser();
+					dataBuffer = preparser.trimData( dataBuffer );
+					
 					//Parsing information helper
 					ELANDeviceInformationParser parser = new ELANDeviceInformationParser();
 					
