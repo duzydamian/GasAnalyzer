@@ -247,6 +247,7 @@ public class GasAnalyzerMainWindow implements Observer
 			public void disconnectFromDevice( String text )
 			{
 				disconnect( text );
+				deviceCollection.removeAllDevice();
 			}
 
 			@Override

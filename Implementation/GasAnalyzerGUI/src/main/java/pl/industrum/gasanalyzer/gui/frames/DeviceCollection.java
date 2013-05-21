@@ -144,6 +144,12 @@ public abstract class DeviceCollection extends Composite
 		return devices;
 	}
 	
+	public void removeAllDevice()
+	{
+		devices.removeAllElements();
+		currentBody.layout();
+	}
+	
 	public abstract Integer getSurveyIDFromGUI();
-	public abstract Integer getStepFromGUI();
+	public abstract Integer getStepFromGUI();	
 }

@@ -8,6 +8,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
 
+import pl.industrum.gasanalyzer.gui.GasAnalyzerGUI;
+
 public class NetworkScan extends Dialog
 {
 
@@ -92,7 +94,14 @@ public class NetworkScan extends Dialog
 							break;
 						}
 						progressBar.setSelection(i);
-						Thread.sleep(100);
+						if ( GasAnalyzerGUI.isDevelop() )
+						{
+							Thread.sleep(10);
+						}
+						else
+						{
+							Thread.sleep(100);
+						}						
 					}
 					catch (Throwable e)
 					{
