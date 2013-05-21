@@ -1,6 +1,5 @@
 package pl.industrum.gasanalyzer.elan.frames;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import pl.industrum.gasanalyzer.elan.types.ELANChannelState;
@@ -9,24 +8,23 @@ public class ELANRxFrame extends ELANFrame
 {
 	private Date timeStamp;
 	private boolean valid;
-	private ArrayList<ELANChannelState> channelStateCollection;
+	private ELANChannelState channelState;
 	
 	public ELANRxFrame( boolean valid ) 
 	{
 		super();
 		this.timeStamp = new Date();
 		this.valid = valid;
-		this.channelStateCollection = new ArrayList<ELANChannelState>();
 	}
 	
-	public void addChannelState( ELANChannelState channelState )
+	public ELANChannelState getChannelState()
 	{
-		channelStateCollection.add( channelState );
+		return channelState;
 	}
 	
-	public ArrayList<ELANChannelState> getChannelStateCollection()
+	public void setChannelState( ELANChannelState channelState )
 	{
-		return channelStateCollection;
+		this.channelState = channelState;
 	}
 	
 	public Date getTimeStamp() 

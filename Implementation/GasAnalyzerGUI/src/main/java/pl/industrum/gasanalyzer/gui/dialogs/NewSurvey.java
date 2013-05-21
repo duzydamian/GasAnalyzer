@@ -37,7 +37,7 @@ import pl.industrum.gasanalyzer.types.UsefulColor;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class NewSurvey extends Dialog
-{//TODO check and implement if necessary
+{
 	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "dd/MM/yyyy HH:mm", Locale.getDefault() );
 	
 	protected Survey result;
@@ -200,9 +200,10 @@ public class NewSurvey extends Dialog
 			{
 				NewSurveyUser addSurveyUser = new NewSurveyUser( getParent()
 						.getShell(), SWT.NONE );
-				addSurveyUser.open();
+				ApplicationUser user = addSurveyUser.open();
 
 				refreshListSurveyUser();
+				listSurveyUser.select( avaibleUsers.indexOf( user ) );
 			}
 		} );
 		
@@ -224,6 +225,7 @@ public class NewSurvey extends Dialog
 			public void modifyText( ModifyEvent arg0 )
 			{
 				isPlaceSelected = validatePlace();
+				refreshListSurveyObject( avaiblePlaces.get( listSurveyPlace.getSelectionIndex() ).getId() );
 				listSurveyObject.setEnabled( isPlaceSelected );
 				btnNewSurveyObject.setEnabled( isPlaceSelected );
 			}
@@ -240,9 +242,10 @@ public class NewSurvey extends Dialog
 			{
 				NewSurveyPlace newSurveyPlace = new NewSurveyPlace( getParent()
 						.getShell(), SWT.NONE );
-				newSurveyPlace.open();
+				Place place = newSurveyPlace.open();
 
 				refreshListSurveyPlace();
+				listSurveyPlace.select( avaiblePlaces.indexOf( place ) );
 			}
 		} );
 		
@@ -255,7 +258,7 @@ public class NewSurvey extends Dialog
 		listSurveyObject = new Combo( surveyForm, SWT.NONE );
 		listSurveyObject.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
 				false, false, 1, 1 ) );
-		refreshListSurveyObject();
+
 		listSurveyObject.addModifyListener( new ModifyListener()
 		{
 			
@@ -277,9 +280,10 @@ public class NewSurvey extends Dialog
 				Integer placeID = avaiblePlaces.get( listSurveyPlace.getSelectionIndex() ).getId();
 				NewSurveyObject newSurveyObject = new NewSurveyObject( getParent()
 						.getShell(), SWT.NONE, placeID );
-				newSurveyObject.open();
+				MeasuredObject measuredObject = newSurveyObject.open();
 
-				refreshListSurveyObject();
+				refreshListSurveyObject( avaiblePlaces.get( listSurveyPlace.getSelectionIndex() ).getId() );
+				listSurveyObject.select( avaibleObjects.indexOf( measuredObject ) );
 			}
 		} );
 		
@@ -588,12 +592,12 @@ public class NewSurvey extends Dialog
 		}
 	}
 
-	private void refreshListSurveyObject()
+	private void refreshListSurveyObject(int placeID)
 	{
 		listSurveyObject.removeAll();
 		avaibleObjects.clear();
 		
-		for( MeasuredObject object: MeasuredObjectManager.getAllObjects() )
+		for( MeasuredObject object: MeasuredObjectManager.getObjectsByPlace( placeID ) )
 		{
 			listSurveyObject.add( object.toString() );
 			avaibleObjects.add( object );

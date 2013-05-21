@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import pl.industrum.gasanalyzer.elan.communication.network.ELANMeasurementDevice;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
+import pl.industrum.gasanalyzer.elan.frames.ELANRxInvalidFrame;
 
 /**
  * @author duzydamian (Damian Karbowiak)
@@ -108,7 +109,7 @@ public abstract class DeviceCollection extends Composite
 		// Disable the check that prevents subclassing of SWT components
 	}
 
-	public void updateMeasurmentFormDevice( Integer deviceAddress,
+	public void updateMeasurmentForDevice( Integer deviceAddress,
 			ELANRxBroadcastFrame frame )
 	{
 		for( Device device: devices )
@@ -118,6 +119,37 @@ public abstract class DeviceCollection extends Composite
 		}
 	}
 	
+	public void updateStateForDevice( Integer deviceAddress, ELANRxInvalidFrame frame )
+	{
+		for( Device device: devices )
+		{
+			if( device.getDeviceAddress() == deviceAddress)
+				device.updateState( frame );			
+		}
+	}
+	
+	public void updateHistoryRefreshStep(int step)
+	{
+		for( Device device: devices )
+		{
+			device.updateRefreshTimerIfStarted( step );			
+		}
+	}
+	
+	/**
+	 * @return the devices
+	 */
+	public Vector<Device> getDevices()
+	{
+		return devices;
+	}
+	
+	public void removeAllDevice()
+	{
+		devices.removeAllElements();
+		currentBody.layout();
+	}
+	
 	public abstract Integer getSurveyIDFromGUI();
-	public abstract Integer getStepFromGUI();
+	public abstract Integer getStepFromGUI();	
 }

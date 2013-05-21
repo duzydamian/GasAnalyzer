@@ -19,8 +19,10 @@ import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
 import pl.industrum.gasanalyzer.elan.exceptions.NullDeviceException;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxFrame;
+import pl.industrum.gasanalyzer.elan.frames.ELANRxInvalidFrame;
 import pl.industrum.gasanalyzer.elan.notifications.ELANMeasurementDeviceNotification;
 import pl.industrum.gasanalyzer.elan.notifications.ELANNetworkNotification;
+import pl.industrum.gasanalyzer.elan.types.ELANBufferType;
 import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
 import pl.industrum.gasanalyzer.gui.dialogs.PdfDialog;
 import pl.industrum.gasanalyzer.gui.dialogs.XlsDialog;
@@ -245,6 +247,7 @@ public class GasAnalyzerMainWindow implements Observer
 			public void disconnectFromDevice( String text )
 			{
 				disconnect( text );
+				deviceCollection.removeAllDevice();
 			}
 
 			@Override
@@ -339,6 +342,26 @@ public class GasAnalyzerMainWindow implements Observer
 			public void setMeasurementComment( String comment )
 			{
 				nextSnapshotComment = comment;
+			}
+
+			@Override
+			public void stopSurveyAlarming()
+			{
+				for( ELANNetwork network: connectionWrapper )
+				{
+					network.stopAlarming();
+				}
+			}
+
+			@Override
+			public void startSurveyAlarming( int step )
+			{
+				for( ELANNetwork network: connectionWrapper )
+				{
+					network.startAlarmingWithStep( step );
+				}
+				
+				deviceCollection.updateHistoryRefreshStep( step );
 			}	
 		};
 		deviceTree.setEnabled( false );
@@ -363,7 +386,14 @@ public class GasAnalyzerMainWindow implements Observer
 		deviceCollection.setEnabled( false );
 		deviceCollection.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
 
-		problems = new Problems( sashELANNetworkProblems, SWT.NONE );		
+		problems = new Problems( sashELANNetworkProblems, SWT.NONE )
+		{
+			@Override
+			public void layoutMainWindow()
+			{
+				sashELANNetworkProblems.layout();
+			}		
+		};		
 
 		statusBar = new StatusBar( shlGasAnalyzer, SWT.BORDER );	
 		
@@ -410,15 +440,36 @@ public class GasAnalyzerMainWindow implements Observer
 				ELANMeasurementDeviceNotification notification = ( ELANMeasurementDeviceNotification )arg;
 				Integer deviceAddress = notification.getData().getDeviceAddress();
 				String networkPort = notification.getData().getNetworkPort();
+				ELANBufferType bufferType = notification.getData().getBufferType();
 				ELANMeasurementDevice device;
 				
 				device = connectionWrapper.getNetwork( networkPort ).getDevice( deviceAddress );
 				
-				ELANRxFrame poll = device.pollAndClear();
-				ELANRxBroadcastFrame frame = ( ELANRxBroadcastFrame )poll;
-				
-				deviceCollection.updateMeasurmentFormDevice( device.getDeviceAddress(), frame );
-			} catch ( NullDeviceException e )
+				ELANRxFrame frame;
+				try
+				{
+					switch ( bufferType )
+					{
+						case INVALID_FRAME:
+						{
+							frame = ( ELANRxInvalidFrame ) device.pollAndClear( bufferType );
+							deviceCollection.updateStateForDevice( device.getDeviceAddress(), ( ELANRxInvalidFrame )frame );
+							break;
+						}
+						case BROADCAST_FRAME:
+						{
+							frame = ( ELANRxBroadcastFrame ) device.pollAndClear( bufferType );
+							deviceCollection.updateMeasurmentForDevice( device.getDeviceAddress(), ( ELANRxBroadcastFrame )frame );
+							break;
+						}
+					}
+				} 
+				catch ( Exception e )
+				{
+					e.printStackTrace();
+				}
+			} 
+			catch ( NullDeviceException e )
 			{
 				e.printStackTrace();
 			}
