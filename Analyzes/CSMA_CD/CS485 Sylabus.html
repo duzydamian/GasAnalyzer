@@ -1,0 +1,1753 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-2"><meta http-equiv="expires" content="0">
+
+</head><body bgcolor="#ffffff" link="#00ff00" text="#000000" vlink="#f00000"><a name="top"></a>
+<title> CS485 Sylabus</title>
+
+
+<h3>
+<hr>
+CSMA/CD: Carrier Sense Multiple Access with
+  <i>Collision Dectection</i>
+ (Ethernet - close enough...)
+<hr>
+</h3>
+
+<p>
+</p><ul>
+
+<p>
+</p><li> <font color="darkmagenta"><b>
+     Collision Detection
+     </b></font>
+<p>
+</p><ul>
+<li> <b>Detecting collision:</b>
+<p>
+</p><ul>
+<table bgcolor="lightcyan" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> Sounds simple:
+<p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <b>Sender</b> transmits...
+ <p>
+ </p></li><li> While <b>transmitting</b>,
+     <font color="blue"><b>receive</b></font> your own transmission
+ <p>
+ </p></li><li> <font color="red"><b>Check </b></font>
+     what you <font color="blue"><b>receive</b></font>
+     is equal to what you have
+     <font color="darkmagenta"><b>transmitted</b></font>
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p><hr>
+<p>
+</p></li><li> <b>Reality:</b>
+<p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <b>Sender</b> is <font color="blue"><b>very close</b></font>
+    to its <font color="red"><b>own transmission</b></font>
+ <p>
+    The <font color="blue"><b>signal strength</b></font>
+    is <font color="darkmagenta"><b>overwhelming</b></font>
+ </p><p>
+ </p></li><li> It took quite <font color="red"><b>a while</b></font>
+      for <font color="blue"><b>engineers</b></font>
+      to develop <font color="darkmagenta"><b>circuitry</b></font>
+      to enable
+      <font color="red"><b>collision detection</b></font>...
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+
+ </p></li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+
+
+</p></li></ul>
+
+<p>
+</p><hr>
+<hr>
+<p>
+</p></li><li> <font color="darkmagenta">
+	<b>Improving the performance with Collision Detection</b>
+	</font>
+ <p>
+ </p><ul>
+ <li> <b>Short coming of <i>pure</i> CSMA:</b>
+<p>
+</p><ul>
+<table bgcolor="lightgreen" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> Although <font color="blue"><b>at the time of
+    <i>transmission</i></b></font>,
+    the <font color="red"><b>channel is <i>idle</i></b></font>,
+    there are <b>still</b> 
+    <font color="darkmagenta"><b>collisions</b></font>
+    possible.
+ <p>
+ <b>Example:</b>
+</p><p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> In <font color="blue"><b>1-persistent CSMA</b></font>,
+     <font color="red"><b><i>two</i> senders</b></font>
+     are
+     <font color="darkmagenta"><b>waiting</b></font>
+     for the <font color="blue"><b>end of the 
+     <i>current</i> transmission</b></font>
+ <p>
+ </p></li><li> When the <font color="blue"><b><i>current</i> transmission</b></font>
+    ends, the
+    <font color="red"><b>channel is <i>idle</i></b></font>
+ <p>
+ </p></li><li> <font color="magenta"><b>Both</b></font>
+   <b>sender</b> will
+   <font color="blue"><b>transmit</b></font> in
+   the next slot...
+  <p>
+   <font color="red"><b>Collision</b></font>....
+     
+ </p></li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+<font color="red"><b>NOTE:</b></font>
+</p><p>
+</p><ul>
+<table bgcolor="mistyrose" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> There is 
+    <font color="blue"><b>no collision detection</b></font>
+    in <font color="red"><b><i>pure</i> CSMA</b></font>
+ <p>
+ </p></li><li> In the example above,
+    <font color="red"><b>both transmissions</b></font>
+    will be <font color="blue"><b>continued</b></font>
+    until the <font color="darkmagenta"><b><i>whole</i> frame</b></font>
+    is <b>transmitted</b>
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p><hr>
+<hr>
+<p>
+</p></li><li> <b>Improving the performance with <i>Collision Detection</i></b>
+<p>
+</p><ul>
+<table bgcolor="lightcyan" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <b>Nodes</b>
+      equipped with 
+   <font color="red"><b>detect collision</b></font>
+     will <font color="blue"><b><i>abort</i>
+	their transmissions</b></font>
+	 when a 
+	 <font color="darkmagenta"><b>collision</b></font>
+	  has been detected 
+ <p>
+ </p></li><li> <b>Result:</b>
+<p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> The <font color="red"><b>remainder</b></font> of the
+      <font color="blue"><b>frame transmission time</b></font>
+      is <font color="darkmagenta"><b>not wasted</b></font>
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+
+ </p></li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+<font color="red"><b>NOTE:</b></font>
+</p><p>
+</p><ul>
+<table bgcolor="lightgreen" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <font color="red"><b>CSMA</b></font> with
+    <font color="blue"><b>collision detection</b></font>
+    <font color="darkmagenta"><b>do <i>not</i></b></font>
+    use
+    <font color="red"><b>slotted transmissions</b></font>
+  <p>
+  (It's pointless to <font color="blue"><b>detect collsion</b></font>
+   at the start of a slot and then
+  <font color="red"><b>wait until the <i>end</i></b></font>
+  of that slot...)
+ </p></li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+</li></ul>
+<p>
+</p><p>
+</p><hr>
+<hr>
+<p>
+</p></li><li> <font color="darkmagenta"><b>
+     Backoff !!!
+     </b></font>
+<p>
+</p><ul>
+<li> <b>Fact after a collision:</b>
+<p>
+</p><ul>
+<table bgcolor="khaki" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> When a <b>node</b> has <font color="blue"><b>detected</b></font>
+     a <font color="red"><b>collision</b></font>,
+     it <font color="darkmagenta"><b>knows</b></font>
+     that there is
+     <font color="red"><b>at least one other</b></font>
+     <b>node</b> that wants to transmit
+ <p>
+   (In fact, <font color="blue"><b>all nodes</b></font>
+   involved in a <font color="red"><b>collision</b></font>
+   is <font color="darkmagenta"><b>aware</b></font>
+   of this <b>fact</b>)
+ </p></li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+<b>Question:</b>
+</p><p>
+</p><ul>
+<table bgcolor="lightcyan" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <font color="red"><b>How</b></font> can
+     a <b>node</b>
+     <font color="blue"><b>avoid (reduce the likelihood of)</b></font>
+     <font color="darkmagenta"><b>another collision</b></font> ???
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ <p>
+ <font color="red"><b>NOTE:</b></font>
+   the method must work
+   <font color="darkmagenta"><b>without exchanging information</b></font>
+   with <font color="red"><b>other nodes</b></font> !!!
+   <br>
+   (<font color="blue"><b>no communication allowed</b></font>, 
+   because we are 
+   <font color="red"><b>trying</b></font> to
+   communicate :-))
+ </p></li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+ <b>Answer:</b>
+</p><p>
+</p><ul>
+<table bgcolor="lightgreen" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> Use a
+   <font color="red"><b>backoff algorithm</b></font>
+   to
+   <font color="blue"><b><i>auto</i>-determine</b></font>
+   your own
+   <font color="darkmagenta"><b>retransmission
+   <i>schedule</i></b></font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p><hr>
+<p>
+</p></li><li> <b>Generic Backoff Algorithm:</b>
+<p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+<font color="blue">
+<b>
+<pre>
+    Pick a <font color="red">random number r</font>
+    Wait <font color="red">r × &#964;</font>
+
+    Start over from the beginning...          
+</pre>
+</b>
+</font>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+ <font color="red"><b>&amp;tau</b></font> =
+    <font color="blue"><b><i>maximum</i> end-to-end delay</b></font>
+    in the LAN:
+</p><p>
+</p><ul>
+<table border="5">
+
+<tbody><tr> <td>
+<img src="CS485%20Sylabus_pliki/time-unit3.gif">
+</td> </tr>
+
+</tbody></table>
+</ul>
+<p>
+
+ </p></li></ul>
+
+
+<p>
+</p><hr>
+<hr>
+</li><li> <font color="darkmagenta">
+	<b>Time unit used for backoff</b>
+	</font>
+ <p>
+ </p><ul>
+ <li> <b>Notice the backoff procedure uses 
+    <font color="red">&#964;</font> as time unit:</b>
+<p>
+</p><ul>
+<table bgcolor="lightgreen" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> Wait <font color="blue"><b>r ×
+   <font color="red"> &#964;</font></b></font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+ <b>Question:</b> &nbsp;why ?
+</p><p>
+</p><hr>
+<hr>
+<p>
+ </p></li><li> <b>Comtemplate on this goal:</b>
+<p>
+</p><ul>
+<table bgcolor="lightcyan" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> Our <font color="blue"><b>goal</b></font> is
+     to <font color="red"><b>avoid</b></font>
+     a subsequent
+     <font color="darkmagenta"><b>collision</b></font>
+ <p>
+ </p></li><li> <b>Desired property of the Backoff algorithm:</b>
+<p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> When <b>2 nodes</b>
+       pick 
+       <font color="red"><b><i>different</i> random numbers</b></font>,
+	they <font color="darkmagenta"><b>will</b></font>
+	<b>reschedule their transmissions</b>
+	that
+	<font color="red"><b>will <i>not</i></b></font>
+	 result in
+	a <font color="darkmagenta"><b>collision</b></font>.
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p><hr>
+<p>
+ (Obviously, when
+     <font color="blue"><b>two nodes</b></font>
+     pick
+     the <font color="red"><b><i>same</i> random number</b></font>,
+   their <b>rescheduled retransmissions</b>
+   will <font color="blue"><b>collide again</b></font>...
+  </p><p>
+  They may need to try <font color="darkmagenta"><b>many times</b></font>
+  before succeeding...)
+ </p></li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+ </p><hr>
+ <p>
+ </p></li><li> <b>Consider the following situation where
+      <font color="red"><i>backoff time unit</i> is &lt; &#964;</font></b>
+ <p>
+</p><p>
+</p><ul>
+<table border="5">
+
+<tbody><tr> <td>
+<img src="CS485%20Sylabus_pliki/time-unit.gif">
+</td> </tr>
+
+</tbody></table>
+</ul>
+<p>
+ <b>Result:</b>
+</p><p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <font color="blue"><b>Eventhought</b></font>
+    nodes <font color="darkmagenta"><b>B</b></font> and
+    <font color="darkmagenta"><b>C</b></font>
+    selected
+    <font color="red"><b><i>different</i>
+    random values</b></font>,
+    their
+    <font color="darkmagenta"><b>retransmissions</b></font>
+    <b>collided</b>
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p><hr>
+<p>
+ </p></li><li> <b>Now contrast the above with the
+ following situation where
+      <font color="red"><i>backoff time unit</i> = &#964;</font></b>
+ <p>
+</p><p>
+</p><ul>
+<table border="5">
+
+<tbody><tr> <td>
+<img src="CS485%20Sylabus_pliki/time-unit2.gif">
+</td> </tr>
+
+</tbody></table>
+</ul>
+<p>
+</p></li><li> <b>Result:</b>
+<p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <font color="blue"><b>Node C</b></font>
+     was <font color="red"><b>able</b></font> to
+     detect <font color="blue"><b>B's retransmission</b></font>
+     <font color="darkmagenta"><b>before</b></font>
+     it's waiting time
+     <font color="red"><b>expires</b></font> !!!
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+
+ </p></li></ul>
+<p>
+</p><hr>
+<hr>
+<p>
+</p></li><li> <font color="darkmagenta"><b>
+     Duration of channel sensing
+     </b></font>
+<p>
+</p><ul>
+<li> <b>Question:</b>
+<p>
+</p><ul>
+<table bgcolor="lightcyan" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> Does a <b>nodes</b> need to
+    <font color="blue"><b>sense the channel</b></font>
+    during the
+    <font color="red"><b>entire transmission</b></font>
+    of its frames ?
+ <p>
+ </p></li><li> Or can the <b>node</b>
+     <font color="red"><b>stop sensing</b></font>
+     the channel
+     <font color="blue"><b>after some period  of time</b></font> ?
+  <p>
+   If so,
+   <font color="red"><b>how long</b></font> ???
+ </p></li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+<b>Answer:</b>
+</p><p>
+</p><ul>
+<table bgcolor="khaki" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <b>Consider the example:</b>
+<p>
+</p><ul>
+<table border="5">
+
+<tbody><tr> <td>
+<img src="CS485%20Sylabus_pliki/time-unit4.gif">
+</td> </tr>
+
+</tbody></table>
+</ul>
+<p>
+</p></li><li> <b>Observation:</b>
+<p>
+</p><ul>
+<table bgcolor="lightgreen" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> After <font color="red"><b>&amp;tau</b></font> time,
+     <font color="blue"><b>B's transmission</b></font> 
+     will be <font color="darkmagenta"><b>heard</b></font>
+     by <font color="red"><b>all nodes</b></font>
+     on the network...
+  <p>
+   After this time, <font color="blue"><b>all nodes</b></font>
+   will <font color="red"><b>refrain</b></font>
+   from transmitting !!!!
+ </p><p>
+ </p><hr> 
+ <p>
+ </p></li><li> <font color="blue"><b>Just before</b></font>
+    time <font color="red"><b>&#964;</b></font>,
+    node <font color="darkmagenta"><b>C</b></font>
+    begins a transmission
+    (it senses the channel is 
+    <font color="red"><b>idle</b></font>)
+ <p>
+ </p></li><li> <font color="blue"><b>C's transmission</b></font>
+     will cause a <font color="red"><b>collision</b></font>
+ <p>
+     <font color="blue"><b>Node B</b></font> will
+      detect the collison at time
+      <font color="red"><b>2 × &#964;</b></font>
+ </p><p>
+ </p></li><li> So if <font color="blue"><b>B</b></font>
+   has <font color="red"><b>not detect a collision</b></font>
+   <font color="darkmagenta"><b>after 2× &#964;</b></font> time,
+   there <font color="red"><b>will <i>not</i>
+    be any collision !!!</b></font>
+    
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+ </p></li><li> So: a <b>node</b> can
+   <font color="red"><b>stop sensing the channel</b></font>
+   after it has 
+   <b>transmitted</b> (successfully)
+   for <font color="blue"><b>2 × &#964;</b></font> time
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+
+</p></li></ul>
+<p>
+</p><hr>
+<hr>
+<p>
+</p></li><li> <font color="darkmagenta"><b>
+     Setting the value of &#964;
+     </b></font>
+<p>
+</p><ul>
+<li> There is a <font color="red"><b>maximum cabling length</b></font>
+     in a <b>LAN</b>
+<p>
+ <b>Examples:</b> <b>IEEE 802.3 specification</b>
+</p><p>
+</p><ul>
+<table bgcolor="lightcyan" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <font color="red"><b>100BaseTX</b></font>
+    - Requires category 5 two pair cable. 
+  <p>
+   Maximum distance is 100 meters.
+  </p><p>
+ </p><hr>
+ <p>
+  
+  </p></li><li> <font color="red"><b>100BaseT4</b></font>
+      - Requires category 3 cable with 4 pair. 
+  <p>
+  Maximum distance is 100 meters.
+  </p><p>
+ </p><hr>
+ <p>
+ </p></li><li> <font color="red"><b>100BaseFX</b></font>
+    - Can use fiber optic to transmit up to 2000 meters.
+ <p>
+  Requires two strands of fiber optic cable. 
+ </p></li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+
+</p><p>
+</p></li><li> Divide the <font color="blue"><b>maximum spanning distance</b></font>
+     by <font color="red"><b>2×10<sup>8</sup> m/sec</b></font>
+     (speed of light in copper and fiber optic)
+     to get the
+     <font color="magenta"><b>maximum end-to-end delay &amp;tau</b></font>
+</li></ul>
+
+
+
+<p>
+</p><hr>
+<hr>
+<p>
+</p><hr>
+<hr>
+<p>
+</p></li><li> <font color="darkmagenta">
+	<b><i>Non</i>-persistent CSMA/CD:</b>
+	</font>
+   <p>
+</p><ul>
+<li> <b>Flow chart for the Non-persistent CSMA/CD protocol:</b>
+<p>
+</p><ul>
+<table border="5">
+
+<tbody><tr> <td>
+<img src="CS485%20Sylabus_pliki/0-pers-csmacd.gif">
+</td> </tr>
+
+</tbody></table>
+</ul>
+<p>
+</p><hr>
+<p>
+</p></li><li> <font color="red"><b>NOTE:</b></font>
+ <p>
+</p><p>
+</p><ul>
+<table bgcolor="lightgreen" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> After <font color="red"><b>detecting a collision</b></font>,
+      a  node will 
+      <font color="magenta"><b>send a <i>jamming signal</i></b></font>
+	for a short duration.
+ <p>
+ </p></li><li> This is to <font color="red"><b>make sure</b></font>
+      that the 
+      <font color="blue"><b>other transmitting
+	node(s)</b></font>
+	 will 
+	 <font color="darkmagenta"><b>also detect</b></font>
+	  a <b>collision</b>
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+
+</p></li></ul>
+<p>
+</p><hr>
+<hr>
+<p>
+</p></li><li> <font color="darkmagenta">
+	<b><i>1</i>-persistent CSMA/CD:</b>
+	</font>
+   <p>
+</p><ul>
+<li> <b>Flow chart for the 1-persistent CSMA/CD protocol:</b>
+<p>
+</p><ul>
+<table border="5">
+
+<tbody><tr> <td>
+<img src="CS485%20Sylabus_pliki/1-pers-csmacd.gif">
+</td> </tr>
+
+</tbody></table>
+</ul>
+</li></ul>
+
+<p>
+</p><hr>
+<hr>
+<p>
+</p></li><li> <font color="darkmagenta">
+	<b>The Ethernet</b>
+	</font>
+ <p>
+ </p><ul>
+ <li> The Ethernet protocol was invented by
+	Robert Metcalfe:
+	<a href="http://en.wikipedia.org/wiki/Robert_Metcalfe">
+	click here</a>
+<p>
+</p><ul>
+<table border="5">
+
+<tbody><tr> <td>
+<img src="CS485%20Sylabus_pliki/Robert_Metcalfe.jpg">
+</td> </tr>
+
+</tbody></table>
+</ul>
+<p>
+</p><hr>
+ <p>
+ </p></li><li> <b>Ethernet MAC</b>
+<p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <b>Ethernet</b> uses
+      the 
+      <font color="red"><b><i>1</i>-persistent CSMA/CD MAC</b></font>
+      protocol
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+
+ </p><p>
+ </p></li><li> <b>The Ethernet Frame format</b>
+<p>
+</p><p>
+</p><ul>
+<table bgcolor="lightgreen" border="5">
+<tbody><tr> <td>
+
+<font color="red">
+<b>
+<pre>
+       7 bytes   start     48 bit  48 bit  16 b    46 B &lt;= n &lt;= 1500 B   32b
+   +-----------+----------+-------+------+--------+--------------------+-----+
+   | <font color="blue">Preamble</font>  | 10101011 |  Src  | Dest | Length | Network Layer Data | CRC |
+   +-----------+----------+-------+------+--------+--------------------+-----+       
+   
+</pre>
+</b>
+</font>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+<font color="red"><b>NOTE:</b></font>
+   <b>sequence numbers ?</b>
+</p><p>
+</p><ul>
+<table bgcolor="mistyrose" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> There is 
+   <font color="red"><b><i>no</i> sequence numbers</b></font>
+   in <font color="blue"><b>Ethernet frames</b></font> !!!
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ <p>
+ </p></li><li> So <font color="blue"><b>no</b></font>
+     <font color="red"><b>reliability functions</b></font> !
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p></li><li> <font color="red"><b>NOTE:</b></font>
+<p>
+</p><ul>
+<table bgcolor="lightcyan" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li>  The <b>Source ID</b> identifies the
+     <font color="blue"><b>sender</b></font>
+ <p>
+ </p></li><li>  The <b>Destination ID</b> identifies the
+     <font color="blue"><b>receiver</b></font>
+ <p>
+ </p><hr>
+ <p>
+  You must do this in a
+  <font color="red"><b> broadcast network</b></font>
+  because the <b>frames</b> is
+  <font color="blue"><b>received</b></font>
+  by <font color="darkmagenta"><b>all nodes</b></font>
+  in the network
+
+ </p></li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+
+</p><hr>
+<p>
+</p></li><li> <b>Pre-amble:</b>
+<p>
+</p><ul>
+<table bgcolor="khaki" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> The <font color="blue"><b>pre-amble</b></font>
+      is used to <font color="red"><b>pad</b></font>
+       the <b>Ethernet frame</b>
+ <p>
+ </p></li><li> It makes sure that that
+	the 
+    <font color="blue"><b>source</b></font>
+     will remain active <font color="red"><b>long enough</b></font>
+    to perform the 
+    <font color="darkmagenta"><b>collision
+	detection</b></font> function.
+   <p>
+ </p><hr>
+ <p>
+ 
+   It  <font color="blue"><b>2 sources</b></font>
+   send 
+	<font color="red"><b>very small message</b></font>,
+	then they can 
+	<font color="darkmagenta"><b>finish transmitting</b></font>
+	<font color="red"><b> without detecting
+	a collision</b></font> !
+</p><p>
+ <b>Example:</b>
+</p><p>
+</p><ul>
+<table border="5">
+
+<tbody><tr> <td>
+<img src="CS485%20Sylabus_pliki/preamble.gif">
+</td> </tr>
+
+</tbody></table>
+</ul>
+<p>
+
+ </p></li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+
+ </p></li></ul>
+<p>
+</p><hr>
+<hr>
+<p>
+</p><hr>
+<hr>
+<p>
+</p></li><li> <font color="darkmagenta">
+	<b>"Ethernet" and the IEEE 802.3 Standard</b>
+	</font>
+<p>
+ </p><ul>
+
+<p>
+</p><li> <b>Ethernet:</b>
+<p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <font color="blue"><b>"Ethernet"</b></font>
+      <font color="red"><b>originally</b></font>
+    referred to the protocol implementation 
+	standardized by 
+  <font color="darkmagenta"><b>Digital, Intel and Xerox</b></font>. 
+ <p>
+ </p></li><li> This standard is now known as the 
+     <font color="blue"><b>DIX standard</b></font>. 
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p><hr>
+<p>
+ </p></li><li> <b>IEEE Standard for "Ethernet"</b>
+<p>
+</p><ul>
+<table bgcolor="lightcyan" border="5">
+<tbody><tr> <td>
+
+ <ul>
+
+ <li> The <font color="blue"><b>IEEE 802.3 protocol standard</b></font>
+       describes 
+   <b>another</b>
+   <font color="red"><b> 1-persistent
+	CSMA/CD protocol</b></font>
+	 that is <b>very close</b> to the 
+	 <font color="darkmagenta"><b>DIX Ethernet
+	standard</b></font>.
+ <p>
+ </p></li><li> <font color="blue"><b>DIX Ethernet</b></font>
+      and <font color="blue"><b>802.3</b></font>
+    differ slightly in the 
+   <font color="blue"><b>frame format</b></font>
+	and are in 
+	<font color="darkmagenta"><b>most respects identical</b></font>. 
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p><hr>
+
+ <p>
+ </p></li><li>
+	Today, the term 
+   <font color="red"><b>"Ethernet"</b></font>
+   refers generically to <b>both</b>
+	 the 
+  <font color="blue"><b>DIX Ethernet implementation</b></font>
+   and the 
+   <font color="blue"><b>IEEE 802.3 standard</b></font>. 
+ <p>
+ </p></li></ul>
+<p>
+</p><p>
+</p><hr>
+<hr>
+<p>
+</p><hr>
+<hr>
+<p>
+</p></li><li> <font color="darkmagenta">
+	<b>Design of the Backoff Protocol</b>
+	</font>
+ <p>
+ </p><ul>
+ <li> <b>Purpose of Backoff:</b>
+<p>
+</p><ul>
+<table bgcolor="lightgreen" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> The <font color="blue"><b>backoff protocol</b></font>
+    is <font color="darkmagenta"><b>invoked</b></font>
+     when you have had a <font color="red"><b>collision</b></font>
+ <p>
+ </p></li><li> The <font color="red"><b>goal</b></font>
+   of the <b>backoff protocol</b> is to 
+   <font color="blue"><b><i>re-schedule</i>
+  the transmissions</b></font>,
+   so that the 
+   <font color="darkmagenta"><b>likelihood
+	of (future) collisions</b></font>
+	 is <font color="red"><b>minimized</b></font>.
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+ (The <font color="blue"><b>Backoff protocol</b></font>
+   must operate 
+  <font color="red"><b><i>without</i> communicating with
+	any other nodes</b></font> in the network...)
+ </p><p>
+ </p><hr>
+ <hr>
+ <p>
+ </p></li><li> <b> A <i>simple-minded</i> backoff protocol:</b>
+<p>
+</p><ul>
+<table bgcolor="khaki" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <b>Pick</b> a 
+     <font color="red"><b>random number <i>r</i></b></font>
+     between 
+     <font color="darkmagenta"><b>[0..N]</b></font>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ <p>
+  (<font color="darkmagenta"><b>N</b></font> is
+  <font color="red"><b>fixed</b></font>)
+ </p><p>
+ </p></li><li> <b>Wait</b>
+     <font color="red"><b><i>r</i> × &#964;</b></font> time
+ <p>
+ </p></li><li> Repeat from the beginning....
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p></li><li> <b>Weakness:</b>
+<p>
+</p><ul>
+<table bgcolor="lightcyan" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> If <font color="blue"><b>N is <i>small</i></b></font>,
+     and the <b>system</b> is <font color="red"><b>busy</b></font>,
+     then you will have 
+     <font color="blue"><b>many consecutive collisions</b></font>
+ <p>
+ </p></li><li> If <font color="blue"><b>N is <i>large</i></b></font>,
+     and the <b>system</b> is <font color="red"><b>lightly loaded</b></font>,
+     then a node <b>may</b> 
+     <font color="blue"><b>select a <i>large</i> value</b></font>
+     and <font color="red"><b>waits very long time 
+ (waste channel bandwidth)</b></font> before it will transmit...
+     
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p><hr>
+<hr>
+<p>
+ </p></li><li> <b>Conclusion:</b>
+<p>
+</p><ul>
+<table bgcolor="lightgreen" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> We need a
+   <font color="red"><b>dynamic</b></font>
+     backoff algorithm....
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+
+ </p></li></ul>
+<p>
+</p><hr>
+<hr>
+<hr>
+<hr>
+<p>
+</p></li><li> <font color="darkmagenta">
+	<b>The Exponential Backoff Protocol</b>
+	</font>
+ <p>
+ </p><ul>
+ <li> <b>Purpose:</b>
+<p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> Allow <b>nodes</b> in a
+    <font color="blue"><b>1-persistent CSMA/CD</b></font> network
+    to
+    <font color="red"><b>auto-schedule</b></font>
+    their <b>re-transmissions</b>
+    <font color="darkmagenta"><b>dynamically</b></font>
+
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p></li><li> <b>How (in a nutshell):</b>
+<p>
+</p><ul>
+<table bgcolor="lightgreen" border="5">
+<tbody><tr> <td>
+
+ <ul>
+
+ <li> <font color="blue"><b>Every attempt</b></font> of
+      <b>re-transmissions</b> will be 
+      <font color="darkmagenta"><b>preceeded</b></font> by a
+      <font color="red"><b>random delay</b></font>
+  <p>
+  </p></li><li>   The <font color="red"><b>duration</b></font> of
+     the <font color="blue"><b>random delays</b></font>
+     will be
+     <font color="darkmagenta"><b>increasing</b></font>
+     with the 
+     <font color="red"><b>number of attempts made</b></font>
+
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p><hr>
+<p>
+ </p></li><li> The <b>Exponential Backoff Algorithm:</b>
+<p>
+</p><ul>
+<table bgcolor="lightcyan" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> Set <font color="red"><b>N=1</b></font>
+      (= # retries)
+ <p>
+ </p></li><li> For the <font color="blue"><b><i>first</i> 
+   retransmission attempt</b></font>
+   (<font color="red"><b>N == 1</b></font>),
+    a node picks
+	a 
+   <b>random number</b> 
+   <font color="red"><b><i>r</i></b></font> from
+    the range:
+<p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <font color="darkred"><b><i>r</i> 
+    &#8712; [0, 2<sup><font color="red">1</font></sup>-1] 
+   &nbsp;&nbsp;&nbsp; = &nbsp;&nbsp;&nbsp; [0..1]</b></font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+ (The <b>node</b> will <font color="blue"><b>wait</b></font>
+   <font color="red"><b><i>r</i> × &#964;</b></font> time and
+   retries the <font color="darkmagenta"><b>transmission</b></font>
+   using <font color="red"><b>CSMA/CD !!!!</b></font>).
+ </p><p>
+ The <b>retransmission</b> can be
+  <font color="blue"><b>successful</b></font> (then you're done)
+  or it can result in another
+  <font color="red"><b>collision</b></font>...
+ </p><p>
+</p><hr>
+<p>
+ </p><p>
+ </p></li><li> It there was <font color="darkmagenta"><b>another collision</b></font>,
+    <b>increase</b> <font color="red"><b>N</b></font>
+    (= 2).
+ <p>
+    And for the <font color="blue"><b><i>second</i> 
+   retransmission attempt</b></font>
+   (<font color="red"><b>N == 2</b></font>),
+    a node picks
+	a 
+   <b>random number</b> 
+   <font color="red"><b><i>r</i></b></font> from
+    the range:
+</p><p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <font color="darkred"><b><i>r</i> &#8712; 
+    [0, 2<sup><font color="red">2</font></sup>-1] 
+   &nbsp;&nbsp;&nbsp; = &nbsp;&nbsp;&nbsp; [0..3]</b></font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+ (The <b>node</b> will <font color="blue"><b>wait</b></font>
+   <font color="red"><b><i>r</i> × &#964;</b></font> time and
+   retries the <font color="darkmagenta"><b>transmission</b></font>
+   using <font color="red"><b>CSMA/CD !!!!</b></font>).
+ </p><p>
+ The <b>retransmission</b> can be
+  <font color="blue"><b>successful</b></font> (then you're done)
+  or it can result in another
+  <font color="red"><b>collision</b></font>...
+ </p><p>
+</p><hr>
+<p>
+ </p><p>
+ </p></li><li> It there was <font color="darkmagenta"><b>another collision</b></font>,
+    <b>increase</b> <font color="red"><b>N</b></font>
+    (= 3).
+ <p>
+    And for the <font color="blue"><b><i>third</i> 
+   retransmission attempt</b></font>
+   (<font color="red"><b>N == 3</b></font>),
+    a node picks
+	a 
+   <b>random number</b> 
+   <font color="red"><b><i>r</i></b></font> from
+    the range:
+</p><p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <font color="darkred"><b><i>r</i> &#8712; 
+    [0, 2<sup><font color="red">3</font></sup>-1] 
+   &nbsp;&nbsp;&nbsp; = &nbsp;&nbsp;&nbsp; [0..7]</b></font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+ (The <b>node</b> will <font color="blue"><b>wait</b></font>
+   <font color="red"><b><i>r</i> × &#964;</b></font> time and
+   retries the <font color="darkmagenta"><b>transmission</b></font>
+   using <font color="red"><b>CSMA/CD !!!!</b></font>).
+ </p><p>
+ The <b>retransmission</b> can be
+  <font color="blue"><b>successful</b></font> (then you're done)
+  or it can result in another
+  <font color="red"><b>collision</b></font>...
+ </p><p>
+</p><hr>
+ <p>
+ </p></li><li> <font color="red"><b>And so on...</b></font>
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p><hr>
+<p>
+</p></li><li> <b>Small problem:</b>
+<p>
+</p><ul>
+<table bgcolor="khaki" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> The <font color="blue"><b>range</b></font> can become
+    <font color="red"><b>insanely large</b></font>
+ <p>
+  (<font color="red"><b>Exponential grow</b></font> is something to be
+   <font color="darkmagenta"><b>feared</b></font>....)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ </p></li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+<b>Solution:</b>
+</p><p>
+</p><ul>
+<table bgcolor="lightgreen" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> Set an <font color="red"><b>upper bound</b></font> on the
+      <font color="blue"><b>range</b></font>
+ <p>
+ The <font color="red"><b>maximum range</b></font> from which the
+  <font color="blue"><b>random numbers</b></font> are selected is:
+</p><p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <font color="red"><b>[0..2<sup>10</sup>-1]
+   &nbsp;&nbsp;&nbsp; = &nbsp;&nbsp;&nbsp; [0..1023]</b></font>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+
+ </p></li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+
+ </p></li></ul>
+<p>
+
+</p><p>
+</p><hr>
+<hr>
+<p>
+</p></li><li> <font color="darkmagenta">
+	<b>Fairness of the Ethernet's backoff algorithm</b>
+	</font>
+ <p>
+ </p><ul>
+ <li> <b>Question:</b>
+<p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> Is there the
+    <font color="blue"><b> <i>possibility</i></b></font>
+     that a <b>node</b>
+     will
+      <font color="red"><b>wait <i>indefinitely</i></b></font>
+      to transmit in 
+      <b>Ethernet</b> ?
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p></li><li> <b> Yes, there is</b> 
+<p>
+</p><p>
+</p><ul>
+<table bgcolor="lightcyan" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <b>Consider</b> the following sequence of events:
+<p>
+</p><ul>
+<table border="5">
+
+<tbody><tr> <td>
+<img src="CS485%20Sylabus_pliki/unfair01.gif">
+</td> </tr>
+
+</tbody></table>
+</ul>
+<p>
+
+</p><hr>
+<p>
+</p></li><li> Now, while <font color="blue"><b>A</b></font> is
+   transmitting,
+   node <font color="darkmagenta"><b>B</b></font> wants to
+   transmit...
+ <p>
+   When <font color="blue"><b>A</b></font> finishes its
+   transmission, we will have another
+   <font color="red"><b>collision</b></font>:
+</p><p>
+</p><ul>
+<table border="5">
+
+<tbody><tr> <td>
+<img src="CS485%20Sylabus_pliki/unfair02.gif">
+</td> </tr>
+
+</tbody></table>
+</ul>
+<p>
+
+
+ </p></li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p><hr>
+<p>
+</p></li><li> <b>Question:</b>
+<p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> What is the <font color="blue"><b>chance</b></font> that
+     <font color="red"><b>C</b></font> will transmit
+     <font color="darkmagenta"><b>before</b></font>
+     <font color="red"><b>B</b></font> ?
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+ <b>Calculation:</b>
+</p><p>
+</p><ul>
+<table bgcolor="lightgreen" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <font color="red"><b>C</b></font> will transmit
+     <font color="darkmagenta"><b>before</b></font>
+     <font color="red"><b>B</b></font> when
+     <font color="red"><b>C</b></font> picks a 
+     <font color="blue"><b>smaller value</b></font>
+     than <font color="red"><b>B</b></font>:
+<p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <font color="blue"><b>C picks 0</b></font> and
+    <font color="red"><b>B picks 1</b></font>
+ &nbsp;&nbsp;&nbsp;&nbsp;
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p></li><li> The <b>probability</b> that
+    <font color="red"><b>C</b></font> will pick 
+    <font color="blue"><b>0 is 0.25</b></font>
+ <p>
+  The <b>probability</b> that
+    <font color="red"><b>B</b></font> will pick 
+    <font color="blue"><b>1 is 0.5</b></font>
+ </p><p>
+</p><hr>
+ <p>
+</p></li><li> The chance that 
+ <font color="red"><b>C</b></font> will transmit
+     <font color="darkmagenta"><b>before</b></font>
+     <font color="red"><b>B</b></font> is:
+<p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <font color="red"><b>0.25 × 0.5 
+     &nbsp;&nbsp; = &nbsp;&nbsp; 0.125</b></font>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p></li></ul>
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p><hr>
+<p>
+</p></li><li> <b>Question:</b>
+<p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> What is the <font color="blue"><b>chance</b></font> that
+     <font color="red"><b>B</b></font> will transmit
+     <font color="darkmagenta"><b>before</b></font>
+     <font color="red"><b>C</b></font> ?
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+ <b>Calculation:</b>
+</p><p>
+</p><ul>
+<table bgcolor="lightcyan" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <font color="red"><b>B</b></font> will transmit
+     <font color="darkmagenta"><b>before</b></font>
+     <font color="red"><b>C</b></font> when
+     <font color="red"><b>B</b></font> picks a 
+     <font color="blue"><b>smaller value</b></font>
+     than <font color="red"><b>C</b></font>:
+<p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <font color="blue"><b>B picks 0</b></font> and
+    <font color="red"><b>C picks 1</b></font>
+ </li><li> <font color="blue"><b>B picks 0</b></font> and
+    <font color="red"><b>C picks 2</b></font>
+ </li><li> <font color="blue"><b>B picks 0</b></font> and
+    <font color="red"><b>C picks 3</b></font>
+ </li><li> <font color="blue"><b>B picks 1</b></font> and
+    <font color="red"><b>C picks 2</b></font>
+ </li><li> <font color="blue"><b>B picks 1</b></font> and
+    <font color="red"><b>C picks 3</b></font>
+ &nbsp;&nbsp;&nbsp;&nbsp;
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p></li><li> The <b>probability</b> that
+    <font color="red"><b>C</b></font> will pick 
+    <font color="darkmagenta"><b>any one number</b></font> is
+    <font color="blue"><b> 0.25</b></font>
+ <p>
+  The <b>probability</b> that
+    <font color="red"><b>B</b></font> will pick 
+    <font color="darkmagenta"><b>any one number</b></font>
+    <font color="blue"><b> 0.5</b></font>
+ </p><p>
+</p><hr>
+ <p>
+</p></li><li> The chance that 
+ <font color="red"><b>C</b></font> will transmit
+     <font color="darkmagenta"><b>before</b></font>
+     <font color="red"><b>B</b></font> is:
+<p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <font color="red"><b>(0.25 × 0.5) 
+   + (0.25 × 0.5) + (0.25 × 0.5) + (0.25 × 0.5)
+   + (0.25 × 0.5)
+     &nbsp;&nbsp; = &nbsp;&nbsp; 0.625</b></font>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p></li></ul>
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+<b>Conclusion:</b>
+</p><p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> This is <font color="red"><b><i>not</i> fair</b></font> !!!
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+</p><hr>
+<hr>
+<p>
+  </p></li><li> And the <font color="red"><b> bad news</b></font> is:
+<p>
+</p><ul>
+<table bgcolor="lightgreen" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> It will get <font color="darkmagenta"><b>even worse</b></font>
+   if <font color="red"><b>C</b></font> loses
+   <font color="blue"><b>again</b></font>
+ ... &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+<font color="red"><b>Suppose</b></font>
+  node <font color="blue"><b>B</b></font> transmits first and
+  during <font color="blue"><b>B's transmission</b></font>
+  the node <font color="red"><b>A</b></font>,
+  scheduled a transmission.
+ </p><p>
+Then:
+</p><p>
+</p><ul>
+<table border="5">
+
+<tbody><tr> <td>
+<img src="CS485%20Sylabus_pliki/unfair03.gif">
+</td> </tr>
+
+</tbody></table>
+</ul>
+<p>
+The <font color="blue"><b>likelyhood </b></font> that
+  <font color="red"><b>node C</b></font> will
+  <font color="darkmagenta"><b>transmit first</b></font>
+  is now <font color="red"><b>very very slim</b></font>...
+</p><p>
+</p><hr>
+<hr>
+<p>
+</p></li><li> <font color="red"><b>NOTE:</b></font>
+<p>
+</p><ul>
+<table bgcolor="lightcyan" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> This same problem will also happen
+    when <font color="red"><b>2 nodes</b></font>
+    have <font color="blue"><b>many packets</b></font>
+    to transmit...
+ <p>
+ </p></li><li> The result will be the 
+   <font color="darkmagenta"><b>node that succeeds <i>first</i></b></font>
+   in <font color="blue"><b>transmitting</b></font>
+   will have an <font color="red"><b>edge</b></font>
+   in the
+   <font color="darkmagenta"><b>retransmission attempts</b></font>
+ <p>
+ </p><hr>
+ <p>
+ </p></li><li> This <font color="blue"><b>problem</b></font>
+     is <font color="red"><b>very well-known</b></font>, and 
+     it is called the:
+<p>
+</p><ul>
+<table bgcolor="yellow" border="5">
+<tbody><tr> <td>
+
+ <ul>
+ <li> <font color="red"><b> "Ethernet Capture Effect" </b></font>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ </li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+
+ </p></li></ul>
+
+</td> </tr>
+</tbody></table>
+</ul>
+<p>
+
+ </p></li></ul>
+</li></ul>
+<hr>
+<hr>
+<hr>
+<hr>
+
+</body></html>
