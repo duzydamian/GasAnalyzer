@@ -2,6 +2,7 @@ package pl.industrum.gasanalyzer.hibernate.model.managers;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 import pl.industrum.gasanalyzer.hibernate.Hibernate;
@@ -60,13 +61,17 @@ public abstract class MeasuredObjectManager
 		return objects;
 	}
 
-	public static List<MeasuredObject> getObjectsByPlace( int placeID )
+	@SuppressWarnings( "unchecked" )
+	public static List<MeasuredObject> getObjectsByPlace( Integer placeID )
 	{
-		/*
-		 * TODO
-		 * FIXME
-		 * as fast as possible add method to get object from place
-		 */
-		return null;
+		//Create session and return survey collection
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		String queryString = "from MeasuredObject object where";
+		queryString += " object.place.id = " + placeID.toString();
+		Query query = session.createQuery( queryString );
+		List<MeasuredObject> objects = ( List<MeasuredObject>  ) query.list();
+		session.getTransaction().commit();
+		return objects;
 	}
 }

@@ -324,7 +324,7 @@ public abstract class Device extends Composite
 					lblCollectiveStateMessage.setText( lblCollectiveStateMessage.getText() + collectiveChannelState.name()+", " );
 				}
 				lblCollectiveStateMessage.setText( lblCollectiveStateMessage.getText().substring( 0, lblCollectiveStateMessage.getText().length() ) );				
-				lblStateMessage.setText( frame.getChannelStateCollection().get( 0 ).name() );
+				lblStateMessage.setText( frame.getChannelState().name() );
 				lblLastMeasureTimeStamp.setText( dateFormater.format( frame.getTimeStamp() ) );
 				
 				int i = 0;
@@ -347,7 +347,8 @@ public abstract class Device extends Composite
 			public void run()
 			{
 				lblCollectiveStateMessage.setText( ELANCollectiveChannelState.TRANSMITTED_MEASRED_VALUES_VALID.name());
-				lblStateMessage.setText( frame.getChannelStateCollection().get( 0 ).name() );
+				lblStateMessage.setText( frame.getChannelState().name() );
+
 				lblLastMeasureTimeStamp.setText( dateFormater.format( frame.getTimeStamp() ) );
 				int i = 0;
 				for( ELANMeasurement elanMeasurement: frame )

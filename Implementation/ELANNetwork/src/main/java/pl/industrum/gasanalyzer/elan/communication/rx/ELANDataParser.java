@@ -35,9 +35,6 @@ public class ELANDataParser extends Observable implements Runnable, ELANParser
 		if( collectiveChannelStateByte == null)
 			return;
 		
-		//channel state (could be few bytes, every byte means different option)
-		Integer channelStateByte;
-		
 		//If the collective state is 0, the transmitted measured values are valid.
 		if( collectiveChannelStateByte == 0 )
 		{
@@ -50,52 +47,54 @@ public class ELANDataParser extends Observable implements Runnable, ELANParser
 			rxFrame = new ELANRxInvalidFrame( collectiveChannelStateQueue );
 		}
 		
-		channelStateByte = dataBuffer.poll();
-		while( channelStateByte != Integer.valueOf( 'k' ) ) //just example letter (must predict all function letters)
-		{
-			rxFrame.addChannelState( ELANChannelState.values()[ channelStateByte ] );
-			channelStateByte = dataBuffer.poll();
-		}
-			
-		if( rxFrame.isValid() )
-		{
-			Integer kFunctionNumber = dataBuffer.poll();
-			if( kFunctionNumber == 2 )
-			{
-				while( dataBuffer.size() > 0 )
-				{
-					String doubleAsString = "";
-					Integer valueByte = dataBuffer.poll();
-					while( valueByte != 0 )
-					{
-						doubleAsString += Character.toString( ( char )valueByte.intValue() );
-						valueByte = dataBuffer.poll(); //in last iteration jump over 0
-					}
-					ELANDimension dimension = ELANDimension.getValue( dataBuffer.poll() );
-					dataBuffer.poll(); //jump over 0
-					ELANMeasuredVariable measuredVariable = ELANMeasuredVariable.getValue( dataBuffer.poll() );
-					dataBuffer.poll(); //jump over 0
-					
-					//create measurement object
-					ELANMeasurement measurement = new ELANMeasurement( dimension, measuredVariable, Double.parseDouble( doubleAsString ) );
-					try
-					{
-						//add measurement object to frame collection
-						( ( ELANRxBroadcastFrame )rxFrame ).addMeasurement(measurement);
-					}
-					catch( Exception e)
-					{
-					}
-				}	
-			}
-		}
-		else
-		{
-			
-		}
+		//channel state (could be few bytes, every byte means different option)
+		Integer channelStateByte =  dataBuffer.poll();
+		rxFrame.setChannelState( ELANChannelState.values()[ channelStateByte ] );
 		
-		setChanged();
-		notifyObservers( new ELANDataParserNotification( rxFrame ) );
+		//function letter
+		Integer functionLetter = dataBuffer.poll();
+		if( functionLetter == Integer.valueOf( 'k' ) )	
+		{
+			if( rxFrame.isValid() )
+			{
+				Integer kFunctionNumber = dataBuffer.poll();
+				if( kFunctionNumber == 2 )
+				{
+					while( dataBuffer.size() > 0 )
+					{
+						String doubleAsString = "";
+						Integer valueByte = dataBuffer.poll();
+						while( valueByte != 0 )
+						{
+							doubleAsString += Character.toString( ( char )valueByte.intValue() );
+							valueByte = dataBuffer.poll(); //in last iteration jump over 0
+						}
+						ELANDimension dimension = ELANDimension.getValue( dataBuffer.poll() );
+						dataBuffer.poll(); //jump over 0
+						ELANMeasuredVariable measuredVariable = ELANMeasuredVariable.getValue( dataBuffer.poll() );
+						dataBuffer.poll(); //jump over 0
+						
+						//create measurement object
+						ELANMeasurement measurement = new ELANMeasurement( dimension, measuredVariable, Double.parseDouble( doubleAsString ) );
+						try
+						{
+							//add measurement object to frame collection
+							( ( ELANRxBroadcastFrame )rxFrame ).addMeasurement(measurement);
+						}
+						catch( Exception e)
+						{
+						}
+					}	
+				}
+			}
+			else
+			{
+				
+			}
+			
+			setChanged();
+			notifyObservers( new ELANDataParserNotification( rxFrame ) );
+		}
 	}
 	
 	public Queue<Integer> trimData( Queue<Integer> data )
