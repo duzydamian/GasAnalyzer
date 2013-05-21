@@ -323,14 +323,14 @@ public abstract class Device extends Composite
 				{
 					lblCollectiveStateMessage.setText( lblCollectiveStateMessage.getText() + collectiveChannelState.name()+", " );
 				}
-				lblCollectiveStateMessage.setText( lblCollectiveStateMessage.getText().substring( 0, lblCollectiveStateMessage.getText().length() ) );				
+				lblCollectiveStateMessage.setText( lblCollectiveStateMessage.getText().substring( 0, lblCollectiveStateMessage.getText().length()-1 ) );				
 				lblStateMessage.setText( frame.getChannelState().name() );
 				lblLastMeasureTimeStamp.setText( dateFormater.format( frame.getTimeStamp() ) );
 				
 				int i = 0;
 				for( TableColumn column: table.getColumns() )
 				{
-					table.getItem( i ).setText( 1, "" );
+					//table.getItem( i ).setText( 1, "" );
 					column.pack();
 					i++;
 				}

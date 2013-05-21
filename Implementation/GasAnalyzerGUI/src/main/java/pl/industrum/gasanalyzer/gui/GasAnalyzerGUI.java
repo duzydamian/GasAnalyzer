@@ -17,7 +17,7 @@ import pl.industrum.gasanalyzer.gui.dialogs.SendExceptionCatched;
 public class GasAnalyzerGUI
 {
 	private static boolean debug = false;
-	private static boolean develop = true;
+	private static boolean develop = false;
 	
 	private static String AppVersion;
 	private static String RXTXVersion;

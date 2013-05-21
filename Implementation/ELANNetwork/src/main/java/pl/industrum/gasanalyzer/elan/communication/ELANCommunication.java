@@ -1,10 +1,13 @@
 package pl.industrum.gasanalyzer.elan.communication;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.Locale;
 import java.util.Queue;
 
 import pl.industrum.gasanalyzer.elan.helpers.ELANCRC16;
+import pl.industrum.gasanalyzer.elan.using.Main;
 
 /**
  * 
@@ -14,7 +17,8 @@ import pl.industrum.gasanalyzer.elan.helpers.ELANCRC16;
  */
 public class ELANCommunication
 {
-
+	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "HH:mm:ss:SS dd/MM/yyyy", Locale.getDefault() );
+	
 	/**
 	 * Object stores existing connection.  
 	 */
@@ -40,8 +44,19 @@ public class ELANCommunication
     	int  curentCharacter = elanConnection.read();
     	while(curentCharacter!=-1)
     	{
-    		//Add current character to collected frame
+    		//loop reading until detect start of frame 16,1
+    		do
+    		{   
+    			previousCharacter = curentCharacter;  
+    			//Read next character from new frame
+    			curentCharacter = elanConnection.read();	
+    		}
+    		while ( !( (previousCharacter == 16) & (curentCharacter == 1) ) );
+    		
+    		//Add start of frame detect in previous loop
+    		data.add(previousCharacter);
     		data.add(curentCharacter);
+    		
     		do
     		{   
     			previousCharacter = curentCharacter;  
@@ -52,9 +67,11 @@ public class ELANCommunication
     		}
     		while ( !( (previousCharacter==16) & (curentCharacter==3) ) );
     		
-    		System.out.println( new Date() + " : ramka z ELAN Communication" );
-        	System.out.println( data );
-        	
+    		if ( Main.isDebug() )
+			{
+    			System.out.println( dateFormater.format( new Date() ) + " : ramka z ELAN Communication" );
+            	System.out.println( data );
+			}    		        	
         	
     		//Add CRC16 to frame
 			int CRCLow = elanConnection.read();
@@ -63,15 +80,21 @@ public class ELANCommunication
 			
 			if( ELANCRC16.checkCRC16( data, CRC ) )
 			{
-				System.out.println( "Crc correct" );
-				System.out.println( );
+				if ( Main.isDebug() )
+				{
+					System.out.println( "Crc correct" );
+					System.out.println( );
+				}
 				return data;
 			}
 			else
 			{
-				System.out.println( "Error in crc" );
-				System.out.println( );
-				break;
+				if ( Main.isDebug() )
+				{
+					System.out.println( "Error in crc" );
+					System.out.println( );
+				}
+				break;				
 			}
     	}
 		return null;
