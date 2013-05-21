@@ -203,9 +203,10 @@ public class EditSurvey extends Dialog
 			{
 				NewSurveyUser addSurveyUser = new NewSurveyUser( getParent()
 						.getShell(), SWT.NONE );
-				addSurveyUser.open();
+				ApplicationUser user = addSurveyUser.open();
 
 				refreshListSurveyUser();
+				listSurveyUser.select( avaibleUsers.indexOf( user ) );
 			}
 		} );
 		
@@ -244,9 +245,10 @@ public class EditSurvey extends Dialog
 			{
 				NewSurveyPlace newSurveyPlace = new NewSurveyPlace( getParent()
 						.getShell(), SWT.NONE );
-				newSurveyPlace.open();
+				Place place = newSurveyPlace.open();
 
 				refreshListSurveyPlace();
+				listSurveyPlace.select( avaiblePlaces.indexOf( place ) );
 			}
 		} );
 		
@@ -281,9 +283,10 @@ public class EditSurvey extends Dialog
 				Integer placeID = avaiblePlaces.get( listSurveyPlace.getSelectionIndex() ).getId();
 				NewSurveyObject newSurveyObject = new NewSurveyObject( getParent()
 						.getShell(), SWT.NONE, placeID );
-				newSurveyObject.open();
+				MeasuredObject measuredObject = newSurveyObject.open();
 
 				refreshListSurveyObject( avaiblePlaces.get( listSurveyPlace.getSelectionIndex() ).getId() );
+				listSurveyObject.select( avaibleObjects.indexOf( measuredObject ) );
 			}
 		} );
 		
