@@ -117,7 +117,7 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 //				}
 				
 				setChanged();
-				notifyObservers( new ELANMeasurementDeviceNotification( port, ( ( ELANMeasurementDeviceNotification ) arg ).getData().getDeviceAddress() ) );
+				notifyObservers( new ELANMeasurementDeviceNotification( port, ( ( ELANMeasurementDeviceNotification ) arg ).getData().getDeviceAddress(), ( ( ELANMeasurementDeviceNotification ) arg ).getData().getBufferType() ) );
 			}
 			else if( arg instanceof ELANAlarmNotification )
 			{

@@ -1,14 +1,16 @@
 package pl.industrum.gasanalyzer.elan.types;
 
-public class ELANNetworkDevicePair
+public class ELANNetworkDeviceInfoObject
 {
 	private String networkPort;
 	private Integer deviceAddress;
+	private ELANBufferType bufferType;
 	
-	public ELANNetworkDevicePair( String networkPort, Integer deviceAddress )
+	public ELANNetworkDeviceInfoObject( String networkPort, Integer deviceAddress, ELANBufferType bufferType )
 	{
 		this.networkPort = networkPort;
 		this.deviceAddress = deviceAddress;
+		this.bufferType = bufferType;
 	}
 	
 	public String getNetworkPort()
@@ -19,5 +21,10 @@ public class ELANNetworkDevicePair
 	public Integer getDeviceAddress()
 	{
 		return deviceAddress;
+	}
+	
+	public ELANBufferType getBufferType()
+	{
+		return bufferType;
 	}
 }
