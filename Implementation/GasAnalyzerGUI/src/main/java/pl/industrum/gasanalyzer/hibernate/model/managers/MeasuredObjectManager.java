@@ -59,4 +59,14 @@ public abstract class MeasuredObjectManager
 		session.getTransaction().commit();
 		return objects;
 	}
+
+	public static List<MeasuredObject> getObjectsByPlace( int placeID )
+	{
+		/*
+		 * TODO
+		 * FIXME
+		 * as fast as possible add method to get object from place
+		 */
+		return null;
+	}
 }
