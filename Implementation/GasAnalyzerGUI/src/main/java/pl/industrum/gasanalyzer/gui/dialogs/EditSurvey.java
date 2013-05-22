@@ -422,17 +422,6 @@ public class EditSurvey extends Dialog
 			}			
 		}
 		
-		if ( survey.getObject().toString() != null )
-		{
-			int i = 0;
-			for( String objectInList: listSurveyObject.getItems() )
-			{
-				if( objectInList.equalsIgnoreCase( survey.getObject().toString() ) )
-					listSurveyObject.select( i );
-				i++;
-			}
-		}
-		
 		if ( survey.getObject().getPlace().toString() != null )
 		{
 			int i = 0;
@@ -440,6 +429,19 @@ public class EditSurvey extends Dialog
 			{
 				if( placeInList.equalsIgnoreCase( survey.getObject().getPlace().toString() ) )
 					listSurveyPlace.select( i );
+				i++;
+			}
+		}
+		
+		if ( survey.getObject().toString() != null )
+		{
+			refreshListSurveyObject( survey.getObject().getPlace().getId() );
+			
+			int i = 0;
+			for( String objectInList: listSurveyObject.getItems() )
+			{
+				if( objectInList.equalsIgnoreCase( survey.getObject().toString() ) )
+					listSurveyObject.select( i );
 				i++;
 			}
 		}
@@ -477,7 +479,7 @@ public class EditSurvey extends Dialog
 		try
 		{		
 			Integer userID = avaibleUsers.get( listSurveyUser.getSelectionIndex() ).getId();
-			Integer objectID = avaibleObjects.get( listSurveyPlace.getSelectionIndex() ).getId();
+			Integer objectID = avaibleObjects.get( listSurveyObject.getSelectionIndex() ).getId();
 			Date date = dateFormater.parse( txtSurveyDate.getText() );
 			SurveyManager.updateSurvey( editedSurveyID, txtSurveyName.getText(), textSurveyLoad.getText(), styledTextSurveySpecialConditions.getText(), styledTextComment.getText(), objectID, userID, date );
 			result = SurveyManager.getSurvey( editedSurveyID );
