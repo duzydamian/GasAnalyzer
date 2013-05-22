@@ -98,7 +98,7 @@ public class OpenSurvey extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 350, 449 );
+		shell.setSize( 600, 440 );
 		shell.setText( getText() );
 		
 		surveyFrameData = new GridData( GridData.FILL, GridData.CENTER, true,
@@ -111,7 +111,7 @@ public class OpenSurvey extends Dialog
 		surveyForm.setLayout( new GridLayout( 3, false ) );
 
 		comboAllSurvey = new Combo( surveyForm, SWT.BORDER );
-		comboAllSurvey.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
+		comboAllSurvey.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 3, 1 ) );
 		comboAllSurvey.addModifyListener( new ModifyListener()
 		{			
@@ -139,7 +139,7 @@ public class OpenSurvey extends Dialog
 				.getString( "SurveyFrame.lblSurveyName.text" ) ); //$NON-NLS-1$
 
 		txtSurveyName = new Text( surveyForm, SWT.BORDER );
-		txtSurveyName.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
+		txtSurveyName.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 2, 1 ) );
 		txtSurveyName.setEnabled( false );
 
@@ -158,7 +158,7 @@ public class OpenSurvey extends Dialog
 
 		listSurveyUser = new Combo( surveyForm, SWT.NONE );
 		listSurveyUser.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
-				false, false, 2, 1 ) );
+				true, false, 2, 1 ) );
 		listSurveyUser.setEnabled( false );
 		
 		lblSurveyPlace = new Label( surveyForm, SWT.NONE );
@@ -167,7 +167,7 @@ public class OpenSurvey extends Dialog
 		
 		listSurveyPlace = new Combo( surveyForm, SWT.NONE );
 		listSurveyPlace.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
-				false, false, 2, 1 ) );		
+				true, false, 2, 1 ) );		
 		listSurveyPlace.setEnabled( false );
 		
 		lblSurveyObject = new Label( surveyForm, SWT.NONE );
@@ -176,7 +176,7 @@ public class OpenSurvey extends Dialog
 
 		listSurveyObject = new Combo( surveyForm, SWT.NONE );
 		listSurveyObject.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
-				false, false, 2, 1 ) );
+				true, false, 2, 1 ) );
 		listSurveyObject.setEnabled( false );
 		
 		lblSurveyLoad = new Label( surveyForm, SWT.NONE );
@@ -185,7 +185,7 @@ public class OpenSurvey extends Dialog
 
 		textSurveyLoad = new Text( surveyForm, SWT.BORDER );
 		textSurveyLoad.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
-				false, false, 2, 1 ) );
+				true, false, 2, 1 ) );
 		textSurveyLoad.setEnabled( false );
 		
 		lblSurveySpecialConditions = new Label( surveyForm, SWT.NONE );
@@ -197,7 +197,7 @@ public class OpenSurvey extends Dialog
 		styledTextSurveySpecialConditions = new Text( surveyForm,
 				SWT.BORDER | SWT.WRAP | SWT.MULTI );
 		GridData gd_styledTextSurveySpecialConditions = new GridData(
-				SWT.FILL, SWT.CENTER, false, false, 2, 2 );
+				SWT.FILL, SWT.CENTER, true, false, 2, 2 );
 		gd_styledTextSurveySpecialConditions.heightHint = 48;
 		styledTextSurveySpecialConditions.setLayoutData( gd_styledTextSurveySpecialConditions );
 		styledTextSurveySpecialConditions.setEnabled( false );
@@ -210,7 +210,7 @@ public class OpenSurvey extends Dialog
 
 		styledTextComment = new Text( surveyForm, SWT.BORDER | SWT.WRAP | SWT.MULTI );
 		GridData gd_styledTextComment = new GridData( SWT.FILL, SWT.FILL,
-				false, false, 2, 3 );
+				true, false, 2, 3 );
 		gd_styledTextComment.heightHint = 71;
 		styledTextComment.setLayoutData( gd_styledTextComment );
 		styledTextComment.setEnabled( false );
