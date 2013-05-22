@@ -398,7 +398,7 @@ public class GasAnalyzerMainWindow implements Observer
 		statusBar = new StatusBar( shlGasAnalyzer, SWT.BORDER );	
 		
 		sashELANNetworkProblems.setWeights( new int[] {80,20} );
-		sashDeviceTreeNetworkDevice.setWeights(new int[] {50,70,70});		
+		sashDeviceTreeNetworkDevice.setWeights(new int[] {10,20,0});		
 	}
 	
 	public void enableSurveyMainWIndow()
