@@ -24,7 +24,7 @@ import pl.industrum.gasanalyzer.types.Warning;
  * 
  */
 public abstract class Problems extends Composite
-{//FIXME no show if empty, add extra data.
+{
 	private GridData compositeData;
 	private Composite body;
 	private GridData globaGridData;

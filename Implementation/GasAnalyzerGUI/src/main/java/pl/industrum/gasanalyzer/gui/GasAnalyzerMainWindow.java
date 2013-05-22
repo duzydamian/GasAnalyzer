@@ -300,13 +300,13 @@ public class GasAnalyzerMainWindow implements Observer
 			@Override
 			public void renameNetwork( String oldName, String newName )
 			{
-				networkCollection.renameNetwork( oldName, newName );
+				networkCollection.renameNetwork( oldName, newName );				
 			}
 
 			@Override
 			public void setNetworkConnected( int networkSize, String name )
 			{
-				networkCollection.setNetworkConnected( networkSize, name );
+				networkCollection.setNetworkConnected( networkSize, name, deviceCollection.getDevices() );
 			}
 
 			@Override

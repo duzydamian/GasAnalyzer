@@ -26,7 +26,7 @@ public class ELANDataParser extends Observable implements Runnable, ELANParser
 	}
 	
 	public void run()
-	{ //FIXME parse collective state and channel state
+	{
 		//First cut off header and footer of frame
 		dataBuffer = trimData( dataBuffer );
 		

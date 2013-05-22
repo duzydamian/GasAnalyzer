@@ -60,6 +60,7 @@ public abstract class Device extends Composite
 	private String[] columns;
 	private String[] columnsHistory;
 	private Table table;
+	
 	private Table tableHistory;
 	private Composite historyBody;
 	private Integer deviceID ;
@@ -401,6 +402,14 @@ public abstract class Device extends Composite
 		}
 		
 		super.setVisible( arg0 );
+	}
+	
+	/**
+	 * @return the table
+	 */
+	public Composite getTableWithDetail()
+	{
+		return currentBody;
 	}
 	
 	@Override

@@ -76,12 +76,23 @@ public class NetworkCollection extends Composite
 		// Disable the check that prevents subclassing of SWT components
 	}
 
-	public void setNetworkConnected( int networkSize, String name )
+	public void setNetworkConnected( int networkSize, String name, Vector<Device> devices )
 	{
 		for( Network network: networks )
 		{
 			if( network.getNetworkName().equalsIgnoreCase( name ))
+			{
 				network.setNetworkConnected( networkSize );
+				
+				Composite [] devicesFrames = new Composite [devices.size()];
+				int i = 0;
+				for( Device device: devices )
+				{
+					devicesFrames[i] = device.getTableWithDetail();					
+					i++;
+				}
+				network.addDeviceTableWithMeasure( devicesFrames );
+			}
 		}
 	}
 }

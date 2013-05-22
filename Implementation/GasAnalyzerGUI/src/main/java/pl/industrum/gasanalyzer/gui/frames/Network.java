@@ -5,6 +5,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
@@ -22,6 +23,7 @@ public class Network extends Composite
 	private Label lblStateMessage;
 	private Label lblDevicesCount;
 	private Label lblDevicesCountValue;
+	private Composite bodyForMeasure;
 
 	/**
 	 * Create the composite.
@@ -43,7 +45,7 @@ public class Network extends Composite
 		grpOneNetwork.setLayout( new FillLayout( SWT.HORIZONTAL ) );
 
 		body = new Composite( grpOneNetwork, SWT.NONE );
-		body.setLayout( new GridLayout( 2, false ) );
+		body.setLayout( new GridLayout( 2, false ) );		
 
 		lblState = new Label( body, SWT.NONE );
 		lblState.setText( "Stan sieci" );
@@ -57,6 +59,10 @@ public class Network extends Composite
 		lblDevicesCount.setText( "Liczba urządzeń w sieci" );
 		lblDevicesCountValue = new Label( body, SWT.NONE );
 		lblDevicesCountValue.setText( "-" );	
+		
+		bodyForMeasure = new Composite( body, SWT.NONE );
+		bodyForMeasure.setLayoutData( new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1) );
+		
 		
 		body.layout();
 		layout();
@@ -103,5 +109,10 @@ public class Network extends Composite
 		lblDevicesCountValue.setText( String.valueOf( networkSize ) );
 		body.layout();
 		layout();
+	}
+	
+	public void addDeviceTableWithMeasure( Control[] devices )
+	{
+		bodyForMeasure.layout( devices );
 	}
 }
