@@ -10,7 +10,8 @@ package pl.industrum.gasanalyzer.types;
 public enum Warning
 {
 	NONE("W0000","",""),
-	NO_DEVICE("W0001", "Brak urządzeń w sieci", "Niestety w sieci nie wtkryto żadnych urządzeń. Sprawdź połączenia i spróbój ponownie.");
+	NO_DEVICE("W0001", "Brak urządzeń w sieci", "Niestety w sieci nie wtkryto żadnych urządzeń. Sprawdź połączenia i spróbój ponownie."),
+	DEVICE_WARNING("W2000", "Ostrzeżenie dla urządzenia", "");
 	
 	String code;
 	String message;

@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.TreeItem;
 
 import pl.industrum.gasanalyzer.elan.communication.network.ELANMeasurementDevice;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
@@ -38,12 +39,13 @@ import pl.industrum.gasanalyzer.types.UsefulImage;
  * 
  */
 public abstract class Device extends Composite
-{
+{//TODO add treeitem do device to able to change icon from frame
 	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "HH:mm:ss dd/MM/yyyy", Locale.getDefault() );
 	
 	private Timer refreshTimer;
 	private TimerTask refreshTimerTask;
 	private boolean runningRefreshTimer;
+	private TreeItem item;
 	
 	GridData tableData;
 	private Group grpOneDIvice;
@@ -74,8 +76,9 @@ public abstract class Device extends Composite
 	 * 
 	 * @param parent
 	 * @param style
+	 * @param treeItem 
 	 */
-	public Device( Composite parent, int style, ELANMeasurementDevice device )
+	public Device( Composite parent, int style, ELANMeasurementDevice device, TreeItem treeItem )
 	{
 //TODO FIXME
 /*
@@ -96,6 +99,8 @@ public abstract class Device extends Composite
 		this.deviceAddress = device.getDeviceAddress();
 		pl.industrum.gasanalyzer.model.Device deviceByAddress = DeviceManager.getDeviceByAddress( device.getDeviceAddress() );
 		this.deviceID = deviceByAddress.getId();
+		
+		item = treeItem;
 
 		grpOneDIvice = new Group( this, SWT.NONE );
 		grpOneDIvice.setText( deviceName );
@@ -327,20 +332,40 @@ public abstract class Device extends Composite
 				lblCollectiveStateMessage.setText( lblCollectiveStateMessage.getText().substring( 0, lblCollectiveStateMessage.getText().length()-1 ) );				
 				lblStateMessage.setText( frame.getChannelState().name() );
 				lblLastMeasureTimeStamp.setText( dateFormater.format( frame.getTimeStamp() ) );
-				
-				int i = 0;
-				for( TableColumn column: table.getColumns() )
+
+				for( TableItem item: table.getItems() )
 				{
-					//table.getItem( i ).setText( 1, "" );
-					column.pack();
-					i++;
+					item.setText( 1, "" );					
 				}
 				
 				table.setEnabled( false );
+				for( ELANCollectiveChannelState collectiveChannelState: frame.getCollectiveChannelState() )
+				{
+					switch ( collectiveChannelState )
+					{
+					case ERROR:
+						item.setImage( UsefulImage.ERROR.getImage() );
+						addError(collectiveChannelState, deviceName);
+						break;
+					case FUNCTION_CHECK_ON:
+						item.setImage( UsefulImage.WARNING.getImage() );
+						addWarning(collectiveChannelState, deviceName);
+						break;
+					case NOT_READY:
+						item.setImage( UsefulImage.WARNING.getImage() );
+						addWarning(collectiveChannelState, deviceName);
+						break;
+					default:
+						item.setImage( UsefulImage.WARNING.getImage() );
+						addWarning(collectiveChannelState, deviceName);
+						break;
+					}
+					
+				}				
 			}
 		});
 	}
-	
+
 	public void updateMeasurment(final ELANRxBroadcastFrame frame)
 	{
 		Display.getDefault().asyncExec( new Runnable()
@@ -358,6 +383,7 @@ public abstract class Device extends Composite
 					i++;
 				}
 				table.setEnabled( true );
+				item.setImage( UsefulImage.OK.getImage() );
 			}
 		});		
 	}
@@ -420,4 +446,6 @@ public abstract class Device extends Composite
 	
 	public abstract Integer getSurveyID();
 	public abstract Integer getStep();
+	public abstract void addWarning(ELANCollectiveChannelState collectiveChannelState, String deviceName2);
+	public abstract void addError(ELANCollectiveChannelState collectiveChannelState, String deviceName2);
 }

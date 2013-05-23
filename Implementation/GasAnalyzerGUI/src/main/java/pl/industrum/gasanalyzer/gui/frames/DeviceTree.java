@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.TreeItem;
 
 import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
 import pl.industrum.gasanalyzer.elan.communication.network.ELANMeasurementDevice;
+import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
 import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
 import pl.industrum.gasanalyzer.gui.ELANConnectionWrapper;
 import pl.industrum.gasanalyzer.gui.dialogs.NetworkScan;
@@ -103,8 +104,7 @@ public abstract class DeviceTree extends Composite
 										int networkSize = getGUIConnectionWrapper().getNetwork( treeItem.getText() ).getSize();
 										setStatusBarInformation( 100, "Połączono z "+ newName );
 										treeItem.setText( newName );
-										renameNetwork( oldName, newName );
-										setNetworkConnected( networkSize, treeItem.getText() );
+										renameNetwork( oldName, newName );										
 										treeItem.setImage( imageConnect );
 										treeItem.setForeground( UsefulColor.BLACK.getColor() );
 										treeItem.setExpanded( true );
@@ -117,9 +117,11 @@ public abstract class DeviceTree extends Composite
 											{
 												TreeItem itemTreeItem = new TreeItem( treeItem, SWT.COLOR_GRAY );
 												itemTreeItem.setText( device.getName() );
-												addDeviceToDeviceCollection(device, port);
+												itemTreeItem.setImage( UsefulImage.GRAY_DISCONNECT.getImage() );
+												addDeviceToDeviceCollection(device, port, itemTreeItem);
 												layout();
 											}
+											setNetworkConnected( networkSize, treeItem.getText(), getGUIConnectionWrapper().getNetwork( port ) );
 										}
 										else
 										{
@@ -332,12 +334,12 @@ public abstract class DeviceTree extends Composite
 	public abstract ELANConnectionState connectWithNetwork(String port);
 	public abstract void disconnectFromDevice( String text );	
 	public abstract ELANConnectionWrapper getGUIConnectionWrapper();
-	public abstract void addDeviceToDeviceCollection( ELANMeasurementDevice device, String port );
+	public abstract void addDeviceToDeviceCollection( ELANMeasurementDevice device, String port, TreeItem treeItem );
 	public abstract void addNetworkToNetworkCollection(String networkName);
 	public abstract void setSelectedDeviceVisible(String text );
 	public abstract void setSelectedNetworkVisible(String text );
 	public abstract void renameNetwork( String oldName, String newName );
-	public abstract void setNetworkConnected( int networkSize, String name );	
+	public abstract void setNetworkConnected( int networkSize, String name, ELANNetwork elanNetwork );	
 	public abstract void setStatusBarInformation( int progress, String statusMessage );
 	public abstract void noDeviceFound(String source);
 	public abstract void connectionProblem(String source, ELANConnectionState connectWithNetworkState);	

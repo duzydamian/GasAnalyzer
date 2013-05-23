@@ -5,9 +5,14 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
+
+import pl.industrum.gasanalyzer.elan.communication.network.ELANMeasurementDevice;
+import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
 
 /**
  * @author duzydamian (Damian Karbowiak)
@@ -23,7 +28,9 @@ public class Network extends Composite
 	private Label lblStateMessage;
 	private Label lblDevicesCount;
 	private Label lblDevicesCountValue;
-	private Composite bodyForMeasure;
+	private String[] columns;
+	private Table table;
+	private GridData tableData;
 
 	/**
 	 * Create the composite.
@@ -60,9 +67,27 @@ public class Network extends Composite
 		lblDevicesCountValue = new Label( body, SWT.NONE );
 		lblDevicesCountValue.setText( "-" );	
 		
-		bodyForMeasure = new Composite( body, SWT.NONE );
-		bodyForMeasure.setLayoutData( new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1) );
+		columns = new String[] {"Urządzenie", "Timestamp", "Pomiar"};
 		
+		table = new Table (body, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		table.setLinesVisible (true);
+		table.setHeaderVisible (true);
+		tableData = new GridData( GridData.FILL, GridData.GRAB_VERTICAL,
+				true, false );
+		tableData.horizontalSpan = 2;
+		table.setLayoutData( tableData );
+		
+		for (int i=0; i<columns.length; i++)
+		{
+			TableColumn column = new TableColumn (table, SWT.NONE);
+			column.setText (columns [i]);
+		}
+		
+		for (int i=0; i<columns.length; i++)
+		{
+			table.getColumn (i).pack ();
+			table.getColumn (i).setMoveable(true);
+		}
 		
 		body.layout();
 		layout();
@@ -111,8 +136,20 @@ public class Network extends Composite
 		layout();
 	}
 	
-	public void addDeviceTableWithMeasure( Control[] devices )
+	public void fillDeviceTableWithMeasure( ELANNetwork elanNetwork )
 	{
-		bodyForMeasure.layout( devices );
+		//bodyForMeasure.changed( devices );
+		for( ELANMeasurementDevice device: elanNetwork )
+		{
+			TableItem item = new TableItem (table, SWT.NONE);
+			item.setText (0, device.getName() );
+			item.setText (1, "");
+			item.setText (2, "" );				
+			for (int i=0; i<columns.length; i++)
+			{
+				table.getColumn (i).pack ();
+				table.getColumn (i).setMoveable(true);
+			}
+		}
 	}
 }

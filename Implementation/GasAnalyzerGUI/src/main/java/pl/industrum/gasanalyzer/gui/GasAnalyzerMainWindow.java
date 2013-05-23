@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TreeItem;
 
 import pl.industrum.gasanalyzer.elan.communication.network.ELANMeasurementDevice;
 import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
@@ -23,6 +24,7 @@ import pl.industrum.gasanalyzer.elan.frames.ELANRxInvalidFrame;
 import pl.industrum.gasanalyzer.elan.notifications.ELANMeasurementDeviceNotification;
 import pl.industrum.gasanalyzer.elan.notifications.ELANNetworkNotification;
 import pl.industrum.gasanalyzer.elan.types.ELANBufferType;
+import pl.industrum.gasanalyzer.elan.types.ELANCollectiveChannelState;
 import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
 import pl.industrum.gasanalyzer.gui.dialogs.PdfDialog;
 import pl.industrum.gasanalyzer.gui.dialogs.XlsDialog;
@@ -257,11 +259,11 @@ public class GasAnalyzerMainWindow implements Observer
 			}
 
 			@Override
-			public void addDeviceToDeviceCollection( ELANMeasurementDevice device, String port )
+			public void addDeviceToDeviceCollection( ELANMeasurementDevice device, String port, TreeItem treeItem )
 			{				
 				try
 				{
-					deviceCollection.addDevice( device );
+					deviceCollection.addDevice( device, treeItem );
 					//TODO change method
 					Device deviceByAddress = DeviceManager.getDeviceByAddress( device.getDeviceAddress() );
 					connectionWrapper.getNetwork( port ).getDevice( device.getDeviceAddress() ).getDeviceInformation().setDeviceIDInDatabase( deviceByAddress.getId() );
@@ -304,9 +306,9 @@ public class GasAnalyzerMainWindow implements Observer
 			}
 
 			@Override
-			public void setNetworkConnected( int networkSize, String name )
+			public void setNetworkConnected( int networkSize, String name, ELANNetwork elanNetwork )
 			{
-				networkCollection.setNetworkConnected( networkSize, name, deviceCollection.getDevices() );
+				networkCollection.setNetworkConnected( networkSize, name, elanNetwork );
 			}
 
 			@Override
@@ -381,6 +383,18 @@ public class GasAnalyzerMainWindow implements Observer
 			public Integer getStepFromGUI()
 			{
 				return deviceTree.getStep();
+			}
+
+			@Override
+			public void addErrorToProblems( ELANCollectiveChannelState collectiveChannelState, String deviceName2 )
+			{
+				problems.addError( Error.DEVICE_ERROR, deviceName2 );
+			}
+
+			@Override
+			public void addWarningToProblems( ELANCollectiveChannelState collectiveChannelState, String deviceName2 )
+			{
+				problems.addWarning( Warning.DEVICE_WARNING, deviceName2 );
 			}			
 		};
 		deviceCollection.setEnabled( false );
@@ -398,7 +412,7 @@ public class GasAnalyzerMainWindow implements Observer
 		statusBar = new StatusBar( shlGasAnalyzer, SWT.BORDER );	
 		
 		sashELANNetworkProblems.setWeights( new int[] {80,20} );
-		sashDeviceTreeNetworkDevice.setWeights(new int[] {10,20,0});		
+		sashDeviceTreeNetworkDevice.setWeights(new int[] {10,20,20});		
 	}
 	
 	public void enableSurveyMainWIndow()
@@ -444,7 +458,7 @@ public class GasAnalyzerMainWindow implements Observer
 				ELANMeasurementDevice device;
 				
 				device = connectionWrapper.getNetwork( networkPort ).getDevice( deviceAddress );
-				
+
 				ELANRxFrame frame;
 				try
 				{
@@ -454,12 +468,14 @@ public class GasAnalyzerMainWindow implements Observer
 						{
 							frame = ( ELANRxInvalidFrame ) device.pollAndClear( bufferType );
 							deviceCollection.updateStateForDevice( device.getDeviceAddress(), ( ELANRxInvalidFrame )frame );
+							networkCollection.updateStateForDevice( networkPort, device.getName(), ( ELANRxInvalidFrame )frame );
 							break;
 						}
 						case BROADCAST_FRAME:
 						{
 							frame = ( ELANRxBroadcastFrame ) device.pollAndClear( bufferType );
 							deviceCollection.updateMeasurmentForDevice( device.getDeviceAddress(), ( ELANRxBroadcastFrame )frame );
+							networkCollection.updateMeasurmentForDevice( networkPort, device.getName(), ( ELANRxBroadcastFrame )frame );
 							break;
 						}
 					}
