@@ -39,7 +39,7 @@ import pl.industrum.gasanalyzer.types.UsefulImage;
  * 
  */
 public abstract class Device extends Composite
-{//TODO add treeitem do device to able to change icon from frame
+{
 	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "HH:mm:ss dd/MM/yyyy", Locale.getDefault() );
 	
 	private Timer refreshTimer;

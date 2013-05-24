@@ -92,17 +92,25 @@ public class NetworkCollection extends Composite
 		}
 	}
 
-	public void updateStateForDevice( String networkPort, String name,
-			ELANRxInvalidFrame frame )
+	public void updateStateForDevice( String networkPort, String name, ELANRxInvalidFrame frame )
 	{
-		// TODO Auto-generated method stub
-		
+		for( Network network: networks )
+		{
+			if( network.getNetworkName().equalsIgnoreCase( networkPort ))
+			{
+				network.updateState( frame, name );
+			}
+		}
 	}
 
-	public void updateMeasurmentForDevice( String networkPort, String name,
-			ELANRxBroadcastFrame frame )
+	public void updateMeasurmentForDevice( String networkPort, String name, ELANRxBroadcastFrame frame )
 	{
-		// TODO Auto-generated method stub
-		
+		for( Network network: networks )
+		{
+			if( network.getNetworkName().equalsIgnoreCase( networkPort ))
+			{
+				network.updateMeasurment( frame, name );
+			}
+		}
 	}
 }

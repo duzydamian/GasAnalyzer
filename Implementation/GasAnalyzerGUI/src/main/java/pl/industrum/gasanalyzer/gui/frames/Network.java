@@ -1,10 +1,14 @@
 package pl.industrum.gasanalyzer.gui.frames;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
@@ -13,6 +17,9 @@ import org.eclipse.swt.widgets.TableItem;
 
 import pl.industrum.gasanalyzer.elan.communication.network.ELANMeasurementDevice;
 import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
+import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
+import pl.industrum.gasanalyzer.elan.frames.ELANRxInvalidFrame;
+import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
 
 /**
  * @author duzydamian (Damian Karbowiak)
@@ -20,6 +27,8 @@ import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
  */
 public class Network extends Composite
 {
+	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "HH:mm:ss dd/MM/yyyy", Locale.getDefault() );
+	
 	GridData compositeData;
 	private Group grpOneNetwork;
 	private Composite body;
@@ -151,5 +160,48 @@ public class Network extends Composite
 				table.getColumn (i).setMoveable(true);
 			}
 		}
+		
+		body.layout();
+	}
+
+	public void updateState( ELANRxInvalidFrame frame, String name )
+	{
+		for( TableItem item: table.getItems() )
+		{
+			item.setText( 2, "błað" );					
+		}
+	}
+
+	public void updateMeasurment( final ELANRxBroadcastFrame frame, final String name )
+	{
+		Display.getDefault().asyncExec( new Runnable()
+		{
+			public void run()
+			{
+				for( TableItem item: table.getItems() )
+				{
+					if ( item.getText( 0 ).equalsIgnoreCase( name ) )
+					{
+						item.setText( 1, dateFormater.format( frame.getTimeStamp() ) );						
+						
+						String printableSet = "";
+						for( ELANMeasurement measurement: frame )
+						{
+							printableSet += measurement.getMeasuredVariable().getPrintable() + ": ";
+							printableSet += measurement.getValue() + " ";
+							printableSet += "[" + measurement.getDimension().getPrintable() + "] | ";
+						}	
+						
+						item.setText( 2, printableSet );					
+					}		
+				}
+				
+				for (int i=0; i<columns.length; i++)
+				{
+					table.getColumn (i).pack ();
+					table.getColumn (i).setMoveable(true);
+				}
+			}
+		});			
 	}
 }
