@@ -28,8 +28,10 @@ public class ELANDataParser extends Observable implements Runnable, ELANParser
 	public void run()
 	{
 		//First cut off header and footer of frame
+		String dataBufferCopy = dataBuffer.toString();
 		dataBuffer = trimData( dataBuffer );
-		
+		try
+		{
 		//collective channel state (1 byte)
 		Integer collectiveChannelStateByte = dataBuffer.poll();
 		if( collectiveChannelStateByte == null)
@@ -94,6 +96,13 @@ public class ELANDataParser extends Observable implements Runnable, ELANParser
 			
 			setChanged();
 			notifyObservers( new ELANDataParserNotification( rxFrame ) );
+		}
+		}
+		catch (Exception e)
+		{
+			System.out.println( dataBufferCopy );
+			System.err.println( dataBufferCopy );
+			e.printStackTrace();
 		}
 	}
 	

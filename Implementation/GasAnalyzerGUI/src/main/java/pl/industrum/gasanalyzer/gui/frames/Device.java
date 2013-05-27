@@ -65,10 +65,10 @@ public abstract class Device extends Composite
 	
 	private Table tableHistory;
 	private Composite historyBody;
-	private Integer deviceID ;
+	private Integer deviceID;
+	private Date lastDate;
 
 	private Label lblCollectiveState;
-
 	private Label lblCollectiveStateMessage;
 
 	/**
@@ -290,12 +290,22 @@ public abstract class Device extends Composite
 		//TODO implement browse history
 		tableHistory.removeAll();
 		
-		for( MeasurementSet set: MeasurementSetManager.getAllMeasurementSets( new Date(), getSurveyID(), deviceID, 20 ) )
+		TableItem itemNext = new TableItem( tableHistory, SWT.NONE );
+		itemNext.setText( 0, "" );
+		itemNext.setText( 1, "Następne" );
+		
+		lastDate = new Date();
+		
+		for( MeasurementSet set: MeasurementSetManager.getAllMeasurementSets( lastDate, getSurveyID(), deviceID, 20 ) )
 		{
 			TableItem item = new TableItem( tableHistory, SWT.NONE );
 			item.setText( 0, dateFormater.format( set.getTimestamp() ) );
 			item.setText( 1, set.toString() );
 		}
+		
+		TableItem itemPrevious = new TableItem( tableHistory, SWT.NONE );
+		itemPrevious.setText( 0, "" );
+		itemPrevious.setText( 1, "Poprzednie" );
 		
 		for (int i=0; i<columnsHistory.length; i++)
 		{

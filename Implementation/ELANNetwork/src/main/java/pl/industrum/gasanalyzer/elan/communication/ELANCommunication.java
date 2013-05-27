@@ -94,7 +94,7 @@ public class ELANCommunication
 					System.out.println( "Error in crc" );
 					System.out.println( );
 				}
-				break;				
+				return null;		
 			}
     	}
 		return null;
