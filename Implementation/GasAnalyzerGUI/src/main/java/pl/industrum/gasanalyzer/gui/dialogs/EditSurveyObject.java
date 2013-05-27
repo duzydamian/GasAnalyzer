@@ -1,5 +1,7 @@
 package pl.industrum.gasanalyzer.gui.dialogs;
 
+import java.util.Vector;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -8,6 +10,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
@@ -16,8 +19,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import pl.industrum.gasanalyzer.hibernate.model.managers.MeasuredObjectManager;
+import pl.industrum.gasanalyzer.hibernate.model.managers.PlaceManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
 import pl.industrum.gasanalyzer.model.MeasuredObject;
+import pl.industrum.gasanalyzer.model.Place;
 import pl.industrum.gasanalyzer.types.UsefulColor;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
@@ -36,17 +41,23 @@ public class EditSurveyObject extends Dialog
 	private Text textDesciption;
 	private Label lblDesciption;
 
+	private Combo comboAllSurveyPlace;
+	private Combo comboAllSurveyObject;
+	protected Vector<Place> avaibleSurveyPlaces;
+	protected Vector<MeasuredObject> avaibleSurveyObjects;
 	/**
 	 * Create the dialog.
 	 * 
 	 * @param parent
 	 * @param style
 	 */
-	public EditSurveyObject( Shell parent, int style, Integer givenPlaceID )
+	public EditSurveyObject( Shell parent, int style )
 	{
 		super( parent, style );
-		setText( Messages.getString( "NewSurveyObject.this.text" ) ); //$NON-NLS-1$
-		placeID = givenPlaceID;
+		setText( "Edytuj obiekt" ); //$NON-NLS-1$
+
+		avaibleSurveyPlaces = new Vector<Place>();
+		avaibleSurveyObjects = new Vector<MeasuredObject>();
 	}
 
 	/**
@@ -76,10 +87,34 @@ public class EditSurveyObject extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 255, 135 );
+		shell.setSize( 255, 200 );
 		shell.setText( getText() );
 		shell.setLayout( new GridLayout( 4, false ) );
 
+		comboAllSurveyPlace = new Combo( shell, SWT.BORDER );
+		comboAllSurveyPlace.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
+				false, 4, 1 ) );
+		comboAllSurveyPlace.addModifyListener( new ModifyListener()
+		{			
+			public void modifyText( ModifyEvent arg0 )
+			{
+				loadSurveyObjects();
+			}
+		} );
+
+		loadSurveyPlaces();
+		
+		comboAllSurveyObject = new Combo( shell, SWT.BORDER );
+		comboAllSurveyObject.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
+				false, 4, 1 ) );
+		comboAllSurveyObject.addModifyListener( new ModifyListener()
+		{			
+			public void modifyText( ModifyEvent arg0 )
+			{
+				loadSurveyObjectData( avaibleSurveyObjects.get( comboAllSurveyObject.getSelectionIndex() ) );
+			}
+		} );
+		
 		lblName = new Label( shell, SWT.RIGHT );
 		lblName.setText( Messages.getString( "NewSurveyObject.lblName.text" ) ); //$NON-NLS-1$
 
@@ -151,9 +186,42 @@ public class EditSurveyObject extends Dialog
 		} );
 	}
 
+	protected void loadSurveyObjects()
+	{
+		placeID = avaibleSurveyPlaces.get( comboAllSurveyPlace.getSelectionIndex() ).getId();
+		for( MeasuredObject measuredObject: MeasuredObjectManager.getObjectsByPlace( placeID ) )
+		{
+			comboAllSurveyObject.add( measuredObject.getName() );
+			avaibleSurveyObjects.add( measuredObject );
+		}
+	}
+
+	private void loadSurveyPlaces()
+	{
+		for( Place place: PlaceManager.getAllPlaces() )
+		{
+			comboAllSurveyPlace.add( place.getName() );
+			avaibleSurveyPlaces.add( place );
+		}
+	}
+	
+	private void loadSurveyObjectData( MeasuredObject measuredObject )
+	{
+		if ( measuredObject.getName() != null )
+		{
+			textName.setText( measuredObject.getName() );
+		}			
+		
+		if ( measuredObject.getDescription() != null )
+		{
+			textDesciption.setText( measuredObject.getDescription() );
+		}
+	}
+	
 	protected void saveAction()
 	{
-		result = MeasuredObjectManager.getObject( MeasuredObjectManager.addObject( textName.getText(), textDesciption.getText(), placeID ) );
+		//TODO implement update in database	
+		//result = MeasuredObjectManager.getObject( MeasuredObjectManager.addObject( textName.getText(), textDesciption.getText(), placeID ) );
 	}
 	
 	private boolean validateName()

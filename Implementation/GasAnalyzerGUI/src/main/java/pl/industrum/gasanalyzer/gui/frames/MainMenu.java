@@ -10,6 +10,8 @@ import org.eclipse.swt.widgets.MenuItem;
 import pl.industrum.gasanalyzer.gui.EmailSystem;
 import pl.industrum.gasanalyzer.gui.dialogs.About;
 import pl.industrum.gasanalyzer.gui.dialogs.EditSurvey;
+import pl.industrum.gasanalyzer.gui.dialogs.EditSurveyObject;
+import pl.industrum.gasanalyzer.gui.dialogs.EditSurveyPlace;
 import pl.industrum.gasanalyzer.gui.dialogs.EditSurveyUserFunction;
 import pl.industrum.gasanalyzer.gui.dialogs.EditSurveyUserTitle;
 import pl.industrum.gasanalyzer.gui.dialogs.NewSurvey;
@@ -99,6 +101,30 @@ public abstract class MainMenu extends Menu
 		Menu menuEdit = new Menu( mntmEdit );
 		mntmEdit.setMenu( menuEdit );
 		
+		MenuItem mntmEditPlace = new MenuItem( menuEdit, SWT.NONE );
+		mntmEditPlace.setText( "Edytuj miejsca" );
+		mntmEditPlace.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				EditSurveyPlace editSurveyPlace = new EditSurveyPlace( getShell(), SWT.NONE );
+				editSurveyPlace.open();
+			}
+		} );
+		
+		MenuItem mntmEditObject = new MenuItem( menuEdit, SWT.NONE );
+		mntmEditObject.setText( "Edytuj obiekty" );
+		mntmEditObject.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				EditSurveyObject editSurveyObject = new EditSurveyObject( getShell(), SWT.NONE );
+				editSurveyObject.open();
+			}
+		} );
+		
+		new MenuItem( menuEdit, SWT.SEPARATOR );
+		
 		MenuItem mntmEditTitle = new MenuItem( menuEdit, SWT.NONE );
 		mntmEditTitle.setText( "Edytuj tytuły" );
 		mntmEditTitle.addSelectionListener( new SelectionAdapter()
@@ -119,7 +145,7 @@ public abstract class MainMenu extends Menu
 				EditSurveyUserFunction editSurveyUserFunction = new EditSurveyUserFunction( getShell(), SWT.NONE );
 				editSurveyUserFunction.open();
 			}
-		} );
+		} );				
 		
 		//_________________Survey___________________________________________________		
 		mntmSurvey = new MenuItem( this, SWT.CASCADE );
