@@ -48,7 +48,9 @@ public class EditSurveyUserTitle extends Dialog
 	public EditSurveyUserTitle( Shell parent, int style )
 	{
 		super( parent, style );
-		setText( Messages.getString( "NewSurveyUserTitle.this.text" ) ); //$NON-NLS-1$
+		setText( Messages.getString("EditSurveyUserTitle.this.text") ); //$NON-NLS-1$ //$NON-NLS-1$
+		
+		avaibleSurveyUserTitles = new Vector<Degree>();
 	}
 
 	/**
@@ -78,7 +80,7 @@ public class EditSurveyUserTitle extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 250, 150 );
+		shell.setSize( 250, 135 );
 		shell.setText( getText() );
 		shell.setLayout( new GridLayout( 4, false ) );
 

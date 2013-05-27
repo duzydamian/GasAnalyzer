@@ -105,8 +105,8 @@ public abstract class MainMenu extends Menu
 		{
 			public void widgetSelected( SelectionEvent e )
 			{
-				EditSurveyUserFunction editSurveyUserFunction = new EditSurveyUserFunction( getShell(), SWT.NONE );
-				editSurveyUserFunction.open();
+				EditSurveyUserTitle editSurveyUserTitle = new EditSurveyUserTitle( getShell(), SWT.NONE );
+				editSurveyUserTitle.open();				
 			}
 		} );
 		
@@ -116,8 +116,8 @@ public abstract class MainMenu extends Menu
 		{
 			public void widgetSelected( SelectionEvent e )
 			{
-				EditSurveyUserTitle editSurveyUserTitle = new EditSurveyUserTitle( getShell(), SWT.NONE );
-				editSurveyUserTitle.open();
+				EditSurveyUserFunction editSurveyUserFunction = new EditSurveyUserFunction( getShell(), SWT.NONE );
+				editSurveyUserFunction.open();
 			}
 		} );
 		
