@@ -7,8 +7,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -94,17 +92,7 @@ public class EditSurveyUserTitle extends Dialog
 				loadSurveyUserTitleData( avaibleSurveyUserTitles.get( comboAllSurveyUserTitle.getSelectionIndex() ) );
 			}
 		} );
-		comboAllSurveyUserTitle.addTraverseListener( new TraverseListener()
-		{			
-			public void keyTraversed( TraverseEvent arg0 )
-			{
-				if ( arg0.detail == SWT.TRAVERSE_RETURN )
-				{
-					saveAction();
-					shell.dispose();
-				}				
-			}
-		} );
+		
 		loadSurveyUserTitles();
 		
 		lblName = new Label( shell, SWT.RIGHT );

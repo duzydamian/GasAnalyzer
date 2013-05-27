@@ -189,6 +189,8 @@ public class EditSurveyObject extends Dialog
 	protected void loadSurveyObjects()
 	{
 		placeID = avaibleSurveyPlaces.get( comboAllSurveyPlace.getSelectionIndex() ).getId();
+		comboAllSurveyObject.removeAll();
+		avaibleSurveyObjects.clear();		
 		for( MeasuredObject measuredObject: MeasuredObjectManager.getObjectsByPlace( placeID ) )
 		{
 			comboAllSurveyObject.add( measuredObject.getName() );
@@ -200,7 +202,7 @@ public class EditSurveyObject extends Dialog
 	{
 		for( Place place: PlaceManager.getAllPlaces() )
 		{
-			comboAllSurveyPlace.add( place.getName() );
+			comboAllSurveyPlace.add( place.toString() );
 			avaibleSurveyPlaces.add( place );
 		}
 	}

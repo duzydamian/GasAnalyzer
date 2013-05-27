@@ -227,7 +227,7 @@ public class EditSurveyPlace extends Dialog
 	{
 		for( Place place: PlaceManager.getAllPlaces() )
 		{
-			comboAllSurveyPlace.add( place.getName() );
+			comboAllSurveyPlace.add( place.toString() );
 			avaibleSurveyPlaces.add( place );
 		}
 	}

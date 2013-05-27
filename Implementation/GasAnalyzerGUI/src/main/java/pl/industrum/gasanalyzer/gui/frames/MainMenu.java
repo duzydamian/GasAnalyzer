@@ -12,6 +12,7 @@ import pl.industrum.gasanalyzer.gui.dialogs.About;
 import pl.industrum.gasanalyzer.gui.dialogs.EditSurvey;
 import pl.industrum.gasanalyzer.gui.dialogs.EditSurveyObject;
 import pl.industrum.gasanalyzer.gui.dialogs.EditSurveyPlace;
+import pl.industrum.gasanalyzer.gui.dialogs.EditSurveyUser;
 import pl.industrum.gasanalyzer.gui.dialogs.EditSurveyUserFunction;
 import pl.industrum.gasanalyzer.gui.dialogs.EditSurveyUserTitle;
 import pl.industrum.gasanalyzer.gui.dialogs.NewSurvey;
@@ -101,29 +102,16 @@ public abstract class MainMenu extends Menu
 		Menu menuEdit = new Menu( mntmEdit );
 		mntmEdit.setMenu( menuEdit );
 		
-		MenuItem mntmEditPlace = new MenuItem( menuEdit, SWT.NONE );
-		mntmEditPlace.setText( "Edytuj miejsca" );
-		mntmEditPlace.addSelectionListener( new SelectionAdapter()
+		MenuItem mntmEditUser = new MenuItem( menuEdit, SWT.NONE );
+		mntmEditUser.setText( "Edytuj prowadzących pomiary" );
+		mntmEditUser.addSelectionListener( new SelectionAdapter()
 		{
 			public void widgetSelected( SelectionEvent e )
 			{
-				EditSurveyPlace editSurveyPlace = new EditSurveyPlace( getShell(), SWT.NONE );
-				editSurveyPlace.open();
+				EditSurveyUser editSurveyUser = new EditSurveyUser( getShell(), SWT.NONE );
+				editSurveyUser.open();
 			}
 		} );
-		
-		MenuItem mntmEditObject = new MenuItem( menuEdit, SWT.NONE );
-		mntmEditObject.setText( "Edytuj obiekty" );
-		mntmEditObject.addSelectionListener( new SelectionAdapter()
-		{
-			public void widgetSelected( SelectionEvent e )
-			{
-				EditSurveyObject editSurveyObject = new EditSurveyObject( getShell(), SWT.NONE );
-				editSurveyObject.open();
-			}
-		} );
-		
-		new MenuItem( menuEdit, SWT.SEPARATOR );
 		
 		MenuItem mntmEditTitle = new MenuItem( menuEdit, SWT.NONE );
 		mntmEditTitle.setText( "Edytuj tytuły" );
@@ -147,6 +135,30 @@ public abstract class MainMenu extends Menu
 			}
 		} );				
 		
+		new MenuItem( menuEdit, SWT.SEPARATOR );
+		
+		MenuItem mntmEditPlace = new MenuItem( menuEdit, SWT.NONE );
+		mntmEditPlace.setText( "Edytuj miejsca" );
+		mntmEditPlace.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				EditSurveyPlace editSurveyPlace = new EditSurveyPlace( getShell(), SWT.NONE );
+				editSurveyPlace.open();
+			}
+		} );
+		
+		MenuItem mntmEditObject = new MenuItem( menuEdit, SWT.NONE );
+		mntmEditObject.setText( "Edytuj obiekty" );
+		mntmEditObject.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				EditSurveyObject editSurveyObject = new EditSurveyObject( getShell(), SWT.NONE );
+				editSurveyObject.open();
+			}
+		} );
+				
 		//_________________Survey___________________________________________________		
 		mntmSurvey = new MenuItem( this, SWT.CASCADE );
 		mntmSurvey.setText( Messages.getString( "MainMenu.Survey" ) ); //$NON-NLS-1$

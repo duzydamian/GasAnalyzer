@@ -50,6 +50,9 @@ public class EditSurveyUser extends Dialog
 	private Button btnNewTitle;
 	private Button btnNewFunction;
 	
+	private Combo comboAllSurveyUser;
+	protected Vector<ApplicationUser> avaibleSurveyUsers;
+	
 	private Vector<Degree> avaibleDegrees;
 	private Vector<Function> avaibleFunctions;
 
@@ -62,7 +65,9 @@ public class EditSurveyUser extends Dialog
 	public EditSurveyUser( Shell parent, int style )
 	{
 		super( parent, style );
-		setText( Messages.getString( "NewSurveyUser.this.text" ) ); //$NON-NLS-1$
+		setText( "Edytuj prowadzącego pomiary" ); //$NON-NLS-1$
+		
+		avaibleSurveyUsers = new Vector<ApplicationUser>();
 		avaibleDegrees = new Vector<Degree>();
 		avaibleFunctions = new Vector<Function>();
 	}
@@ -94,10 +99,23 @@ public class EditSurveyUser extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 339, 200 );
+		shell.setSize( 339, 235 );
 		shell.setText( getText() );
 		shell.setLayout( new GridLayout( 4, false ) );
 
+		comboAllSurveyUser = new Combo( shell, SWT.BORDER );
+		comboAllSurveyUser.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
+				false, 4, 1 ) );
+		comboAllSurveyUser.addModifyListener( new ModifyListener()
+		{			
+			public void modifyText( ModifyEvent arg0 )
+			{
+				loadSurveyUserData( avaibleSurveyUsers.get( comboAllSurveyUser.getSelectionIndex() ) );
+			}
+		} );
+		
+		loadSurveyUsers();
+		
 		lblTitle = new Label( shell, SWT.NONE );
 		lblTitle.setText( Messages.getString( "NewSurveyUser.lblTitle.text" ) ); //$NON-NLS-1$
 
@@ -264,11 +282,56 @@ public class EditSurveyUser extends Dialog
 		}
 	}
 
+	private void loadSurveyUsers()
+	{
+		for( ApplicationUser user: ApplicationUserManager.getAllApplicationUsers() )
+		{
+			comboAllSurveyUser.add( user.toString() );
+			avaibleSurveyUsers.add( user );
+		}
+	}
+	
+	private void loadSurveyUserData( ApplicationUser user )
+	{
+		if ( user.getDegree().getName() != null )
+		{
+			int i = 0;
+			for( String titleInList: textTitle.getItems() )
+			{
+				if( titleInList.equalsIgnoreCase( user.getDegree().getName() ) )
+					textTitle.select( i );
+				i++;
+			}
+		}
+		
+		if ( user.getName() != null )
+		{
+			textName.setText( user.getName() );
+		}		
+		
+		if ( user.getSurname() != null )
+		{
+			textSurname.setText( user.getSurname() );
+		}
+		
+		if ( user.getFunction().getName() != null )
+		{
+			int i = 0;
+			for( String functionInList: textFunction.getItems() )
+			{
+				if( functionInList.equalsIgnoreCase( user.getFunction().getName() ) )
+					textFunction.select( i );
+				i++;
+			}
+		}
+	}
+	
 	protected void saveAction()
 	{
-		Integer functionID = avaibleFunctions.get( textFunction.getSelectionIndex() ).getId();
-		Integer degreeID = avaibleDegrees.get( textTitle.getSelectionIndex() ).getId();
-		result = ApplicationUserManager.getApplicationUser( ApplicationUserManager.addApplicationUser( functionID, degreeID, textName.getText(), textSurname.getText() ) );
+		//Integer functionID = avaibleFunctions.get( textFunction.getSelectionIndex() ).getId();
+		//Integer degreeID = avaibleDegrees.get( textTitle.getSelectionIndex() ).getId();		
+		//TODO implement update in database
+		//result = ApplicationUserManager.getApplicationUser( ApplicationUserManager.addApplicationUser( functionID, degreeID, textName.getText(), textSurname.getText() ) );
 	}
 
 	private void validateTitle()
