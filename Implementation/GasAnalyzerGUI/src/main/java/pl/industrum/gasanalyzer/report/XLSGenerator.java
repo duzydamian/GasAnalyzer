@@ -41,42 +41,50 @@ public abstract class XLSGenerator
         HSSFSheet measurementSheet =  workbook.createSheet("karta pomiarowa");
         
         //Create information sheet
+        
+        String informationString = null;
+        
         ////Add institution
         HSSFRow rowInstitution = informationSheet.createRow( 2 );
-        CellRangeAddress mergedRegionInstitution = new CellRangeAddress( 2, 14, 2, 8 );
+        CellRangeAddress mergedRegionInstitution = new CellRangeAddress( 2, 8, 2, 7 );
         informationSheet.addMergedRegion( mergedRegionInstitution );
-        String informationString = "";
-        informationString += "POLITECHNIKA ŚLĄSKA\n";
+        informationString = "POLITECHNIKA ŚLĄSKA\n";
         informationString += "WYDZIAŁ INŻYNIERII ŚRODOWISKA I ENERGETYKI\n";
         informationString += "INSTYTUT MASZYN I URZĄDZEŃ ENERGETYCZNYCH\n";
         informationString += "ZAKŁAD KOTŁÓW I WYTORNIC PARY\n";
         informationString += "\n";
-        informationString += "UL. KONARSKIEGO 20\n";
-        informationString += "44-100  GLIWICE\n";
-        informationString += "\n";
-        informationString += "T: +48 32 237 12 73\n";
-        informationString += "F: +48 32 237 21 93\n";
-        informationString += "\n";
         informationString += "www.kotly.polsl.pl\n";
-        informationString += "kotly@polsl.pl\n";
         HSSFCell cell = rowInstitution.createCell( 2 );
         cell.setCellValue(  informationString );
         
         HSSFCellStyle style = workbook.createCellStyle();
         style.setAlignment( CellStyle.ALIGN_CENTER );
 		cell.setCellStyle( style );
+		
+		CellRangeAddress mergedRegionInformation = new CellRangeAddress( 2, 8, 9, 11 );
+        informationSheet.addMergedRegion( mergedRegionInformation );
+		
+		informationString = " UL. KONARSKIEGO 20\n";
+        informationString += " 44-100  GLIWICE\n\n";
+        informationString += " T: +48 32 237 12 73\n";
+        informationString += " F: +48 32 237 21 93\n";
+        informationString += " kotly@polsl.pl\n";
+        
+        cell = rowInstitution.createCell( 9 );
+        cell.setCellValue(  informationString );
+        
         ////Add survey data
-        rowInstitution = informationSheet.createRow( 16 );
-        mergedRegionInstitution = new CellRangeAddress( 16, 24, 2, 8 );
+        rowInstitution = informationSheet.createRow( 10 );
+        mergedRegionInstitution = new CellRangeAddress( 10, 19, 2, 11 );
         informationSheet.addMergedRegion( mergedRegionInstitution );
-        informationString = "DANE POMIARU:\n";
-        informationString += "Nazwa pomiarów: " + survey.getName() + "\n";
-        informationString += "Data pomiarów: " + dateFormater.format( survey.getTimestamp() ) + "\n";
-        informationString += "Miejsce: " + survey.getObject().getPlace().toString() + "\n";
-        informationString += "Obiekt: " + survey.getObject().toString() + "\n";
-        informationString += "Obciążenie: " + survey.getLoad() + "\n";
-        informationString += "Warunki szczególne: " + survey.getSpecialConditions() + "\n";
-        informationString += "Prowadzący pomiary: " + survey.getApplicationUser().toString() + "\n";
+        informationString = " DANE POMIARU:\n\n";
+        informationString += " Nazwa pomiarów: " + survey.getName() + "\n";
+        informationString += " Data pomiarów: " + dateFormater.format( survey.getTimestamp() ) + "\n";
+        informationString += " Miejsce: " + survey.getObject().getPlace().toString() + "\n";
+        informationString += " Obiekt: " + survey.getObject().toString() + "\n";
+        informationString += " Obciążenie: " + survey.getLoad() + "\n";
+        informationString += " Warunki szczególne: " + survey.getSpecialConditions() + "\n";
+        informationString += " Prowadzący pomiary: " + survey.getApplicationUser().toString() + "\n";
         informationString += "";
         rowInstitution.createCell( 2 ).setCellValue(  informationString );
         
@@ -152,7 +160,6 @@ public abstract class XLSGenerator
 						dataRow.createCell( currColumn ).setCellValue( ( ( Measurement )measurement  ).getValue() ); currColumn++;
 					}						
 				}
-				
 			}
 			
 			dataRow.createCell( currColumn ).setCellValue( snapshot.getComment() );
