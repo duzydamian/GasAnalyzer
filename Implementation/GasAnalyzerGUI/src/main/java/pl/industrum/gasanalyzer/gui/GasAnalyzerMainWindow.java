@@ -310,6 +310,12 @@ public class GasAnalyzerMainWindow implements Observer
 			{
 				networkCollection.setNetworkConnected( networkSize, name, elanNetwork );
 			}
+			
+			@Override
+			public void setNetworkDisconnected( String name )
+			{
+				networkCollection.setNetworkDisconnected( name );
+			}
 
 			@Override
 			public void setStatusBarInformation( int progress,
@@ -458,7 +464,7 @@ public class GasAnalyzerMainWindow implements Observer
 				ELANMeasurementDevice device;
 				
 				device = connectionWrapper.getNetwork( networkPort ).getDevice( deviceAddress );
-
+	
 				ELANRxFrame frame;
 				try
 				{
@@ -500,6 +506,6 @@ public class GasAnalyzerMainWindow implements Observer
 				deviceTree.enableNextComment();
 				nextSnapshotComment = "";
 			}		
-		}		
+		}				
 	}
 }

@@ -78,7 +78,8 @@ public class GasAnalyzerGUI
 				window.open();
 			}
 			
-		} catch ( Exception e )
+		}		
+		catch ( Exception e )
 		{
 			e.printStackTrace();
 			SendExceptionCatched sendExceptionCatched = new SendExceptionCatched(new Shell(), SWT.NONE, e );

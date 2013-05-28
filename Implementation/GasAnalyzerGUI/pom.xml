@@ -162,7 +162,11 @@
 	      <artifactId>postgresql</artifactId>
 	      <version>9.1-901.jdbc4</version>
 	    </dependency>
-	    
+<!-- 		<dependency> -->
+<!-- 			<groupId>junit</groupId> -->
+<!-- 			<artifactId>junit</artifactId> -->
+<!-- 			<version>4.11</version> -->
+<!-- 		</dependency>	     -->
 <!-- Report generating library -->
 		<dependency>
 			<groupId>com.itextpdf</groupId>

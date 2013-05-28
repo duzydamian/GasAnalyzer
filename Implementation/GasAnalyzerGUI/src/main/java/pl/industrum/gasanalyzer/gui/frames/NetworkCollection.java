@@ -91,12 +91,24 @@ public class NetworkCollection extends Composite
 			}
 		}
 	}
+	
+	public void setNetworkDisconnected( String name )
+	{
+		for( Network network: networks )
+		{
+			if( network.getNetworkName().equalsIgnoreCase( name ))
+			{
+				network.setNetworkDisconnected( );
+				network.clearDeviceTableWithMeasure( );
+			}
+		}
+	}
 
 	public void updateStateForDevice( String networkPort, String name, ELANRxInvalidFrame frame )
 	{
 		for( Network network: networks )
 		{
-			if( network.getNetworkName().equalsIgnoreCase( networkPort ))
+			if( network.getNetworkName().contains( networkPort ))
 			{
 				network.updateState( frame, name );
 			}
@@ -107,7 +119,7 @@ public class NetworkCollection extends Composite
 	{
 		for( Network network: networks )
 		{
-			if( network.getNetworkName().equalsIgnoreCase( networkPort ))
+			if( network.getNetworkName().contains( networkPort ))
 			{
 				network.updateMeasurment( frame, name );
 			}

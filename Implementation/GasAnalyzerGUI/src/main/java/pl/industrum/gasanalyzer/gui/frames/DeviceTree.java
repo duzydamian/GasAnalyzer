@@ -111,6 +111,7 @@ public abstract class DeviceTree extends Composite
 										setStatusBarInformation( -1, "");
 										String port = treeItem.getText();
 										port = port.substring( port.indexOf( "[" )+1, port.indexOf( "]" ) );
+										setNetworkConnected( networkSize, treeItem.getText(), getGUIConnectionWrapper().getNetwork( port ) );
 										if ( getGUIConnectionWrapper().getNetwork( port ).getSize() > 0 )
 										{																						
 											for( ELANMeasurementDevice device: getGUIConnectionWrapper().getNetwork( port ) )
@@ -120,8 +121,7 @@ public abstract class DeviceTree extends Composite
 												itemTreeItem.setImage( UsefulImage.GRAY_DISCONNECT.getImage() );
 												addDeviceToDeviceCollection(device, port, itemTreeItem);
 												layout();
-											}
-											setNetworkConnected( networkSize, treeItem.getText(), getGUIConnectionWrapper().getNetwork( port ) );
+											}											
 										}
 										else
 										{
@@ -135,14 +135,17 @@ public abstract class DeviceTree extends Composite
 								}
 								else
 								{
-									String port = treeItem.getText();
-									port = port.substring( port.indexOf( "[" )+1, port.indexOf( "]" ) );
-									disconnectFromDevice( port );
+									String oldName = treeItem.getText();
+									String port = treeItem.getText();									 
+									port = port.substring( port.indexOf( "[" )+1, port.indexOf( "]" ) );									
 									treeItem.removeAll();
 									treeItem.setText( port );
 									treeItem.setImage( imageDisconnect );
 									treeItem.setForeground( UsefulColor.GRAY_DISCONNECT.getColor() );
+									renameNetwork( oldName, port );
+									disconnectFromDevice( port );
 									setStatusBarInformation( -1, "Rozłączono z "+ port );
+									setNetworkDisconnected( treeItem.getText() );
 								}
 							}
 					});
@@ -339,7 +342,8 @@ public abstract class DeviceTree extends Composite
 	public abstract void setSelectedDeviceVisible(String text );
 	public abstract void setSelectedNetworkVisible(String text );
 	public abstract void renameNetwork( String oldName, String newName );
-	public abstract void setNetworkConnected( int networkSize, String name, ELANNetwork elanNetwork );	
+	public abstract void setNetworkConnected( int networkSize, String name, ELANNetwork elanNetwork );
+	public abstract void setNetworkDisconnected( String name );
 	public abstract void setStatusBarInformation( int progress, String statusMessage );
 	public abstract void noDeviceFound(String source);
 	public abstract void connectionProblem(String source, ELANConnectionState connectWithNetworkState);	

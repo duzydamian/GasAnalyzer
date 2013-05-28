@@ -1,11 +1,10 @@
 package pl.industrum.gasanalyzer.unit_tests;
 
-import static org.junit.Assert.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import org.junit.Test;
-import org.omg.PortableInterceptor.SUCCESSFUL;
-
-import java.io.*;
 
 public class LinesNumber
 {

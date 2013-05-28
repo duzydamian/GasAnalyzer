@@ -7,6 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -377,23 +378,31 @@ public abstract class Device extends Composite
 	}
 
 	public void updateMeasurment(final ELANRxBroadcastFrame frame)
-	{
+	{		
 		Display.getDefault().asyncExec( new Runnable()
 		{
 			public void run()
 			{
-				lblCollectiveStateMessage.setText( ELANCollectiveChannelState.TRANSMITTED_MEASRED_VALUES_VALID.name());
-				lblStateMessage.setText( frame.getChannelState().name() );
-
-				lblLastMeasureTimeStamp.setText( dateFormater.format( frame.getTimeStamp() ) );
-				int i = 0;
-				for( ELANMeasurement elanMeasurement: frame )
+				try
 				{
-					table.getItem( i ).setText( 1, elanMeasurement.getValue().toString() );
-					i++;
+					lblCollectiveStateMessage.setText( ELANCollectiveChannelState.TRANSMITTED_MEASRED_VALUES_VALID.name());
+					lblStateMessage.setText( frame.getChannelState().name() );
+	
+					lblLastMeasureTimeStamp.setText( dateFormater.format( frame.getTimeStamp() ) );
+					int i = 0;
+					for( ELANMeasurement elanMeasurement: frame )
+					{
+						table.getItem( i ).setText( 1, elanMeasurement.getValue().toString() );
+						i++;
+					}
+					table.setEnabled( true );
+					item.setImage( UsefulImage.OK.getImage() );
 				}
-				table.setEnabled( true );
-				item.setImage( UsefulImage.OK.getImage() );
+				catch (SWTException swtException)
+				{
+					System.err.println( "Try to refresh disposed element" );
+					swtException.printStackTrace();
+				}
 			}
 		});		
 	}
