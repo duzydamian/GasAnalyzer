@@ -51,9 +51,9 @@ public abstract class DeviceCollection extends Composite
 		super.setEnabled( arg0 );
 	}
 	
-	public void addDevice( ELANMeasurementDevice device, TreeItem treeItem )
+	public void addDevice( ELANMeasurementDevice device, TreeItem treeItem, String name )
 	{
-		Device addedDevice = new Device( currentBody, SWT.NONE, device, treeItem )
+		Device addedDevice = new Device( currentBody, SWT.NONE, device, treeItem, name )
 		{
 
 			@Override
@@ -89,7 +89,7 @@ public abstract class DeviceCollection extends Composite
 	{
 		for( Device device: devices )
 		{
-			if( device.getDeviceName().equalsIgnoreCase( name ))
+			if( device.getDeviceName().contains( name ))
 			{
 				GridData deviceLayoutData = new GridData( GridData.FILL, GridData.FILL,
 						true, true );

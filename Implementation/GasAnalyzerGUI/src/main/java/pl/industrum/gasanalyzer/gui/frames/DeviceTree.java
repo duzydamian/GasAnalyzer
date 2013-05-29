@@ -27,7 +27,9 @@ import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
 import pl.industrum.gasanalyzer.elan.types.ELANConnectionState;
 import pl.industrum.gasanalyzer.gui.ELANConnectionWrapper;
 import pl.industrum.gasanalyzer.gui.dialogs.NetworkScan;
+import pl.industrum.gasanalyzer.hibernate.model.managers.DeviceManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.model.Device;
 import pl.industrum.gasanalyzer.types.UsefulColor;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
@@ -111,15 +113,16 @@ public abstract class DeviceTree extends Composite
 										setStatusBarInformation( -1, "");
 										String port = treeItem.getText();
 										port = port.substring( port.indexOf( "[" )+1, port.indexOf( "]" ) );
-										setNetworkConnected( networkSize, treeItem.getText(), getGUIConnectionWrapper().getNetwork( port ) );
+										
 										if ( getGUIConnectionWrapper().getNetwork( port ).getSize() > 0 )
 										{																						
 											for( ELANMeasurementDevice device: getGUIConnectionWrapper().getNetwork( port ) )
 											{
+												Device deviceByAddress = DeviceManager.getDeviceByAddress( device.getDeviceAddress() );
 												TreeItem itemTreeItem = new TreeItem( treeItem, SWT.COLOR_GRAY );
-												itemTreeItem.setText( device.getName() );
+												itemTreeItem.setText( deviceByAddress.getName() + " [" + deviceByAddress.getDeviceType().getType() + "]" );
 												itemTreeItem.setImage( UsefulImage.GRAY_DISCONNECT.getImage() );
-												addDeviceToDeviceCollection(device, port, itemTreeItem);
+												addDeviceToDeviceCollection( port, itemTreeItem, deviceByAddress );
 												layout();
 											}											
 										}
@@ -127,6 +130,7 @@ public abstract class DeviceTree extends Composite
 										{
 											noDeviceFound(treeItem.getText());
 										}
+										setNetworkConnected( networkSize, treeItem.getText(), getGUIConnectionWrapper().getNetwork( port ) );
 									}
 									else
 									{
@@ -337,7 +341,7 @@ public abstract class DeviceTree extends Composite
 	public abstract ELANConnectionState connectWithNetwork(String port);
 	public abstract void disconnectFromDevice( String text );	
 	public abstract ELANConnectionWrapper getGUIConnectionWrapper();
-	public abstract void addDeviceToDeviceCollection( ELANMeasurementDevice device, String port, TreeItem treeItem );
+	public abstract void addDeviceToDeviceCollection( String port, TreeItem treeItem, Device deviceByAddress );
 	public abstract void addNetworkToNetworkCollection(String networkName);
 	public abstract void setSelectedDeviceVisible(String text );
 	public abstract void setSelectedNetworkVisible(String text );

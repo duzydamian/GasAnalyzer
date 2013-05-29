@@ -81,7 +81,7 @@ public abstract class Device extends Composite
 	 * @param style
 	 * @param treeItem 
 	 */
-	public Device( Composite parent, int style, ELANMeasurementDevice device, TreeItem treeItem )
+	public Device( Composite parent, int style, ELANMeasurementDevice device, TreeItem treeItem, String name )
 	{
 //TODO FIXME
 /*
@@ -94,7 +94,7 @@ public abstract class Device extends Composite
 //		compositeData.horizontalSpan = 6;
 		this.setLayout( new FillLayout( SWT.HORIZONTAL ) );		
 		//this.setLayoutData( compositeData );
-		this.deviceName = device.getName() ;
+		this.deviceName = name;
 		this.deviceAddress = device.getDeviceAddress();
 		pl.industrum.gasanalyzer.model.Device deviceByAddress = DeviceManager.getDeviceByAddress( device.getDeviceAddress() );
 		this.deviceID = deviceByAddress.getId();
