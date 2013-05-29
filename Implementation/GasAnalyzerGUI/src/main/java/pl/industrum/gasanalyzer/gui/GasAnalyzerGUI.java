@@ -16,7 +16,7 @@ import pl.industrum.gasanalyzer.gui.dialogs.SendExceptionCatched;
  */
 public class GasAnalyzerGUI
 {
-	private static boolean debug = false;
+	private static boolean debug = true;
 	private static boolean develop = true;
 	
 	private static String AppVersion;
@@ -61,15 +61,23 @@ public class GasAnalyzerGUI
 			{
 				e.printStackTrace();
 			}									
-			
-			SplashScreen splashScreen = new SplashScreen();
-			splashScreen.open();
-
-			if ( splashScreen.isAllTestComplete() )
-			{				
+						
+			if ( !develop )
+			{	
+				SplashScreen splashScreen = new SplashScreen();
+				splashScreen.open();
+				if ( splashScreen.isAllTestComplete() )
+				{				
+					GasAnalyzerMainWindow window = new GasAnalyzerMainWindow();
+					window.open();
+				}
+			}
+			else
+			{
 				GasAnalyzerMainWindow window = new GasAnalyzerMainWindow();
 				window.open();
 			}
+			
 		} catch ( Exception e )
 		{
 			e.printStackTrace();

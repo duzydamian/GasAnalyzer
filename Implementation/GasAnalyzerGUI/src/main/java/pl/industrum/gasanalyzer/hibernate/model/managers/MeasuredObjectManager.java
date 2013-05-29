@@ -58,7 +58,7 @@ public abstract class MeasuredObjectManager
 		session.beginTransaction();
 		List<MeasuredObject> objects = ( List<MeasuredObject>  ) session.createQuery( "from MeasuredObject" ).list();
 		session.getTransaction().commit();
-		return objects;
+		return objects; 
 	}
 
 	@SuppressWarnings( "unchecked" )
@@ -67,8 +67,8 @@ public abstract class MeasuredObjectManager
 		//Create session and return survey collection
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		String queryString = "from MeasuredObject object where";
-		queryString += " object.place.id = " + placeID.toString();
+		String queryString = "from MeasuredObject measuredObject where";
+		queryString += " measuredObject.place.id = " + placeID.toString();
 		Query query = session.createQuery( queryString );
 		List<MeasuredObject> objects = ( List<MeasuredObject>  ) query.list();
 		session.getTransaction().commit();

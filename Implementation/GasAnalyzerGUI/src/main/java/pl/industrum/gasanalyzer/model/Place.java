@@ -105,4 +105,16 @@ public class Place implements java.io.Serializable
 	{
 		return getName() + " - " + getAddress() + ", " + getPostCode() + " " + getCity();
 	}
+	
+	@Override
+	public boolean equals( Object obj )
+	{
+		Place place = ( Place )obj;
+		if ( id == place.id )
+		{
+			return true;
+		}
+		
+		return false;
+	}
 }

@@ -110,4 +110,16 @@ public class ApplicationUser implements java.io.Serializable
 	{
 		return getDegree().getName() + " " + getName() + " " + getSurname() + ", " + getFunction().getName();
 	}
+	
+	@Override
+	public boolean equals( Object obj )
+	{
+		ApplicationUser user = ( ApplicationUser )obj;
+		if ( id == user.id )
+		{
+			return true;
+		}
+		
+		return false;
+	}
 }

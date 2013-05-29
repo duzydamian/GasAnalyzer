@@ -95,4 +95,16 @@ public class MeasuredObject implements java.io.Serializable
 	{
 		return getName() + " ( " + getDescription() + " )";
 	}
+	
+	@Override
+	public boolean equals( Object obj )
+	{
+		MeasuredObject measuredObject = ( MeasuredObject )obj;
+		if ( id == measuredObject.id )
+		{
+			return true;
+		}
+		
+		return false;
+	}
 }

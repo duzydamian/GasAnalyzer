@@ -20,9 +20,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.TreeItem;
 
 import pl.industrum.gasanalyzer.elan.communication.network.ELANMeasurementDevice;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
+import pl.industrum.gasanalyzer.elan.frames.ELANRxInvalidFrame;
+import pl.industrum.gasanalyzer.elan.types.ELANCollectiveChannelState;
 import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
 import pl.industrum.gasanalyzer.elan.types.ELANVariableDimensionPair;
 import pl.industrum.gasanalyzer.hibernate.model.managers.DeviceManager;
@@ -42,6 +45,7 @@ public abstract class Device extends Composite
 	private Timer refreshTimer;
 	private TimerTask refreshTimerTask;
 	private boolean runningRefreshTimer;
+	private TreeItem item;
 	
 	GridData tableData;
 	private Group grpOneDIvice;
@@ -58,6 +62,7 @@ public abstract class Device extends Composite
 	private String[] columns;
 	private String[] columnsHistory;
 	private Table table;
+	
 	private Table tableHistory;
 	private Composite historyBody;
 	private Integer deviceID ;
@@ -71,8 +76,9 @@ public abstract class Device extends Composite
 	 * 
 	 * @param parent
 	 * @param style
+	 * @param treeItem 
 	 */
-	public Device( Composite parent, int style, ELANMeasurementDevice device )
+	public Device( Composite parent, int style, ELANMeasurementDevice device, TreeItem treeItem )
 	{
 //TODO FIXME
 /*
@@ -93,6 +99,8 @@ public abstract class Device extends Composite
 		this.deviceAddress = device.getDeviceAddress();
 		pl.industrum.gasanalyzer.model.Device deviceByAddress = DeviceManager.getDeviceByAddress( device.getDeviceAddress() );
 		this.deviceID = deviceByAddress.getId();
+		
+		item = treeItem;
 
 		grpOneDIvice = new Group( this, SWT.NONE );
 		grpOneDIvice.setText( deviceName );
@@ -310,13 +318,63 @@ public abstract class Device extends Composite
 		tabFolder.setEnabled( arg0 );
 	}	
 	
+	public void updateState( final ELANRxInvalidFrame frame )
+	{
+		Display.getDefault().asyncExec( new Runnable()
+		{
+			public void run()
+			{
+				lblCollectiveStateMessage.setText( "" );
+				for( ELANCollectiveChannelState collectiveChannelState: frame.getCollectiveChannelState() )
+				{
+					lblCollectiveStateMessage.setText( lblCollectiveStateMessage.getText() + collectiveChannelState.name()+", " );
+				}
+				lblCollectiveStateMessage.setText( lblCollectiveStateMessage.getText().substring( 0, lblCollectiveStateMessage.getText().length()-1 ) );				
+				lblStateMessage.setText( frame.getChannelState().name() );
+				lblLastMeasureTimeStamp.setText( dateFormater.format( frame.getTimeStamp() ) );
+
+				for( TableItem item: table.getItems() )
+				{
+					item.setText( 1, "" );					
+				}
+				
+				table.setEnabled( false );
+				for( ELANCollectiveChannelState collectiveChannelState: frame.getCollectiveChannelState() )
+				{
+					switch ( collectiveChannelState )
+					{
+					case ERROR:
+						item.setImage( UsefulImage.ERROR.getImage() );
+						addError(collectiveChannelState, deviceName);
+						break;
+					case FUNCTION_CHECK_ON:
+						item.setImage( UsefulImage.WARNING.getImage() );
+						addWarning(collectiveChannelState, deviceName);
+						break;
+					case NOT_READY:
+						item.setImage( UsefulImage.WARNING.getImage() );
+						addWarning(collectiveChannelState, deviceName);
+						break;
+					default:
+						item.setImage( UsefulImage.WARNING.getImage() );
+						addWarning(collectiveChannelState, deviceName);
+						break;
+					}
+					
+				}				
+			}
+		});
+	}
+
 	public void updateMeasurment(final ELANRxBroadcastFrame frame)
 	{
 		Display.getDefault().asyncExec( new Runnable()
 		{
 			public void run()
 			{
+				lblCollectiveStateMessage.setText( ELANCollectiveChannelState.TRANSMITTED_MEASRED_VALUES_VALID.name());
 				lblStateMessage.setText( frame.getChannelState().name() );
+
 				lblLastMeasureTimeStamp.setText( dateFormater.format( frame.getTimeStamp() ) );
 				int i = 0;
 				for( ELANMeasurement elanMeasurement: frame )
@@ -324,6 +382,8 @@ public abstract class Device extends Composite
 					table.getItem( i ).setText( 1, elanMeasurement.getValue().toString() );
 					i++;
 				}
+				table.setEnabled( true );
+				item.setImage( UsefulImage.OK.getImage() );
 			}
 		});		
 	}
@@ -370,6 +430,14 @@ public abstract class Device extends Composite
 		super.setVisible( arg0 );
 	}
 	
+	/**
+	 * @return the table
+	 */
+	public Composite getTableWithDetail()
+	{
+		return currentBody;
+	}
+	
 	@Override
 	protected void checkSubclass()
 	{
@@ -378,4 +446,6 @@ public abstract class Device extends Composite
 	
 	public abstract Integer getSurveyID();
 	public abstract Integer getStep();
+	public abstract void addWarning(ELANCollectiveChannelState collectiveChannelState, String deviceName2);
+	public abstract void addError(ELANCollectiveChannelState collectiveChannelState, String deviceName2);
 }

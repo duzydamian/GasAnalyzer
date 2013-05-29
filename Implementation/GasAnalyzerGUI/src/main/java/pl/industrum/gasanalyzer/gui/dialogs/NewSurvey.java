@@ -112,7 +112,7 @@ public class NewSurvey extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 460, 400 );
+		shell.setSize( 600, 440 );
 		shell.setText( getText() );
 		shell.setImage( UsefulImage.ADD.getImage() );
 		
@@ -131,7 +131,7 @@ public class NewSurvey extends Dialog
 				.getString( "SurveyFrame.lblSurveyName.text" ) ); //$NON-NLS-1$
 
 		txtSurveyName = new Text( surveyForm, SWT.BORDER );
-		txtSurveyName.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
+		txtSurveyName.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 2, 1 ) );
 		txtSurveyName.addModifyListener( new ModifyListener()
 		{
@@ -149,7 +149,7 @@ public class NewSurvey extends Dialog
 				.getString( "SurveyFrame.lblSurveyDate.text" ) ); //$NON-NLS-1$
 
 		txtSurveyDate = new Text( surveyForm, SWT.BORDER );
-		txtSurveyDate.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
+		txtSurveyDate.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 1, 1 ) );
 		txtSurveyDate.setText( dateFormater.format( new Date() ) );
 
@@ -176,7 +176,7 @@ public class NewSurvey extends Dialog
 
 		listSurveyUser = new Combo( surveyForm, SWT.NONE );
 		listSurveyUser.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
-				false, false, 1, 1 ) );
+				true, false, 1, 1 ) );
 		
 		refreshListSurveyUser();
 		
@@ -215,7 +215,7 @@ public class NewSurvey extends Dialog
 
 		listSurveyPlace = new Combo( surveyForm, SWT.NONE );
 		listSurveyPlace.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
-				false, false, 1, 1 ) );
+				true, false, 1, 1 ) );
 		refreshListSurveyPlace();
 		listSurveyPlace.addModifyListener( new ModifyListener()
 		{
@@ -242,9 +242,10 @@ public class NewSurvey extends Dialog
 			{
 				NewSurveyPlace newSurveyPlace = new NewSurveyPlace( getParent()
 						.getShell(), SWT.NONE );
-				newSurveyPlace.open();
+				Place place = newSurveyPlace.open();
 
 				refreshListSurveyPlace();
+				listSurveyPlace.select( avaiblePlaces.indexOf( place ) );
 			}
 		} );
 		
@@ -256,7 +257,7 @@ public class NewSurvey extends Dialog
 
 		listSurveyObject = new Combo( surveyForm, SWT.NONE );
 		listSurveyObject.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
-				false, false, 1, 1 ) );
+				true, false, 1, 1 ) );
 
 		listSurveyObject.addModifyListener( new ModifyListener()
 		{
@@ -279,9 +280,10 @@ public class NewSurvey extends Dialog
 				Integer placeID = avaiblePlaces.get( listSurveyPlace.getSelectionIndex() ).getId();
 				NewSurveyObject newSurveyObject = new NewSurveyObject( getParent()
 						.getShell(), SWT.NONE, placeID );
-				newSurveyObject.open();
+				MeasuredObject measuredObject = newSurveyObject.open();
 
 				refreshListSurveyObject( avaiblePlaces.get( listSurveyPlace.getSelectionIndex() ).getId() );
+				listSurveyObject.select( avaibleObjects.indexOf( measuredObject ) );
 			}
 		} );
 		
@@ -293,7 +295,7 @@ public class NewSurvey extends Dialog
 
 		textSurveyLoad = new Text( surveyForm, SWT.BORDER );
 		textSurveyLoad.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
-				false, false, 2, 1 ) );
+				true, false, 2, 1 ) );
 		textSurveyLoad.addModifyListener( new ModifyListener()
 		{
 			
@@ -314,7 +316,7 @@ public class NewSurvey extends Dialog
 		styledTextSurveySpecialConditions = new Text( surveyForm,
 				SWT.BORDER | SWT.WRAP | SWT.MULTI );
 		GridData gd_styledTextSurveySpecialConditions = new GridData(
-				SWT.FILL, SWT.CENTER, false, false, 2, 2 );
+				SWT.FILL, SWT.CENTER, true, false, 2, 2 );
 		gd_styledTextSurveySpecialConditions.heightHint = 48;
 		styledTextSurveySpecialConditions.setLayoutData( gd_styledTextSurveySpecialConditions );
 		styledTextSurveySpecialConditions.addModifyListener( new ModifyListener()
@@ -336,7 +338,7 @@ public class NewSurvey extends Dialog
 
 		styledTextComment = new Text( surveyForm, SWT.BORDER | SWT.WRAP | SWT.MULTI );
 		GridData gd_styledTextComment = new GridData( SWT.FILL, SWT.FILL,
-				false, false, 2, 3 );
+				true, false, 2, 3 );
 		gd_styledTextComment.heightHint = 71;
 		styledTextComment.setLayoutData( gd_styledTextComment );
 		styledTextComment.addModifyListener( new ModifyListener()

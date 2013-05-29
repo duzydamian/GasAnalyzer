@@ -15,3 +15,6 @@ http://www.lammertbies.nl/comm/info/crc-calculation.html
 
 RXTX
 http://rxtx.qbang.org/pub/rxtx/
+
+CSMA/CD Analyzes
+http://www.mathcs.emory.edu/~cheung/Courses/455/Syllabus/3a-MAC/csmacd.html
