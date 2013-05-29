@@ -25,13 +25,14 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 import pl.industrum.gasanalyzer.i18n.Messages;
-import pl.industrum.gasanalyzer.model.Function;
 import pl.industrum.gasanalyzer.model.MeasurementVariable;
 import pl.industrum.gasanalyzer.types.UsefulImage;
+import pl.industrum.gasanalyzer.xml.XmlCreator;
+import pl.industrum.gasanalyzer.xml.XmlParser;
 
 public class DevicePreferences extends Dialog
 {
-	protected Function result;
+	protected Object result;
 	protected Shell shell;
 	private Button btnOk;
 	private Button btnCancel;
@@ -65,9 +66,13 @@ public class DevicePreferences extends Dialog
 	 * 
 	 * @return the result
 	 */
-	public Function open()
+	public Object open()
 	{
 		createContents();
+		
+		XmlParser xmlParser = new XmlParser();
+		//TODO implement parse device configuration and add to window
+		
 		shell.open();
 		shell.layout();
 		display = getParent().getDisplay();
@@ -312,7 +317,7 @@ public class DevicePreferences extends Dialog
 							{
 								if ( validateAll() )
 								{
-									//saveAction();
+									saveAction();
 									shell.dispose();
 								}
 							}
@@ -335,10 +340,13 @@ public class DevicePreferences extends Dialog
 								new Label(shell, SWT.NONE);
 	}
 
-//	protected void saveAction()
-//	{
-//		result = FunctionDictionary.get( FunctionDictionary.add( textName.getText() ) );
-//	}
+	protected void saveAction()
+	{
+		//TODO forward precision to creator per device
+		XmlCreator xmlCreator = new XmlCreator(table.getItems());		
+		result = xmlCreator.getXml();
+		
+	}
 //	
 //	private boolean validateName()
 //	{

@@ -1,7 +1,14 @@
 package pl.industrum.gasanalyzer.gui.dialogs;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -145,7 +152,7 @@ public class MeasurementPreferences extends Dialog
 			{
 				if ( validateAll() )
 				{
-					// saveAction();
+					saveAction();
 					shell.dispose();
 				}
 			}
