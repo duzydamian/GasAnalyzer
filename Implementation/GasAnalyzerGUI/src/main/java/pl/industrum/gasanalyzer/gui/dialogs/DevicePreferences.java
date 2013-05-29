@@ -1,19 +1,24 @@
 package pl.industrum.gasanalyzer.gui.dialogs;
 
+import java.util.HashMap;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -21,7 +26,7 @@ import org.eclipse.swt.widgets.Text;
 
 import pl.industrum.gasanalyzer.i18n.Messages;
 import pl.industrum.gasanalyzer.model.Function;
-import pl.industrum.gasanalyzer.types.UsefulColor;
+import pl.industrum.gasanalyzer.model.MeasurementVariable;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class DevicePreferences extends Dialog
@@ -34,8 +39,12 @@ public class DevicePreferences extends Dialog
 	private Label icoName;
 	
 	private Table table;
-	private TableEditor tableEditor;
-
+	private TableEditor editor;
+	
+	private HashMap<String, Integer> variables;
+	private HashMap<String, Integer> tempResults;
+	private HashMap<Integer, MeasurementVariable> precisionMap;
+	
 	/**
 	 * Create the dialog.
 	 * 
@@ -45,7 +54,10 @@ public class DevicePreferences extends Dialog
 	public DevicePreferences( Shell parent, int style )
 	{
 		super( parent, style );
-		setText( Messages.getString( "Preferencje urządzeń" ) );
+		setText( "Preferencje urządzeń" );
+		
+		variables = new HashMap<String, Integer>();
+		tempResults = new HashMap<String, Integer>();
 	}
 
 	/**
@@ -75,59 +87,214 @@ public class DevicePreferences extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 365, 187 );
+		shell.setSize( 500, 600 );
 		shell.setText( getText() );
 		shell.setLayout( new GridLayout( 5, false ) );
 		
 		table = new Table( shell, SWT.FULL_SELECTION | SWT.HIDE_SELECTION );
+		table.setHeaderVisible( true );
+		table.setLinesVisible( true );
 		
-		TableColumn nameColumn = new TableColumn( table, SWT.NONE );
-		TableColumn addressColumn = new TableColumn( table, SWT.NONE );
+
+		final TableColumn addColumn = new TableColumn( table, SWT.NONE );
+		final TableColumn addressColumn = new TableColumn( table, SWT.NONE );
+		final TableColumn nameColumn = new TableColumn( table, SWT.NONE );
+		final TableColumn typeColumn = new TableColumn( table, SWT.NONE );
+		final TableColumn precisionColumn = new TableColumn( table, SWT.NONE );
+		
+		addColumn.setText( "" );
+		addressColumn.setText( "adres" );
+		nameColumn.setText( "nazwa" );
+		typeColumn.setText( "typ" );
+		precisionColumn.setText( "dokładność" );
+		
+		addressColumn.pack();
+		nameColumn.pack();
+		typeColumn.pack();
+		precisionColumn.pack();
+		addColumn.pack();
+		
+		editor = new TableEditor( table );
+		editor.horizontalAlignment = SWT.LEFT;
+		editor.grabHorizontal = true;
+		
+		TableItem device = new TableItem( table, SWT.NONE );
+		device.setImage( 0, UsefulImage.PREFERENCES.getImage() );
+		device.setText( 1, "12" );
+		device.setText( 2, "Device 0" );
+		device.setText( 3, "Ultramat 23" );
+		device.setText( 4, "2" );
+		
+		
+		TableItem device2 = new TableItem( table, SWT.NONE );
+		device2.setImage( 0, UsefulImage.PREFERENCES.getImage() );
+		device2.setText( 1, "9" );
+		device2.setText( 2, "Device 1" );
+		device2.setText( 3, "Ultramat 23/a" );
+		device2.setText( 4, "6" );
 		
 		nameColumn.pack();
 		addressColumn.pack();
-		
-		TableItem device = new TableItem( table, SWT.NONE );
-		device.setText( new String[] {"Device 0", "12"} );
-		
-		tableEditor = new TableEditor( table );
-		tableEditor.horizontalAlignment = SWT.LEFT;
-		tableEditor.grabHorizontal = true;
-		tableEditor.minimumWidth = 50;
-		
-		final int EDIT_TABLE_COLUMNS = 2;
+		precisionColumn.pack();
+		typeColumn.pack();
+		addColumn.pack();
 		
 		GridData gd_tableEditor = new GridData(SWT.FILL, SWT.FILL, true, true, 5, 1);
-		gd_tableEditor.widthHint = 229;
 		table.setLayoutData(gd_tableEditor);
 		
-		table.addSelectionListener( new SelectionAdapter()
+		table.addListener( SWT.MouseDown, new Listener ()
 		{
-            public void widgetSelected( SelectionEvent e )
-            {
-                    // Clean up any previous editor control
-                    Control oldEditor = tableEditor.getEditor();
-                    if ( oldEditor != null ) oldEditor.dispose();
-    
-                    // Identify the selected row
-                    TableItem item = ( TableItem )e.item;
-                    if ( item == null ) return;
-    
-                    // The control that will be the editor must be a child of the Table
-                    Text newEditor = new Text( table, SWT.NONE );
-                    newEditor.setText( item.getText( EDIT_TABLE_COLUMNS ) );
-                    newEditor.addModifyListener( new ModifyListener()
-                    {
-                            public void modifyText( ModifyEvent e )
-                            {
-                                    Text text = ( Text )tableEditor.getEditor();
-                                    tableEditor.getItem().setText( EDIT_TABLE_COLUMNS, text.getText() );
-                            }
-                    });
-                    newEditor.selectAll();
-                    newEditor.setFocus();
-                    tableEditor.setEditor( newEditor, item, EDIT_TABLE_COLUMNS );
-            }
+
+			public void handleEvent( Event event )
+			{
+				Rectangle clientArea = table.getClientArea();
+				Point pt = new Point( event.x, event.y );
+				int index = table.getTopIndex();
+				while ( index < table.getItemCount() )
+				{
+					boolean visible = false;
+					final TableItem item = table.getItem( index );
+					for ( int i=0; i<table.getColumnCount(); i++ )
+					{
+						Rectangle rect = item.getBounds( i );
+						if ( rect.contains( pt ) )
+						{
+							final int column = i;						
+							
+							if( column == 0 )
+							{
+								tempResults.clear();
+								MeasurementPreferences preferences = new MeasurementPreferences( getParent(), SWT.NONE );
+								tempResults.putAll( preferences.open( variables ) ); 
+							}
+							else if( column == 2 )
+							{
+								final Text text = new Text( table, SWT.NONE );
+								Listener textListener = new Listener()
+								{
+									public void handleEvent ( final Event e )
+									{
+										switch( e.type )
+										{
+											case SWT.FocusOut:
+												item.setText( column, text.getText () );
+												text.dispose();
+												break;
+											case SWT.Traverse:
+												switch( e.detail )
+												{
+													case SWT.TRAVERSE_RETURN:
+														item.setText (column, text.getText ());
+													case SWT.TRAVERSE_ESCAPE:
+														text.dispose ();
+														e.doit = false;
+												}
+												break;
+										}
+									}
+								};
+								
+								text.addListener ( SWT.FocusOut, textListener );
+								text.addListener ( SWT.Traverse, textListener );
+								editor.setEditor ( text, item, i );
+								text.setText ( item.getText( i ) );
+								text.selectAll();
+								text.setFocus();
+							}
+							else if( column == 3)
+							{
+								final Combo deviceType = new Combo( table, SWT.NONE );
+								deviceType.add( "Ultramat23" );
+								deviceType.add( "Ultramat23/a" );
+								
+								Listener textListener = new Listener()
+								{
+									public void handleEvent ( final Event e )
+									{
+										switch( e.type )
+										{
+											case SWT.FocusOut:
+												item.setText( column, deviceType.getText() );
+												deviceType.dispose();
+												break;
+											case SWT.Traverse:
+												switch( e.detail )
+												{
+													case SWT.TRAVERSE_RETURN:
+														item.setText (column, deviceType.getText() );
+													case SWT.TRAVERSE_ESCAPE:
+														deviceType.dispose ();
+														e.doit = false;
+												}
+												break;
+										}
+									}
+								};
+								
+								deviceType.addListener ( SWT.FocusOut, textListener );
+								deviceType.addListener ( SWT.Traverse, textListener );
+								editor.setEditor ( deviceType, item, i );
+								deviceType.setText( item.getText( i ) );
+								deviceType.setFocus();
+							}
+							else
+							{
+								final Spinner precisionEditor = new Spinner( table, SWT.NONE );
+								if( column == 0 )
+								{
+									precisionEditor.setMaximum( 12 );
+									precisionEditor.setMinimum( 1 );
+								}
+								else
+								{
+									precisionEditor.setMaximum( 4 );
+									precisionEditor.setMinimum( 0 );
+								}
+								Listener textListener = new Listener()
+								{
+									public void handleEvent ( final Event e )
+									{
+										switch( e.type )
+										{
+											case SWT.FocusOut:
+												item.setText( column, Integer.toString( precisionEditor.getSelection() ) );
+												precisionEditor.dispose();
+												break;
+											case SWT.Traverse:
+												switch( e.detail )
+												{
+													case SWT.TRAVERSE_RETURN:
+														item.setText (column, Integer.toString( precisionEditor.getSelection() ) );
+													case SWT.TRAVERSE_ESCAPE:
+														precisionEditor.dispose ();
+														e.doit = false;
+												}
+												break;
+										}
+									}
+								};
+								
+								precisionEditor.addListener ( SWT.FocusOut, textListener );
+								precisionEditor.addListener ( SWT.Traverse, textListener );
+								editor.setEditor ( precisionEditor, item, i );
+								precisionEditor.setSelection( Integer.parseInt( item.getText( i ) ) );
+								precisionEditor.setFocus();
+							}
+							return;
+						}
+						if (!visible && rect.intersects( clientArea ) )
+						{
+							visible = true;
+						}
+					}
+					if ( !visible ) 
+					{
+						return;
+					}
+					index++;
+				}
+			}
+			
 		});
 		
 		
@@ -193,19 +360,5 @@ public class DevicePreferences extends Dialog
 		//isValid = validateName();
 		
 		return isValid;
-	}
-
-	private void setFormFieldError( Label label, Control textField, Label ico )
-	{
-		ico.setImage( UsefulImage.ERROR.getImage() );
-		ico.getParent().layout();
-		textField.setBackground( UsefulColor.RED_ERROR.getColor() );
-	}
-	
-	private void setFormFieldOK( Label label, Control textField, Label ico )
-	{
-		ico.setImage( UsefulImage.OK.getImage() );
-		ico.getParent().layout();
-		textField.setBackground( UsefulColor.WHITE.getColor() );
 	}
 }

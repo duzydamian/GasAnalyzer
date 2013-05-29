@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.MenuItem;
 
 import pl.industrum.gasanalyzer.gui.EmailSystem;
 import pl.industrum.gasanalyzer.gui.dialogs.About;
+import pl.industrum.gasanalyzer.gui.dialogs.DevicePreferences;
 import pl.industrum.gasanalyzer.gui.dialogs.EditSurvey;
 import pl.industrum.gasanalyzer.gui.dialogs.EditSurveyObject;
 import pl.industrum.gasanalyzer.gui.dialogs.EditSurveyPlace;
@@ -173,7 +174,8 @@ public abstract class MainMenu extends Menu
 		{
 			public void widgetSelected( SelectionEvent e )
 			{
-				//TODO implement open edit devices dialog
+				 DevicePreferences preferences = new DevicePreferences( getShell(), SWT.NONE );
+				 preferences.open(); 
 			}
 		} );
 		
