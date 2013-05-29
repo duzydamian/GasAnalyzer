@@ -8,6 +8,10 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
+import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
+import pl.industrum.gasanalyzer.elan.frames.ELANRxInvalidFrame;
+
 /**
  * @author duzydamian (Damian Karbowiak)
  * 
@@ -76,12 +80,37 @@ public class NetworkCollection extends Composite
 		// Disable the check that prevents subclassing of SWT components
 	}
 
-	public void setNetworkConnected( int networkSize, String name )
+	public void setNetworkConnected( int networkSize, String name, ELANNetwork elanNetwork )
 	{
 		for( Network network: networks )
 		{
 			if( network.getNetworkName().equalsIgnoreCase( name ))
+			{
 				network.setNetworkConnected( networkSize );
+				network.fillDeviceTableWithMeasure( elanNetwork );
+			}
+		}
+	}
+
+	public void updateStateForDevice( String networkPort, String name, ELANRxInvalidFrame frame )
+	{
+		for( Network network: networks )
+		{
+			if( network.getNetworkName().equalsIgnoreCase( networkPort ))
+			{
+				network.updateState( frame, name );
+			}
+		}
+	}
+
+	public void updateMeasurmentForDevice( String networkPort, String name, ELANRxBroadcastFrame frame )
+	{
+		for( Network network: networks )
+		{
+			if( network.getNetworkName().equalsIgnoreCase( networkPort ))
+			{
+				network.updateMeasurment( frame, name );
+			}
 		}
 	}
 }

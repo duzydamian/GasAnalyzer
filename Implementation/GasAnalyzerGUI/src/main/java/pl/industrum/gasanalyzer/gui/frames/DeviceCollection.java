@@ -8,10 +8,12 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.TreeItem;
 
 import pl.industrum.gasanalyzer.elan.communication.network.ELANMeasurementDevice;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxInvalidFrame;
+import pl.industrum.gasanalyzer.elan.types.ELANCollectiveChannelState;
 
 /**
  * @author duzydamian (Damian Karbowiak)
@@ -49,9 +51,9 @@ public abstract class DeviceCollection extends Composite
 		super.setEnabled( arg0 );
 	}
 	
-	public void addDevice( ELANMeasurementDevice device )
+	public void addDevice( ELANMeasurementDevice device, TreeItem treeItem )
 	{
-		Device addedDevice = new Device( currentBody, SWT.NONE, device )
+		Device addedDevice = new Device( currentBody, SWT.NONE, device, treeItem )
 		{
 
 			@Override
@@ -65,12 +67,24 @@ public abstract class DeviceCollection extends Composite
 			{
 				return getStepFromGUI();
 			}
+
+			@Override
+			public void addWarning( ELANCollectiveChannelState collectiveChannelState, String deviceName2 )
+			{
+				addWarningToProblems( collectiveChannelState, deviceName2 );
+			}
+
+			@Override
+			public void addError( ELANCollectiveChannelState collectiveChannelState, String deviceName2 )
+			{
+				addErrorToProblems( collectiveChannelState, deviceName2 );
+			}
 			
 		};
 		addedDevice.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
 		devices.add( addedDevice );
 	}
-	
+
 	public void setVisibleDivice(String name)
 	{
 		for( Device device: devices )
@@ -151,5 +165,7 @@ public abstract class DeviceCollection extends Composite
 	}
 	
 	public abstract Integer getSurveyIDFromGUI();
-	public abstract Integer getStepFromGUI();	
+	public abstract Integer getStepFromGUI();
+	public abstract void addErrorToProblems( ELANCollectiveChannelState collectiveChannelState, String deviceName2 );
+	public abstract void addWarningToProblems( ELANCollectiveChannelState collectiveChannelState, String deviceName2 );
 }

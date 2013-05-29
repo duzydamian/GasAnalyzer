@@ -9,7 +9,10 @@ import org.eclipse.swt.widgets.MenuItem;
 
 import pl.industrum.gasanalyzer.gui.EmailSystem;
 import pl.industrum.gasanalyzer.gui.dialogs.About;
+import pl.industrum.gasanalyzer.gui.dialogs.DevicePreferences;
 import pl.industrum.gasanalyzer.gui.dialogs.EditSurvey;
+import pl.industrum.gasanalyzer.gui.dialogs.EditSurveyUserFunction;
+import pl.industrum.gasanalyzer.gui.dialogs.EditSurveyUserTitle;
 import pl.industrum.gasanalyzer.gui.dialogs.NewSurvey;
 import pl.industrum.gasanalyzer.gui.dialogs.OpenSurvey;
 import pl.industrum.gasanalyzer.i18n.Messages;
@@ -97,6 +100,29 @@ public abstract class MainMenu extends Menu
 		Menu menuEdit = new Menu( mntmEdit );
 		mntmEdit.setMenu( menuEdit );
 		
+		MenuItem mntmEditTitle = new MenuItem( menuEdit, SWT.NONE );
+		mntmEditTitle.setText( "Edytuj tytuły" );
+		mntmEditTitle.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				EditSurveyUserFunction editSurveyUserFunction = new EditSurveyUserFunction( getShell(), SWT.NONE );
+				editSurveyUserFunction.open();
+			}
+		} );
+		
+		MenuItem mntmEditFunction = new MenuItem( menuEdit, SWT.NONE );
+		mntmEditFunction.setText( "Edytuj funkcje" );
+		mntmEditFunction.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				EditSurveyUserTitle editSurveyUserTitle = new EditSurveyUserTitle( getShell(), SWT.NONE );
+				editSurveyUserTitle.open();
+			}
+		} );
+		
+		//_________________Survey___________________________________________________		
 		mntmSurvey = new MenuItem( this, SWT.CASCADE );
 		mntmSurvey.setText( Messages.getString( "MainMenu.Survey" ) ); //$NON-NLS-1$
 		mntmSurvey.setEnabled( false );
@@ -104,6 +130,17 @@ public abstract class MainMenu extends Menu
 		Menu menuSurvey = new Menu( mntmSurvey );
 		mntmSurvey.setMenu( menuSurvey );
 
+		MenuItem mntmEditDevice = new MenuItem( menuSurvey, SWT.NONE );
+		mntmEditDevice.setText( "Edytuj urządzenia" );
+		mntmEditDevice.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				DevicePreferences preferences = new DevicePreferences( getShell(), SWT.NONE );
+				preferences.open();
+			}
+		} );
+		
 		MenuItem mntmPreferences = new MenuItem( menuSurvey, SWT.NONE );
 		mntmPreferences.setImage( UsefulImage.PREFERENCES.getImage() );
 		mntmPreferences.setText( Messages.getString( "MainMenu.Preferences" ) ); //$NON-NLS-1$
@@ -123,6 +160,7 @@ public abstract class MainMenu extends Menu
 			}
 		} );
 
+		//_________________Network___________________________________________________		
 		mntmNetwork = new MenuItem( this, SWT.CASCADE );
 		mntmNetwork.setText( Messages.getString( "MainMenu.Network" ) ); //$NON-NLS-1$
 		mntmNetwork.setEnabled( false );

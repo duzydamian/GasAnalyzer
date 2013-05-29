@@ -71,7 +71,7 @@ public class NetworkScan extends Dialog
 		{
 			public void run()
 			{
-				for (int i=0; i<100; i++)
+				for (int i=0; i<60; i++)
 				{				
 					try
 					{						
@@ -96,11 +96,11 @@ public class NetworkScan extends Dialog
 						progressBar.setSelection(i);
 						if ( GasAnalyzerGUI.isDevelop() )
 						{
-							Thread.sleep(10);
+							Thread.sleep(100);
 						}
 						else
 						{
-							Thread.sleep(100);
+							Thread.sleep(1000);
 						}						
 					}
 					catch (Throwable e)

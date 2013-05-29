@@ -6,9 +6,12 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.eclipse.swt.program.Program;
 
@@ -34,10 +37,59 @@ public abstract class XLSGenerator
 	public void create( Survey survey, String path )
     {
 		HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet =  workbook.createSheet("FirstSheet");  
-
+		HSSFSheet informationSheet =  workbook.createSheet("karta informacyjna");
+        HSSFSheet measurementSheet =  workbook.createSheet("karta pomiarowa");
+        
+        //Create information sheet
+        
+        String informationString = null;
+        
+        ////Add institution
+        HSSFRow rowInstitution = informationSheet.createRow( 2 );
+        CellRangeAddress mergedRegionInstitution = new CellRangeAddress( 2, 8, 2, 7 );
+        informationSheet.addMergedRegion( mergedRegionInstitution );
+        informationString = "POLITECHNIKA ŚLĄSKA\n";
+        informationString += "WYDZIAŁ INŻYNIERII ŚRODOWISKA I ENERGETYKI\n";
+        informationString += "INSTYTUT MASZYN I URZĄDZEŃ ENERGETYCZNYCH\n";
+        informationString += "ZAKŁAD KOTŁÓW I WYTORNIC PARY\n";
+        informationString += "\n";
+        informationString += "www.kotly.polsl.pl\n";
+        HSSFCell cell = rowInstitution.createCell( 2 );
+        cell.setCellValue(  informationString );
+        
+        HSSFCellStyle style = workbook.createCellStyle();
+        style.setAlignment( CellStyle.ALIGN_CENTER );
+		cell.setCellStyle( style );
+		
+		CellRangeAddress mergedRegionInformation = new CellRangeAddress( 2, 8, 9, 11 );
+        informationSheet.addMergedRegion( mergedRegionInformation );
+		
+		informationString = " UL. KONARSKIEGO 20\n";
+        informationString += " 44-100  GLIWICE\n\n";
+        informationString += " T: +48 32 237 12 73\n";
+        informationString += " F: +48 32 237 21 93\n";
+        informationString += " kotly@polsl.pl\n";
+        
+        cell = rowInstitution.createCell( 9 );
+        cell.setCellValue(  informationString );
+        
+        ////Add survey data
+        rowInstitution = informationSheet.createRow( 10 );
+        mergedRegionInstitution = new CellRangeAddress( 10, 19, 2, 11 );
+        informationSheet.addMergedRegion( mergedRegionInstitution );
+        informationString = " DANE POMIARU:\n\n";
+        informationString += " Nazwa pomiarów: " + survey.getName() + "\n";
+        informationString += " Data pomiarów: " + dateFormater.format( survey.getTimestamp() ) + "\n";
+        informationString += " Miejsce: " + survey.getObject().getPlace().toString() + "\n";
+        informationString += " Obiekt: " + survey.getObject().toString() + "\n";
+        informationString += " Obciążenie: " + survey.getLoad() + "\n";
+        informationString += " Warunki szczególne: " + survey.getSpecialConditions() + "\n";
+        informationString += " Prowadzący pomiary: " + survey.getApplicationUser().toString() + "\n";
+        informationString += "";
+        rowInstitution.createCell( 2 ).setCellValue(  informationString );
+        
         //Add free cells above L.p. and Timestamp
-        HSSFRow rowhead = sheet.createRow( 0 );
+        HSSFRow rowhead = measurementSheet.createRow( 0 );
         rowhead.createCell( 1 ).setCellValue("");
         rowhead.createCell( 2 ).setCellValue("");
         
@@ -51,7 +103,7 @@ public abstract class XLSGenerator
 			MeasurementSet measurementSet = ( MeasurementSet )set;
 			
 			CellRangeAddress mergedRegion = new CellRangeAddress( currRow, currRow, currColumn + 1, currColumn + measurementSet.getMeasurements().size() - 1 );
-	        sheet.addMergedRegion( mergedRegion );
+	        measurementSheet.addMergedRegion( mergedRegion );
 	        rowhead.createCell( currColumn + 1 ).setCellValue( measurementSet.getDevice().getName() );
 	        currColumn += ( measurementSet.getMeasurements().size() - 1 );
 			
@@ -59,8 +111,8 @@ public abstract class XLSGenerator
 		}
 		
 		//Add free cells above L.p. and Timestamp
-        HSSFRow rowVariable = sheet.createRow( 1 );
-        HSSFRow rowDimension = sheet.createRow( 2 );
+        HSSFRow rowVariable = measurementSheet.createRow( 1 );
+        HSSFRow rowDimension = measurementSheet.createRow( 2 );
         rowVariable.createCell( 1 ).setCellValue("L.p.");
         rowVariable.createCell( 2 ).setCellValue("Godzina");
         
@@ -93,7 +145,7 @@ public abstract class XLSGenerator
 		for( MeasurementSnapshot snapshot: MeasurementSnapshotManager.getAllMeasurementSnapshots( survey.getId() ) )
 		{	
 			currColumn = 1;
-			dataRow = sheet.createRow( currRow ); currRow++;
+			dataRow = measurementSheet.createRow( currRow ); currRow++;
 			
 			dataRow.createCell( currColumn ).setCellValue( String.valueOf( i ) ); currColumn++;
 			dataRow.createCell( currColumn ).setCellValue( hourFormater.format( snapshot.getTimestamp() ) ); currColumn++;
@@ -105,10 +157,9 @@ public abstract class XLSGenerator
 				{
 					if ( !( ( Measurement )measurement  ).getMeasurementVariable().getName().equalsIgnoreCase( "Process preassure" ) )
 					{
-						dataRow.createCell( currColumn ).setCellValue( String.valueOf( ( ( Measurement )measurement  ).getValue() ) ); currColumn++;
+						dataRow.createCell( currColumn ).setCellValue( ( ( Measurement )measurement  ).getValue() ); currColumn++;
 					}						
 				}
-				
 			}
 			
 			dataRow.createCell( currColumn ).setCellValue( snapshot.getComment() );

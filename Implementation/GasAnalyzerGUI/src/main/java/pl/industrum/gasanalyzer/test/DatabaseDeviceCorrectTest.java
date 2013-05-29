@@ -10,8 +10,6 @@ import org.eclipse.swt.widgets.Shell;
 import pl.industrum.gasanalyzer.hibernate.model.managers.DeviceManager;
 
 /**
- * Probably unused infuture
- * TODO remove or delete this info
  * 
  * @author duzydamian (Damian Karbowiak)
  * 

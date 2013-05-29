@@ -10,7 +10,8 @@ package pl.industrum.gasanalyzer.types;
 public enum Error
 {
 	NONE("E0000","",""),
-	CONNECTION_PROBLEM("E001", "Problem z połączeniem z wybraną siecią.", "");
+	CONNECTION_PROBLEM("E0001", "Problem z połączeniem z wybraną siecią.", ""),
+	DEVICE_ERROR("E2000", "Błąd w podanym urządzeniu", "");
 	
 	String code;
 	String message;

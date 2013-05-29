@@ -116,7 +116,7 @@ public class EditSurvey extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 460, 400 );
+		shell.setSize( 600, 440 );
 		shell.setText( getText() );
 		
 		surveyFrameData = new GridData( GridData.FILL, GridData.CENTER, true,
@@ -134,7 +134,7 @@ public class EditSurvey extends Dialog
 				.getString( "SurveyFrame.lblSurveyName.text" ) ); //$NON-NLS-1$
 
 		txtSurveyName = new Text( surveyForm, SWT.BORDER );
-		txtSurveyName.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
+		txtSurveyName.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 2, 1 ) );
 		txtSurveyName.addModifyListener( new ModifyListener()
 		{
@@ -152,7 +152,7 @@ public class EditSurvey extends Dialog
 				.getString( "SurveyFrame.lblSurveyDate.text" ) ); //$NON-NLS-1$
 
 		txtSurveyDate = new Text( surveyForm, SWT.BORDER );
-		txtSurveyDate.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
+		txtSurveyDate.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 1, 1 ) );
 		txtSurveyDate.setText( dateFormater.format( new Date() ) );;
 
@@ -179,7 +179,7 @@ public class EditSurvey extends Dialog
 
 		listSurveyUser = new Combo( surveyForm, SWT.NONE );
 		listSurveyUser.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
-				false, false, 1, 1 ) );
+				true, false, 1, 1 ) );
 		
 		refreshListSurveyUser();
 		
@@ -218,7 +218,7 @@ public class EditSurvey extends Dialog
 
 		listSurveyPlace = new Combo( surveyForm, SWT.NONE );
 		listSurveyPlace.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
-				false, false, 1, 1 ) );
+				true, false, 1, 1 ) );
 		refreshListSurveyPlace();
 		listSurveyPlace.addModifyListener( new ModifyListener()
 		{
@@ -260,7 +260,7 @@ public class EditSurvey extends Dialog
 
 		listSurveyObject = new Combo( surveyForm, SWT.NONE );
 		listSurveyObject.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
-				false, false, 1, 1 ) );
+				true, false, 1, 1 ) );
 		
 		listSurveyObject.addModifyListener( new ModifyListener()
 		{
@@ -298,7 +298,7 @@ public class EditSurvey extends Dialog
 
 		textSurveyLoad = new Text( surveyForm, SWT.BORDER );
 		textSurveyLoad.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
-				false, false, 2, 1 ) );
+				true, false, 2, 1 ) );
 		textSurveyLoad.addModifyListener( new ModifyListener()
 		{
 			
@@ -319,7 +319,7 @@ public class EditSurvey extends Dialog
 		styledTextSurveySpecialConditions = new StyledText( surveyForm,
 				SWT.BORDER | SWT.WRAP );
 		GridData gd_styledTextSurveySpecialConditions = new GridData(
-				SWT.FILL, SWT.CENTER, false, false, 2, 2 );
+				SWT.FILL, SWT.CENTER, true, false, 2, 2 );
 		gd_styledTextSurveySpecialConditions.heightHint = 48;
 		styledTextSurveySpecialConditions.setLayoutData( gd_styledTextSurveySpecialConditions );
 		styledTextSurveySpecialConditions.addModifyListener( new ModifyListener()
@@ -342,7 +342,7 @@ public class EditSurvey extends Dialog
 
 		styledTextComment = new StyledText( surveyForm, SWT.BORDER | SWT.WRAP );
 		GridData gd_styledTextComment = new GridData( SWT.FILL, SWT.FILL,
-				false, false, 2, 3 );
+				true, false, 2, 3 );
 		gd_styledTextComment.heightHint = 71;
 		styledTextComment.setLayoutData( gd_styledTextComment );
 		styledTextComment.addModifyListener( new ModifyListener()
@@ -422,17 +422,6 @@ public class EditSurvey extends Dialog
 			}			
 		}
 		
-		if ( survey.getObject().toString() != null )
-		{
-			int i = 0;
-			for( String objectInList: listSurveyObject.getItems() )
-			{
-				if( objectInList.equalsIgnoreCase( survey.getObject().toString() ) )
-					listSurveyObject.select( i );
-				i++;
-			}
-		}
-		
 		if ( survey.getObject().getPlace().toString() != null )
 		{
 			int i = 0;
@@ -440,6 +429,19 @@ public class EditSurvey extends Dialog
 			{
 				if( placeInList.equalsIgnoreCase( survey.getObject().getPlace().toString() ) )
 					listSurveyPlace.select( i );
+				i++;
+			}
+		}
+		
+		if ( survey.getObject().toString() != null )
+		{
+			refreshListSurveyObject( survey.getObject().getPlace().getId() );
+			
+			int i = 0;
+			for( String objectInList: listSurveyObject.getItems() )
+			{
+				if( objectInList.equalsIgnoreCase( survey.getObject().toString() ) )
+					listSurveyObject.select( i );
 				i++;
 			}
 		}
@@ -477,7 +479,7 @@ public class EditSurvey extends Dialog
 		try
 		{		
 			Integer userID = avaibleUsers.get( listSurveyUser.getSelectionIndex() ).getId();
-			Integer objectID = avaibleObjects.get( listSurveyPlace.getSelectionIndex() ).getId();
+			Integer objectID = avaibleObjects.get( listSurveyObject.getSelectionIndex() ).getId();
 			Date date = dateFormater.parse( txtSurveyDate.getText() );
 			SurveyManager.updateSurvey( editedSurveyID, txtSurveyName.getText(), textSurveyLoad.getText(), styledTextSurveySpecialConditions.getText(), styledTextComment.getText(), objectID, userID, date );
 			result = SurveyManager.getSurvey( editedSurveyID );

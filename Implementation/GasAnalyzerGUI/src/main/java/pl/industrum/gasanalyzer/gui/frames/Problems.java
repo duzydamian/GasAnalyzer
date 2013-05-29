@@ -1,5 +1,9 @@
 package pl.industrum.gasanalyzer.gui.frames;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -24,7 +28,9 @@ import pl.industrum.gasanalyzer.types.Warning;
  * 
  */
 public abstract class Problems extends Composite
-{//FIXME no show if empty, add extra data.
+{
+	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "dd/MM/yyyy HH:mm", Locale.getDefault() );
+	
 	private GridData compositeData;
 	private Composite body;
 	private GridData globaGridData;
@@ -65,7 +71,7 @@ public abstract class Problems extends Composite
 		folder.setMaximized(true);
 		folder.setUnselectedCloseVisible(false);
 		
-		columns = new String[] {"Kod", "Nazwa", "Opis", "Lokalizacja"};
+		columns = new String[] {"Czas wystąpienia", "Kod", "Nazwa", "Opis", "Źródło"};
 		
 		itemWarning = new CTabItem(folder, SWT.CLOSE);
 		itemWarning.setText("Warning");
@@ -180,11 +186,21 @@ public abstract class Problems extends Composite
 
 	public void addWarning(Warning warning, String source)
 	{
+		//check if warning with code per source existing in table
+		for( TableItem testedItem: tableWarning.getItems() )
+		{
+			if ( testedItem.getText(1).equalsIgnoreCase( warning.getCode() ) & testedItem.getText(4).equalsIgnoreCase( source ) )
+			{
+				return;
+			}
+		}
+		
 		TableItem item = new TableItem (tableWarning, SWT.NONE);
-		item.setText (0, warning.getCode());
-		item.setText (1, warning.getMessage());
-		item.setText (2, warning.getDescription());
-		item.setText (3, source);				
+		item.setText (0, dateFormater.format( new Date() ));
+		item.setText (1, warning.getCode());
+		item.setText (2, warning.getMessage());
+		item.setText (3, warning.getDescription());
+		item.setText (4, source);				
 		for (int i=0; i<columns.length; i++)
 		{
 			tableWarning.getColumn (i).pack ();
@@ -207,23 +223,33 @@ public abstract class Problems extends Composite
 	
 	public void addError(Error error, String source)
 	{
+		//check if error with code per source existing in table
+		for( TableItem testedItem: tableError.getItems() )
+		{
+			if ( testedItem.getText(1).equalsIgnoreCase( error.getCode() ) & testedItem.getText(4).equalsIgnoreCase( source ) )
+			{
+				return;
+			}
+		}		
+		
 		TableItem item = new TableItem (tableError, SWT.NONE);
-		item.setText (0, error.getCode());
-		item.setText (1, error.getMessage());
-		item.setText (2, error.getDescription());
-		item.setText (3, source);		
+		item.setText (0, dateFormater.format( new Date() ));
+		item.setText (1, error.getCode());
+		item.setText (2, error.getMessage());
+		item.setText (3, error.getDescription());
+		item.setText (4, source);		
 		for (int i=0; i<columns.length; i++)
 		{
 			tableError.getColumn (i).pack ();
 			tableError.getColumn (i).setMoveable(true);
 		}
 		
-		showError();
-		
 		if ( !isVisible() )
 		{
 			show();
 		}
+		
+		showError();
 	}
 	
 	public void showError()
