@@ -11,6 +11,7 @@ import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -68,6 +69,7 @@ public abstract class Device extends Composite
 	private Composite historyBody;
 	private Integer deviceID;
 	private Date lastDate;
+	private int historySize;
 
 	private Label lblCollectiveState;
 	private Label lblCollectiveStateMessage;
@@ -83,12 +85,8 @@ public abstract class Device extends Composite
 	{
 //TODO FIXME
 /*
- * history browsing
  * change refresh step to survey step
  * to many columns
- * load data on show
- * add more data in refresh from 10 to 25
- * 
  */
 		super( parent, style );
 //		compositeData = new GridData( GridData.FILL, GridData.GRAB_VERTICAL,
@@ -100,6 +98,7 @@ public abstract class Device extends Composite
 		this.deviceAddress = device.getDeviceAddress();
 		pl.industrum.gasanalyzer.model.Device deviceByAddress = DeviceManager.getDeviceByAddress( device.getDeviceAddress() );
 		this.deviceID = deviceByAddress.getId();
+		this.historySize = 25;
 		
 		item = treeItem;
 
@@ -191,6 +190,30 @@ public abstract class Device extends Composite
 		tableHistory = new Table (historyBody, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		tableHistory.setLinesVisible (true);
 		tableHistory.setHeaderVisible (true);
+		
+		tableHistory.addSelectionListener(new SelectionAdapter()
+		{
+			public void widgetSelected(SelectionEvent e)
+			{
+				TableItem item = ( TableItem )e.item;
+				if ( item.getText( ).equalsIgnoreCase( "Mniej..." ) )
+				{
+					if ( historySize > 10 )
+					{
+						historySize = historySize - 5;
+						refreshDeviceMeasurements();
+					}
+				}
+				else if ( item.getText().equalsIgnoreCase( "Więcej..." ) )
+				{
+					if ( historySize < 150 )
+					{
+						historySize = historySize + 5;
+						refreshDeviceMeasurements();
+					}
+				}
+			}
+		} );
 		
 		for (int i=0; i<columnsHistory.length; i++)
 		{
@@ -288,25 +311,28 @@ public abstract class Device extends Composite
 	
 	private void refreshDeviceMeasurements()
 	{
-		//TODO implement browse history
 		tableHistory.removeAll();
 		
-		TableItem itemNext = new TableItem( tableHistory, SWT.NONE );
-		itemNext.setText( 0, "" );
-		itemNext.setText( 1, "Następne" );
+		if ( historySize > 10 )
+		{
+			TableItem itemNext = new TableItem( tableHistory, SWT.NONE );
+			itemNext.setText( "Mniej..." );
+		}
 		
 		lastDate = new Date();
 		
-		for( MeasurementSet set: MeasurementSetManager.getAllMeasurementSets( lastDate, getSurveyID(), deviceID, 20 ) )
+		for( MeasurementSet set: MeasurementSetManager.getAllMeasurementSets( lastDate, getSurveyID(), deviceID, historySize ) )
 		{
 			TableItem item = new TableItem( tableHistory, SWT.NONE );
 			item.setText( 0, dateFormater.format( set.getTimestamp() ) );
 			item.setText( 1, set.toString() );
 		}
 		
-		TableItem itemPrevious = new TableItem( tableHistory, SWT.NONE );
-		itemPrevious.setText( 0, "" );
-		itemPrevious.setText( 1, "Poprzednie" );
+		if ( historySize < 50 )
+		{
+			TableItem itemPrevious = new TableItem( tableHistory, SWT.NONE );
+			itemPrevious.setText( "Więcej..." );
+		}		
 		
 		for (int i=0; i<columnsHistory.length; i++)
 		{
