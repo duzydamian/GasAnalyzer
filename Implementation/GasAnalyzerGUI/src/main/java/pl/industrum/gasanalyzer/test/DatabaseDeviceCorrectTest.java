@@ -52,5 +52,6 @@ public class DatabaseDeviceCorrectTest extends Test
 				messageDialog.open();
 			}
 		}
+		setPassed();
 	}
 }

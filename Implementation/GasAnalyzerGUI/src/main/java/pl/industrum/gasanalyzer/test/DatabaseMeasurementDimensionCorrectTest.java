@@ -53,5 +53,6 @@ public class DatabaseMeasurementDimensionCorrectTest extends Test
 				messageDialog.open();
 			}
 		}
+		setPassed();
 	}
 }
