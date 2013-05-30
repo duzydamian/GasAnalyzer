@@ -132,16 +132,21 @@ public class SplashScreen
 			public void run()
 			{
 				for (int i=0; i<testsCount; i++)
-				{													
-					try
+				{		
+					if ( allTestComplete )
 					{
-						stateLabel.setText(testVector.get(i).getName());
-						testVector.get(i).test();
-						Thread.sleep(100);
-					}
-					catch (Throwable e)
-					{
-						e.printStackTrace();
+						try
+						{
+							stateLabel.setText(testVector.get(i).getName());
+							testVector.get(i).test();
+							allTestComplete = testVector.get( i ).isPassed(); 
+							
+							Thread.sleep(100);
+						}
+						catch (Throwable e)
+						{
+							e.printStackTrace();
+						}
 					}
 					progressBar.setSelection(i+1);
 				}

@@ -60,7 +60,7 @@
 							jar-with-dependencies
 						</descriptorRef>
 					</descriptorRefs>
-					<finalName>GasAnalyzer${profile}${project.parent.version}</finalName>
+					<finalName>GasAnalyzer-${project.activeProfiles[0].id}-${project.parent.version}</finalName>
 				</configuration>
 			</plugin>
       <plugin>

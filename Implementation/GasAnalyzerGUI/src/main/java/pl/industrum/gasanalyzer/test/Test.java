@@ -18,7 +18,7 @@ public class Test
 	 */
 	public Test()
 	{
-		setPassed( false );
+		setFailed();
 	}
 
 	/**
@@ -27,7 +27,7 @@ public class Test
 	public Test( String testName )
 	{
 		setName( testName );
-		setPassed( false );
+		setFailed();
 	}
 
 	public void test()
@@ -50,9 +50,14 @@ public class Test
 		return passed;
 	}
 
-	public void setPassed( boolean passed )
+	public void setPassed()
 	{
-		this.passed = passed;
+		this.passed = true;
+	}
+	
+	public void setFailed()
+	{
+		this.passed = false;
 	}
 
 }

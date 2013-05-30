@@ -34,8 +34,16 @@ public class DatabaseConnectionTest extends Test
 
 	public void test()
 	{
-		Session session = Hibernate.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		session.getTransaction().commit();
+		try
+		{
+			Session session = Hibernate.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			session.getTransaction().commit();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			messageDialog.open();
+		}
 	}
 }

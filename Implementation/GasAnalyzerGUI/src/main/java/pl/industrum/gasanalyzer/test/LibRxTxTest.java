@@ -34,14 +34,16 @@ public class LibRxTxTest extends Test
 
 	public void test()
 	{
-		try{
+		try
+		{
 			GasAnalyzerGUI.setRXTXVersion( ELANConnection.getRXTXVersion() );
 			GasAnalyzerGUI.setNativeRXTXVersion( ELANConnection
 				.getNativeRXTXVersion() );
 		}
-		catch ( Exception e)
+		catch ( Throwable throwable )
 		{
-			
+			throwable.printStackTrace();
+			messageDialog.open();
 		}
 	}
 }
