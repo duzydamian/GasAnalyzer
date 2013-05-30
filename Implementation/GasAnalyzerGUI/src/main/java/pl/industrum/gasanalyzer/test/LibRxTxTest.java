@@ -45,5 +45,6 @@ public class LibRxTxTest extends Test
 			throwable.printStackTrace();
 			messageDialog.open();
 		}
+		setPassed();		
 	}
 }

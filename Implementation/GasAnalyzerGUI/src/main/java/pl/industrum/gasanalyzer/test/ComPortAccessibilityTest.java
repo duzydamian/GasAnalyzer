@@ -36,9 +36,15 @@ public class ComPortAccessibilityTest extends Test
 		try
 		{
 			if ( ELANConnection.vectorPorts().size() > 0 )
+			{
+				setPassed();
 				return;
+			}
 			else
+			{
+				setFailed();
 				messageDialog.open();
+			}
 		}
 		catch ( Throwable throwable )
 		{
