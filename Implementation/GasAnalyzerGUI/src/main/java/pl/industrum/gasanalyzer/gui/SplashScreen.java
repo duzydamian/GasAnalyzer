@@ -50,9 +50,7 @@ public class SplashScreen
 	{
 		super();
 		allTestComplete = true;
-		display = new Display();
-		testVector = new TestVector();
-		testsCount = testVector.size();
+		display = new Display();		
 		image = new Image(display, 400, 400);
 		gc = new GC(image);
 		gc.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
@@ -117,12 +115,16 @@ public class SplashScreen
 		progressBar.setLayoutData(progressBarData);
 		
 		splash.pack();
+		splash.layout();
 		
 		splashRect = splash.getBounds();
 		displayRect = display.getBounds();
 		
 		int x = (displayRect.width - splashRect.width) / 2;
 		int y = (displayRect.height - splashRect.height) / 2;
+		
+		testVector = new TestVector(splash.getShell());
+		testsCount = testVector.size();
 		
 		splash.setLocation(x, y);
 		splash.open();

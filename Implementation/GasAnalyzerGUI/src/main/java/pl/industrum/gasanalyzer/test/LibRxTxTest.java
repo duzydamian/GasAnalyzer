@@ -17,16 +17,15 @@ import pl.industrum.gasanalyzer.gui.GasAnalyzerGUI;
 public class LibRxTxTest extends Test
 {
 	private MessageBox messageDialog;
-	private Shell shell;
 	
 	/**
+	 * @param parentShell 
 	 * 
 	 */
-	public LibRxTxTest()
+	public LibRxTxTest(Shell parentShell)
 	{
 		super( "Testowanie biblioteki RxTx" );
-		shell = new Shell();
-		messageDialog = new MessageBox( shell, SWT.ICON_ERROR );
+		messageDialog = new MessageBox( parentShell, SWT.ICON_ERROR );
 		messageDialog.setText( "Błąd" );
 		messageDialog
 				.setMessage( "W systemie nie zainstalowano biblioteki RXTX! Odwiedź stronę projektu, aby znaleźć rozwiązanie problemu" );

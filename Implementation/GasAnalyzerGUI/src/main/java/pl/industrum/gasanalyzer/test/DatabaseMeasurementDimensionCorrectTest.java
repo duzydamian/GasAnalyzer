@@ -17,16 +17,15 @@ import pl.industrum.gasanalyzer.hibernate.model.dictionaries.MeasurementDimensio
 public class DatabaseMeasurementDimensionCorrectTest extends Test
 {	
 	private MessageBox messageDialog;
-	private Shell shell;
 	
 	/**
+	 * @param parentShell 
 	 * 
 	 */
-	public DatabaseMeasurementDimensionCorrectTest()
+	public DatabaseMeasurementDimensionCorrectTest(Shell parentShell)
 	{
 		super( "Testowanie słownika Measurement dimension z bazy danych" );
-		shell = new Shell();
-		messageDialog = new MessageBox( shell, SWT.ICON_WARNING );
+		messageDialog = new MessageBox( parentShell, SWT.ICON_WARNING );
 		messageDialog.setText( "Ostrzeżenie" );
 		messageDialog
 				.setMessage( "Problem z naprawieniem słownika Measurement dimension" );

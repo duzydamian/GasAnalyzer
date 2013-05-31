@@ -17,16 +17,15 @@ import pl.industrum.gasanalyzer.hibernate.model.dictionaries.DeviceTypeDictionar
 public class DatabaseDeviceTypeCorrectTest extends Test
 {	
 	private MessageBox messageDialog;
-	private Shell shell;
 	
 	/**
+	 * @param parentShell 
 	 * 
 	 */
-	public DatabaseDeviceTypeCorrectTest()
+	public DatabaseDeviceTypeCorrectTest(Shell parentShell)
 	{
 		super( "Testowanie słownika Device type z bazy danych" );
-		shell = new Shell();
-		messageDialog = new MessageBox( shell, SWT.ICON_WARNING );
+		messageDialog = new MessageBox( parentShell, SWT.ICON_WARNING );
 		messageDialog.setText( "Ostrzeżenie" );
 		messageDialog
 				.setMessage( "Problem z naprawieniem słownika Device type" );

@@ -17,16 +17,15 @@ import pl.industrum.gasanalyzer.hibernate.Hibernate;
 public class DatabaseConnectionTest extends Test
 {
 	private MessageBox messageDialog;
-	private Shell shell;
 	
 	/**
+	 * @param parentShell 
 	 * 
 	 */
-	public DatabaseConnectionTest()
+	public DatabaseConnectionTest(Shell parentShell)
 	{
 		super( "Testowanie połączenia do bazy danych" );
-		shell = new Shell();
-		messageDialog = new MessageBox( shell, SWT.ICON_ERROR );
+		messageDialog = new MessageBox( parentShell, SWT.ICON_ERROR );
 		messageDialog.setText( "Błąd" );
 		messageDialog
 				.setMessage( "Problem z połączeniem do bazy danych." );
