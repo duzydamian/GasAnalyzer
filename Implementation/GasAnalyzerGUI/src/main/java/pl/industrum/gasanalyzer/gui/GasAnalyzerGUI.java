@@ -66,7 +66,7 @@ public class GasAnalyzerGUI
 			{	
 				SplashScreen splashScreen = new SplashScreen();
 				splashScreen.open();
-				if ( splashScreen.isAllTestComplete() )
+	//			if ( splashScreen.isAllTestComplete() )
 				{				
 					GasAnalyzerMainWindow window = new GasAnalyzerMainWindow();
 					window.open();

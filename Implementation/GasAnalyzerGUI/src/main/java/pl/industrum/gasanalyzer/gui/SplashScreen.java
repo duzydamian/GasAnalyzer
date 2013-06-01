@@ -51,7 +51,7 @@ public class SplashScreen
 		super();
 		allTestComplete = true;
 		display = new Display();		
-		image = new Image(display, 400, 400);
+		image = new Image(display, 400, 400);		
 		gc = new GC(image);
 		gc.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
 		gc.fillRectangle(image.getBounds());
@@ -75,7 +75,7 @@ public class SplashScreen
 		industrumLogoData = new FormData();
 		industrumLogoData.left = new FormAttachment ((image.getBounds().width/2 - industrumLogo.getImage().getBounds().width/2)/4, 0);
 		industrumLogoData.bottom = new FormAttachment (50, -5);
-		industrumLogo.setLayoutData(industrumLogoData);
+		industrumLogo.setLayoutData(industrumLogoData);		
 	
 		imiueLogo = new Label(splash, SWT.NONE);
 		imiueLogo.setImage( UsefulImage.IMIUE_LOGO.getImage() );
@@ -127,6 +127,8 @@ public class SplashScreen
 		testsCount = testVector.size();
 		
 		splash.setLocation(x, y);
+		splash.pack();
+		splash.layout();
 		splash.open();
 		
 		display.asyncExec(new Runnable()
