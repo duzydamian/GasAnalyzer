@@ -1,6 +1,7 @@
 package pl.industrum.gasanalyzer.gui.dialogs;
 
 import java.util.HashMap;
+import java.util.Vector;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
@@ -49,6 +50,8 @@ public class DevicePreferences extends Dialog
 	private TableEditor editor;
 
 	private HashMap<String, Integer> currentStoredPrecision;
+	private Vector<Device> devicesCollection;
+	
 	private TableColumn addColumn;
 	private TableColumn addressColumn;
 	private TableColumn nameColumn;
@@ -147,7 +150,7 @@ public class DevicePreferences extends Dialog
 		device2.setBackground( 4, new Color( display, new RGB( 100, 100, 100 ) ) );
 		device2.setText( 4, "" );
 		
-		loadDevices();
+		loadDevicesFromDB();
 		
 		GridData gd_tableEditor = new GridData(SWT.FILL, SWT.FILL, true, true, 5, 1);
 		table.setLayoutData(gd_tableEditor);
@@ -349,23 +352,37 @@ public class DevicePreferences extends Dialog
 								new Label(shell, SWT.NONE);
 	}
 
-	private void loadDevices()
+	private void createTableForDevices()
+	{
+		
+	}
+	
+	private void loadPrecisionForDevices()
+	{
+		
+	}
+	
+	private void loadDevicesFromDB()
 	{
 		for( Device device: DeviceManager.getAllDevices() )
 		{
-			TableItem deviceItem = new TableItem( table, SWT.NONE );
-			deviceItem.setImage( 0, UsefulImage.PREFERENCES.getImage() );
-			deviceItem.setText( 1, Integer.toString( device.getAddress() ) );
-			deviceItem.setText( 2, device.getName() );
-			deviceItem.setText( 3, device.getDeviceType().getType() );
-			deviceItem.setText( 4, "2" );
-		}		
+			devicesCollection.add( device );
+		}
+//		for( Device device: DeviceManager.getAllDevices() )
+//		{
+//			TableItem deviceItem = new TableItem( table, SWT.NONE );
+//			deviceItem.setImage( 0, UsefulImage.PREFERENCES.getImage() );
+//			deviceItem.setText( 1, Integer.toString( device.getAddress() ) );
+//			deviceItem.setText( 2, device.getName() );
+//			deviceItem.setText( 3, device.getDeviceType().getType() );
+//			deviceItem.setText( 4, "2" );
+//		}		
 		
-		nameColumn.pack();
-		addressColumn.pack();
-		precisionColumn.pack();
-		typeColumn.pack();
-		addColumn.pack();
+//		nameColumn.pack();
+//		addressColumn.pack();
+//		precisionColumn.pack();
+//		typeColumn.pack();
+//		addColumn.pack();
 	}
 	
 	protected void saveAction()
