@@ -152,7 +152,7 @@ public class MeasurementPreferences extends Dialog
 							{
 								if ( validateAll() )
 								{
-									//saveAction();
+									saveAction();
 									shell.dispose();
 								}
 							}

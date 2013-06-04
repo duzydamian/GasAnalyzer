@@ -6,7 +6,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -131,7 +133,10 @@ public class DevicePreferences extends Dialog
 		device2.setText( 1, "9" );
 		device2.setText( 2, "Device 1" );
 		device2.setText( 3, "Ultramat 23/a" );
-		device2.setText( 4, "6" );
+		
+		//device2.setForeground( 4, new Color( display, new RGB( 100, 100, 100 ) ) );
+		device2.setBackground( 4, new Color( display, new RGB( 100, 100, 100 ) ) );
+		device2.setText( 4, "" );
 		
 		nameColumn.pack();
 		addressColumn.pack();
@@ -240,45 +245,48 @@ public class DevicePreferences extends Dialog
 							else
 							{
 								final Spinner precisionEditor = new Spinner( table, SWT.NONE );
-								if( column == 0 )
+								if( !item.getText( column ).contentEquals( "" ) )
 								{
-									precisionEditor.setMaximum( 12 );
-									precisionEditor.setMinimum( 1 );
-								}
-								else
-								{
-									precisionEditor.setMaximum( 4 );
-									precisionEditor.setMinimum( 0 );
-								}
-								Listener textListener = new Listener()
-								{
-									public void handleEvent ( final Event e )
+									if( column == 1 )
 									{
-										switch( e.type )
-										{
-											case SWT.FocusOut:
-												item.setText( column, Integer.toString( precisionEditor.getSelection() ) );
-												precisionEditor.dispose();
-												break;
-											case SWT.Traverse:
-												switch( e.detail )
-												{
-													case SWT.TRAVERSE_RETURN:
-														item.setText (column, Integer.toString( precisionEditor.getSelection() ) );
-													case SWT.TRAVERSE_ESCAPE:
-														precisionEditor.dispose ();
-														e.doit = false;
-												}
-												break;
-										}
+										precisionEditor.setMaximum( 12 );
+										precisionEditor.setMinimum( 1 );
 									}
-								};
-								
-								precisionEditor.addListener ( SWT.FocusOut, textListener );
-								precisionEditor.addListener ( SWT.Traverse, textListener );
-								editor.setEditor ( precisionEditor, item, i );
-								precisionEditor.setSelection( Integer.parseInt( item.getText( i ) ) );
-								precisionEditor.setFocus();
+									else
+									{
+										precisionEditor.setMaximum( 4 );
+										precisionEditor.setMinimum( 0 );
+									}
+									Listener textListener = new Listener()
+									{
+										public void handleEvent ( final Event e )
+										{
+											switch( e.type )
+											{
+												case SWT.FocusOut:
+													item.setText( column, Integer.toString( precisionEditor.getSelection() ) );
+													precisionEditor.dispose();
+													break;
+												case SWT.Traverse:
+													switch( e.detail )
+													{
+														case SWT.TRAVERSE_RETURN:
+															item.setText (column, Integer.toString( precisionEditor.getSelection() ) );
+														case SWT.TRAVERSE_ESCAPE:
+															precisionEditor.dispose ();
+															e.doit = false;
+													}
+													break;
+											}
+										}
+									};
+									
+									precisionEditor.addListener ( SWT.FocusOut, textListener );
+									precisionEditor.addListener ( SWT.Traverse, textListener );
+									editor.setEditor ( precisionEditor, item, i );
+									precisionEditor.setSelection( Integer.parseInt( item.getText( i ) ) );
+									precisionEditor.setFocus();
+								}
 							}
 							return;
 						}
@@ -353,6 +361,11 @@ public class DevicePreferences extends Dialog
 //		}
 //	}
 
+	private void buildDataStructure()
+	{
+		
+	}
+	
 	private boolean validateAll()
 	{
 		boolean isValid = true;
