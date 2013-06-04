@@ -49,14 +49,13 @@ public class DevicePreferences extends Dialog
 	private Table table;
 	private TableEditor editor;
 
-	private Vector<String> currentStoredPrecisions;
 	private Vector<Device> devicesCollection;
+	private HashMap<Integer, Device> devicesMap;
 	
 	private TableColumn addColumn;
 	private TableColumn addressColumn;
 	private TableColumn nameColumn;
 	private TableColumn typeColumn;
-	private TableColumn precisionColumn;
 	
 	/**
 	 * Create the dialog.
@@ -69,8 +68,8 @@ public class DevicePreferences extends Dialog
 		super( parent, style );
 		setText( "Preferencje urządzeń" );
 		
-		currentStoredPrecisions = new Vector<String>();
 		devicesCollection = new Vector<Device>();
+		devicesMap = new HashMap<Integer, Device>();
 	}
 
 	/**
@@ -117,43 +116,23 @@ public class DevicePreferences extends Dialog
 		addressColumn = new TableColumn( table, SWT.NONE );
 		nameColumn = new TableColumn( table, SWT.NONE );
 		typeColumn = new TableColumn( table, SWT.NONE );
-		precisionColumn = new TableColumn( table, SWT.NONE );
 		
 		addColumn.setText( "" );
 		addressColumn.setText( "adres" );
 		nameColumn.setText( "nazwa" );
 		typeColumn.setText( "typ" );
-		precisionColumn.setText( "dokładność" );
 		
 		addressColumn.pack();
 		nameColumn.pack();
 		typeColumn.pack();
-		precisionColumn.pack();
 		addColumn.pack();
 		
 		editor = new TableEditor( table );
 		editor.horizontalAlignment = SWT.LEFT;
 		editor.grabHorizontal = true;
 		
-		TableItem device = new TableItem( table, SWT.NONE );
-		device.setImage( 0, UsefulImage.PREFERENCES.getImage() );
-		device.setText( 1, "12" );
-		device.setText( 2, "Device 0" );
-		device.setText( 3, "Ultramat 23" );
-		device.setText( 4, "2" );
-		
-		
-		TableItem device2 = new TableItem( table, SWT.NONE );
-		device2.setImage( 0, UsefulImage.PREFERENCES.getImage() );
-		device2.setText( 1, "9" );
-		device2.setText( 2, "Device 1" );
-		device2.setText( 3, "Ultramat 23/a" );
-		
-		//device2.setForeground( 4, new Color( display, new RGB( 100, 100, 100 ) ) );
-		device2.setBackground( 4, new Color( display, new RGB( 100, 100, 100 ) ) );
-		device2.setText( 4, "" );
-		
 		loadDevicesFromDB();
+		addDevicesToTable();
 		
 		GridData gd_tableEditor = new GridData(SWT.FILL, SWT.FILL, true, true, 5, 1);
 		table.setLayoutData(gd_tableEditor);
@@ -179,8 +158,8 @@ public class DevicePreferences extends Dialog
 							
 							if( column == 0 )
 							{
-								MeasurementPreferences preferences = new MeasurementPreferences( getParent(), SWT.NONE );
-								//tempResults.putAll( preferences.open( variables ) ); 
+								MeasurementPreferences preferences = new MeasurementPreferences( getParent(), SWT.NONE, devicesMap.get( index ) );
+								preferences.open();
 							}
 							else if( column == 2 )
 							{
@@ -254,52 +233,6 @@ public class DevicePreferences extends Dialog
 								deviceType.setText( item.getText( i ) );
 								deviceType.setFocus();
 							}
-							else
-							{
-								final Spinner precisionEditor = new Spinner( table, SWT.NONE );
-								if( !item.getText( column ).contentEquals( "" ) )
-								{
-									if( column == 1 )
-									{
-										precisionEditor.setMaximum( 12 );
-										precisionEditor.setMinimum( 1 );
-									}
-									else
-									{
-										precisionEditor.setMaximum( 4 );
-										precisionEditor.setMinimum( 0 );
-									}
-									Listener textListener = new Listener()
-									{
-										public void handleEvent ( final Event e )
-										{
-											switch( e.type )
-											{
-												case SWT.FocusOut:
-													item.setText( column, Integer.toString( precisionEditor.getSelection() ) );
-													precisionEditor.dispose();
-													break;
-												case SWT.Traverse:
-													switch( e.detail )
-													{
-														case SWT.TRAVERSE_RETURN:
-															item.setText (column, Integer.toString( precisionEditor.getSelection() ) );
-														case SWT.TRAVERSE_ESCAPE:
-															precisionEditor.dispose ();
-															e.doit = false;
-													}
-													break;
-											}
-										}
-									};
-									
-									precisionEditor.addListener ( SWT.FocusOut, textListener );
-									precisionEditor.addListener ( SWT.Traverse, textListener );
-									editor.setEditor ( precisionEditor, item, i );
-									precisionEditor.setSelection( Integer.parseInt( item.getText( i ) ) );
-									precisionEditor.setFocus();
-								}
-							}
 							return;
 						}
 						if (!visible && rect.intersects( clientArea ) )
@@ -354,26 +287,22 @@ public class DevicePreferences extends Dialog
 								new Label(shell, SWT.NONE);
 								new Label(shell, SWT.NONE);
 	}
-
-	private void createTableForDevices()
+	
+	private void addDevicesToTable()
 	{
 		for( Device device: devicesCollection )
 		{
-			for( String measurement: device.getMeasurementPrecisionMap().keySet() )
-			{
-				if( !isPrecisionStored( measurement ) )
-				{
-					currentStoredPrecisions.add( measurement );
-				}
-			}
-		}
+			TableItem deviceItem = new TableItem( table, SWT.NONE );
+			deviceItem.setImage( 0, UsefulImage.PREFERENCES.getImage() );
+			deviceItem.setText( 1, Integer.toString( device.getAddress() ) );
+			deviceItem.setText( 2, device.getName() );
+			deviceItem.setText( 3, device.getDeviceType().getType() );
+		}		
 		
-		
-	}
-	
-	private void loadPrecisionForDevices()
-	{
-		
+		nameColumn.pack();
+		addressColumn.pack();
+		typeColumn.pack();
+		addColumn.pack();
 	}
 	
 	private void loadDevicesFromDB()
@@ -382,33 +311,6 @@ public class DevicePreferences extends Dialog
 		{
 			devicesCollection.add( device );
 		}
-//		for( Device device: DeviceManager.getAllDevices() )
-//		{
-//			TableItem deviceItem = new TableItem( table, SWT.NONE );
-//			deviceItem.setImage( 0, UsefulImage.PREFERENCES.getImage() );
-//			deviceItem.setText( 1, Integer.toString( device.getAddress() ) );
-//			deviceItem.setText( 2, device.getName() );
-//			deviceItem.setText( 3, device.getDeviceType().getType() );
-//			deviceItem.setText( 4, "2" );
-//		}		
-		
-//		nameColumn.pack();
-//		addressColumn.pack();
-//		precisionColumn.pack();
-//		typeColumn.pack();
-//		addColumn.pack();
-	}
-	
-	private boolean isPrecisionStored( String precision )
-	{
-		for( String iteratedPrecision : currentStoredPrecisions )
-		{
-			if( iteratedPrecision.equalsIgnoreCase( precision ) )
-			{
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	protected void saveAction()
