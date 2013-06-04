@@ -81,9 +81,6 @@ public class DevicePreferences extends Dialog
 	{
 		createContents();
 		
-		XmlParser xmlParser = new XmlParser( devicesCollection );
-		//TODO implement parse device configuration and add to window
-		
 		shell.open();
 		shell.layout();
 		display = getParent().getDisplay();
@@ -132,6 +129,8 @@ public class DevicePreferences extends Dialog
 		editor.grabHorizontal = true;
 		
 		loadDevicesFromDB();
+		XmlParser xmlParser = new XmlParser( devicesCollection );
+		devicesCollection = xmlParser.getDevicesFromDatabaseWithPrecision();
 		addDevicesToTable();
 		
 		GridData gd_tableEditor = new GridData(SWT.FILL, SWT.FILL, true, true, 5, 1);
@@ -307,9 +306,12 @@ public class DevicePreferences extends Dialog
 	
 	private void loadDevicesFromDB()
 	{
+		Integer index = 0;
 		for( Device device: DeviceManager.getAllDevices() )
 		{
 			devicesCollection.add( device );
+			devicesMap.put( index, device );
+			index++;
 		}
 	}
 	

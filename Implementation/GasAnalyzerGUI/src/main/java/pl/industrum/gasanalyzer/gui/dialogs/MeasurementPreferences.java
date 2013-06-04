@@ -100,14 +100,17 @@ public class MeasurementPreferences extends Dialog
 		table.setHeaderVisible( true );
 		table.setLinesVisible( true );
 		
+		editor = new TableEditor( table );
+		editor.horizontalAlignment = SWT.LEFT;
+		editor.grabHorizontal = true;
+		
 		nameColumn = new TableColumn( table, SWT.NONE );
 		precisionColumn = new TableColumn( table, SWT.NONE );
 		
 		nameColumn.setText( "nazwa" );
 		precisionColumn.setText( "precyzja" );
 
-		for( MeasurementVariable variable: MeasurementVariableDictionary
-				.getAll() )
+		for( MeasurementVariable variable: MeasurementVariableDictionary.getAll() )
 		{
 			String name = variable.getName();
 			if ( !name.isEmpty() && !name.equalsIgnoreCase( "no component" ) )
@@ -116,6 +119,7 @@ public class MeasurementPreferences extends Dialog
 				item.setText( 0, name );
 				if( device.getMeasurementPrecisionMap().containsKey( name ) )
 				{
+					item.setChecked( true );
 					item.setText( 1, device.getMeasurementPrecisionMap().get( name ).toString() );
 				}
 				else
@@ -125,7 +129,10 @@ public class MeasurementPreferences extends Dialog
 				}
 			}
 		}
-
+		
+		nameColumn.pack();
+		precisionColumn.pack();
+		
 		Rectangle clientArea = shell.getClientArea();
 		table.setBounds( clientArea.x, clientArea.y, 100, 100 );
 		table.addListener( SWT.Selection, new Listener()
@@ -134,62 +141,64 @@ public class MeasurementPreferences extends Dialog
 			{
 				if ( event.detail == SWT.CHECK )
 				{
-					String name = event.item.toString();
-					if ( device.getMeasurementPrecisionMap().containsKey( name ) )
+					TableItem item = ( TableItem )event.item;
+					if( item.getBackground(1).equals(  new Color( display, new RGB( 255, 255, 255 ) ) ) )
 					{
-						if ( device.getMeasurementPrecisionMap().get( name ) == 0 )
-						{
-							device.getMeasurementPrecisionMap().remove( name );
-							device.getMeasurementPrecisionMap().put( name, 1 );
-						} 
-						else
-						{
-							device.getMeasurementPrecisionMap().remove( name );
-							device.getMeasurementPrecisionMap().put( name, 0 );
-						}
-					} 
+						item.setBackground( 1, new Color( display, new RGB( 100, 100, 100 ) ) );
+						item.setText( 1, "" );
+					}
 					else
 					{
-						device.getMeasurementPrecisionMap().put( name, 1 );
+						item.setBackground( 1, new Color( display, new RGB( 255, 255, 255 ) ) );
 					}
 				}
 				else
 				{
 					final TableItem item = ( TableItem )event.item;
 					
-					final Spinner precisionEditor = new Spinner( table, SWT.NONE );
-					precisionEditor.setMaximum( 4 );
-					precisionEditor.setMinimum( 0 );
-					
-					Listener textListener = new Listener()
+					if( item.getChecked() )
 					{
-						public void handleEvent ( final Event e )
+						final Spinner precisionEditor = new Spinner( table, SWT.NONE );
+						precisionEditor.setMaximum( 4 );
+						precisionEditor.setMinimum( 0 );					
+						
+						Listener textListener = new Listener()
 						{
-							switch( e.type )
+							public void handleEvent ( final Event e )
 							{
-								case SWT.FocusOut:
-									item.setText( 1, Integer.toString( precisionEditor.getSelection() ) );
-									precisionEditor.dispose();
-									break;
-								case SWT.Traverse:
-									switch( e.detail )
-									{
-										case SWT.TRAVERSE_RETURN:
-											item.setText (1, Integer.toString( precisionEditor.getSelection() ) );
-										case SWT.TRAVERSE_ESCAPE:
-											precisionEditor.dispose ();
-											e.doit = false;
-									}
-									break;
+								switch( e.type )
+								{
+									case SWT.FocusOut:
+										item.setText( 1, Integer.toString( precisionEditor.getSelection() ) );
+										precisionEditor.dispose();
+										break;
+									case SWT.Traverse:
+										switch( e.detail )
+										{
+											case SWT.TRAVERSE_RETURN:
+												item.setText (1, Integer.toString( precisionEditor.getSelection() ) );
+											case SWT.TRAVERSE_ESCAPE:
+												precisionEditor.dispose ();
+												e.doit = false;
+										}
+										break;
+								}
 							}
+						};
+						
+						precisionEditor.addListener ( SWT.FocusOut, textListener );
+						precisionEditor.addListener ( SWT.Traverse, textListener );
+						editor.setEditor ( precisionEditor, item, 1 );
+						if( item.getText( 1 ).isEmpty() )
+						{
+							precisionEditor.setSelection( 2 );
 						}
-					};
-					
-					precisionEditor.addListener ( SWT.FocusOut, textListener );
-					precisionEditor.addListener ( SWT.Traverse, textListener );
-					editor.setEditor ( precisionEditor, item, 1 );
-					precisionEditor.setSelection( Integer.parseInt( item.getText( 1 ) ) );
-					precisionEditor.setFocus();
+						else
+						{
+							precisionEditor.setSelection( Integer.parseInt( item.getText( 1 ) ) );
+						}
+						precisionEditor.setFocus();
+					}
 				}
 			}
 		} );
