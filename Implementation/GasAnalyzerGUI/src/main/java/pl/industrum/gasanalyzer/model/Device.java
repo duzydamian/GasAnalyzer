@@ -25,6 +25,7 @@ public class Device implements java.io.Serializable
 
 	public Device()
 	{
+		measurementPrecision = new HashMap<String, Integer>();
 	}
 
 	public Device( int id, DeviceType deviceType, String name, int address )

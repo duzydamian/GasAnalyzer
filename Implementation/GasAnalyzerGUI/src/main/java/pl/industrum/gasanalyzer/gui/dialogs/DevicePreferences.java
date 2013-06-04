@@ -81,7 +81,7 @@ public class DevicePreferences extends Dialog
 	{
 		createContents();
 		
-		XmlParser xmlParser = new XmlParser();
+		XmlParser xmlParser = new XmlParser( devicesCollection );
 		//TODO implement parse device configuration and add to window
 		
 		shell.open();
@@ -316,7 +316,7 @@ public class DevicePreferences extends Dialog
 	protected void saveAction()
 	{
 		//TODO forward precision to creator per device
-		XmlCreator xmlCreator = new XmlCreator(table.getItems());		
+		XmlCreator xmlCreator = new XmlCreator( devicesCollection );		
 		result = xmlCreator.getXml();
 		
 	}
