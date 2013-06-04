@@ -13,6 +13,8 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.eclipse.swt.widgets.TableItem;
 
+import pl.industrum.gasanalyzer.model.Device;
+
 /**
  * @author duzydamian (Damian Karbowiak)
  *
@@ -26,23 +28,26 @@ public class XmlCreator
 	 * @param tableItems 
 	 * 
 	 */
-	public XmlCreator(TableItem[] tableItems)
+	public XmlCreator(Device devicesList)
 	{
 		xml = DocumentHelper.createDocument();
 		xml.setXMLEncoding("UTF-8");
 		Element devices = xml.addElement( "devices" );		
 		
-		for( TableItem item: tableItems )
+		//for( Device device: devicesList )
 		{
-			Element device = devices.addElement( "device" );		
-			device.addAttribute( "name", item.getText( 2 ) );
-			device.addAttribute( "address", item.getText( 1 ) );
-			device.addAttribute( "type", item.getText( 3 ) );
+//			Element deviceElement = devices.addElement( "device" );		
+//			deviceElement.addAttribute( "name", device.getName() );
+//			deviceElement.addAttribute( "address", String.valueOf( device.getAddress() ) );
+//			deviceElement.addAttribute( "type", device.getDeviceType().getType() );
 			
 			//TODO add precision definition
-			Element measured_value = device.addElement( "measured_value" );
-			measured_value.addAttribute( "name", "todo" );
-			measured_value.addAttribute( "precision", "todo" );
+			//for( iterable_type iterable_element: device.get )
+			{
+//				Element measured_value = deviceElement.addElement( "measured_value" );
+//				measured_value.addAttribute( "name", device );
+//				measured_value.addAttribute( "precision", device );
+			}			
 		}
 		
 		try{
