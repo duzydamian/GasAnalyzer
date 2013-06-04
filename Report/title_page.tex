@@ -1,56 +1,29 @@
-%\documentclass[a4paper,12pt]{report}
-\documentclass[a4paper,12pt]{article}
-%\documentclass[a4paper,12pt]{book}
-\usepackage{polski}
-\usepackage[polish]{babel}
-\usepackage[utf8]{inputenc}
-\usepackage[top=2.5cm, bottom=2.5cm, left=3cm, right=2.5cm]{geometry}
-\usepackage{graphicx}
-\usepackage{setspace}
-\usepackage{ifthen}
-%\usepackage[utf8]{inputenc}
-\usepackage{a4wide}
-\usepackage{fullpage}
-\usepackage{verbatim}
-\usepackage[usenames,dvipsnames]{color}
-\usepackage{hyperref}
-\usepackage{subfig}
-\usepackage{listings}
-\usepackage{mdwlist}
-\usepackage{titlesec}
-\usepackage{lipsum}
+\begin{titlepage}
+  \begin{center}\Large
+  Politechnika Śląska w Gliwicach\\
+  Wydział Automatyki, Elektroniki i Informatyki
+  \vskip 2cm
+  \includegraphics[width=5cm]{images/logo.png}
+  \vskip 2cm
+  \Huge{\textbf{\przedmiot}}
 
-\hypersetup{
-	bookmarks=true,
-	pdftitle={Zdalne laboratorium},
-	pdfauthor={Damian Karbowiak},
-	pdfsubject={Zdalne laboratorium},
-	pdfkeywords={Zdalny, laboratorium, przemysł, przemysłówka, psp, sip},
-	colorlinks=true,
-	linkcolor=Blue,
-	urlcolor=Blue
-	}
+  \Large{\emph {Projekt --~Sprawozdanie}}
+  \vskip 2em
 
-\let\subsubsubsection\paragraph
-%\setcounter{secnumdepth}{6} % subsubparagraph ???
-% that is, subsubsubsubsubsection :-)
-\setcounter{secnumdepth}{4}
+  \LARGE{\emph{\tytul}}
+  \vskip 4cm
+  \end{center}
 
-\titlespacing{\section}{1cm}{*4}{*1.5}
-\titlespacing{\subsection}{1cm}{*4}{*1.5}
-\titlespacing{\subsubsection}{1cm}{*4}{*1.5}
+  \begin{flushright}
+  \Large{\textbf{\autor}}\\
+  \Large{\textbf{\sem}}\\
+  \Large{\textbf{\prow}}
+  \end{flushright}
 
-\begin{document}
-\lstset{backgroundcolor=\color{white}, boxpos=c, captionpos=b}
-\lstset{numbers=left, stepnumber=1, numbersep=10pt, frame=single}
-\lstset{frameround=tttt}
-\renewcommand{\lstlistlistingname}{\vspace*{-13mm}}
-\renewcommand{\listfigurename}{\vspace*{-13mm}}
-%\renewcommand*\l@figure[2]{\indent}
-\renewcommand{\listtablename}{\vspace*{-13mm}}
-\renewcommand*{\refname}{\vspace*{-13mm}}
-\renewcommand{\lstlistingname}{Kod źródłowy} 
+  \vfil
+  \begin{center}
+  \Large{\today}
+  \end{center}
 
-XYZ
 
-\end{document}
+\end{titlepage}

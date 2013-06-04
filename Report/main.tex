@@ -22,10 +22,10 @@
 
 \hypersetup{
 	bookmarks=true,
-	pdftitle={Zdalne laboratorium},
-	pdfauthor={Damian Karbowiak},
-	pdfsubject={Zdalne laboratorium},
-	pdfkeywords={Zdalny, laboratorium, przemysł, przemysłówka, psp, sip},
+	pdftitle={GasAnalyzer},
+	pdfauthor={Damian Karbowiak, Grzegorz Powała},
+	pdfsubject={GasAnalyzer},
+	pdfkeywords={GasAnalyzer, Siemens, przemysł, przemysłówka, ppsk},
 	colorlinks=true,
 	linkcolor=Blue,
 	urlcolor=Blue
@@ -40,6 +40,12 @@
 \titlespacing{\subsection}{1cm}{*4}{*1.5}
 \titlespacing{\subsubsection}{1cm}{*4}{*1.5}
 
+\def\tytul{GasAnalyzer}
+\def\przedmiot{Projektowanie przemysłowych systemów komputerowych}
+\def\autor{Autorzy: Damian Karbowiak, Grzegorz Powała}
+\def\sem{Informatyka, SSM3, grupa ISP1}
+\def\prow{Prowadzący: dr inż. Jacek Stój}
+
 \begin{document}
 \lstset{backgroundcolor=\color{white}, boxpos=c, captionpos=b}
 \lstset{numbers=left, stepnumber=1, numbersep=10pt, frame=single}
@@ -50,7 +56,26 @@
 \renewcommand{\listtablename}{\vspace*{-13mm}}
 \renewcommand*{\refname}{\vspace*{-13mm}}
 \renewcommand{\lstlistingname}{Kod źródłowy} 
+\input{./title_page.tex}
 
-XYZ
+\tableofcontents 
+\addtocontents{toc}{\protect\vspace*{\baselineskip}}
+\clearpage
+
+\include{introduction} %
+\include{user_manual} %
+\include{bibliography} %
+\section{Spis rysunków, tablic i kodów źródłowych}
+\subsection{Spis rysunków}
+%\listoffigures
+\renewcommand*\numberline[1]{Rysunek\,#1:\indent}
+\listoffigures
+\subsection{Spis tablic}
+\renewcommand*\numberline[1]{Tablica\,#1:\indent}
+\listoftables
+\subsection{Spis kodów źródłowych}
+\renewcommand*\numberline[1]{Kod źródłowy\,#1:\indent}
+\lstlistoflistings
+\include{attachement} %
 
 \end{document}
