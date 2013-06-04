@@ -1,6 +1,7 @@
 package pl.industrum.gasanalyzer.gui.dialogs;
 
 import java.util.HashMap;
+import java.util.Vector;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
@@ -49,6 +50,8 @@ public class DevicePreferences extends Dialog
 	private TableEditor editor;
 
 	private HashMap<String, Integer> currentStoredPrecision;
+	private Vector<Device> devicesCollection;
+	
 	private TableColumn addColumn;
 	private TableColumn addressColumn;
 	private TableColumn nameColumn;

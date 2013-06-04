@@ -55,6 +55,11 @@ public class Device implements java.io.Serializable
 		this.measurementPrecision.putAll( measurementPrecision );
 	}
 	
+	public HashMap<String, Integer> getMeasurementPrecisionMap()
+	{
+		return measurementPrecision;
+	}
+	
 	public int getId()
 	{
 		return this.id;
