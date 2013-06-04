@@ -15,6 +15,7 @@ import pl.industrum.gasanalyzer.model.Measurement;
 import pl.industrum.gasanalyzer.model.MeasurementSet;
 import pl.industrum.gasanalyzer.model.MeasurementSnapshot;
 import pl.industrum.gasanalyzer.model.Survey;
+import pl.industrum.gasanalyzer.types.Formater;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
 import com.itextpdf.text.Chunk;
@@ -42,11 +43,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 @SuppressWarnings( "unused" )
 public abstract class PDFGenerator
 {
-	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "dd/MM/yyyy", Locale.getDefault() );
-	private static SimpleDateFormat hourFormater = new SimpleDateFormat( "HH:mm:ss", Locale.getDefault() );
-	
-	private static NumberFormat nf = NumberFormat.getInstance();
-    
 	static BaseFont font;
     
 	private Font czcionka2;
@@ -185,7 +181,7 @@ public abstract class PDFGenerator
 			surveyData.add(new Chunk(survey.getName(), czcionka16b));
 			surveyData.add("\n");
 			surveyData.add(new Chunk("Data pomiarów: ", czcionka16));
-			surveyData.add(new Chunk(dateFormater.format( survey.getTimestamp() ), czcionka16b));
+			surveyData.add(new Chunk(Formater.getDateFormater().format( survey.getTimestamp() ), czcionka16b));
 			surveyData.add("\n");
 			surveyData.add(new Chunk("Miejsce: ", czcionka16));
 			surveyData.add(new Chunk(survey.getObject().getPlace().toString(), czcionka16b));
@@ -264,7 +260,7 @@ public abstract class PDFGenerator
 			for( MeasurementSnapshot snapshot: MeasurementSnapshotManager.getAllMeasurementSnapshots( survey.getId() ) )
 			{				
 				measurementSnapshotList.addCell(new PdfPCell(new Paragraph(String.valueOf(i),czcionka10)));
-				measurementSnapshotList.addCell(new PdfPCell(new Paragraph(hourFormater.format( snapshot.getTimestamp() ),czcionka10)));
+				measurementSnapshotList.addCell(new PdfPCell(new Paragraph(Formater.getHourFormater().format( snapshot.getTimestamp() ),czcionka10)));
 				for( Object set: snapshot.getMeasurementSetsSorted() )
 				{
 					MeasurementSet measurementSet = ( MeasurementSet )set;
@@ -276,15 +272,15 @@ public abstract class PDFGenerator
 							String valueAsString = "";
 							if ( measurement2.getMeasurementDimension().getId() < 8 )
 							{
-								valueAsString = StringRet( measurement2.getValue(), 0 );
+								valueAsString = Formater.doubleWithPrecisionAsString( measurement2.getValue(), 0 );
 							}
 							else if ( measurement2.getMeasurementVariable().getId() == 4 )
 							{
-								valueAsString = StringRet( measurement2.getValue(), 3 );
+								valueAsString = Formater.doubleWithPrecisionAsString( measurement2.getValue(), 3 );
 							} 
 							else
 							{
-								valueAsString = StringRet( measurement2.getValue(), 2 );
+								valueAsString = Formater.doubleWithPrecisionAsString( measurement2.getValue(), 2 );
 							}
 							PdfPCell pdfPCell = new PdfPCell( new Paragraph( valueAsString, czcionka10 ) );
 							pdfPCell.setHorizontalAlignment( PdfPCell.ALIGN_CENTER );
@@ -330,41 +326,7 @@ public abstract class PDFGenerator
     public void open(String path)
     {
             Program.launch( path );
-    }
-    
-    public static double doubleRet(double value, int precision)
-    {
-        return new BigDecimal(value).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue();
-    }
-
-    public static double doubleRet(String value, int precision)
-    {
-        return new BigDecimal(value).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue();
-    }
-
-    public static Double DoubleRet(double value, int precision)
-    {
-        return new BigDecimal(value).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue();
-    }
-
-    public static Double DoubleRet(String value, int precision)
-    {
-        return new BigDecimal(value).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue();
-    }
-
-    public static String StringRet(double value, int precision)
-    {
-        nf.setMaximumFractionDigits(precision);
-        nf.setMinimumFractionDigits(precision);
-        return nf.format(new BigDecimal(value).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue()).replace(".", ",");
-    }
-
-    public static String StringRet(String value, int precision)
-    {
-        nf.setMaximumFractionDigits(precision);
-        nf.setMinimumFractionDigits(precision);
-        return nf.format(new BigDecimal(value.replace(',', '.')).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue()).replace(".", ",");
-    }
+    }   
     
     public abstract void progressIncrement();
     

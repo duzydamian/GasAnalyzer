@@ -7,9 +7,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -21,7 +19,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -32,7 +29,6 @@ import pl.industrum.gasanalyzer.hibernate.model.managers.DeviceManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
 import pl.industrum.gasanalyzer.model.Device;
 import pl.industrum.gasanalyzer.model.DeviceType;
-import pl.industrum.gasanalyzer.model.MeasurementVariable;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 import pl.industrum.gasanalyzer.xml.XmlCreator;
 import pl.industrum.gasanalyzer.xml.XmlParser;
@@ -108,7 +104,7 @@ public class DevicePreferences extends Dialog
 		table.setHeaderVisible( true );
 		table.setLinesVisible( true );
 		
-
+		//TODO maybe add column with current set precisions
 		addColumn = new TableColumn( table, SWT.NONE );
 		addressColumn = new TableColumn( table, SWT.NONE );
 		nameColumn = new TableColumn( table, SWT.NONE );
@@ -321,10 +317,9 @@ public class DevicePreferences extends Dialog
 	
 	protected void saveAction()
 	{
-		//TODO forward precision to creator per device
+		//TODO add update devices in DB
 		XmlCreator xmlCreator = new XmlCreator( devicesCollection );		
-		result = xmlCreator.getXml();
-		
+		result = xmlCreator.getXml();	
 	}
 //	
 //	private boolean validateName()
