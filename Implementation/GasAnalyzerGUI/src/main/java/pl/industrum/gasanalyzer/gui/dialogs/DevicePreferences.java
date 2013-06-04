@@ -49,7 +49,7 @@ public class DevicePreferences extends Dialog
 	private Table table;
 	private TableEditor editor;
 
-	private HashMap<String, Integer> currentStoredPrecision;
+	private Vector<String> currentStoredPrecisions;
 	private Vector<Device> devicesCollection;
 	
 	private TableColumn addColumn;
@@ -68,6 +68,9 @@ public class DevicePreferences extends Dialog
 	{
 		super( parent, style );
 		setText( "Preferencje urządzeń" );
+		
+		currentStoredPrecisions = new Vector<String>();
+		devicesCollection = new Vector<Device>();
 	}
 
 	/**
@@ -354,6 +357,17 @@ public class DevicePreferences extends Dialog
 
 	private void createTableForDevices()
 	{
+		for( Device device: devicesCollection )
+		{
+			for( String measurement: device.getMeasurementPrecisionMap().keySet() )
+			{
+				if( !isPrecisionStored( measurement ) )
+				{
+					currentStoredPrecisions.add( measurement );
+				}
+			}
+		}
+		
 		
 	}
 	
@@ -383,6 +397,18 @@ public class DevicePreferences extends Dialog
 //		precisionColumn.pack();
 //		typeColumn.pack();
 //		addColumn.pack();
+	}
+	
+	private boolean isPrecisionStored( String precision )
+	{
+		for( String iteratedPrecision : currentStoredPrecisions )
+		{
+			if( iteratedPrecision.equalsIgnoreCase( precision ) )
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	protected void saveAction()
