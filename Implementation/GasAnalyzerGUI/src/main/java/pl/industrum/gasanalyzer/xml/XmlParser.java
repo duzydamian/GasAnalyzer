@@ -27,12 +27,14 @@ public class XmlParser
 {
 
 	private Document xml;
+	Vector<Device> devicesFromDatabaseWithPrecision;
 
 	/**
 	 * 
 	 */
 	public XmlParser(Vector<Device> devicesFromDatabase)
 	{		
+		devicesFromDatabaseWithPrecision = devicesFromDatabase;
         try
 		{
         	SAXReader reader = new SAXReader();
@@ -48,12 +50,15 @@ public class XmlParser
 			// iterate through child elements of root
 	        for ( Iterator<?> i = devices.elementIterator(); i.hasNext(); )
 	        {
+	        	int id = 0;
 	            Element device = (Element) i.next();
 	            for( Iterator<?> i2 = device.attributeIterator(); i2.hasNext(); )
 				{
-					Attribute deviceAattribute = ( Attribute ) i2.next();
-					deviceAattribute.getName();
-					deviceAattribute.getValue();
+					Attribute deviceAattribute = ( Attribute ) i2.next();					
+					if ( deviceAattribute.getName().equalsIgnoreCase( "id" ) )
+					{
+						id = Integer.valueOf( deviceAattribute.getValue() );
+					}
 				}
 	            
 	            for ( Iterator<?> i3 = device.elementIterator(); i3.hasNext(); )
@@ -62,9 +67,17 @@ public class XmlParser
 	            	Element measuredValue = (Element) i3.next();
 	            	for( Iterator<?> i4 = measuredValue.attributeIterator(); i4.hasNext(); )
 					{
-						Attribute measuredValueAttribute = ( Attribute ) i4.next();
-						measuredValueAttribute.getName();
-						measuredValueAttribute.getValue();
+						Attribute measuredValueAttributeName = ( Attribute ) i4.next();
+						Attribute measuredValueAttributeValue = ( Attribute ) i4.next();						
+						measurementPrecision.put( measuredValueAttributeName.getValue(), Integer.valueOf( measuredValueAttributeValue.getValue() ) );
+					}
+
+	            	for( Device device2: devicesFromDatabaseWithPrecision )
+					{						
+						if ( device2.getId() == id )
+						{
+							device2.setMeasurementPrecisionMap( measurementPrecision );
+						}
 					}
 	            }
 	        }
@@ -81,6 +94,14 @@ public class XmlParser
 		{
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * @return the devicesFromDatabaseWithPrecision
+	 */
+	public Vector<Device> getDevicesFromDatabaseWithPrecision()
+	{
+		return devicesFromDatabaseWithPrecision;
 	}
 
 }

@@ -36,7 +36,8 @@ public class XmlCreator
 		
 		for( Device device: devicesList )
 		{
-			Element deviceElement = devices.addElement( "device" );		
+			Element deviceElement = devices.addElement( "device" );
+			deviceElement.addAttribute( "id", String.valueOf( device.getId() ) );
 			deviceElement.addAttribute( "name", device.getName() );
 			deviceElement.addAttribute( "address", String.valueOf( device.getAddress() ) );
 			deviceElement.addAttribute( "type", device.getDeviceType().getType() );
