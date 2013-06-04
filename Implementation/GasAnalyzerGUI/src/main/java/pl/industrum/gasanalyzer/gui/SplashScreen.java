@@ -50,10 +50,8 @@ public class SplashScreen
 	{
 		super();
 		allTestComplete = true;
-		display = new Display();
-		testVector = new TestVector();
-		testsCount = testVector.size();
-		image = new Image(display, 400, 400);
+		display = new Display();		
+		image = new Image(display, 400, 400);		
 		gc = new GC(image);
 		gc.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
 		gc.fillRectangle(image.getBounds());
@@ -77,7 +75,7 @@ public class SplashScreen
 		industrumLogoData = new FormData();
 		industrumLogoData.left = new FormAttachment ((image.getBounds().width/2 - industrumLogo.getImage().getBounds().width/2)/4, 0);
 		industrumLogoData.bottom = new FormAttachment (50, -5);
-		industrumLogo.setLayoutData(industrumLogoData);
+		industrumLogo.setLayoutData(industrumLogoData);		
 	
 		imiueLogo = new Label(splash, SWT.NONE);
 		imiueLogo.setImage( UsefulImage.IMIUE_LOGO.getImage() );
@@ -117,6 +115,7 @@ public class SplashScreen
 		progressBar.setLayoutData(progressBarData);
 		
 		splash.pack();
+		splash.layout();
 		
 		splashRect = splash.getBounds();
 		displayRect = display.getBounds();
@@ -124,7 +123,12 @@ public class SplashScreen
 		int x = (displayRect.width - splashRect.width) / 2;
 		int y = (displayRect.height - splashRect.height) / 2;
 		
+		testVector = new TestVector(splash.getShell());
+		testsCount = testVector.size();
+		
 		splash.setLocation(x, y);
+		splash.pack();
+		splash.layout();
 		splash.open();
 		
 		display.asyncExec(new Runnable()
@@ -132,16 +136,21 @@ public class SplashScreen
 			public void run()
 			{
 				for (int i=0; i<testsCount; i++)
-				{													
-					try
+				{		
+					if ( allTestComplete )
 					{
-						stateLabel.setText(testVector.get(i).getName());
-						testVector.get(i).test();
-						Thread.sleep(100);
-					}
-					catch (Throwable e)
-					{
-						e.printStackTrace();
+						try
+						{
+							stateLabel.setText(testVector.get(i).getName());
+							testVector.get(i).test();
+							allTestComplete = testVector.get( i ).isPassed(); 
+							
+							Thread.sleep(100);
+						}
+						catch (Throwable e)
+						{
+							e.printStackTrace();
+						}
 					}
 					progressBar.setSelection(i+1);
 				}

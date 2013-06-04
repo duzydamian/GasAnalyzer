@@ -26,14 +26,19 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
+import pl.industrum.gasanalyzer.hibernate.model.dictionaries.DeviceTypeDictionary;
+import pl.industrum.gasanalyzer.hibernate.model.managers.DeviceManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
-import pl.industrum.gasanalyzer.model.Function;
+import pl.industrum.gasanalyzer.model.Device;
+import pl.industrum.gasanalyzer.model.DeviceType;
 import pl.industrum.gasanalyzer.model.MeasurementVariable;
 import pl.industrum.gasanalyzer.types.UsefulImage;
+import pl.industrum.gasanalyzer.xml.XmlCreator;
+import pl.industrum.gasanalyzer.xml.XmlParser;
 
 public class DevicePreferences extends Dialog
 {
-	protected Function result;
+	protected Object result;
 	protected Shell shell;
 	private Button btnOk;
 	private Button btnCancel;
@@ -42,10 +47,13 @@ public class DevicePreferences extends Dialog
 	
 	private Table table;
 	private TableEditor editor;
-	
-	private HashMap<String, Integer> variables;
-	private HashMap<String, Integer> tempResults;
-	private HashMap<Integer, MeasurementVariable> precisionMap;
+
+	private HashMap<String, Integer> currentStoredPrecision;
+	private TableColumn addColumn;
+	private TableColumn addressColumn;
+	private TableColumn nameColumn;
+	private TableColumn typeColumn;
+	private TableColumn precisionColumn;
 	
 	/**
 	 * Create the dialog.
@@ -57,9 +65,6 @@ public class DevicePreferences extends Dialog
 	{
 		super( parent, style );
 		setText( "Preferencje urządzeń" );
-		
-		variables = new HashMap<String, Integer>();
-		tempResults = new HashMap<String, Integer>();
 	}
 
 	/**
@@ -67,9 +72,13 @@ public class DevicePreferences extends Dialog
 	 * 
 	 * @return the result
 	 */
-	public Function open()
+	public Object open()
 	{
 		createContents();
+		
+		XmlParser xmlParser = new XmlParser();
+		//TODO implement parse device configuration and add to window
+		
 		shell.open();
 		shell.layout();
 		display = getParent().getDisplay();
@@ -98,11 +107,11 @@ public class DevicePreferences extends Dialog
 		table.setLinesVisible( true );
 		
 
-		final TableColumn addColumn = new TableColumn( table, SWT.NONE );
-		final TableColumn addressColumn = new TableColumn( table, SWT.NONE );
-		final TableColumn nameColumn = new TableColumn( table, SWT.NONE );
-		final TableColumn typeColumn = new TableColumn( table, SWT.NONE );
-		final TableColumn precisionColumn = new TableColumn( table, SWT.NONE );
+		addColumn = new TableColumn( table, SWT.NONE );
+		addressColumn = new TableColumn( table, SWT.NONE );
+		nameColumn = new TableColumn( table, SWT.NONE );
+		typeColumn = new TableColumn( table, SWT.NONE );
+		precisionColumn = new TableColumn( table, SWT.NONE );
 		
 		addColumn.setText( "" );
 		addressColumn.setText( "adres" );
@@ -138,11 +147,7 @@ public class DevicePreferences extends Dialog
 		device2.setBackground( 4, new Color( display, new RGB( 100, 100, 100 ) ) );
 		device2.setText( 4, "" );
 		
-		nameColumn.pack();
-		addressColumn.pack();
-		precisionColumn.pack();
-		typeColumn.pack();
-		addColumn.pack();
+		loadDevices();
 		
 		GridData gd_tableEditor = new GridData(SWT.FILL, SWT.FILL, true, true, 5, 1);
 		table.setLayoutData(gd_tableEditor);
@@ -168,9 +173,8 @@ public class DevicePreferences extends Dialog
 							
 							if( column == 0 )
 							{
-								tempResults.clear();
 								MeasurementPreferences preferences = new MeasurementPreferences( getParent(), SWT.NONE );
-								tempResults.putAll( preferences.open( variables ) ); 
+								//tempResults.putAll( preferences.open( variables ) ); 
 							}
 							else if( column == 2 )
 							{
@@ -209,8 +213,10 @@ public class DevicePreferences extends Dialog
 							else if( column == 3)
 							{
 								final Combo deviceType = new Combo( table, SWT.NONE );
-								deviceType.add( "Ultramat23" );
-								deviceType.add( "Ultramat23/a" );
+								for( DeviceType type: DeviceTypeDictionary.getAll() )
+								{
+									deviceType.add( type.getType() );
+								}
 								
 								Listener textListener = new Listener()
 								{
@@ -320,7 +326,7 @@ public class DevicePreferences extends Dialog
 							{
 								if ( validateAll() )
 								{
-									//saveAction();
+									saveAction();
 									shell.dispose();
 								}
 							}
@@ -343,10 +349,32 @@ public class DevicePreferences extends Dialog
 								new Label(shell, SWT.NONE);
 	}
 
-//	protected void saveAction()
-//	{
-//		result = FunctionDictionary.get( FunctionDictionary.add( textName.getText() ) );
-//	}
+	private void loadDevices()
+	{
+		for( Device device: DeviceManager.getAllDevices() )
+		{
+			TableItem deviceItem = new TableItem( table, SWT.NONE );
+			deviceItem.setImage( 0, UsefulImage.PREFERENCES.getImage() );
+			deviceItem.setText( 1, Integer.toString( device.getAddress() ) );
+			deviceItem.setText( 2, device.getName() );
+			deviceItem.setText( 3, device.getDeviceType().getType() );
+			deviceItem.setText( 4, "2" );
+		}		
+		
+		nameColumn.pack();
+		addressColumn.pack();
+		precisionColumn.pack();
+		typeColumn.pack();
+		addColumn.pack();
+	}
+	
+	protected void saveAction()
+	{
+		//TODO forward precision to creator per device
+		XmlCreator xmlCreator = new XmlCreator(table.getItems());		
+		result = xmlCreator.getXml();
+		
+	}
 //	
 //	private boolean validateName()
 //	{

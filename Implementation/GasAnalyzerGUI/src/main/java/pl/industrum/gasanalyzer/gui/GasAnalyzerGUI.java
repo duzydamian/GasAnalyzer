@@ -16,8 +16,8 @@ import pl.industrum.gasanalyzer.gui.dialogs.SendExceptionCatched;
  */
 public class GasAnalyzerGUI
 {
-	private static boolean debug = true;
-	private static boolean develop = true;
+	private static boolean debug = false;
+	private static boolean develop = false;
 	
 	private static String AppVersion;
 	private static String RXTXVersion;
@@ -66,7 +66,7 @@ public class GasAnalyzerGUI
 			{	
 				SplashScreen splashScreen = new SplashScreen();
 				splashScreen.open();
-				if ( splashScreen.isAllTestComplete() )
+	//			if ( splashScreen.isAllTestComplete() )
 				{				
 					GasAnalyzerMainWindow window = new GasAnalyzerMainWindow();
 					window.open();
@@ -78,7 +78,8 @@ public class GasAnalyzerGUI
 				window.open();
 			}
 			
-		} catch ( Exception e )
+		}		
+		catch ( Exception e )
 		{
 			e.printStackTrace();
 			SendExceptionCatched sendExceptionCatched = new SendExceptionCatched(new Shell(), SWT.NONE, e );

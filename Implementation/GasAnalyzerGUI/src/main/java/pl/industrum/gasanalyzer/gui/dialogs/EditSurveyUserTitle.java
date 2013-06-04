@@ -7,8 +7,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -48,7 +46,9 @@ public class EditSurveyUserTitle extends Dialog
 	public EditSurveyUserTitle( Shell parent, int style )
 	{
 		super( parent, style );
-		setText( Messages.getString( "NewSurveyUserTitle.this.text" ) ); //$NON-NLS-1$
+		setText( Messages.getString("EditSurveyUserTitle.this.text") ); //$NON-NLS-1$ //$NON-NLS-1$
+		
+		avaibleSurveyUserTitles = new Vector<Degree>();
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class EditSurveyUserTitle extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 250, 150 );
+		shell.setSize( 250, 135 );
 		shell.setText( getText() );
 		shell.setLayout( new GridLayout( 4, false ) );
 
@@ -92,17 +92,7 @@ public class EditSurveyUserTitle extends Dialog
 				loadSurveyUserTitleData( avaibleSurveyUserTitles.get( comboAllSurveyUserTitle.getSelectionIndex() ) );
 			}
 		} );
-		comboAllSurveyUserTitle.addTraverseListener( new TraverseListener()
-		{			
-			public void keyTraversed( TraverseEvent arg0 )
-			{
-				if ( arg0.detail == SWT.TRAVERSE_RETURN )
-				{
-					saveAction();
-					shell.dispose();
-				}				
-			}
-		} );
+		
 		loadSurveyUserTitles();
 		
 		lblName = new Label( shell, SWT.RIGHT );

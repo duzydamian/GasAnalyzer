@@ -17,16 +17,15 @@ import pl.industrum.gasanalyzer.hibernate.model.dictionaries.MeasurementVariable
 public class DatabaseMeasurementVariableCorrectTest extends Test
 {
 	private MessageBox messageDialog;
-	private Shell shell;
 	
 	/**
+	 * @param parentShell 
 	 * 
 	 */
-	public DatabaseMeasurementVariableCorrectTest()
+	public DatabaseMeasurementVariableCorrectTest(Shell parentShell)
 	{
 		super( "Testowanie słownika Measurement variable z bazy danych" );
-		shell = new Shell();
-		messageDialog = new MessageBox( shell, SWT.ICON_WARNING );
+		messageDialog = new MessageBox( parentShell, SWT.ICON_WARNING );
 		messageDialog.setText( "Ostrzeżenie" );
 		messageDialog
 				.setMessage( "Problem z naprawieniem słownika Measurement variable." );
@@ -52,5 +51,6 @@ public class DatabaseMeasurementVariableCorrectTest extends Test
 				messageDialog.open();
 			}
 		}
+		setPassed();
 	}
 }

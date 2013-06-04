@@ -1,13 +1,18 @@
 package pl.industrum.gasanalyzer.gui.dialogs;
 
+import java.util.Vector;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
@@ -40,6 +45,9 @@ public class EditSurveyPlace extends Dialog
 	private Label lblPostCode;
 	private Text textPostCode;
 	private Label icoPostCode;
+	
+	private Combo comboAllSurveyPlace;
+	protected Vector<Place> avaibleSurveyPlaces;
 
 	/**
 	 * Create the dialog.
@@ -50,7 +58,9 @@ public class EditSurveyPlace extends Dialog
 	public EditSurveyPlace( Shell parent, int style )
 	{
 		super( parent, style );
-		setText( Messages.getString( "NewSurveyPlace.this.text" ) ); //$NON-NLS-1$
+		setText( "Edytuj miejsce" ); //$NON-NLS-1$
+		
+		avaibleSurveyPlaces = new Vector<Place>();
 	}
 
 	/**
@@ -80,10 +90,33 @@ public class EditSurveyPlace extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 260, 195 );
+		shell.setSize( 260, 230 );
 		shell.setText( getText() );
 		shell.setLayout( new GridLayout( 4, false ) );
 
+		comboAllSurveyPlace = new Combo( shell, SWT.BORDER );
+		comboAllSurveyPlace.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
+				false, 4, 1 ) );
+		comboAllSurveyPlace.addModifyListener( new ModifyListener()
+		{			
+			public void modifyText( ModifyEvent arg0 )
+			{
+				loadSurveyPlaceData( avaibleSurveyPlaces.get( comboAllSurveyPlace.getSelectionIndex() ) );
+			}
+		} );
+		comboAllSurveyPlace.addTraverseListener( new TraverseListener()
+		{			
+			public void keyTraversed( TraverseEvent arg0 )
+			{
+				if ( arg0.detail == SWT.TRAVERSE_RETURN )
+				{
+					saveAction();
+					shell.dispose();
+				}				
+			}
+		} );
+		loadSurveyPlaces();
+		
 		lblName = new Label( shell, SWT.RIGHT );
 		lblName.setText( Messages.getString( "NewSurveyPlace.lblName.text" ) ); //$NON-NLS-1$
 
@@ -190,9 +223,42 @@ public class EditSurveyPlace extends Dialog
 		} );
 	}
 
+	private void loadSurveyPlaces()
+	{
+		for( Place place: PlaceManager.getAllPlaces() )
+		{
+			comboAllSurveyPlace.add( place.toString() );
+			avaibleSurveyPlaces.add( place );
+		}
+	}
+	
+	private void loadSurveyPlaceData( Place place )
+	{
+		if ( place.getName() != null )
+		{
+			textName.setText( place.getName() );
+		}			
+		
+		if ( place.getCity() != null )
+		{
+			textCity.setText( place.getCity() );
+		}
+		
+		if ( place.getPostCode() != null )
+		{
+			textPostCode.setText( place.getPostCode() );
+		}
+		
+		if ( place.getAddress() != null )
+		{
+			textAddress.setText( place.getAddress() );
+		}
+	}
+	
 	protected void saveAction()
 	{
-		result = PlaceManager.getPlace( PlaceManager.addPlace( textName.getText(), textCity.getText(), textPostCode.getText(), textAddress.getText() ) );
+		//TODO implement update in database		
+		//result = PlaceManager.getPlace( PlaceManager.addPlace( textName.getText(), textCity.getText(), textPostCode.getText(), textAddress.getText() ) );
 	}
 	
 	private boolean validateName()

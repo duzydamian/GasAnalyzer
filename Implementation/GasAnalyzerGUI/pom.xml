@@ -12,7 +12,7 @@
 		<artifactId>GasAnalyzer</artifactId>
 		<version>0.0.7</version>
 	</parent>
-	
+
 	<build>
 	<plugins>
          <plugin>
@@ -60,7 +60,7 @@
 							jar-with-dependencies
 						</descriptorRef>
 					</descriptorRefs>
-					<finalName>GasAnalyzer</finalName>
+					<finalName>GasAnalyzer-${project.activeProfiles[0].id}-${project.parent.version}</finalName>
 				</configuration>
 			</plugin>
       <plugin>
@@ -73,34 +73,82 @@
       </plugin>			
 		</plugins>
 	</build>
+	
+<profiles>	
+		<profile>
+			<id>win32</id>
+			<dependencies>
+				<dependency>
+			        <groupId>org.eclipse.swt</groupId>
+			        <artifactId>org.eclipse.swt.win32.win32.x86</artifactId>
+			        <version>4.2.1</version>
+	    		</dependency>		
+			</dependencies>
+		</profile>
+		
+		<profile>
+			<id>win64</id>
+			<dependencies>
+				<dependency>
+			        <groupId>org.eclipse.swt</groupId>
+			        <artifactId>org.eclipse.swt.win32.win32.x86_64</artifactId>
+			        <version>4.2.1</version>
+	    		</dependency>
+			</dependencies>
+		</profile>
+
+		<profile>
+			<id>lin32</id>
+			<dependencies>
+				<dependency>
+			        <groupId>org.eclipse.swt</groupId>
+			        <artifactId>org.eclipse.swt.gtk.linux.x86</artifactId>
+			        <version>4.2.1</version>
+	    		</dependency>
+			</dependencies>
+		</profile>
+		
+		<profile>
+			<id>lin64</id>
+			<dependencies>
+				<dependency>
+			        <groupId>org.eclipse.swt</groupId>
+			        <artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
+			        <version>4.2.1</version>
+	    		</dependency>
+			</dependencies>
+		</profile>
+		
+		<profile>
+			<id>mac32</id>
+			<dependencies>
+				<dependency>
+			        <groupId>org.eclipse.swt</groupId>
+			        <artifactId>org.eclipse.swt.cocoa.macosx</artifactId>
+			        <version>4.2.1</version>
+	    		</dependency>
+			</dependencies>
+		</profile>
+		
+		<profile>
+			<id>mac64</id>
+			<dependencies>
+				<dependency>
+			        <groupId>org.eclipse.swt</groupId>
+			        <artifactId>org.eclipse.swt.cocoa.macosx.x86_64</artifactId>
+			        <version>4.2.1</version>
+	    		</dependency>
+			</dependencies>
+		</profile>								
+</profiles> 
+	
 	<dependencies>
 		<dependency>
 			<groupId>pl.industrum.gasanalyzer.elan</groupId>
 			<artifactId>ELANNetwork</artifactId>
 			<version>0.0.8</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi</artifactId>
-			<version>3.9</version>
 		</dependency>		
-		<dependency>
-	        <groupId>org.eclipse.swt</groupId>
 
-	        <artifactId>org.eclipse.swt.gtk.linux.x86</artifactId>
-
-<!-- 	        <artifactId>org.eclipse.swt.win32.win32.x86</artifactId>	         -->
-<!--
-	        
-    org.eclipse.swt.win32.win32.x86
-    org.eclipse.swt.win32.win32.x86_64
-    org.eclipse.swt.gtk.linux.x86
-    org.eclipse.swt.gtk.linux.x86_64
-    org.eclipse.swt.cocoa.macosx
-    org.eclipse.swt.cocoa.macosx.x86_64
--->
-	        <version>4.2.1</version>
-    	</dependency>
 <!-- Hibernate and required library -->    	
     	<dependency>
 	      <groupId>org.hibernate</groupId>
@@ -162,13 +210,22 @@
 	      <artifactId>postgresql</artifactId>
 	      <version>9.1-901.jdbc4</version>
 	    </dependency>
-	    
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+		</dependency>	    
 <!-- Report generating library -->
 		<dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itextpdf</artifactId>
 			<version>5.4.1</version>
-		</dependency>	    
+		</dependency>	
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.9</version>
+		</dependency>		    
 	</dependencies>
 	
 	<repositories>

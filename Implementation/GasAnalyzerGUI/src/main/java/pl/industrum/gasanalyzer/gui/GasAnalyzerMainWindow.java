@@ -35,7 +35,6 @@ import pl.industrum.gasanalyzer.gui.frames.NetworkCollection;
 import pl.industrum.gasanalyzer.gui.frames.Problems;
 import pl.industrum.gasanalyzer.gui.frames.StatusBar;
 import pl.industrum.gasanalyzer.gui.frames.ToolBar;
-import pl.industrum.gasanalyzer.hibernate.model.managers.DeviceManager;
 import pl.industrum.gasanalyzer.hibernate.model.managers.MeasurementSnapshotManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
 import pl.industrum.gasanalyzer.model.Device;
@@ -259,14 +258,13 @@ public class GasAnalyzerMainWindow implements Observer
 			}
 
 			@Override
-			public void addDeviceToDeviceCollection( ELANMeasurementDevice device, String port, TreeItem treeItem )
+			public void addDeviceToDeviceCollection( String port, TreeItem treeItem, Device deviceByAddress )
 			{				
 				try
-				{
-					deviceCollection.addDevice( device, treeItem );
-					//TODO change method
-					Device deviceByAddress = DeviceManager.getDeviceByAddress( device.getDeviceAddress() );
-					connectionWrapper.getNetwork( port ).getDevice( device.getDeviceAddress() ).getDeviceInformation().setDeviceIDInDatabase( deviceByAddress.getId() );
+				{					
+					connectionWrapper.getNetwork( port ).getDevice( deviceByAddress.getAddress() ).getDeviceInformation().setDeviceIDInDatabase( deviceByAddress.getId() );
+					connectionWrapper.getNetwork( port ).getDevice( deviceByAddress.getAddress() ).getDeviceInformation().setName( deviceByAddress.getName() );
+					deviceCollection.addDevice( connectionWrapper.getNetwork( port ).getDevice( deviceByAddress.getAddress() ), treeItem, treeItem.getText() );
 				} catch ( NullDeviceException e )
 				{
 					e.printStackTrace();
@@ -309,6 +307,12 @@ public class GasAnalyzerMainWindow implements Observer
 			public void setNetworkConnected( int networkSize, String name, ELANNetwork elanNetwork )
 			{
 				networkCollection.setNetworkConnected( networkSize, name, elanNetwork );
+			}
+			
+			@Override
+			public void setNetworkDisconnected( String name )
+			{
+				networkCollection.setNetworkDisconnected( name );
 			}
 
 			@Override
@@ -458,7 +462,7 @@ public class GasAnalyzerMainWindow implements Observer
 				ELANMeasurementDevice device;
 				
 				device = connectionWrapper.getNetwork( networkPort ).getDevice( deviceAddress );
-
+	
 				ELANRxFrame frame;
 				try
 				{
@@ -500,6 +504,6 @@ public class GasAnalyzerMainWindow implements Observer
 				deviceTree.enableNextComment();
 				nextSnapshotComment = "";
 			}		
-		}		
+		}				
 	}
 }

@@ -9,8 +9,8 @@ package pl.industrum.gasanalyzer.elan.using;
  */
 public class Main
 {
-	private static boolean debug = true;
-	private static boolean develop = true;
+	private static boolean debug = false;
+	private static boolean develop = false;
 
 	public Main()
 	{

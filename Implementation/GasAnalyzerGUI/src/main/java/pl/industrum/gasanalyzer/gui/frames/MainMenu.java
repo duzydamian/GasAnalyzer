@@ -11,6 +11,9 @@ import pl.industrum.gasanalyzer.gui.EmailSystem;
 import pl.industrum.gasanalyzer.gui.dialogs.About;
 import pl.industrum.gasanalyzer.gui.dialogs.DevicePreferences;
 import pl.industrum.gasanalyzer.gui.dialogs.EditSurvey;
+import pl.industrum.gasanalyzer.gui.dialogs.EditSurveyObject;
+import pl.industrum.gasanalyzer.gui.dialogs.EditSurveyPlace;
+import pl.industrum.gasanalyzer.gui.dialogs.EditSurveyUser;
 import pl.industrum.gasanalyzer.gui.dialogs.EditSurveyUserFunction;
 import pl.industrum.gasanalyzer.gui.dialogs.EditSurveyUserTitle;
 import pl.industrum.gasanalyzer.gui.dialogs.NewSurvey;
@@ -100,14 +103,25 @@ public abstract class MainMenu extends Menu
 		Menu menuEdit = new Menu( mntmEdit );
 		mntmEdit.setMenu( menuEdit );
 		
+		MenuItem mntmEditUser = new MenuItem( menuEdit, SWT.NONE );
+		mntmEditUser.setText( "Edytuj prowadzących pomiary" );
+		mntmEditUser.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				EditSurveyUser editSurveyUser = new EditSurveyUser( getShell(), SWT.NONE );
+				editSurveyUser.open();
+			}
+		} );
+		
 		MenuItem mntmEditTitle = new MenuItem( menuEdit, SWT.NONE );
 		mntmEditTitle.setText( "Edytuj tytuły" );
 		mntmEditTitle.addSelectionListener( new SelectionAdapter()
 		{
 			public void widgetSelected( SelectionEvent e )
 			{
-				EditSurveyUserFunction editSurveyUserFunction = new EditSurveyUserFunction( getShell(), SWT.NONE );
-				editSurveyUserFunction.open();
+				EditSurveyUserTitle editSurveyUserTitle = new EditSurveyUserTitle( getShell(), SWT.NONE );
+				editSurveyUserTitle.open();				
 			}
 		} );
 		
@@ -117,11 +131,35 @@ public abstract class MainMenu extends Menu
 		{
 			public void widgetSelected( SelectionEvent e )
 			{
-				EditSurveyUserTitle editSurveyUserTitle = new EditSurveyUserTitle( getShell(), SWT.NONE );
-				editSurveyUserTitle.open();
+				EditSurveyUserFunction editSurveyUserFunction = new EditSurveyUserFunction( getShell(), SWT.NONE );
+				editSurveyUserFunction.open();
+			}
+		} );				
+		
+		new MenuItem( menuEdit, SWT.SEPARATOR );
+		
+		MenuItem mntmEditPlace = new MenuItem( menuEdit, SWT.NONE );
+		mntmEditPlace.setText( "Edytuj miejsca" );
+		mntmEditPlace.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				EditSurveyPlace editSurveyPlace = new EditSurveyPlace( getShell(), SWT.NONE );
+				editSurveyPlace.open();
 			}
 		} );
 		
+		MenuItem mntmEditObject = new MenuItem( menuEdit, SWT.NONE );
+		mntmEditObject.setText( "Edytuj obiekty" );
+		mntmEditObject.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				EditSurveyObject editSurveyObject = new EditSurveyObject( getShell(), SWT.NONE );
+				editSurveyObject.open();
+			}
+		} );
+				
 		//_________________Survey___________________________________________________		
 		mntmSurvey = new MenuItem( this, SWT.CASCADE );
 		mntmSurvey.setText( Messages.getString( "MainMenu.Survey" ) ); //$NON-NLS-1$
@@ -136,8 +174,8 @@ public abstract class MainMenu extends Menu
 		{
 			public void widgetSelected( SelectionEvent e )
 			{
-				DevicePreferences preferences = new DevicePreferences( getShell(), SWT.NONE );
-				preferences.open();
+				 DevicePreferences preferences = new DevicePreferences( getShell(), SWT.NONE );
+				 preferences.open(); 
 			}
 		} );
 		

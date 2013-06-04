@@ -1,13 +1,18 @@
 package pl.industrum.gasanalyzer.gui.dialogs;
 
+import java.util.Vector;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
@@ -31,6 +36,8 @@ public class EditSurveyUserFunction extends Dialog
 	private Button btnCancel;
 	private Display display;
 	private Label icoName;
+	private Combo comboAllSurveyUserFunction;
+	protected Vector<Function> avaibleSurveyUserFunctions;
 
 	/**
 	 * Create the dialog.
@@ -41,7 +48,9 @@ public class EditSurveyUserFunction extends Dialog
 	public EditSurveyUserFunction( Shell parent, int style )
 	{
 		super( parent, style );
-		setText( Messages.getString( "NewSurveyUserFunction.this.text" ) ); //$NON-NLS-1$
+		setText( Messages.getString("EditSurveyUserFunction.this.text") ); //$NON-NLS-1$ //$NON-NLS-1$
+		
+		avaibleSurveyUserFunctions = new Vector<Function>();
 	}
 
 	/**
@@ -71,10 +80,33 @@ public class EditSurveyUserFunction extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 250, 100 );
+		shell.setSize( 250, 135 );
 		shell.setText( getText() );
 		shell.setLayout( new GridLayout( 4, false ) );
 
+		comboAllSurveyUserFunction = new Combo( shell, SWT.BORDER );
+		comboAllSurveyUserFunction.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
+				false, 4, 1 ) );
+		comboAllSurveyUserFunction.addModifyListener( new ModifyListener()
+		{			
+			public void modifyText( ModifyEvent arg0 )
+			{
+				loadSurveyUserFunctionData( avaibleSurveyUserFunctions.get( comboAllSurveyUserFunction.getSelectionIndex() ) );
+			}
+		} );
+		comboAllSurveyUserFunction.addTraverseListener( new TraverseListener()
+		{			
+			public void keyTraversed( TraverseEvent arg0 )
+			{
+				if ( arg0.detail == SWT.TRAVERSE_RETURN )
+				{
+					saveAction();
+					shell.dispose();
+				}				
+			}
+		} );
+		loadSurveyUserFunctions();
+		
 		lblName = new Label( shell, SWT.RIGHT );
 		lblName.setText( Messages.getString( "NewSurveyUserFunction.lblName.text" ) ); //$NON-NLS-1$
 
@@ -128,9 +160,27 @@ public class EditSurveyUserFunction extends Dialog
 		} );
 	}
 
+	private void loadSurveyUserFunctions()
+	{
+		for( Function function: FunctionDictionary.getAll() )
+		{
+			comboAllSurveyUserFunction.add( function.getName() );
+			avaibleSurveyUserFunctions.add( function );
+		}
+	}
+	
+	private void loadSurveyUserFunctionData( Function function )
+	{
+		if ( function.getName() != null )
+		{
+			textName.setText( function.getName() );
+		}				
+	}
+	
 	protected void saveAction()
 	{
-		result = FunctionDictionary.get( FunctionDictionary.add( textName.getText() ) );
+		//TODO implement update in database		
+		//result = FunctionDictionary.get( FunctionDictionary.add( textName.getText() ) );
 	}
 	
 	private boolean validateName()

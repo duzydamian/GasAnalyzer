@@ -17,16 +17,15 @@ import pl.industrum.gasanalyzer.hibernate.model.managers.DeviceManager;
 public class DatabaseDeviceCorrectTest extends Test
 {	
 	private MessageBox messageDialog;
-	private Shell shell;
 	
 	/**
+	 * @param parentShell 
 	 * 
 	 */
-	public DatabaseDeviceCorrectTest()
+	public DatabaseDeviceCorrectTest(Shell parentShell)
 	{
 		super( "Testowanie słownika Device z bazy danych" );
-		shell = new Shell();
-		messageDialog = new MessageBox( shell, SWT.ICON_WARNING );
+		messageDialog = new MessageBox( parentShell, SWT.ICON_WARNING );
 		messageDialog.setText( "Ostrzeżenie" );
 		messageDialog
 				.setMessage( "Problem z naprawieniem słownika" );
@@ -52,5 +51,6 @@ public class DatabaseDeviceCorrectTest extends Test
 				messageDialog.open();
 			}
 		}
+		setPassed();
 	}
 }

@@ -19,6 +19,7 @@ import pl.industrum.gasanalyzer.elan.communication.network.ELANMeasurementDevice
 import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxInvalidFrame;
+import pl.industrum.gasanalyzer.elan.types.ELANCollectiveChannelState;
 import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
 
 /**
@@ -48,7 +49,7 @@ public class Network extends Composite
 	 * @param style
 	 */
 	public Network( Composite parent, int style, String name )
-	{//FIXME add all device current measurement to this frame
+	{
 		super( parent, style );
 //		compositeData = new GridData( GridData.FILL, GridData.GRAB_VERTICAL,
 //				true, false );
@@ -76,7 +77,7 @@ public class Network extends Composite
 		lblDevicesCountValue = new Label( body, SWT.NONE );
 		lblDevicesCountValue.setText( "-" );	
 		
-		columns = new String[] {"Urządzenie", "Timestamp", "Pomiar"};
+		columns = new String[] {"Urządzenie", "Timestamp", "Pomiar", "Stan ogólny", "Stan" };
 		
 		table = new Table (body, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		table.setLinesVisible (true);
@@ -145,9 +146,16 @@ public class Network extends Composite
 		layout();
 	}
 	
+	public void setNetworkDisconnected()
+	{
+		lblStateMessage.setText( "Niepołączona" );
+		lblDevicesCountValue.setText( String.valueOf( 0 ) );
+		body.layout();
+		layout();
+	}
+	
 	public void fillDeviceTableWithMeasure( ELANNetwork elanNetwork )
 	{
-		//bodyForMeasure.changed( devices );
 		for( ELANMeasurementDevice device: elanNetwork )
 		{
 			TableItem item = new TableItem (table, SWT.NONE);
@@ -163,13 +171,57 @@ public class Network extends Composite
 		
 		body.layout();
 	}
-
-	public void updateState( ELANRxInvalidFrame frame, String name )
+	
+	public void clearDeviceTableWithMeasure()
 	{
-		for( TableItem item: table.getItems() )
+		table.removeAll();
+		
+		for (int i=0; i<columns.length; i++)
 		{
-			item.setText( 2, "błað" );					
+			table.getColumn (i).pack ();
+			table.getColumn (i).setMoveable(true);
 		}
+	
+		body.layout();
+	}
+
+	public void updateState( final ELANRxInvalidFrame frame, final String name )
+	{
+		Display.getDefault().asyncExec( new Runnable()
+		{
+			public void run()
+			{
+				try
+				{		
+					for( TableItem item: table.getItems() )
+					{
+						if ( item.getText( 0 ).equalsIgnoreCase( name ) )
+						{
+							item.setText( 1, dateFormater.format( frame.getTimeStamp() ) );
+							item.setText( 2, "" );
+							String collectiveStateMessage = "";
+							for( ELANCollectiveChannelState collectiveChannelState: frame.getCollectiveChannelState() )
+							{
+								collectiveStateMessage = collectiveStateMessage + collectiveChannelState.name()+", ";
+							}
+							collectiveStateMessage =  collectiveStateMessage.substring( 0, collectiveStateMessage.length()-1 );
+							item.setText( 3, collectiveStateMessage );
+							item.setText( 4, frame.getChannelState().name() );
+						}
+					}
+					
+					for (int i=0; i<columns.length; i++)
+					{
+						table.getColumn (i).pack ();
+						table.getColumn (i).setMoveable(true);
+					}
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}	
+			}
+		});					
 	}
 
 	public void updateMeasurment( final ELANRxBroadcastFrame frame, final String name )
@@ -178,30 +230,39 @@ public class Network extends Composite
 		{
 			public void run()
 			{
-				for( TableItem item: table.getItems() )
+				try
 				{
-					if ( item.getText( 0 ).equalsIgnoreCase( name ) )
+					for( TableItem item: table.getItems() )
 					{
-						item.setText( 1, dateFormater.format( frame.getTimeStamp() ) );						
-						
-						String printableSet = "";
-						for( ELANMeasurement measurement: frame )
+						if ( item.getText( 0 ).equalsIgnoreCase( name ) )
 						{
-							printableSet += measurement.getMeasuredVariable().getPrintable() + ": ";
-							printableSet += measurement.getValue() + " ";
-							printableSet += "[" + measurement.getDimension().getPrintable() + "] | ";
-						}	
-						
-						item.setText( 2, printableSet );					
-					}		
-				}
+							item.setText( 1, dateFormater.format( frame.getTimeStamp() ) );						
+							
+							String printableSet = "";
+							for( ELANMeasurement measurement: frame )
+							{
+								printableSet += measurement.getMeasuredVariable().getPrintable() + ": ";
+								printableSet += measurement.getValue() + " ";
+								printableSet += "[" + measurement.getDimension().getPrintable() + "] | ";
+							}	
+							
+							item.setText( 2, printableSet );	
+							item.setText( 3, ELANCollectiveChannelState.TRANSMITTED_MEASRED_VALUES_VALID.name() );
+							item.setText( 4, frame.getChannelState().name() );
+						}		
+					}
 				
-				for (int i=0; i<columns.length; i++)
+					for (int i=0; i<columns.length; i++)
+					{
+						table.getColumn (i).pack ();
+						table.getColumn (i).setMoveable(true);
+					}
+				}
+				catch(Exception e)
 				{
-					table.getColumn (i).pack ();
-					table.getColumn (i).setMoveable(true);
+					e.printStackTrace();
 				}
 			}
 		});			
-	}
+	}	
 }

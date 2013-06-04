@@ -16,16 +16,15 @@ import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
 public class ComPortAccessibilityTest extends Test
 {
 	private MessageBox messageDialog;
-	private Shell shell;
 
 	/**
+	 * @param parentShell 
 	 * 
 	 */
-	public ComPortAccessibilityTest()
+	public ComPortAccessibilityTest(Shell parentShell)
 	{
 		super( "Sprawdzanie dostępności portów COM" );
-		shell = new Shell();
-		messageDialog = new MessageBox( shell, SWT.ICON_WARNING );
+		messageDialog = new MessageBox( parentShell, SWT.ICON_WARNING );
 		messageDialog.setText( "Ostrzeżenie" );
 		messageDialog
 				.setMessage( "W systemie nie wykryto żadnych portów szeregowych!" );
@@ -33,9 +32,22 @@ public class ComPortAccessibilityTest extends Test
 
 	public void test()
 	{
-		if ( ELANConnection.vectorPorts().size() > 0 )
-			return;
-		else
-			messageDialog.open();
+		try
+		{
+			if ( ELANConnection.vectorPorts().size() > 0 )
+			{
+				setPassed();
+				return;
+			}
+			else
+			{
+				setFailed();
+				messageDialog.open();
+			}
+		}
+		catch ( Throwable throwable )
+		{
+			throwable.printStackTrace();
+		}
 	}
 }
