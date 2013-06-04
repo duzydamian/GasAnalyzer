@@ -46,14 +46,15 @@ public class XmlCreator
 		}
 		
 		try{
+			OutputFormat format = OutputFormat.createPrettyPrint();
+			
 			// lets write to a file
 			XMLWriter writer = new XMLWriter( new FileWriter(
-					"devicesConfiguration.xml" ) );
+					"devicesConfiguration.xml" ), format );
 			writer.write( xml );
 			writer.close();
         
-			// Pretty print the document to System.out
-			OutputFormat format = OutputFormat.createPrettyPrint();
+			// Pretty print the document to System.out			
 			writer = new XMLWriter( System.out, format );
 			writer.write( xml );
 		}
