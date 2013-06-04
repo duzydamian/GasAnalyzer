@@ -5,7 +5,9 @@ package pl.industrum.gasanalyzer.xml;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Vector;
 
 import org.dom4j.Attribute;
 import org.dom4j.Document;
@@ -14,6 +16,8 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+
+import pl.industrum.gasanalyzer.model.Device;
 
 /**
  * @author duzydamian (Damian Karbowiak)
@@ -27,7 +31,7 @@ public class XmlParser
 	/**
 	 * 
 	 */
-	public XmlParser()
+	public XmlParser(Vector<Device> devicesFromDatabase)
 	{		
         try
 		{
@@ -54,6 +58,7 @@ public class XmlParser
 	            
 	            for ( Iterator<?> i3 = device.elementIterator(); i3.hasNext(); )
 	            {
+	            	HashMap<String, Integer> measurementPrecision = new HashMap<String, Integer>();
 	            	Element measuredValue = (Element) i3.next();
 	            	for( Iterator<?> i4 = measuredValue.attributeIterator(); i4.hasNext(); )
 					{

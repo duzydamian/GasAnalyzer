@@ -5,13 +5,13 @@ package pl.industrum.gasanalyzer.xml;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Vector;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
-import org.eclipse.swt.widgets.TableItem;
 
 import pl.industrum.gasanalyzer.model.Device;
 
@@ -28,25 +28,25 @@ public class XmlCreator
 	 * @param tableItems 
 	 * 
 	 */
-	public XmlCreator(Device devicesList)
+	public XmlCreator(Vector<Device> devicesList)
 	{
 		xml = DocumentHelper.createDocument();
 		xml.setXMLEncoding("UTF-8");
 		Element devices = xml.addElement( "devices" );		
 		
-		//for( Device device: devicesList )
+		for( Device device: devicesList )
 		{
-//			Element deviceElement = devices.addElement( "device" );		
-//			deviceElement.addAttribute( "name", device.getName() );
-//			deviceElement.addAttribute( "address", String.valueOf( device.getAddress() ) );
-//			deviceElement.addAttribute( "type", device.getDeviceType().getType() );
+			Element deviceElement = devices.addElement( "device" );		
+			deviceElement.addAttribute( "name", device.getName() );
+			deviceElement.addAttribute( "address", String.valueOf( device.getAddress() ) );
+			deviceElement.addAttribute( "type", device.getDeviceType().getType() );
 			
 			//TODO add precision definition
-			//for( iterable_type iterable_element: device.get )
+			for( String key: device.getMeasurementPrecisionMap().keySet() )
 			{
-//				Element measured_value = deviceElement.addElement( "measured_value" );
-//				measured_value.addAttribute( "name", device );
-//				measured_value.addAttribute( "precision", device );
+				Element measured_value = deviceElement.addElement( "measured_value" );
+				measured_value.addAttribute( "name", key );
+				measured_value.addAttribute( "precision", device.getMeasurementPrecisionMap().get( key ).toString() );
 			}			
 		}
 		
