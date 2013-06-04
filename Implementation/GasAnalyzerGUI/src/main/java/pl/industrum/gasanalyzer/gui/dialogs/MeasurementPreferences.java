@@ -37,7 +37,7 @@ import pl.industrum.gasanalyzer.model.MeasurementVariable;
 
 public class MeasurementPreferences extends Dialog
 {
-	protected Device result;
+	protected HashMap<String, Integer> result;
 	protected Shell shell;
 	private Button btnOk;
 	private Button btnCancel;
@@ -48,6 +48,7 @@ public class MeasurementPreferences extends Dialog
 	private TableEditor editor;
 
 	private Device device;
+	private HashMap<String, Integer> measurementPrecision;
 	private TableColumn nameColumn;
 	private TableColumn precisionColumn;
 
@@ -62,6 +63,7 @@ public class MeasurementPreferences extends Dialog
 		super( parent, style );
 		setText( "Preferencje urządzeń" );
 		this.device = device;
+		measurementPrecision = new HashMap<String, Integer>();
 	}
 
 	/**
@@ -69,7 +71,7 @@ public class MeasurementPreferences extends Dialog
 	 * 
 	 * @return the result
 	 */
-	public Device open()
+	public HashMap<String, Integer> open()
 	{
 		createContents();
 		shell.open();
@@ -246,7 +248,14 @@ public class MeasurementPreferences extends Dialog
 
 	protected void saveAction()
 	{
-		result = device;
+		for( int i = 0; i < table.getItemCount(); i++ )
+		{
+			if( !table.getItem( i ).getText( 1 ).isEmpty() )
+			{
+				measurementPrecision.put( table.getItem( i ).getText( 0 ), Integer.parseInt( table.getItem( i ).getText( 1 )  ) );
+			}
+		}
+		result = measurementPrecision;
 	}
 
 	// private boolean validateName()
