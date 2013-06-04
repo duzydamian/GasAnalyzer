@@ -158,7 +158,11 @@ public class DevicePreferences extends Dialog
 							if( column == 0 )
 							{
 								MeasurementPreferences preferences = new MeasurementPreferences( getParent(), SWT.NONE, devicesMap.get( index ) );
-								devicesMap.get( index ).setMeasurementPrecisionMap( preferences.open() );
+								HashMap<String, Integer> openResult = preferences.open();
+								if ( openResult != null )
+								{
+									devicesMap.get( index ).setMeasurementPrecisionMap( openResult );
+								}								
 							}
 							else if( column == 2 )
 							{

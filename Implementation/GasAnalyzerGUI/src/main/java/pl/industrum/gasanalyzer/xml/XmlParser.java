@@ -60,10 +60,10 @@ public class XmlParser
 						id = Integer.valueOf( deviceAattribute.getValue() );
 					}
 				}
+	            HashMap<String, Integer> measurementPrecision = new HashMap<String, Integer>();
 	            
 	            for ( Iterator<?> i3 = device.elementIterator(); i3.hasNext(); )
-	            {
-	            	HashMap<String, Integer> measurementPrecision = new HashMap<String, Integer>();
+	            {	            	
 	            	Element measuredValue = (Element) i3.next();
 	            	for( Iterator<?> i4 = measuredValue.attributeIterator(); i4.hasNext(); )
 					{
@@ -71,15 +71,15 @@ public class XmlParser
 						Attribute measuredValueAttributeValue = ( Attribute ) i4.next();						
 						measurementPrecision.put( measuredValueAttributeName.getValue(), Integer.valueOf( measuredValueAttributeValue.getValue() ) );
 					}
-
-	            	for( Device device2: devicesFromDatabaseWithPrecision )
-					{						
-						if ( device2.getId() == id )
-						{
-							device2.setMeasurementPrecisionMap( measurementPrecision );
-						}
-					}
 	            }
+	            
+	            for( Device device2: devicesFromDatabaseWithPrecision )
+				{						
+					if ( device2.getId() == id )
+					{
+						device2.setMeasurementPrecisionMap( measurementPrecision );
+					}
+				}
 	        }
 		}
         catch ( DocumentException e )
