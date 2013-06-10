@@ -37,9 +37,21 @@ public abstract class ApplicationUserManager
 		session.getTransaction().commit();
 	}
 	
-	public static void updateApplicationUser()
+	public static Integer updateApplicationUser( Integer userID, Integer functionID, Integer degreeID, String name, String surname )
 	{
-		//TODO complete mehod
+		ApplicationUser user = ApplicationUserManager.getApplicationUser( userID );
+		user.setDegree( DegreeDictionary.get( degreeID ) );
+		user.setFunction( FunctionDictionary.get( functionID ) ); 
+		user.setName( name );
+		user.setSurname( surname );
+		
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.update( user );
+		session.getTransaction().commit();
+		
+		return user.getId();
+		
 	}
 	
 	public static ApplicationUser getApplicationUser( Integer userID )

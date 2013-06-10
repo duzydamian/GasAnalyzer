@@ -39,7 +39,7 @@ public abstract class SurveyManager
 		session.getTransaction().commit();
 	}
 	
-	public static void updateSurvey( Integer surveyID, String name, String load, String specialConditions, String comment, Integer objectID, Integer userID, Date date )
+	public static Integer updateSurvey( Integer surveyID, String name, String load, String specialConditions, String comment, Integer objectID, Integer userID, Date date )
 	{
 		Survey survey = SurveyManager.getSurvey( surveyID );
 		survey.setName( name );
@@ -54,6 +54,8 @@ public abstract class SurveyManager
 		session.beginTransaction();
 		session.update( survey );
 		session.getTransaction().commit();
+		
+		return survey.getId();
 	}
 	
 	public static Survey getSurvey( Integer surveyID )

@@ -33,6 +33,19 @@ public abstract class DegreeDictionary
 		session.getTransaction().commit();
 	}
 	
+	public static Integer update(  Integer id, String name )
+	{
+		Degree degree = DegreeDictionary.get( id );
+		degree.setName( name );
+
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.update( degree );
+		session.getTransaction().commit();
+		//TODO reindexing table
+		return degree.getId();
+	}
+	
 	public static Degree get( Integer functionID )
 	{
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
