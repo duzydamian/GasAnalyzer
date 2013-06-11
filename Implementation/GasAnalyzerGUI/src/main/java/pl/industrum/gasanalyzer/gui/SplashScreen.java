@@ -55,9 +55,12 @@ public class SplashScreen
 		gc = new GC(image);
 		gc.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
 		gc.fillRectangle(image.getBounds());
-		gc.setFont(new Font(display, "Arial", 14, SWT.BOLD | SWT.ITALIC));
+		gc.setFont(new Font(display, "Arial", 18, SWT.BOLD | SWT.ITALIC));
 		gc.drawText("Gas Analyzer", 10, 10);
+		gc.setFont(new Font(display, "Arial", 12, SWT.BOLD));
+		gc.drawText("Autorzy: Damian Karbowiak & Grzegorz Powała", 10, 40);
 		gc.dispose();
+		
 		splash = new Shell(SWT.ON_TOP);
 		
 		layout = new FormLayout();

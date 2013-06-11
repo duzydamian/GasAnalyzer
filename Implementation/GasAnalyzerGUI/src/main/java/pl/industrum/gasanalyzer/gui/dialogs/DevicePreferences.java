@@ -196,7 +196,7 @@ public class DevicePreferences extends Dialog
 							}
 							else if( column == 3)
 							{
-								final Combo deviceType = new Combo( table, SWT.NONE );
+								final Combo deviceType = new Combo( table, SWT.NONE | SWT.READ_ONLY);
 								for( DeviceType type: DeviceTypeDictionary.getAll() )
 								{
 									deviceType.add( type.getType() );

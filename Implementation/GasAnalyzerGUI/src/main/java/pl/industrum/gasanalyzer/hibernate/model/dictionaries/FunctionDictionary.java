@@ -33,7 +33,7 @@ public abstract class FunctionDictionary
 		session.getTransaction().commit();
 	}
 	
-	private static Integer update( Integer id, String name )
+	public static Integer update( Integer id, String name )
 	{
 		Function function = FunctionDictionary.get( id );
 		function.setName( name );

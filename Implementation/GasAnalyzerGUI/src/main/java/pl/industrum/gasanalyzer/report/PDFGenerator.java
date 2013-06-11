@@ -302,14 +302,11 @@ public abstract class PDFGenerator
             
             document.add(measurementSnapshotList);
 
-//            document.addAuthor("duzydamian");
-//            document.addProducer();
-//            document.addCreator(sp.getNazwa());
-//            document.addSubject("Faktrura Vat");
+            document.addAuthor("Damian Karbowiak & Grzegorz Powała");
+            document.addCreator(survey.getApplicationUser().toString());
+            document.addSubject(survey.getName());
             document.addTitle("Gas Analyzer " + survey.getName());
-//            document.addCreationDate();
-//            document.addKeywords("faktura, vat, firma, klient, produkt");
-//            document.addHeader(numer, numer);
+            document.addCreationDate();
 
             }
         	catch (DocumentException de)
@@ -366,19 +363,23 @@ public abstract class PDFGenerator
          */
         public void onEndPage(PdfWriter writer, Document document)
         {
-            PdfPTable table = new PdfPTable(2);
+            PdfPTable table = new PdfPTable(3);
             try
             {
-                table.setWidths(new int[]{90, 10});
-                table.setTotalWidth(writer.getPageSize().getWidth());       
-                table.getDefaultCell().setFixedHeight(20);
+                table.setWidths(new int[]{60, 30, 10});
+                table.setTotalWidth(writer.getPageSize().getWidth()-60);       
+                table.getDefaultCell().setFixedHeight(30);
                 table.getDefaultCell().setBorder(Rectangle.NO_BORDER);
-                table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
+                PdfPCell pdfPCell = new PdfPCell(new Paragraph(" Wygenerowano przy pomocy programu Gas Analyzer \n Autorzy: Damian Karbowiak & Grzegorz Powała", czcionka8));
+                pdfPCell.setBorder( Rectangle.NO_BORDER );
+                table.addCell(pdfPCell);
+                table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);                
                 table.addCell(String.format("Strona %d z", writer.getPageNumber()));
                 PdfPCell cell = new PdfPCell(Image.getInstance(total));
+                cell.setPaddingLeft( 2f );
                 cell.setBorder(Rectangle.NO_BORDER);
                 table.addCell(cell);
-                table.writeSelectedRows(0, -1, 0f, 20f, writer.getDirectContent());
+                table.writeSelectedRows(0, -1, 30f, 30f, writer.getDirectContent());
             }
             catch(DocumentException de)
             {
