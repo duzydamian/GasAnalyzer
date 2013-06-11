@@ -35,9 +35,19 @@ public abstract class MeasuredObjectManager
 		session.getTransaction().commit();
 	}
 	
-	public static void updateObject()
+	public static Integer updateObject( Integer objectID, String name, String description, Integer placeID )
 	{
-		//TODO complete mehod
+		MeasuredObject object = MeasuredObjectManager.getObject( objectID );
+		object.setName( name );
+		object.setDescription( description );
+		object.setPlace( PlaceManager.getPlace( placeID ) );
+
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.update( object );
+		session.getTransaction().commit();
+		
+		return object.getId();
 	}
 	
 	public static MeasuredObject getObject( Integer objectID )

@@ -49,9 +49,19 @@ public abstract class DeviceManager
 		session.getTransaction().commit();
 	}
 	
-	public static void updateDevice()
+	public static Integer updateDevice( Integer deviceID, Integer deviceTypeID, String name, Integer address )
 	{
-		//TODO complete mehod
+		Device device = DeviceManager.getDevice( deviceID );
+		device.setDeviceType( DeviceTypeDictionary.get( deviceTypeID ) );
+		device.setName( name );
+		device.setAddress( address.intValue() );
+
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.update( device );
+		session.getTransaction().commit();
+		
+		return device.getId();
 	}
 	
 	public static Device getDevice( Integer deviceID )

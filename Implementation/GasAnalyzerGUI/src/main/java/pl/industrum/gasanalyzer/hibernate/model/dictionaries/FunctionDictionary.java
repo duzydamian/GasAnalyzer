@@ -33,6 +33,19 @@ public abstract class FunctionDictionary
 		session.getTransaction().commit();
 	}
 	
+	private static Integer update( Integer id, String name )
+	{
+		Function function = FunctionDictionary.get( id );
+		function.setName( name );
+
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.update( function );
+		session.getTransaction().commit();
+		//TODO reindexing table
+		return function.getId();
+	}
+	
 	public static Function get( Integer functionID )
 	{
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
