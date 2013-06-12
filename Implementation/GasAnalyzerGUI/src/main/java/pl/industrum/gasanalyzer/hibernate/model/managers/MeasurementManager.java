@@ -15,7 +15,7 @@ public class MeasurementManager
 		Measurement measurement = new Measurement();
 		measurement.setMeasurementDimension( MeasurementDimensionDictionary.get( elanMeasurement.getDimension().ordinal() ) );
 		measurement.setMeasurementVariable( MeasurementVariableDictionary.get( elanMeasurement.getMeasuredVariable().ordinal() ) );
-		measurement.setValue( elanMeasurement.getValue() );
+		measurement.setValue( elanMeasurement.doubleRet() );
 		measurement.setMeasurementSet( MeasurementSetManager.get( setID ) );
 		
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
