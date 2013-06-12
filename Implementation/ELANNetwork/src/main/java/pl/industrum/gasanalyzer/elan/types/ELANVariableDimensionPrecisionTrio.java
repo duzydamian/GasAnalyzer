@@ -27,4 +27,9 @@ public class ELANVariableDimensionPrecisionTrio
 	{
 		return precision;
 	}
+	
+	public void setPrecision(Integer newPrecision)
+	{
+		precision = newPrecision;
+	}
 }

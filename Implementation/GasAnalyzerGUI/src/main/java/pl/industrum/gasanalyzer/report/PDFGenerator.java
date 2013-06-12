@@ -7,16 +7,20 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.Vector;
 
 import org.eclipse.swt.program.Program;
 
+import pl.industrum.gasanalyzer.hibernate.model.managers.DeviceManager;
 import pl.industrum.gasanalyzer.hibernate.model.managers.MeasurementSnapshotManager;
+import pl.industrum.gasanalyzer.model.Device;
 import pl.industrum.gasanalyzer.model.Measurement;
 import pl.industrum.gasanalyzer.model.MeasurementSet;
 import pl.industrum.gasanalyzer.model.MeasurementSnapshot;
 import pl.industrum.gasanalyzer.model.Survey;
 import pl.industrum.gasanalyzer.types.Formater;
 import pl.industrum.gasanalyzer.types.UsefulImage;
+import pl.industrum.gasanalyzer.xml.XmlParser;
 
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -256,6 +260,9 @@ public abstract class PDFGenerator
 				}
 			}			
 			
+			XmlParser xml = new XmlParser( DeviceManager.getAllDevices() );
+			Vector<Device> devicesFromDatabaseWithPrecision = xml.getDevicesFromDatabaseWithPrecision();
+			
 			int i = 1;
 			for( MeasurementSnapshot snapshot: MeasurementSnapshotManager.getAllMeasurementSnapshots( survey.getId() ) )
 			{				
@@ -264,24 +271,22 @@ public abstract class PDFGenerator
 				for( Object set: snapshot.getMeasurementSetsSorted() )
 				{
 					MeasurementSet measurementSet = ( MeasurementSet )set;
+					Device thisDevice = null;
+					for( Device device: devicesFromDatabaseWithPrecision )
+					{
+						if( device.getId() == measurementSet.getDevice().getId() )
+							thisDevice = device;
+					}
+					
 					for( Object measurement: measurementSet.getMeasurementsSorted() )
 					{
 						Measurement measurement2 = ( Measurement )measurement;
 						if ( !measurement2.getMeasurementVariable().getName().equalsIgnoreCase( "Process preassure" ) )
 						{
 							String valueAsString = "";
-							if ( measurement2.getMeasurementDimension().getId() < 8 )
-							{
-								valueAsString = Formater.doubleWithPrecisionAsString( measurement2.getValue(), 0 );
-							}
-							else if ( measurement2.getMeasurementVariable().getId() == 4 )
-							{
-								valueAsString = Formater.doubleWithPrecisionAsString( measurement2.getValue(), 3 );
-							} 
-							else
-							{
-								valueAsString = Formater.doubleWithPrecisionAsString( measurement2.getValue(), 2 );
-							}
+							
+							valueAsString = Formater.doubleWithPrecisionAsString( measurement2.getValue(), thisDevice.getMeasurementPrecisionMap().get( measurement2.getMeasurementVariable().getName() ) );
+							
 							PdfPCell pdfPCell = new PdfPCell( new Paragraph( valueAsString, czcionka10 ) );
 							pdfPCell.setHorizontalAlignment( PdfPCell.ALIGN_CENTER );
 							measurementSnapshotList.addCell( pdfPCell );
