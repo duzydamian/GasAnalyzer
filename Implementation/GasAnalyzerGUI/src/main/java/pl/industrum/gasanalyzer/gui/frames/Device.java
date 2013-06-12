@@ -29,7 +29,7 @@ import pl.industrum.gasanalyzer.elan.frames.ELANRxBroadcastFrame;
 import pl.industrum.gasanalyzer.elan.frames.ELANRxInvalidFrame;
 import pl.industrum.gasanalyzer.elan.types.ELANCollectiveChannelState;
 import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
-import pl.industrum.gasanalyzer.elan.types.ELANVariableDimensionPair;
+import pl.industrum.gasanalyzer.elan.types.ELANVariableDimensionPrecisionTrio;
 import pl.industrum.gasanalyzer.hibernate.model.managers.DeviceManager;
 import pl.industrum.gasanalyzer.hibernate.model.managers.MeasurementSetManager;
 import pl.industrum.gasanalyzer.i18n.Messages;
@@ -162,7 +162,7 @@ public abstract class Device extends Composite
 			table.getColumn (i).setMoveable(true);
 		}
 		
-		for( ELANVariableDimensionPair measurement: device.getDeviceInformation() )
+		for( ELANVariableDimensionPrecisionTrio measurement: device.getDeviceInformation() )
 		{
 			TableItem item = new TableItem (table, SWT.NONE);
 			item.setText (0, measurement.getVariable().getPrintable() );

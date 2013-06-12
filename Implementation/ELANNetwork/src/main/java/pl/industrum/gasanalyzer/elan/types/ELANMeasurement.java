@@ -1,11 +1,17 @@
 package pl.industrum.gasanalyzer.elan.types;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+
 
 public class ELANMeasurement
 {
 	private ELANDimension dimension;
 	private ELANMeasuredVariable measuredVariable;
 	private Double value;
+	private Integer precision;
+	
+	private static NumberFormat nf = NumberFormat.getInstance();
 	
 	public ELANMeasurement( ELANDimension dimension, ELANMeasuredVariable measuredVariable, Double value )
 	{
@@ -29,9 +35,31 @@ public class ELANMeasurement
 		return value;
 	}
 	
+	public void setPrecision( Integer precision )
+	{
+		this.precision = precision;
+	}
+	
+	public Integer getPrecision()
+	{
+		return precision;
+	}
+	
 	@Override
 	public String toString()
 	{
 		return value.toString() + " " + dimension.toString() + " " + measuredVariable.toString();
+	}
+	
+	public double doubleRet()
+    {
+        return new BigDecimal(value).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue();
+    }
+	
+	public String doubleAsStringRet()
+	{
+		nf.setMaximumFractionDigits(precision);
+	    nf.setMinimumFractionDigits(precision);
+	    return nf.format(new BigDecimal(value).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue()).replace(".", ",");
 	}
 }
