@@ -418,7 +418,7 @@ public abstract class Device extends Composite
 					int i = 0;
 					for( ELANMeasurement elanMeasurement: frame )
 					{
-						table.getItem( i ).setText( 1, elanMeasurement.getValue().toString() );
+						table.getItem( i ).setText( 1, elanMeasurement.doubleAsStringRet());
 						i++;
 					}
 					table.setEnabled( true );
