@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 import org.dom4j.Attribute;
@@ -29,6 +30,18 @@ public class XmlParser
 	private Document xml;
 	Vector<Device> devicesFromDatabaseWithPrecision;
 
+	public XmlParser( List<Device> allDevices )
+	{
+		devicesFromDatabaseWithPrecision = new Vector<Device>();
+		
+		for( Device device: allDevices )
+		{
+			devicesFromDatabaseWithPrecision.add( device );
+		}
+		
+		new XmlParser( devicesFromDatabaseWithPrecision );
+	}
+	
 	/**
 	 * 
 	 */

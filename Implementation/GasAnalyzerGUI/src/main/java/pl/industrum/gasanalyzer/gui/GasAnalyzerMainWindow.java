@@ -1,6 +1,7 @@
 package pl.industrum.gasanalyzer.gui;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -258,12 +259,13 @@ public class GasAnalyzerMainWindow implements Observer
 			}
 
 			@Override
-			public void addDeviceToDeviceCollection( String port, TreeItem treeItem, Device deviceByAddress )
+			public void addDeviceToDeviceCollection( String port, TreeItem treeItem, Device deviceByAddress, HashMap<String, Integer> measurementPrecisionMap )
 			{				
 				try
 				{					
 					connectionWrapper.getNetwork( port ).getDevice( deviceByAddress.getAddress() ).getDeviceInformation().setDeviceIDInDatabase( deviceByAddress.getId() );
 					connectionWrapper.getNetwork( port ).getDevice( deviceByAddress.getAddress() ).getDeviceInformation().setName( deviceByAddress.getName() );
+					connectionWrapper.getNetwork( port ).getDevice( deviceByAddress.getAddress() ).getDeviceInformation().setPrecisions( measurementPrecisionMap );
 					deviceCollection.addDevice( connectionWrapper.getNetwork( port ).getDevice( deviceByAddress.getAddress() ), treeItem, treeItem.getText() );
 				} catch ( NullDeviceException e )
 				{

@@ -47,11 +47,12 @@ public class DevicePreferences extends Dialog
 
 	private Vector<Device> devicesCollection;
 	private HashMap<Integer, Device> devicesMap;
+	private HashMap<String, DeviceType> deviceTypesMap;
 	
 	private TableColumn addColumn;
 	private TableColumn addressColumn;
 	private TableColumn nameColumn;
-	private TableColumn typeColumn;
+	private TableColumn typeColumn;	
 	
 	/**
 	 * Create the dialog.
@@ -66,6 +67,7 @@ public class DevicePreferences extends Dialog
 		
 		devicesCollection = new Vector<Device>();
 		devicesMap = new HashMap<Integer, Device>();
+		deviceTypesMap = new HashMap<String, DeviceType>();
 	}
 
 	/**
@@ -125,6 +127,8 @@ public class DevicePreferences extends Dialog
 		editor.grabHorizontal = true;
 		
 		loadDevicesFromDB();
+		loadDeviceTypesFromDB();
+		
 		XmlParser xmlParser = new XmlParser( devicesCollection );
 		devicesCollection = xmlParser.getDevicesFromDatabaseWithPrecision();
 		addDevicesToTable();
@@ -315,36 +319,31 @@ public class DevicePreferences extends Dialog
 		}
 	}
 	
+	private void loadDeviceTypesFromDB()
+	{
+		for( DeviceType deviceType: DeviceTypeDictionary.getAll() )
+		{
+			deviceTypesMap.put( deviceType.getType(), deviceType );
+		}
+	}
+	
 	protected void saveAction()
 	{
+		for( TableItem item: table.getItems() )
+		{			
+			Integer id = devicesMap.get( table.indexOf( item ) ).getId();
+			Integer deviceTypeID = deviceTypesMap.get( item.getText( 3 ) ).getId();
+			result = DeviceManager.getDevice( DeviceManager.updateDevice( id, deviceTypeID, item.getText( 2 ), Integer.parseInt( item.getText( 1 ) ) ) );
+		}
+		
 		//TODO add update devices in DB
 		XmlCreator xmlCreator = new XmlCreator( devicesCollection );		
 		result = xmlCreator.getXml();	
 	}
-//	
-//	private boolean validateName()
-//	{
-//		if ( textName.getText().isEmpty() | textName.getText() == null )
-//		{
-//			setFormFieldError( lblName, textName, icoName );
-//			return false;
-//		} else
-//		{
-//			setFormFieldOK( lblName, textName, icoName );
-//			return true;
-//		}
-//	}
-
-	private void buildDataStructure()
-	{
-		
-	}
 	
 	private boolean validateAll()
 	{
-		boolean isValid = true;
-		
-		//isValid = validateName();
+		boolean isValid = true;		
 		
 		return isValid;
 	}
