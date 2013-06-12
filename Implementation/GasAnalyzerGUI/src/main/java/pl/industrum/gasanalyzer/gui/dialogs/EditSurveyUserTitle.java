@@ -82,7 +82,7 @@ public class EditSurveyUserTitle extends Dialog
 		shell.setText( getText() );
 		shell.setLayout( new GridLayout( 4, false ) );
 
-		comboAllSurveyUserTitle = new Combo( shell, SWT.BORDER );
+		comboAllSurveyUserTitle = new Combo( shell, SWT.BORDER | SWT.READ_ONLY );
 		comboAllSurveyUserTitle.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 4, 1 ) );
 		comboAllSurveyUserTitle.addModifyListener( new ModifyListener()
@@ -92,7 +92,7 @@ public class EditSurveyUserTitle extends Dialog
 				loadSurveyUserTitleData( avaibleSurveyUserTitles.get( comboAllSurveyUserTitle.getSelectionIndex() ) );
 			}
 		} );
-		
+
 		loadSurveyUserTitles();
 		
 		lblName = new Label( shell, SWT.RIGHT );
@@ -167,8 +167,8 @@ public class EditSurveyUserTitle extends Dialog
 	
 	protected void saveAction()
 	{
-		//TODO implement update in database
-		//result = DegreeDictionary.get( DegreeDictionary.add( textName.getText() ) );
+		Integer id = avaibleSurveyUserTitles.get( comboAllSurveyUserTitle.getSelectionIndex() ).getId();		
+		result = DegreeDictionary.get( DegreeDictionary.update( id, textName.getText() ) );
 	}
 	
 	private boolean validateName()

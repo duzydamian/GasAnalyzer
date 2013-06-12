@@ -1,5 +1,6 @@
 package pl.industrum.gasanalyzer.elan.communication.network;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -109,5 +110,14 @@ public class ELANMeasurementDeviceInformation implements Iterable<ELANVariableDi
 	public void setDeviceIDInDatabase( Integer deviceIDInDatabase )
 	{
 		this.deviceIDInDatabase = deviceIDInDatabase;
+	}
+
+	public void setPrecisions( HashMap<String, Integer> measurementPrecisionMap )
+	{
+		// TODO Auto-generated method stub
+		for( ELANVariableDimensionPrecisionTrio precisionTrio: measuredVariables )
+		{
+			precisionTrio.setPrecision( measurementPrecisionMap.get( precisionTrio.getVariable().name() ) );
+		}
 	}
 }

@@ -101,7 +101,7 @@ public class NewSurveyUser extends Dialog
 		lblTitle = new Label( shell, SWT.NONE );
 		lblTitle.setText( Messages.getString( "NewSurveyUser.lblTitle.text" ) ); //$NON-NLS-1$
 
-		textTitle = new Combo( shell, SWT.BORDER );
+		textTitle = new Combo( shell, SWT.BORDER | SWT.READ_ONLY );
 		textTitle.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 1, 1 ) );
 		refreshListTitle();
@@ -173,7 +173,7 @@ public class NewSurveyUser extends Dialog
 		lblFunction.setText( Messages
 				.getString( "NewSurveyUser.lblNewLabel.text" ) ); //$NON-NLS-1$
 
-		textFunction = new Combo( shell, SWT.BORDER );
+		textFunction = new Combo( shell, SWT.BORDER | SWT.READ_ONLY );
 		textFunction.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 1, 1 ) );
 		refreshListFunction();

@@ -55,9 +55,12 @@ public class SplashScreen
 		gc = new GC(image);
 		gc.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
 		gc.fillRectangle(image.getBounds());
-		gc.setFont(new Font(display, "Arial", 14, SWT.BOLD | SWT.ITALIC));
+		gc.setFont(new Font(display, "Arial", 18, SWT.BOLD | SWT.ITALIC));
 		gc.drawText("Gas Analyzer", 10, 10);
+		gc.setFont(new Font(display, "Arial", 12, SWT.BOLD));
+		gc.drawText("Autorzy: Damian Karbowiak & Grzegorz Powała", 10, 40);
 		gc.dispose();
+		
 		splash = new Shell(SWT.ON_TOP);
 		
 		layout = new FormLayout();
@@ -67,35 +70,35 @@ public class SplashScreen
 		label.setImage(image);
 		labelData = new FormData ();
 		labelData.right = new FormAttachment (100, 0);
-		labelData.bottom = new FormAttachment (100, 0);
+		labelData.bottom = new FormAttachment (100);
 		label.setLayoutData(labelData);		
 		
 		industrumLogo = new Label(splash, SWT.NONE);
 		industrumLogo.setImage( UsefulImage.INDUSTRUM_LOGO.getImage() );
 		industrumLogoData = new FormData();
 		industrumLogoData.left = new FormAttachment ((image.getBounds().width/2 - industrumLogo.getImage().getBounds().width/2)/4, 0);
-		industrumLogoData.bottom = new FormAttachment (50, -5);
+		industrumLogoData.bottom = new FormAttachment (55, -5);
 		industrumLogo.setLayoutData(industrumLogoData);		
 	
 		imiueLogo = new Label(splash, SWT.NONE);
 		imiueLogo.setImage( UsefulImage.IMIUE_LOGO.getImage() );
 		imiueLogoData = new FormData();
-		imiueLogoData.left = new FormAttachment (5, 0);	
-		imiueLogoData.bottom = new FormAttachment (80, -5);
+		imiueLogoData.left = new FormAttachment ((image.getBounds().width/2 - imiueLogo.getImage().getBounds().width/2)/4, 0);					
+		imiueLogoData.bottom = new FormAttachment (82, -5);
 		imiueLogo.setLayoutData(imiueLogoData);
 		
 		zkiwpLogo = new Label(splash, SWT.NONE);
 		zkiwpLogo.setImage( UsefulImage.ZKIWP_LOGO.getImage() );
 		zkiwpLogoData = new FormData();
-		zkiwpLogoData.left = new FormAttachment ((image.getBounds().width/2 - zkiwpLogo.getImage().getBounds().width/2)/4, 0);
-		zkiwpLogoData.bottom = new FormAttachment (80, -5);
+		zkiwpLogoData.left = new FormAttachment ((image.getBounds().width-zkiwpLogo.getImage().getBounds().width)/4-5, 0);				
+		zkiwpLogoData.bottom = new FormAttachment (82, -5);
 		zkiwpLogo.setLayoutData(zkiwpLogoData);
 		
 		polslLogo = new Label(splash, SWT.NONE);
 		polslLogo.setImage( UsefulImage.POLSL_LOGO.getImage() );
 		polslLogoData = new FormData();
-		polslLogoData.left = new FormAttachment ((image.getBounds().width-polslLogo.getImage().getBounds().width)/4-5, 0);		
-		polslLogoData.bottom = new FormAttachment (80, -5);
+		polslLogoData.left = new FormAttachment (5, 0); 						
+		polslLogoData.bottom = new FormAttachment (82, -5);
 		polslLogo.setLayoutData(polslLogoData);
 		
 		stateLabel = new Label(splash, SWT.NONE);

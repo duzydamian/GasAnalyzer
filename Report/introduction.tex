@@ -1,0 +1,65 @@
+\section{Wstęp}
+%Część ta~zawiera wstępne informacje o~realizowanym projekcie. Zebrano w~nim wszystko to~co było dostępne zanim student przystąpił do~realizacji informatycznej części projektu. Opisano stanowisko laboratoryjne na~którym powstał projekt.
+
+\subsection{Geneza}
+Tematem projektu, którego dotyczy ta praca jest: „Syst". Pomysł na~projekt pojawił się po~zrealizowaniu przez autora projektu semestralnego z~przedmiotu Sterowniki PLC.
+
+\subsection{Temat}
+Głównymi celami pracy było napisanie oprogramowania
+
+\subsection{Dostępny sprzęt}
+\begin{figure}[!htb] 	\centering 	\includegraphics[width=0.99\textwidth]{images/schemat.png} 	\caption{Schemat stanowiska} \label{schemat} \end{figure} 
+Na potrzeby realizacji projektu wykorzystano istniejące stanowisko laboratoryjne, którego schemat przedstawia Rysunek~\ref{schemat}. Składa się ono~z:
+\begin{itemize}
+\item Sterownika PLC,
+\item Komputera,
+\item Modelu Robota 3D.
+\end{itemize}
+\indent
+\indent Stanowisko to na potrzeby projektu rozbudowano o model magazynu wysokiego składowania. Poszczególne składowe stanowiska zostały bardziej szczegółowo opisane w~kolejnych podrozdziałach.
+\subsubsection{Sterownik PLC}
+Sterownik PLC wykorzystywany do realizacji projektu był wyposażony w następujące moduły:
+\begin{enumerate}
+\item SIMATIC S7-300, Jednostka centralna S7-300 CPU 315F-2 PN/DP,
+\item SIMATIC S7-300, Zasilacz PS 307,
+\item SIMATIC S7-300, Wejścia/Wyjścia cyfrowe SM 323,
+\item SIMATIC S7-300, Wejścia/Wyjścia analogowe SM 334.
+\end{enumerate}
+
+\indent
+\indent Sterownik podłączony jest do sieci lokalnej Ethernet w~laboratorium, więc komunikacja z~nim odbywa się tak samo jak z~każdym innym urządzeniem sieciowym. Podstawy programowania i korzystania ze sterowników autor poznał zapoznając się z odpowiednią literaturą \cite{plc1,plc2,plc4,plc5,plc6}.
+Konfigurację sterownika wraz z modułami przedstawia Rysunek~\ref{conf}.
+
+\subsubsection{Komputer}
+Projekt w całości był realizowany na laptopie autora, podłączanym do~sieci w~laboratorium. Na~komputerze uruchomiane były dwie maszyny wirtualne. Na~jednej zainstalowane było środowisko Step~7 do~programowania sterownika, a~na~drugiej WinCC flexible 2008 do~tworzenia i~uruchamiania wizualizacji. Wizualizacje tworzone w środowisku WinCC flexible są~dedykowane do~paneli operatorskich, jednak ta~stworzona przez autora na~potrzeby projektu była uruchamiana na komputerze za~pomocą runtime system.
+
+\subsection{Analiza tematu}
+Analiza tematu polegała przede wszystkim na zapoznaniu się z~narzędziami programistycznymi do~tworzenia oprogramowania sterownika oraz wizualizacji.
+W~wyniku analizy autor poznał podstawy języków: LAD~\cite{step1,step2,step3}, STL~\cite{step1,step2,step3}, FBD~\cite{step1,step2,step3}, GRAPH~\cite{step3}, SCL~\cite{scl1,scl2,scl3} i AWL do~tworzenia programu sterownika oraz VBScript do~tworzenia skryptów w~wizualizacji. Poznanie tych podstaw pozwoliło dobrać język odpowiedni do~realizacji poszczególnych zadań.
+
+\subsection{Założenia}
+%Stworzone oprogramowanie dla Robota Fishertechnik ma działać na sterownikach firmy Siemens oraz ma zostać stworzone przy użyciu środowiska Step 7. Funkcjonalności robota, jakie mają wchodzić w~skład projektu, to:
+Oprogramowanie dla Robota Fishertechnik powinno zostać stworzone przy użyciu środowiska Step 7 oraz działać na sterownikach firmy Siemens. Funkcjonalności robota wchodzące w~skład projektu, to:
+\begin{itemize}
+\item sterowanie ręczne z~pilota podłączonego bezpośrednio do~sterownika,
+\item sterowanie ręczne z~wizualizacji,
+\item sterowanie automatyczne, 
+\item wizualizacja stanu magazynu,
+\item umożliwienie korzystania z~magazynu zarówno poprzez sterowanie ręczne, jak i~przy użyciu zautomatyzowanych poleceń dostępnych z~poziomu wizualizacji.
+\end{itemize}
+\indent
+\indent Powyżej zostały wymienione założenia podstawowe, jednak autor nie wyklucza zrealizowania dodatkowych zadań, które nie zostały zamieszczone w~pierwotnej koncepcji realizacji projektu.
+%Zamieszczone tu założenia są podstawowe, ale niewykluczone jest zrealizowanie przez autora dodatkowych zadań nie zaplanowanych przed rozpoczęciem realizacji projektu.
+
+\subsection{Plan pracy}
+Realizacja projektu została podzielona na następujące etapy:
+\begin{itemize}
+\item Przygotowanie stanowiska, zebranie odpowiednich materiałów i~literatury,
+\item Analiza wymagań funkcjonalnych aplikacji,
+\item Projektowanie struktury oprogramowania i~interfejsów wymiany danych,
+\item Implementacja,
+\item Testowanie i~uruchamianie,
+\item Przedstawienie projektu i~ewentualne korekty.
+\end{itemize}
+\indent
+\indent Powyższy plan pracy stanowił dla autora wyznacznik kolejnych działań. Jednak powszechnie wiadomo, że w~praktyce poszczególne punkty są~wymienne i~wpływają na siebie wzajemnie.
