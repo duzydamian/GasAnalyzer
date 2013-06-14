@@ -114,10 +114,9 @@ public class ELANMeasurementDeviceInformation implements Iterable<ELANVariableDi
 
 	public void setPrecisions( HashMap<String, Integer> measurementPrecisionMap )
 	{
-		// TODO Auto-generated method stub
 		for( ELANVariableDimensionPrecisionTrio precisionTrio: measuredVariables )
 		{
-			precisionTrio.setPrecision( measurementPrecisionMap.get( precisionTrio.getVariable().name() ) );
+			precisionTrio.setPrecision( measurementPrecisionMap.get( precisionTrio.getVariable().getPrintable() ) );
 		}
 	}
 }

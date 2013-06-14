@@ -283,13 +283,21 @@ public abstract class PDFGenerator
 						Measurement measurement2 = ( Measurement )measurement;
 						if ( !measurement2.getMeasurementVariable().getName().equalsIgnoreCase( "Process preassure" ) )
 						{
-							String valueAsString = "";
+							try{
+							String valueAsString = "";		
+							Integer precision = thisDevice.getMeasurementPrecisionMap().get( measurement2.getMeasurementVariable().getName() );
+							if( precision == null)
+								precision = 2;
 							
-							valueAsString = Formater.doubleWithPrecisionAsString( measurement2.getValue(), thisDevice.getMeasurementPrecisionMap().get( measurement2.getMeasurementVariable().getName() ) );
+							valueAsString = Formater.doubleWithPrecisionAsString( measurement2.getValue(), precision );
 							
 							PdfPCell pdfPCell = new PdfPCell( new Paragraph( valueAsString, czcionka10 ) );
 							pdfPCell.setHorizontalAlignment( PdfPCell.ALIGN_CENTER );
 							measurementSnapshotList.addCell( pdfPCell );
+							}catch(NullPointerException aa)
+							{
+								aa.printStackTrace();
+							}
 						}						
 					}
 					
