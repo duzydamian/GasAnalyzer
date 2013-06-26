@@ -45,13 +45,15 @@ public class DatabaseMeasurementDimensionCorrectTest extends Test
 				}
 				
 				System.out.println( "Successful repair Measurement dimension dictionary: " );
+				setPassed();
 			}
 			catch(Exception e)
 			{
-				e.printStackTrace();
+				setFailed();
+				e.printStackTrace();				
 				messageDialog.open();
 			}
 		}
-		setPassed();
+		
 	}
 }

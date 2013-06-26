@@ -42,7 +42,7 @@ public abstract class MeasurementDimensionDictionary
 		
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		session.update( dimension );
+		session.saveOrUpdate( dimension );
 		session.getTransaction().commit();
 		//TODO reindexing table
 		return dimension.getId();

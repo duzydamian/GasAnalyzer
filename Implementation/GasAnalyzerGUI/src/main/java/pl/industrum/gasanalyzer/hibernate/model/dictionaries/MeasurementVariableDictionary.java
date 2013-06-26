@@ -42,7 +42,7 @@ public abstract class MeasurementVariableDictionary
 		
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		session.update( variable );
+		session.saveOrUpdate( variable );
 		session.getTransaction().commit();
 		//TODO reindexing table
 		return variable.getId();

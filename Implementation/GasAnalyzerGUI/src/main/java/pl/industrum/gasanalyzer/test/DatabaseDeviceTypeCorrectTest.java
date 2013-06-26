@@ -45,12 +45,14 @@ public class DatabaseDeviceTypeCorrectTest extends Test
 				}
 				
 				System.out.println( "Successful repair Device type dictionary: " );
+				setPassed();
 			}
 			catch(Exception e)
 			{
+				setFailed();
+				e.printStackTrace();
 				messageDialog.open();
 			}
-		}
-		setPassed();
+		}		
 	}
 }

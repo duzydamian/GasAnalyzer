@@ -45,12 +45,15 @@ public class DatabaseMeasurementVariableCorrectTest extends Test
 				}
 				
 				System.out.println( "Successful repair Measurement variable dictionary: " );
+				setPassed();
 			}
 			catch(Exception e)
 			{
+				setFailed();
+				e.printStackTrace();
 				messageDialog.open();
 			}
 		}
-		setPassed();
+		
 	}
 }

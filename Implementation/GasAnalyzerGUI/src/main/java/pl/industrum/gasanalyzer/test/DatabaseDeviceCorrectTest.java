@@ -45,12 +45,15 @@ public class DatabaseDeviceCorrectTest extends Test
 				{
 					DeviceManager.addDevice( 1 , "Device "+i, i );
 				}
+				
+				setPassed();
 			}
 			catch(Exception e)
 			{
+				setFailed();
+				e.printStackTrace();
 				messageDialog.open();
 			}
-		}
-		setPassed();
+		}		
 	}
 }
