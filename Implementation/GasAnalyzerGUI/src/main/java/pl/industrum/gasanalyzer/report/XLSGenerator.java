@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.Vector;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -16,11 +17,14 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.eclipse.swt.program.Program;
 
+import pl.industrum.gasanalyzer.hibernate.model.managers.DeviceManager;
 import pl.industrum.gasanalyzer.hibernate.model.managers.MeasurementSnapshotManager;
+import pl.industrum.gasanalyzer.model.Device;
 import pl.industrum.gasanalyzer.model.Measurement;
 import pl.industrum.gasanalyzer.model.MeasurementSet;
 import pl.industrum.gasanalyzer.model.MeasurementSnapshot;
 import pl.industrum.gasanalyzer.model.Survey;
+import pl.industrum.gasanalyzer.xml.XmlParser;
 
 /**
  *
@@ -141,11 +145,8 @@ public abstract class XLSGenerator
         currRow = 3;
         currColumn = 1;
         
-        HSSFCellStyle cs = workbook.createCellStyle();
-        HSSFDataFormat df = workbook.createDataFormat();
-        cs.setDataFormat( df.getFormat("#,##0.0") );
-        cell.setCellValue(11111.1);
-        cell.setCellStyle(cs);
+        XmlParser xml = new XmlParser( DeviceManager.getAllDevices() );
+		Vector<Device> devicesFromDatabaseWithPrecision = xml.getDevicesFromDatabaseWithPrecision();
         
         int i = 1;
         HSSFRow dataRow;
@@ -160,13 +161,29 @@ public abstract class XLSGenerator
 			for( Object set: snapshot.getMeasurementSetsSorted() )
 			{
 				MeasurementSet measurementSet = ( MeasurementSet )set;
+				Device thisDevice = null;
+				for( Device device: devicesFromDatabaseWithPrecision )
+				{
+					if( device.getId() == measurementSet.getDevice().getId() )
+						thisDevice = device;
+				}
 				for( Object measurement: measurementSet.getMeasurementsSorted() )
 				{
 					if ( !( ( Measurement )measurement  ).getMeasurementVariable().getName().equalsIgnoreCase( "Process preassure" ) )
 					{
-						HSSFCell new_cell = dataRow.createCell( currColumn );
+						HSSFCellStyle cs = workbook.createCellStyle();
+				        HSSFDataFormat df = workbook.createDataFormat();
+				        Integer precision = thisDevice.getMeasurementPrecisionMap().get( ( ( Measurement )measurement ).getMeasurementVariable().getName() );
+				        if( precision == null )
+				        {
+				        	precision = 2;
+				        }
+				        cs.setDataFormat( df.getFormat( getPrecisionFormat( precision ) ) );
+						
+				        HSSFCell new_cell = dataRow.createCell( currColumn );
 						new_cell.setCellStyle(cs);
 						new_cell.setCellValue( (double)( ( Measurement )measurement  ).getValue() );
+						
 						currColumn++;
 					}						
 				}
@@ -193,6 +210,24 @@ public abstract class XLSGenerator
 			e.printStackTrace();
 		}
     }
+	
+	private String getPrecisionFormat( Integer precision )
+	{
+		String format = "#,##0";
+		if( precision == 0 )
+		{
+			return format;
+		}
+		else
+		{
+			format += ".";
+			for( int i = 0; i < precision; i++ )
+			{
+				format += "0";
+			}
+			return format;
+		}
+	}
 	
 	public void open(String path)
     {
