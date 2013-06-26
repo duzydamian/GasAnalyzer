@@ -7,15 +7,20 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.Vector;
 
 import org.eclipse.swt.program.Program;
 
+import pl.industrum.gasanalyzer.hibernate.model.managers.DeviceManager;
 import pl.industrum.gasanalyzer.hibernate.model.managers.MeasurementSnapshotManager;
+import pl.industrum.gasanalyzer.model.Device;
 import pl.industrum.gasanalyzer.model.Measurement;
 import pl.industrum.gasanalyzer.model.MeasurementSet;
 import pl.industrum.gasanalyzer.model.MeasurementSnapshot;
 import pl.industrum.gasanalyzer.model.Survey;
+import pl.industrum.gasanalyzer.types.Formater;
 import pl.industrum.gasanalyzer.types.UsefulImage;
+import pl.industrum.gasanalyzer.xml.XmlParser;
 
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -42,11 +47,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 @SuppressWarnings( "unused" )
 public abstract class PDFGenerator
 {
-	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "dd/MM/yyyy", Locale.getDefault() );
-	private static SimpleDateFormat hourFormater = new SimpleDateFormat( "HH:mm:ss", Locale.getDefault() );
-	
-	private static NumberFormat nf = NumberFormat.getInstance();
-    
 	static BaseFont font;
     
 	private Font czcionka2;
@@ -185,7 +185,7 @@ public abstract class PDFGenerator
 			surveyData.add(new Chunk(survey.getName(), czcionka16b));
 			surveyData.add("\n");
 			surveyData.add(new Chunk("Data pomiarów: ", czcionka16));
-			surveyData.add(new Chunk(dateFormater.format( survey.getTimestamp() ), czcionka16b));
+			surveyData.add(new Chunk(Formater.getDateFormater().format( survey.getTimestamp() ), czcionka16b));
 			surveyData.add("\n");
 			surveyData.add(new Chunk("Miejsce: ", czcionka16));
 			surveyData.add(new Chunk(survey.getObject().getPlace().toString(), czcionka16b));
@@ -260,35 +260,44 @@ public abstract class PDFGenerator
 				}
 			}			
 			
+			XmlParser xml = new XmlParser( DeviceManager.getAllDevices() );
+			Vector<Device> devicesFromDatabaseWithPrecision = xml.getDevicesFromDatabaseWithPrecision();
+			
 			int i = 1;
 			for( MeasurementSnapshot snapshot: MeasurementSnapshotManager.getAllMeasurementSnapshots( survey.getId() ) )
 			{				
 				measurementSnapshotList.addCell(new PdfPCell(new Paragraph(String.valueOf(i),czcionka10)));
-				measurementSnapshotList.addCell(new PdfPCell(new Paragraph(hourFormater.format( snapshot.getTimestamp() ),czcionka10)));
+				measurementSnapshotList.addCell(new PdfPCell(new Paragraph(Formater.getHourFormater().format( snapshot.getTimestamp() ),czcionka10)));
 				for( Object set: snapshot.getMeasurementSetsSorted() )
 				{
 					MeasurementSet measurementSet = ( MeasurementSet )set;
+					Device thisDevice = null;
+					for( Device device: devicesFromDatabaseWithPrecision )
+					{
+						if( device.getId() == measurementSet.getDevice().getId() )
+							thisDevice = device;
+					}
+					
 					for( Object measurement: measurementSet.getMeasurementsSorted() )
 					{
 						Measurement measurement2 = ( Measurement )measurement;
 						if ( !measurement2.getMeasurementVariable().getName().equalsIgnoreCase( "Process preassure" ) )
 						{
-							String valueAsString = "";
-							if ( measurement2.getMeasurementDimension().getId() < 8 )
-							{
-								valueAsString = StringRet( measurement2.getValue(), 0 );
-							}
-							else if ( measurement2.getMeasurementVariable().getId() == 4 )
-							{
-								valueAsString = StringRet( measurement2.getValue(), 3 );
-							} 
-							else
-							{
-								valueAsString = StringRet( measurement2.getValue(), 2 );
-							}
+							try{
+							String valueAsString = "";		
+							Integer precision = thisDevice.getMeasurementPrecisionMap().get( measurement2.getMeasurementVariable().getName() );
+							if( precision == null)
+								precision = 2;
+							
+							valueAsString = Formater.doubleWithPrecisionAsString( measurement2.getValue(), precision );
+							
 							PdfPCell pdfPCell = new PdfPCell( new Paragraph( valueAsString, czcionka10 ) );
 							pdfPCell.setHorizontalAlignment( PdfPCell.ALIGN_CENTER );
 							measurementSnapshotList.addCell( pdfPCell );
+							}catch(NullPointerException aa)
+							{
+								aa.printStackTrace();
+							}
 						}						
 					}
 					
@@ -306,14 +315,11 @@ public abstract class PDFGenerator
             
             document.add(measurementSnapshotList);
 
-//            document.addAuthor("duzydamian");
-//            document.addProducer();
-//            document.addCreator(sp.getNazwa());
-//            document.addSubject("Faktrura Vat");
+            document.addAuthor("Damian Karbowiak & Grzegorz Powała");
+            document.addCreator(survey.getApplicationUser().toString());
+            document.addSubject(survey.getName());
             document.addTitle("Gas Analyzer " + survey.getName());
-//            document.addCreationDate();
-//            document.addKeywords("faktura, vat, firma, klient, produkt");
-//            document.addHeader(numer, numer);
+            document.addCreationDate();
 
             }
         	catch (DocumentException de)
@@ -330,41 +336,7 @@ public abstract class PDFGenerator
     public void open(String path)
     {
             Program.launch( path );
-    }
-    
-    public static double doubleRet(double value, int precision)
-    {
-        return new BigDecimal(value).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue();
-    }
-
-    public static double doubleRet(String value, int precision)
-    {
-        return new BigDecimal(value).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue();
-    }
-
-    public static Double DoubleRet(double value, int precision)
-    {
-        return new BigDecimal(value).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue();
-    }
-
-    public static Double DoubleRet(String value, int precision)
-    {
-        return new BigDecimal(value).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue();
-    }
-
-    public static String StringRet(double value, int precision)
-    {
-        nf.setMaximumFractionDigits(precision);
-        nf.setMinimumFractionDigits(precision);
-        return nf.format(new BigDecimal(value).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue()).replace(".", ",");
-    }
-
-    public static String StringRet(String value, int precision)
-    {
-        nf.setMaximumFractionDigits(precision);
-        nf.setMinimumFractionDigits(precision);
-        return nf.format(new BigDecimal(value.replace(',', '.')).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue()).replace(".", ",");
-    }
+    }   
     
     public abstract void progressIncrement();
     
@@ -404,19 +376,23 @@ public abstract class PDFGenerator
          */
         public void onEndPage(PdfWriter writer, Document document)
         {
-            PdfPTable table = new PdfPTable(2);
+            PdfPTable table = new PdfPTable(3);
             try
             {
-                table.setWidths(new int[]{90, 10});
-                table.setTotalWidth(writer.getPageSize().getWidth());       
-                table.getDefaultCell().setFixedHeight(20);
+                table.setWidths(new int[]{60, 30, 10});
+                table.setTotalWidth(writer.getPageSize().getWidth()-60);       
+                table.getDefaultCell().setFixedHeight(30);
                 table.getDefaultCell().setBorder(Rectangle.NO_BORDER);
-                table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
+                PdfPCell pdfPCell = new PdfPCell(new Paragraph(" Wygenerowano przy pomocy programu Gas Analyzer \n Autorzy: Damian Karbowiak & Grzegorz Powała", czcionka8));
+                pdfPCell.setBorder( Rectangle.NO_BORDER );
+                table.addCell(pdfPCell);
+                table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);                
                 table.addCell(String.format("Strona %d z", writer.getPageNumber()));
                 PdfPCell cell = new PdfPCell(Image.getInstance(total));
+                cell.setPaddingLeft( 2f );
                 cell.setBorder(Rectangle.NO_BORDER);
                 table.addCell(cell);
-                table.writeSelectedRows(0, -1, 0f, 20f, writer.getDirectContent());
+                table.writeSelectedRows(0, -1, 30f, 30f, writer.getDirectContent());
             }
             catch(DocumentException de)
             {

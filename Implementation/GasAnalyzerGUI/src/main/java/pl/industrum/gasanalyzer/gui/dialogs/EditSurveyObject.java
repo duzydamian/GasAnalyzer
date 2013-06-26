@@ -91,7 +91,7 @@ public class EditSurveyObject extends Dialog
 		shell.setText( getText() );
 		shell.setLayout( new GridLayout( 4, false ) );
 
-		comboAllSurveyPlace = new Combo( shell, SWT.BORDER );
+		comboAllSurveyPlace = new Combo( shell, SWT.BORDER | SWT.READ_ONLY);
 		comboAllSurveyPlace.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 4, 1 ) );
 		comboAllSurveyPlace.addModifyListener( new ModifyListener()
@@ -104,7 +104,7 @@ public class EditSurveyObject extends Dialog
 
 		loadSurveyPlaces();
 		
-		comboAllSurveyObject = new Combo( shell, SWT.BORDER );
+		comboAllSurveyObject = new Combo( shell, SWT.BORDER | SWT.READ_ONLY);
 		comboAllSurveyObject.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 4, 1 ) );
 		comboAllSurveyObject.addModifyListener( new ModifyListener()
@@ -222,8 +222,8 @@ public class EditSurveyObject extends Dialog
 	
 	protected void saveAction()
 	{
-		//TODO implement update in database	
-		//result = MeasuredObjectManager.getObject( MeasuredObjectManager.addObject( textName.getText(), textDesciption.getText(), placeID ) );
+		Integer id = avaibleSurveyObjects.get( comboAllSurveyObject.getSelectionIndex() ).getId();	
+		result = MeasuredObjectManager.getObject( MeasuredObjectManager.updateObject( id, textName.getText(), textDesciption.getText(), placeID ) );
 	}
 	
 	private boolean validateName()

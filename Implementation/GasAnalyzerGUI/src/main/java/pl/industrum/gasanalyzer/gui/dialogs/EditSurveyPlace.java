@@ -94,7 +94,7 @@ public class EditSurveyPlace extends Dialog
 		shell.setText( getText() );
 		shell.setLayout( new GridLayout( 4, false ) );
 
-		comboAllSurveyPlace = new Combo( shell, SWT.BORDER );
+		comboAllSurveyPlace = new Combo( shell, SWT.BORDER | SWT.READ_ONLY);
 		comboAllSurveyPlace.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 4, 1 ) );
 		comboAllSurveyPlace.addModifyListener( new ModifyListener()
@@ -134,7 +134,7 @@ public class EditSurveyPlace extends Dialog
 		
 		icoName = new Label(shell, SWT.NONE);
 		icoName.setImage( null );
-//////////////////////////////////
+
 		lblCity = new Label( shell, SWT.RIGHT );
 		lblCity.setText( Messages.getString( "NewSurveyPlace.lblCity.text" ) ); //$NON-NLS-1$
 
@@ -152,7 +152,7 @@ public class EditSurveyPlace extends Dialog
 		
 		icoCity = new Label(shell, SWT.NONE);
 		icoCity.setImage( null );
-///////////////////////////////////
+		
 		lblPostCode = new Label( shell, SWT.RIGHT );
 		lblPostCode.setText( Messages.getString( "NewSurveyPlace.lblPostCode.text" ) ); //$NON-NLS-1$
 
@@ -170,7 +170,7 @@ public class EditSurveyPlace extends Dialog
 		
 		icoPostCode = new Label(shell, SWT.NONE);
 		icoPostCode.setImage( null );
-//////////////////////////////////////////////////////////////
+
 		lblAddress = new Label( shell, SWT.RIGHT );
 		lblAddress.setText( Messages.getString( "NewSurveyPlace.lblAddress.text" ) ); //$NON-NLS-1$
 
@@ -257,8 +257,8 @@ public class EditSurveyPlace extends Dialog
 	
 	protected void saveAction()
 	{
-		//TODO implement update in database		
-		//result = PlaceManager.getPlace( PlaceManager.addPlace( textName.getText(), textCity.getText(), textPostCode.getText(), textAddress.getText() ) );
+		Integer id = avaibleSurveyPlaces.get( comboAllSurveyPlace.getSelectionIndex() ).getId();		
+		result = PlaceManager.getPlace( PlaceManager.updatePlace( id, textName.getText(), textCity.getText(), textPostCode.getText(), textAddress.getText() ) );
 	}
 	
 	private boolean validateName()

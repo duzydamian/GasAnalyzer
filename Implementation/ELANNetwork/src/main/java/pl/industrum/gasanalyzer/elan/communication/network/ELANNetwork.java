@@ -17,7 +17,7 @@ import pl.industrum.gasanalyzer.elan.exceptions.NullDeviceException;
 import pl.industrum.gasanalyzer.elan.notifications.ELANMeasurementDeviceNotification;
 import pl.industrum.gasanalyzer.elan.notifications.ELANNetworkNotification;
 import pl.industrum.gasanalyzer.elan.notifications.ELANRxByteBufferNotification;
-import pl.industrum.gasanalyzer.elan.types.ELANVariableDimensionPair;
+import pl.industrum.gasanalyzer.elan.types.ELANVariableDimensionPrecisionTrio;
 
 public class ELANNetwork extends Observable implements Iterable<ELANMeasurementDevice>, Observer
 {
@@ -95,7 +95,7 @@ public class ELANNetwork extends Observable implements Iterable<ELANMeasurementD
 	            	{
 	            		//Parser, used only to get measured variables list	            		
 	            		addDevice( deviceAddress );
-	            		Queue<ELANVariableDimensionPair> measuredVariables = parser.parseMeasuredVariables( dataBuffer );
+	            		Queue<ELANVariableDimensionPrecisionTrio> measuredVariables = parser.parseMeasuredVariables( dataBuffer );
 	            		( measurementDevices[deviceAddress] ).getDeviceInformation().setMeasuredVariables( measuredVariables );
 	            	}
 	            	

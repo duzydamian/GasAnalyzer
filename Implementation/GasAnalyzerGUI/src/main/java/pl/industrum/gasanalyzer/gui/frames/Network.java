@@ -242,7 +242,7 @@ public class Network extends Composite
 							for( ELANMeasurement measurement: frame )
 							{
 								printableSet += measurement.getMeasuredVariable().getPrintable() + ": ";
-								printableSet += measurement.getValue() + " ";
+								printableSet += measurement.doubleAsStringRet() + " ";
 								printableSet += "[" + measurement.getDimension().getPrintable() + "] | ";
 							}	
 							

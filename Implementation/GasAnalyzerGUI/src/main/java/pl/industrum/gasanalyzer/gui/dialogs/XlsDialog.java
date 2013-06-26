@@ -5,7 +5,6 @@ import java.util.Locale;
 import java.util.Vector;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -57,10 +56,10 @@ public class XlsDialog extends Dialog
 	private Combo listSurveyObject;
 	private Label lblSurveyLoad;
 	private Label lblSurveySpecialConditions;
-	private StyledText styledTextSurveySpecialConditions;
+	private Text styledTextSurveySpecialConditions;
 	private Text textSurveyLoad;
 	private Label lblComment;
-	private StyledText styledTextComment;
+	private Text styledTextComment;
 
 	private Vector<ApplicationUser> avaibleUsers;
 	private Vector<Place> avaiblePlaces;
@@ -155,7 +154,7 @@ public class XlsDialog extends Dialog
 				.getString( "SurveyFrame.lblSurveyName.text" ) ); //$NON-NLS-1$
 
 		txtSurveyName = new Text( surveyForm, SWT.BORDER );
-		txtSurveyName.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false,
+		txtSurveyName.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 2, 1 ) );
 		txtSurveyName.setEnabled( false );
 
@@ -210,8 +209,8 @@ public class XlsDialog extends Dialog
 		lblSurveySpecialConditions.setLayoutData( new GridData(
 				SWT.FILL, SWT.CENTER, false, false, 1, 2 ) );
 
-		styledTextSurveySpecialConditions = new StyledText( surveyForm,
-				SWT.BORDER | SWT.WRAP );
+		styledTextSurveySpecialConditions = new Text( surveyForm,
+				SWT.BORDER | SWT.WRAP | SWT.MULTI );
 		GridData gd_styledTextSurveySpecialConditions = new GridData(
 				SWT.FILL, SWT.CENTER, false, false, 2, 2 );
 		gd_styledTextSurveySpecialConditions.heightHint = 48;
@@ -224,7 +223,7 @@ public class XlsDialog extends Dialog
 		lblComment.setLayoutData( new GridData(
 				SWT.FILL, SWT.CENTER, false, false, 1, 2 ) );
 
-		styledTextComment = new StyledText( surveyForm, SWT.BORDER | SWT.WRAP );
+		styledTextComment = new Text( surveyForm, SWT.BORDER | SWT.WRAP | SWT.MULTI );
 		GridData gd_styledTextComment = new GridData( SWT.FILL, SWT.FILL,
 				false, false, 2, 3 );
 		gd_styledTextComment.heightHint = 71;

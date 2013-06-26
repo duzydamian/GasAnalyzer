@@ -103,7 +103,7 @@ public class EditSurveyUser extends Dialog
 		shell.setText( getText() );
 		shell.setLayout( new GridLayout( 4, false ) );
 
-		comboAllSurveyUser = new Combo( shell, SWT.BORDER );
+		comboAllSurveyUser = new Combo( shell, SWT.BORDER | SWT.READ_ONLY);
 		comboAllSurveyUser.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 4, 1 ) );
 		comboAllSurveyUser.addModifyListener( new ModifyListener()
@@ -119,7 +119,7 @@ public class EditSurveyUser extends Dialog
 		lblTitle = new Label( shell, SWT.NONE );
 		lblTitle.setText( Messages.getString( "NewSurveyUser.lblTitle.text" ) ); //$NON-NLS-1$
 
-		textTitle = new Combo( shell, SWT.BORDER );
+		textTitle = new Combo( shell, SWT.BORDER | SWT.READ_ONLY);
 		textTitle.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 1, 1 ) );
 		refreshListTitle();
@@ -191,7 +191,7 @@ public class EditSurveyUser extends Dialog
 		lblFunction.setText( Messages
 				.getString( "NewSurveyUser.lblNewLabel.text" ) ); //$NON-NLS-1$
 
-		textFunction = new Combo( shell, SWT.BORDER );
+		textFunction = new Combo( shell, SWT.BORDER | SWT.READ_ONLY);
 		textFunction.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 1, 1 ) );
 		refreshListFunction();
@@ -328,10 +328,10 @@ public class EditSurveyUser extends Dialog
 	
 	protected void saveAction()
 	{
-		//Integer functionID = avaibleFunctions.get( textFunction.getSelectionIndex() ).getId();
-		//Integer degreeID = avaibleDegrees.get( textTitle.getSelectionIndex() ).getId();		
-		//TODO implement update in database
-		//result = ApplicationUserManager.getApplicationUser( ApplicationUserManager.addApplicationUser( functionID, degreeID, textName.getText(), textSurname.getText() ) );
+		Integer id = avaibleSurveyUsers.get( comboAllSurveyUser.getSelectionIndex() ).getId();
+		Integer functionID = avaibleFunctions.get( textFunction.getSelectionIndex() ).getId();
+		Integer degreeID = avaibleDegrees.get( textTitle.getSelectionIndex() ).getId();		
+		result = ApplicationUserManager.getApplicationUser( ApplicationUserManager.updateApplicationUser( id, functionID, degreeID, textName.getText(), textSurname.getText() ) );
 	}
 
 	private void validateTitle()

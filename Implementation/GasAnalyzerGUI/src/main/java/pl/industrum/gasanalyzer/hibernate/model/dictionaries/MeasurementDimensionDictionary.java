@@ -35,17 +35,17 @@ public abstract class MeasurementDimensionDictionary
 		//TODO reindexing table
 	}
 	
-	public static void update( Integer id, String name )
+	public static Integer update( Integer id, String name )
 	{
-		MeasurementDimension dimension = new MeasurementDimension();
-		dimension.setId( id );
+		MeasurementDimension dimension = MeasurementDimensionDictionary.get( id );
 		dimension.setName( name );
 		
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		session.saveOrUpdate( dimension );
+		session.update( dimension );
 		session.getTransaction().commit();
 		//TODO reindexing table
+		return dimension.getId();
 	}
 	
 	public static void delete( Integer id )

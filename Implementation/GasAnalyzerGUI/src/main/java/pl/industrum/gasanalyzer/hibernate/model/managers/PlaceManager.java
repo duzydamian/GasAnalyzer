@@ -35,9 +35,20 @@ public abstract class PlaceManager
 		session.getTransaction().commit();
 	}
 	
-	public static void updatePlace()
+	public static Integer updatePlace( Integer placeID, String name, String city, String postCode, String address )
 	{
-		//TODO complete mehod
+		Place place = PlaceManager.getPlace( placeID );
+		place.setName( name );
+		place.setCity( city );
+		place.setPostCode( postCode );
+		place.setAddress( address );
+
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.update( place );
+		session.getTransaction().commit();
+		
+		return place.getId();
 	}
 	
 	public static Place getPlace( Integer placeID )

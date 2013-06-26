@@ -1,18 +1,13 @@
 package pl.industrum.gasanalyzer.gui.dialogs;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.HashMap;
 
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.XMLWriter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -23,11 +18,14 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import pl.industrum.gasanalyzer.hibernate.model.dictionaries.MeasurementVariableDictionary;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.model.Device;
 import pl.industrum.gasanalyzer.model.MeasurementVariable;
 
 public class MeasurementPreferences extends Dialog
@@ -42,7 +40,10 @@ public class MeasurementPreferences extends Dialog
 	private Table table;
 	private TableEditor editor;
 
-	private HashMap<String, Integer> variables;
+	private Device device;
+	private HashMap<String, Integer> measurementPrecision;
+	private TableColumn nameColumn;
+	private TableColumn precisionColumn;
 
 	/**
 	 * Create the dialog.
@@ -50,10 +51,12 @@ public class MeasurementPreferences extends Dialog
 	 * @param parent
 	 * @param style
 	 */
-	public MeasurementPreferences( Shell parent, int style )
+	public MeasurementPreferences( Shell parent, int style, Device device )
 	{
 		super( parent, style );
 		setText( "Preferencje urządzeń" );
+		this.device = device;
+		measurementPrecision = new HashMap<String, Integer>();
 	}
 
 	/**
@@ -61,11 +64,8 @@ public class MeasurementPreferences extends Dialog
 	 * 
 	 * @return the result
 	 */
-	public HashMap<String, Integer> open( HashMap<String, Integer> variables )
+	public HashMap<String, Integer> open()
 	{
-		this.variables = new HashMap<String, Integer>();
-		this.variables.putAll( variables );
-
 		createContents();
 		shell.open();
 		shell.layout();
@@ -94,18 +94,40 @@ public class MeasurementPreferences extends Dialog
 				| SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL );
 		table.setHeaderVisible( true );
 		table.setLinesVisible( true );
+		
+		editor = new TableEditor( table );
+		editor.horizontalAlignment = SWT.LEFT;
+		editor.grabHorizontal = true;
+		
+		nameColumn = new TableColumn( table, SWT.NONE );
+		precisionColumn = new TableColumn( table, SWT.NONE );
+		
+		nameColumn.setText( "nazwa" );
+		precisionColumn.setText( "precyzja" );
 
-		for( MeasurementVariable variable: MeasurementVariableDictionary
-				.getAll() )
+		for( MeasurementVariable variable: MeasurementVariableDictionary.getAll() )
 		{
 			String name = variable.getName();
 			if ( !name.isEmpty() && !name.equalsIgnoreCase( "no component" ) )
 			{
 				TableItem item = new TableItem( table, SWT.NONE );
-				item.setText( name );
+				item.setText( 0, name );
+				if( device.getMeasurementPrecisionMap().containsKey( name ) )
+				{
+					item.setChecked( true );
+					item.setText( 1, device.getMeasurementPrecisionMap().get( name ).toString() );
+				}
+				else
+				{
+					item.setBackground( 1, new Color( display, new RGB( 100, 100, 100 ) ) );
+					item.setText( 1, "" );
+				}
 			}
 		}
-
+		
+		nameColumn.pack();
+		precisionColumn.pack();
+		
 		Rectangle clientArea = shell.getClientArea();
 		table.setBounds( clientArea.x, clientArea.y, 100, 100 );
 		table.addListener( SWT.Selection, new Listener()
@@ -114,21 +136,63 @@ public class MeasurementPreferences extends Dialog
 			{
 				if ( event.detail == SWT.CHECK )
 				{
-					String name = event.item.toString();
-					if ( variables.containsKey( name ) )
+					TableItem item = ( TableItem )event.item;
+					if( item.getBackground(1).equals(  new Color( display, new RGB( 255, 255, 255 ) ) ) )
 					{
-						if ( variables.get( name ) == 0 )
+						item.setBackground( 1, new Color( display, new RGB( 100, 100, 100 ) ) );
+						item.setText( 1, "" );
+					}
+					else
+					{
+						item.setBackground( 1, new Color( display, new RGB( 255, 255, 255 ) ) );
+					}
+				}
+				else
+				{
+					final TableItem item = ( TableItem )event.item;
+					
+					if( item.getChecked() )
+					{
+						final Spinner precisionEditor = new Spinner( table, SWT.NONE );
+						precisionEditor.setMaximum( 4 );
+						precisionEditor.setMinimum( 0 );					
+						
+						Listener textListener = new Listener()
 						{
-							variables.remove( name );
-							variables.put( name, 1 );
-						} else
+							public void handleEvent ( final Event e )
+							{
+								switch( e.type )
+								{
+									case SWT.FocusOut:
+										item.setText( 1, Integer.toString( precisionEditor.getSelection() ) );
+										precisionEditor.dispose();
+										break;
+									case SWT.Traverse:
+										switch( e.detail )
+										{
+											case SWT.TRAVERSE_RETURN:
+												item.setText (1, Integer.toString( precisionEditor.getSelection() ) );
+											case SWT.TRAVERSE_ESCAPE:
+												precisionEditor.dispose ();
+												e.doit = false;
+										}
+										break;
+								}
+							}
+						};
+						
+						precisionEditor.addListener ( SWT.FocusOut, textListener );
+						precisionEditor.addListener ( SWT.Traverse, textListener );
+						editor.setEditor ( precisionEditor, item, 1 );
+						if( item.getText( 1 ).isEmpty() )
 						{
-							variables.remove( name );
-							variables.put( name, 0 );
+							precisionEditor.setSelection( 2 );
 						}
-					} else
-					{
-						variables.put( name, 1 );
+						else
+						{
+							precisionEditor.setSelection( Integer.parseInt( item.getText( 1 ) ) );
+						}
+						precisionEditor.setFocus();
 					}
 				}
 			}
@@ -177,7 +241,14 @@ public class MeasurementPreferences extends Dialog
 
 	protected void saveAction()
 	{
-		result = variables;
+		for( int i = 0; i < table.getItemCount(); i++ )
+		{
+			if( !table.getItem( i ).getText( 1 ).isEmpty() )
+			{
+				measurementPrecision.put( table.getItem( i ).getText( 0 ), Integer.parseInt( table.getItem( i ).getText( 1 )  ) );
+			}
+		}
+		result = measurementPrecision;
 	}
 
 	// private boolean validateName()

@@ -110,7 +110,7 @@ public class OpenSurvey extends Dialog
 		surveyForm = new Composite( shell, SWT.NONE );
 		surveyForm.setLayout( new GridLayout( 3, false ) );
 
-		comboAllSurvey = new Combo( surveyForm, SWT.BORDER );
+		comboAllSurvey = new Combo( surveyForm, SWT.BORDER | SWT.READ_ONLY );
 		comboAllSurvey.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 3, 1 ) );
 		comboAllSurvey.addModifyListener( new ModifyListener()
@@ -156,7 +156,7 @@ public class OpenSurvey extends Dialog
 		lblSurveyUser.setText( Messages
 				.getString( "SurveyFrame.lblSurveyUser.text" ) ); //$NON-NLS-1$
 
-		listSurveyUser = new Combo( surveyForm, SWT.NONE );
+		listSurveyUser = new Combo( surveyForm, SWT.NONE | SWT.READ_ONLY );
 		listSurveyUser.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
 				true, false, 2, 1 ) );
 		listSurveyUser.setEnabled( false );
@@ -165,7 +165,7 @@ public class OpenSurvey extends Dialog
 		lblSurveyPlace.setText( Messages
 				.getString( "SurveyFrame.lblSurveyPlace.text" ) ); //$NON-NLS-1$
 		
-		listSurveyPlace = new Combo( surveyForm, SWT.NONE );
+		listSurveyPlace = new Combo( surveyForm, SWT.NONE | SWT.READ_ONLY );
 		listSurveyPlace.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
 				true, false, 2, 1 ) );		
 		listSurveyPlace.setEnabled( false );
@@ -174,7 +174,7 @@ public class OpenSurvey extends Dialog
 		lblSurveyObject.setText( Messages
 				.getString( "SurveyFrame.lblSurveyObject.text" ) ); //$NON-NLS-1$
 
-		listSurveyObject = new Combo( surveyForm, SWT.NONE );
+		listSurveyObject = new Combo( surveyForm, SWT.NONE | SWT.READ_ONLY );
 		listSurveyObject.setLayoutData( new GridData( SWT.FILL, SWT.CENTER,
 				true, false, 2, 1 ) );
 		listSurveyObject.setEnabled( false );

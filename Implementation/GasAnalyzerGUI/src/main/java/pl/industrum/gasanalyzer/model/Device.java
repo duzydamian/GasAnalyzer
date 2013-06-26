@@ -3,6 +3,7 @@ package pl.industrum.gasanalyzer.model;
 // default package
 // Generated 2013-05-07 14:42:04 by Hibernate Tools 4.0.0
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,9 +19,13 @@ public class Device implements java.io.Serializable
 	private String name;
 	private int address;
 	private Set measurementSets = new HashSet( 0 );
+	
+	//For GUI purpose only (not mapped)
+	private HashMap<String, Integer> measurementPrecision;
 
 	public Device()
 	{
+		measurementPrecision = new HashMap<String, Integer>();
 	}
 
 	public Device( int id, DeviceType deviceType, String name, int address )
@@ -29,6 +34,8 @@ public class Device implements java.io.Serializable
 		this.deviceType = deviceType;
 		this.name = name;
 		this.address = address;
+
+		measurementPrecision = new HashMap<String, Integer>();
 	}
 
 	public Device( int id, DeviceType deviceType, String name, int address,
@@ -39,8 +46,21 @@ public class Device implements java.io.Serializable
 		this.name = name;
 		this.address = address;
 		this.measurementSets = measurementSets;
+		
+		measurementPrecision = new HashMap<String, Integer>();
 	}
 
+	public void setMeasurementPrecisionMap( HashMap<String, Integer> measurementPrecision )
+	{
+		this.measurementPrecision.clear();
+		this.measurementPrecision.putAll( measurementPrecision );
+	}
+	
+	public HashMap<String, Integer> getMeasurementPrecisionMap()
+	{
+		return measurementPrecision;
+	}
+	
 	public int getId()
 	{
 		return this.id;

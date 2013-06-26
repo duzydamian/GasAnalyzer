@@ -1,5 +1,8 @@
 package pl.industrum.gasanalyzer.gui.frames;
 
+import java.util.HashMap;
+import java.util.Vector;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -32,6 +35,7 @@ import pl.industrum.gasanalyzer.i18n.Messages;
 import pl.industrum.gasanalyzer.model.Device;
 import pl.industrum.gasanalyzer.types.UsefulColor;
 import pl.industrum.gasanalyzer.types.UsefulImage;
+import pl.industrum.gasanalyzer.xml.XmlParser;
 
 public abstract class DeviceTree extends Composite
 {
@@ -114,6 +118,9 @@ public abstract class DeviceTree extends Composite
 										String port = treeItem.getText();
 										port = port.substring( port.indexOf( "[" )+1, port.indexOf( "]" ) );
 										
+										XmlParser xml = new XmlParser( DeviceManager.getAllDevices() );
+										Vector<Device> devicesFromDatabaseWithPrecision = xml.getDevicesFromDatabaseWithPrecision();
+										
 										if ( getGUIConnectionWrapper().getNetwork( port ).getSize() > 0 )
 										{																						
 											for( ELANMeasurementDevice device: getGUIConnectionWrapper().getNetwork( port ) )
@@ -122,7 +129,15 @@ public abstract class DeviceTree extends Composite
 												TreeItem itemTreeItem = new TreeItem( treeItem, SWT.COLOR_GRAY );
 												itemTreeItem.setText( deviceByAddress.getName() + " [" + deviceByAddress.getDeviceType().getType() + "]" );
 												itemTreeItem.setImage( UsefulImage.GRAY_DISCONNECT.getImage() );
-												addDeviceToDeviceCollection( port, itemTreeItem, deviceByAddress );
+												HashMap<String, Integer> measurementPrecisionMap = new HashMap<String, Integer>();
+												for( Device deviceFromDB: devicesFromDatabaseWithPrecision )
+												{
+													if ( deviceFromDB.getAddress() == device.getDeviceAddress() )
+													{
+														measurementPrecisionMap = deviceFromDB.getMeasurementPrecisionMap();
+													}
+												}												
+												addDeviceToDeviceCollection( port, itemTreeItem, deviceByAddress, measurementPrecisionMap );
 												layout();
 											}											
 										}
@@ -341,7 +356,7 @@ public abstract class DeviceTree extends Composite
 	public abstract ELANConnectionState connectWithNetwork(String port);
 	public abstract void disconnectFromDevice( String text );	
 	public abstract ELANConnectionWrapper getGUIConnectionWrapper();
-	public abstract void addDeviceToDeviceCollection( String port, TreeItem treeItem, Device deviceByAddress );
+	public abstract void addDeviceToDeviceCollection( String port, TreeItem treeItem, Device deviceByAddress, HashMap<String, Integer> measurementPrecisionMap );
 	public abstract void addNetworkToNetworkCollection(String networkName);
 	public abstract void setSelectedDeviceVisible(String text );
 	public abstract void setSelectedNetworkVisible(String text );

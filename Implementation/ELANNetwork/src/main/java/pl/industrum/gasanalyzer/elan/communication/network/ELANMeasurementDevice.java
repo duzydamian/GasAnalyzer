@@ -12,6 +12,7 @@ import pl.industrum.gasanalyzer.elan.notifications.ELANDataParserNotification;
 import pl.industrum.gasanalyzer.elan.notifications.ELANMeasurementDeviceNotification;
 import pl.industrum.gasanalyzer.elan.types.ELANBufferType;
 import pl.industrum.gasanalyzer.elan.types.ELANDeviceType;
+import pl.industrum.gasanalyzer.elan.types.ELANMeasurement;
 
 public class ELANMeasurementDevice extends Observable implements Observer
 {
@@ -51,6 +52,11 @@ public class ELANMeasurementDevice extends Observable implements Observer
 				if( rx.isValid() )
 				{
 					//Add frame to broadcasts buffer
+					for( ELANMeasurement measurement : ( ( ELANRxBroadcastFrame )rx ) )
+					{
+						measurement.setPrecision( deviceInformation.getVariablePrecision( measurement.getMeasuredVariable() ) );
+					}
+					
 					rxBroadcastFrameBuffer.add( ( ELANRxBroadcastFrame )rx );
 					rxBroadcastFrameForSnaphot = ( ELANRxBroadcastFrame ) rx;
 
@@ -198,5 +204,10 @@ public class ELANMeasurementDevice extends Observable implements Observer
 	public ELANRxFrame getSnapshot()
 	{
 		return rxBroadcastFrameForSnaphot;
+	}
+	
+	public Queue<ELANRxBroadcastFrame> getRxBroadcastFrameBuffer()
+	{
+		return rxBroadcastFrameBuffer;
 	}
 }

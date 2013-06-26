@@ -22,6 +22,19 @@ public abstract class SurveySectionDictionary
 		return section.getId();
 	}
 	
+	public static Integer update( Integer id, String name )
+	{
+		SurveySection section = SurveySectionDictionary.get( id );
+		section.setName( name );
+		
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.update( section );
+		session.getTransaction().commit();
+		//TODO reindexing table
+		return section.getId();
+	}
+	
 	public static void delete( Integer id )
 	{
 		SurveySection section = SurveySectionDictionary.get( id );

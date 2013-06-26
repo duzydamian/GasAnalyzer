@@ -84,7 +84,7 @@ public class EditSurveyUserFunction extends Dialog
 		shell.setText( getText() );
 		shell.setLayout( new GridLayout( 4, false ) );
 
-		comboAllSurveyUserFunction = new Combo( shell, SWT.BORDER );
+		comboAllSurveyUserFunction = new Combo( shell, SWT.BORDER | SWT.READ_ONLY );
 		comboAllSurveyUserFunction.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true,
 				false, 4, 1 ) );
 		comboAllSurveyUserFunction.addModifyListener( new ModifyListener()
@@ -179,8 +179,8 @@ public class EditSurveyUserFunction extends Dialog
 	
 	protected void saveAction()
 	{
-		//TODO implement update in database		
-		//result = FunctionDictionary.get( FunctionDictionary.add( textName.getText() ) );
+		Integer id = avaibleSurveyUserFunctions.get( comboAllSurveyUserFunction.getSelectionIndex() ).getId();		
+		result = FunctionDictionary.get( FunctionDictionary.update( id, textName.getText() ) );
 	}
 	
 	private boolean validateName()

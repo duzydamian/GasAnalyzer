@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -119,7 +120,7 @@ public abstract class XLSGenerator
         currRow = 1;
         currColumn = 2;
 		
-        //Add measurement variables and dimension names
+		//Add measurement variables and dimension names
         for( Object set: snapshotForHeader.getMeasurementSetsSorted() )
 		{
 			MeasurementSet measurementSet = ( MeasurementSet )set;
@@ -140,6 +141,12 @@ public abstract class XLSGenerator
         currRow = 3;
         currColumn = 1;
         
+        HSSFCellStyle cs = workbook.createCellStyle();
+        HSSFDataFormat df = workbook.createDataFormat();
+        cs.setDataFormat( df.getFormat("#,##0.0") );
+        cell.setCellValue(11111.1);
+        cell.setCellStyle(cs);
+        
         int i = 1;
         HSSFRow dataRow;
 		for( MeasurementSnapshot snapshot: MeasurementSnapshotManager.getAllMeasurementSnapshots( survey.getId() ) )
@@ -157,7 +164,10 @@ public abstract class XLSGenerator
 				{
 					if ( !( ( Measurement )measurement  ).getMeasurementVariable().getName().equalsIgnoreCase( "Process preassure" ) )
 					{
-						dataRow.createCell( currColumn ).setCellValue( ( ( Measurement )measurement  ).getValue() ); currColumn++;
+						HSSFCell new_cell = dataRow.createCell( currColumn );
+						new_cell.setCellStyle(cs);
+						new_cell.setCellValue( (double)( ( Measurement )measurement  ).getValue() );
+						currColumn++;
 					}						
 				}
 			}

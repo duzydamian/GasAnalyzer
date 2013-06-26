@@ -1,35 +1,50 @@
 package pl.industrum.gasanalyzer.elan.communication.network;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
 import pl.industrum.gasanalyzer.elan.types.ELANDeviceType;
-import pl.industrum.gasanalyzer.elan.types.ELANVariableDimensionPair;
+import pl.industrum.gasanalyzer.elan.types.ELANMeasuredVariable;
+import pl.industrum.gasanalyzer.elan.types.ELANVariableDimensionPrecisionTrio;
 
-public class ELANMeasurementDeviceInformation implements Iterable<ELANVariableDimensionPair>
+public class ELANMeasurementDeviceInformation implements Iterable<ELANVariableDimensionPrecisionTrio>
 {
 	private String name;
 	private ELANDeviceType deviceType;
 	private Integer deviceAddress;
 	private Integer deviceIDInDatabase;
-	private Queue<ELANVariableDimensionPair> measuredVariables;
+	private Queue<ELANVariableDimensionPrecisionTrio> measuredVariables;
 	
 	public ELANMeasurementDeviceInformation()
 	{
 		name = "";
-		measuredVariables = new LinkedList<ELANVariableDimensionPair>();
+		measuredVariables = new LinkedList<ELANVariableDimensionPrecisionTrio>();
 	}
 	
-	public Iterator<ELANVariableDimensionPair> iterator() 
+	public Integer getVariablePrecision( ELANMeasuredVariable measuredVariable ) throws Exception
 	{
-        Iterator<ELANVariableDimensionPair> imeasuredVariables = measuredVariables.iterator();
+		for( ELANVariableDimensionPrecisionTrio trio : measuredVariables )
+		{
+			if( trio.getVariable() == measuredVariable )
+			{
+				return trio.getPrecision();
+			}
+		}
+		
+		throw new Exception( "No such measured variable." );
+	}
+	
+	public Iterator<ELANVariableDimensionPrecisionTrio> iterator() 
+	{
+        Iterator<ELANVariableDimensionPrecisionTrio> imeasuredVariables = measuredVariables.iterator();
         return imeasuredVariables; 
     }
 	
-	public void addMeasuredVariable( ELANVariableDimensionPair measuredVariable )
+	public void addMeasuredVariable( ELANVariableDimensionPrecisionTrio measuredVariable )
 	{
-		for( ELANVariableDimensionPair variable : this )
+		for( ELANVariableDimensionPrecisionTrio variable : this )
 		{
 			if( variable.getVariable() == measuredVariable.getVariable() )
 			{
@@ -39,7 +54,7 @@ public class ELANMeasurementDeviceInformation implements Iterable<ELANVariableDi
 		measuredVariables.add( measuredVariable );
 	}
 	
-	public void setMeasuredVariables( Queue<ELANVariableDimensionPair> measuredVariables )
+	public void setMeasuredVariables( Queue<ELANVariableDimensionPrecisionTrio> measuredVariables )
 	{
 		this.measuredVariables = measuredVariables;
 	}
@@ -95,5 +110,13 @@ public class ELANMeasurementDeviceInformation implements Iterable<ELANVariableDi
 	public void setDeviceIDInDatabase( Integer deviceIDInDatabase )
 	{
 		this.deviceIDInDatabase = deviceIDInDatabase;
+	}
+
+	public void setPrecisions( HashMap<String, Integer> measurementPrecisionMap )
+	{
+		for( ELANVariableDimensionPrecisionTrio precisionTrio: measuredVariables )
+		{
+			precisionTrio.setPrecision( measurementPrecisionMap.get( precisionTrio.getVariable().getPrintable() ) );
+		}
 	}
 }

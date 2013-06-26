@@ -7,11 +7,11 @@ import java.util.Queue;
 
 import pl.industrum.gasanalyzer.elan.types.ELANDimension;
 import pl.industrum.gasanalyzer.elan.types.ELANMeasuredVariable;
-import pl.industrum.gasanalyzer.elan.types.ELANVariableDimensionPair;
+import pl.industrum.gasanalyzer.elan.types.ELANVariableDimensionPrecisionTrio;
 
 public class ELANDeviceInformationParser implements ELANParser
 {
-	public Queue<ELANVariableDimensionPair> parseMeasuredVariables( Queue<Integer> data )
+	public Queue<ELANVariableDimensionPrecisionTrio> parseMeasuredVariables( Queue<Integer> data )
 	{
 		Queue<Integer> dataTemp = new LinkedList<Integer>();
 		dataTemp.addAll(data);
@@ -19,10 +19,10 @@ public class ELANDeviceInformationParser implements ELANParser
 		return getMeasuredVariables( trimData( data ) );
 	}
 	
-	public Queue<ELANVariableDimensionPair> getMeasuredVariables( Queue<Integer> trimedData )
+	public Queue<ELANVariableDimensionPrecisionTrio> getMeasuredVariables( Queue<Integer> trimedData )
 	{
 		//Create queue to return
-		Queue< ELANVariableDimensionPair > measuredVariables = new LinkedList< ELANVariableDimensionPair >();
+		Queue< ELANVariableDimensionPrecisionTrio > measuredVariables = new LinkedList< ELANVariableDimensionPrecisionTrio >();
 		
 		//Trim source and target addresses
 		trimedData.poll();
@@ -57,7 +57,7 @@ public class ELANDeviceInformationParser implements ELANParser
 			trimedData.poll();
 			
 			//Add to queue
-			ELANVariableDimensionPair variableDimensionPair = new ELANVariableDimensionPair( measuredVariable, dimension );
+			ELANVariableDimensionPrecisionTrio variableDimensionPair = new ELANVariableDimensionPrecisionTrio( measuredVariable, dimension, 2 );
 			measuredVariables.add( variableDimensionPair );	
 		}
 		

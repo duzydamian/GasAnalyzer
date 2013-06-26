@@ -96,11 +96,11 @@ public class NetworkScan extends Dialog
 						progressBar.setSelection(i);
 						if ( GasAnalyzerGUI.isDevelop() )
 						{
-							Thread.sleep(100);
+							Thread.sleep(10);
 						}
 						else
 						{
-							Thread.sleep(1000);
+							Thread.sleep(100);
 						}						
 					}
 					catch (Throwable e)
