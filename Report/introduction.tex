@@ -13,30 +13,24 @@ Głównymi celami pracy było napisanie oprogramowania
 Na potrzeby realizacji projektu stworzono stanowisko laboratoryjne, którego schemat przedstawia Rysunek~\ref{schemat1}. Składa się ono~z:
 \begin{itemize}
 \item Komputera,
-\item ULTRAMAT-u 23
+\item ULTRAMAT 23
 \item Konwertera ATC-850.
 \end{itemize}
 \indent
-\indent Stanowisko to na potrzeby projektu rozbudowano o model magazynu wysokiego składowania. Poszczególne składowe stanowiska zostały bardziej szczegółowo opisane w~kolejnych podrozdziałach.
+\indent Komputery na, których powstała wersja rozwojowa projekty pracowały na systemach operacyjnych Linux Ubuntu w wersji 32 oraz 64 bitowej. Do połączenia komputera z urządzeniem ULTRAMAT 23 zastosowano izolowany konwerter USB do RS-232/422/485, moduł ATC-850 jest automatycznie wykrywany i instalowany jako standardowy port COM. Stosowane w tej fazie projektu urządzenie pomiarowe potrafiło mierzyć zawartość $ CO_2 $, $ CO $, $ O_2 $ oraz $ NO_2 $ ??
 
 \subsubsection{Stanowisko docelowe}
 \begin{figure}[!htb] 	\centering 	\includegraphics[width=0.8\textwidth]{images/schemat2} 	\caption{Schemat stanowiska docelowego} \label{schemat2} \end{figure} 
-
-\subsubsection{Sterownik PLC}
-Sterownik PLC wykorzystywany do realizacji projektu był wyposażony w następujące moduły:
-\begin{enumerate}
-\item SIMATIC S7-300, Jednostka centralna S7-300 CPU 315F-2 PN/DP,
-\item SIMATIC S7-300, Zasilacz PS 307,
-\item SIMATIC S7-300, Wejścia/Wyjścia cyfrowe SM 323,
-\item SIMATIC S7-300, Wejścia/Wyjścia analogowe SM 334.
-\end{enumerate}
-
+Docelowo zrealizowany projekt ma być uruchamiany na stanowisku, którego schemat przedstawia Rysunek~\ref{schemat2}. Składa się ono~z:
+\begin{itemize}
+\item Komputera,
+\item 3x ULTRAMAT 23
+\item ULTRAMAT 6
+\item Konwertera ATC-850.
+\end{itemize}
 \indent
-\indent Sterownik podłączony jest do sieci lokalnej Ethernet w~laboratorium, więc komunikacja z~nim odbywa się tak samo jak z~każdym innym urządzeniem sieciowym. Podstawy programowania i korzystania ze sterowników autor poznał zapoznając się z odpowiednią literaturą \cite{plc1,plc2,plc4,plc5,plc6}.
-Konfigurację sterownika wraz z modułami przedstawia Rysunek~\ref{conf}.
-
-\subsubsection{Komputer}
-Projekt w całości był realizowany na laptopie autora, podłączanym do~sieci w~laboratorium. Na~komputerze uruchomiane były dwie maszyny wirtualne. Na~jednej zainstalowane było środowisko Step~7 do~programowania sterownika, a~na~drugiej WinCC flexible 2008 do~tworzenia i~uruchamiania wizualizacji. Wizualizacje tworzone w środowisku WinCC flexible są~dedykowane do~paneli operatorskich, jednak ta~stworzona przez autora na~potrzeby projektu była uruchamiana na komputerze za~pomocą runtime system.
+\indent aaaa
+\end{enumerate}
 
 \subsection{Analiza tematu}
 Analiza tematu polegała przede wszystkim na zapoznaniu się z~narzędziami programistycznymi do~tworzenia oprogramowania sterownika oraz wizualizacji.
