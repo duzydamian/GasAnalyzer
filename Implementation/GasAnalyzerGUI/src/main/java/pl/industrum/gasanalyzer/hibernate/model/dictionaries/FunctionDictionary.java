@@ -35,15 +35,22 @@ public abstract class FunctionDictionary
 	
 	public static Integer update( Integer id, String name )
 	{
-		Function function = FunctionDictionary.get( id );
-		function.setName( name );
-
-		Session session = Hibernate.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		session.update( function );
-		session.getTransaction().commit();
-		//TODO reindexing table
-		return function.getId();
+		try
+		{
+			Function function = FunctionDictionary.get( id );
+			function.setName( name );
+	
+			Session session = Hibernate.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			session.update( function );
+			session.getTransaction().commit();
+			//TODO reindexing table
+			return function.getId();
+		}
+		catch( Exception e )
+		{
+			return null;
+		}
 	}
 	
 	public static Function get( Integer functionID )
