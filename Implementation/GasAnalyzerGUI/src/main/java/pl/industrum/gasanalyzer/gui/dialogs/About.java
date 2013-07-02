@@ -79,6 +79,8 @@ public class About extends Dialog
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
 		shell.setSize( 600, 407 );
 		shell.setText( getText() );
+		shell.setImage( UsefulImage.ABOUT_STAR.getImage() );
+		
 		shell.setLayout( new FillLayout( SWT.VERTICAL ) );
 
 		composite = new Composite( shell, SWT.NONE );

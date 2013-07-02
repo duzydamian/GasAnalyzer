@@ -41,6 +41,7 @@ import pl.industrum.gasanalyzer.i18n.Messages;
 import pl.industrum.gasanalyzer.model.Device;
 import pl.industrum.gasanalyzer.model.Survey;
 import pl.industrum.gasanalyzer.types.Error;
+import pl.industrum.gasanalyzer.types.UsefulImage;
 import pl.industrum.gasanalyzer.types.Warning;
 
 public class GasAnalyzerMainWindow implements Observer
@@ -143,6 +144,7 @@ public class GasAnalyzerMainWindow implements Observer
 		//shlGasAnalyzer.setSize( 650, 500 );
 		shlGasAnalyzer.setText( Messages
 				.getString( "GasAnalyzerMainWindow.shlGasAnalyzer.text" ) ); //$NON-NLS-1$
+		shlGasAnalyzer.setImage( UsefulImage.APPLICATION.getImage() );
 		shlGasAnalyzer.setLayout( new GridLayout( 6, false ) );		
 		
 		menu = new MainMenu( shlGasAnalyzer, SWT.BAR )

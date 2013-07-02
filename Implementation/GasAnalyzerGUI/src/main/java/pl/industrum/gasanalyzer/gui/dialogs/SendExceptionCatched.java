@@ -14,6 +14,8 @@ import org.eclipse.swt.widgets.Shell;
 
 import pl.industrum.gasanalyzer.gui.EmailSystem;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.types.UsefulImage;
+
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.custom.StyledText;
 
@@ -74,6 +76,7 @@ public class SendExceptionCatched extends Dialog
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
 		shell.setSize( 490, 370 );
 		shell.setText( getText() );
+		shell.setImage( UsefulImage.SEND_MAIL.getImage() );
 		
 		surveyFrameData = new GridData( GridData.FILL, GridData.CENTER, true,
 				false );
@@ -107,6 +110,7 @@ public class SendExceptionCatched extends Dialog
 		btnOk = new Button(surveyForm, SWT.RIGHT);
 		btnOk.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		btnOk.setText(Messages.getString("SendExceptionCatched.btnOk.text")); //$NON-NLS-1$
+		btnOk.setImage( UsefulImage.SEND_MAIL.getImage() );
 		btnOk.addSelectionListener( new SelectionAdapter()
 		{
 			@Override
@@ -118,7 +122,8 @@ public class SendExceptionCatched extends Dialog
 		} );
 		
 		btnCancel = new Button(surveyForm, SWT.NONE);
-		btnCancel.setText(Messages.getString("SendExceptionCatched.btnCancel.text")); //$NON-NLS-1$	
+		btnCancel.setText(Messages.getString("SendExceptionCatched.btnCancel.text")); //$NON-NLS-1$
+		btnCancel.setImage( UsefulImage.CANCEL.getImage() );
 		btnCancel.addSelectionListener( new SelectionAdapter()
 		{
 			@Override

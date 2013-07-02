@@ -41,17 +41,22 @@ public class DatabaseMeasurementDimensionCorrectTest extends Test
 				
 				for( ELANDimension dimension: ELANDimension.values() )
 				{
-					MeasurementDimensionDictionary.update( dimension.ordinal(), dimension.getPrintable() );
+					if (MeasurementDimensionDictionary.update( dimension.ordinal(), dimension.getPrintable() ) == null)
+					{
+						MeasurementDimensionDictionary.add( dimension.ordinal(), dimension.getPrintable() );
+					}
 				}
 				
 				System.out.println( "Successful repair Measurement dimension dictionary: " );
+				setPassed();
 			}
 			catch(Exception e)
 			{
-				e.printStackTrace();
+				setFailed();
+				e.printStackTrace();				
 				messageDialog.open();
 			}
 		}
-		setPassed();
+		
 	}
 }

@@ -11,8 +11,10 @@ import org.eclipse.swt.graphics.Image;
  */
 public enum UsefulImage
 {
+	APPLICATION( "/pl/industrum/gasanalyzer/gui/application.png" ),
 	ABOUT_STAR( "/pl/industrum/gasanalyzer/gui/about.png" ),
-	NEW_MAIL( "/pl/industrum/gasanalyzer/gui/mail-message-new.png" ),
+	NEW_MAIL( "/pl/industrum/gasanalyzer/gui/mail.png" ),
+	SEND_MAIL( "/pl/industrum/gasanalyzer/gui/mail_send.png" ),
 	SHUTDOWN( "/pl/industrum/gasanalyzer/gui/shutdown.png" ),
 	REFRESH( "/pl/industrum/gasanalyzer/gui/odswiez.png" ),
 	PDF( "/pl/industrum/gasanalyzer/gui/pdf.png" ),
@@ -24,11 +26,14 @@ public enum UsefulImage
 	CONNECT( "/pl/industrum/gasanalyzer/gui/connect.png" ),
 	DISCONNECT( "/pl/industrum/gasanalyzer/gui/disconnect.png" ),
 	ADD( "/pl/industrum/gasanalyzer/gui/add.png" ),
+	EDIT( "/pl/industrum/gasanalyzer/gui/edit.png" ),
 	INDUSTRUM_LOGO( "/pl/industrum/gasanalyzer/gui/SKNIndustrumLogo.png" ),
 	IMIUE_LOGO( "/pl/industrum/gasanalyzer/gui/IMIUELogo.png" ),
 	ZKIWP_LOGO( "/pl/industrum/gasanalyzer/gui/ZKiWPLogo.png" ),
 	POLSL_LOGO( "/pl/industrum/gasanalyzer/gui/PolslLogo.png" ),
 	OK( "/pl/industrum/gasanalyzer/gui/ok.png" ),
+	CANCEL( "/pl/industrum/gasanalyzer/gui/cancel.png" ),
+	FIND( "/pl/industrum/gasanalyzer/gui/find.png" ),
 	WARNING( "/pl/industrum/gasanalyzer/gui/warning.png" ),
 	ERROR( "/pl/industrum/gasanalyzer/gui/remove.png" ),
 	GRAY_DISCONNECT( "");	

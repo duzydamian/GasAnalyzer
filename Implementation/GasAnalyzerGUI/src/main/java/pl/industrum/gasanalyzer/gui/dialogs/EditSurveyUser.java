@@ -101,6 +101,8 @@ public class EditSurveyUser extends Dialog
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
 		shell.setSize( 339, 235 );
 		shell.setText( getText() );
+		shell.setImage( UsefulImage.EDIT.getImage() );
+		
 		shell.setLayout( new GridLayout( 4, false ) );
 
 		comboAllSurveyUser = new Combo( shell, SWT.BORDER | SWT.READ_ONLY);

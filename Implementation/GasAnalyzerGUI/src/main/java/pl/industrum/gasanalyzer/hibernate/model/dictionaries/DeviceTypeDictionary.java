@@ -17,7 +17,7 @@ public abstract class DeviceTypeDictionary
 		
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		session.save( deviceType );
+		session.saveOrUpdate( deviceType );
 		session.getTransaction().commit();
 		//TODO reindexing table
 		return deviceType.getId();

@@ -100,6 +100,8 @@ public class DevicePreferences extends Dialog
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
 		shell.setSize( 500, 600 );
 		shell.setText( getText() );
+		shell.setImage( UsefulImage.PREFERENCES.getImage() );
+		
 		shell.setLayout( new GridLayout( 5, false ) );
 		
 		table = new Table( shell, SWT.FULL_SELECTION | SWT.HIDE_SELECTION );
