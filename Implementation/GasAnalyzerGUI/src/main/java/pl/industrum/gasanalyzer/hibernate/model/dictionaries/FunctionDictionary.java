@@ -57,9 +57,9 @@ public abstract class FunctionDictionary
 	{
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		Function function = ( Function ) session.createQuery( "from Function where id='" + functionID.toString() + "'" ).list().get( 0 );
 		try
 		{
+			Function function = ( Function ) session.createQuery( "from Function where id='" + functionID.toString() + "'" ).list().get( 0 );
 			session.getTransaction().commit();
 			return function;
 		}

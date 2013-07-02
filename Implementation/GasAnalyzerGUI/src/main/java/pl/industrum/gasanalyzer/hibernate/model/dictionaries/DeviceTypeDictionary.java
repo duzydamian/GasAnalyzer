@@ -104,9 +104,9 @@ public abstract class DeviceTypeDictionary
 	{
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		DeviceType function = ( DeviceType ) session.createQuery( "from DeviceType where id='" + typeID.toString() + "'" ).list().get( 0 );
 		try
 		{
+			DeviceType function = ( DeviceType ) session.createQuery( "from DeviceType where id='" + typeID.toString() + "'" ).list().get( 0 );
 			session.getTransaction().commit();
 			return function;
 		}

@@ -75,9 +75,9 @@ public abstract class DeviceManager
 	{
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		Device device = ( Device  ) session.createQuery( "from Device where id='" + deviceID.toString() + "'" ).list().get( 0 );
 		try
 		{
+			Device device = ( Device  ) session.createQuery( "from Device where id='" + deviceID.toString() + "'" ).list().get( 0 );
 			session.getTransaction().commit();
 			return device;
 		}
