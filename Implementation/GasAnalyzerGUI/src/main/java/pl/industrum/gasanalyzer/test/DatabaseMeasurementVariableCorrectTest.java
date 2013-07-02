@@ -41,7 +41,10 @@ public class DatabaseMeasurementVariableCorrectTest extends Test
 				
 				for( ELANMeasuredVariable measuredVariable: ELANMeasuredVariable.values() )
 				{
-					MeasurementVariableDictionary.update( measuredVariable.ordinal(), measuredVariable.getPrintable() );
+					if( MeasurementVariableDictionary.update( measuredVariable.ordinal(), measuredVariable.getPrintable() ) == null )
+					{
+						MeasurementVariableDictionary.add( measuredVariable.ordinal(), measuredVariable.getPrintable() );
+					}
 				}
 				
 				System.out.println( "Successful repair Measurement variable dictionary: " );

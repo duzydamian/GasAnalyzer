@@ -41,7 +41,10 @@ public class DatabaseDeviceTypeCorrectTest extends Test
 				
 				for( ELANDeviceType deviceType: ELANDeviceType.values() )
 				{
-					DeviceTypeDictionary.update( deviceType.ordinal(), deviceType.name(), null );
+					if( DeviceTypeDictionary.update( deviceType.ordinal(), deviceType.name(), null ) == null)
+					{
+						DeviceTypeDictionary.update( deviceType.ordinal(), deviceType.name(), null );
+					}
 				}
 				
 				System.out.println( "Successful repair Device type dictionary: " );
