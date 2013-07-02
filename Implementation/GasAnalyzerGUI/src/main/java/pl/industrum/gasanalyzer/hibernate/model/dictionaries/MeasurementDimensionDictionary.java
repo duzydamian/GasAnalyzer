@@ -37,9 +37,13 @@ public abstract class MeasurementDimensionDictionary
 	
 	public static Integer update( Integer id, String name )
 	{
-		try
+		MeasurementDimension dimension = MeasurementDimensionDictionary.get( id );
+		if( dimension == null )
 		{
-			MeasurementDimension dimension = MeasurementDimensionDictionary.get( id );
+			return null;
+		}
+		else
+		{
 			dimension.setName( name );
 			
 			Session session = Hibernate.getSessionFactory().getCurrentSession();
@@ -48,10 +52,6 @@ public abstract class MeasurementDimensionDictionary
 			session.getTransaction().commit();
 			//TODO reindexing table
 			return dimension.getId();
-		}
-		catch( Exception e )
-		{
-			return null;
 		}
 	}
 	
@@ -83,8 +83,16 @@ public abstract class MeasurementDimensionDictionary
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		MeasurementDimension dimension = ( MeasurementDimension ) session.createQuery( "from MeasurementDimension where id='" + dimensionID.toString() + "'" ).list().get( 0 );
-		session.getTransaction().commit();
-		return dimension;
+		try
+		{
+			session.getTransaction().commit();
+			return dimension;
+		}
+		catch( Exception e )
+		{
+			session.getTransaction().rollback();
+			return null;
+		}
 	}
 	
 	@SuppressWarnings( "unchecked" )

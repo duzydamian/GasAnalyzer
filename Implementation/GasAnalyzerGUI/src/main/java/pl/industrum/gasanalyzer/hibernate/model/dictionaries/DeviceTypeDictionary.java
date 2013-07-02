@@ -53,9 +53,13 @@ public abstract class DeviceTypeDictionary
 	
 	public static Integer update( Integer id, String type, byte[] document )
 	{
-		try
+		DeviceType deviceType = DeviceTypeDictionary.get( id );
+		if( deviceType == null )
 		{
-			DeviceType deviceType = DeviceTypeDictionary.get( id );
+			return null;
+		}
+		else
+		{
 			deviceType.setType( type );
 			deviceType.setDocument( document );
 			
@@ -65,10 +69,6 @@ public abstract class DeviceTypeDictionary
 			session.getTransaction().commit();
 			//TODO reindexing table
 			return deviceType.getId();
-		}
-		catch( Exception e )
-		{
-			return null;
 		}
 	}
 	
@@ -105,8 +105,16 @@ public abstract class DeviceTypeDictionary
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		DeviceType function = ( DeviceType ) session.createQuery( "from DeviceType where id='" + typeID.toString() + "'" ).list().get( 0 );
-		session.getTransaction().commit();
-		return function;
+		try
+		{
+			session.getTransaction().commit();
+			return function;
+		}
+		catch( Exception e )
+		{
+			session.getTransaction().rollback();
+			return null;
+		}
 	}
 	
 	@SuppressWarnings( "unchecked" )

@@ -37,9 +37,13 @@ public abstract class MeasurementVariableDictionary
 	
 	public static Integer update( Integer id, String name )
 	{
-		try
+		MeasurementVariable variable = MeasurementVariableDictionary.get( id );
+		if( variable == null )
 		{
-			MeasurementVariable variable = MeasurementVariableDictionary.get( id );
+			return null;
+		}
+		else
+		{
 			variable.setName( name );
 			
 			Session session = Hibernate.getSessionFactory().getCurrentSession();
@@ -48,10 +52,6 @@ public abstract class MeasurementVariableDictionary
 			session.getTransaction().commit();
 			//TODO reindexing table
 			return variable.getId();
-		}
-		catch( Exception e )
-		{
-			return null;
 		}
 	}
 	
@@ -84,8 +84,16 @@ public abstract class MeasurementVariableDictionary
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		MeasurementVariable variable = ( MeasurementVariable ) session.createQuery( "from MeasurementVariable where id='" + variableID.toString() + "'" ).list().get( 0 );
-		session.getTransaction().commit();
-		return variable;
+		try
+		{
+			session.getTransaction().commit();
+			return variable;
+		}
+		catch( Exception e )
+		{
+			session.getTransaction().rollback();
+			return null;
+		}
 	}
 	
 	@SuppressWarnings( "unchecked" )

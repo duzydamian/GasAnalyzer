@@ -35,9 +35,13 @@ public abstract class DegreeDictionary
 	
 	public static Integer update(  Integer id, String name )
 	{
-		try
+		Degree degree = DegreeDictionary.get( id );
+		if( degree == null )
 		{
-			Degree degree = DegreeDictionary.get( id );
+			return null;
+		}
+		else
+		{
 			degree.setName( name );
 	
 			Session session = Hibernate.getSessionFactory().getCurrentSession();
@@ -47,10 +51,6 @@ public abstract class DegreeDictionary
 			//TODO reindexing table
 			return degree.getId();
 		}
-		catch( Exception e )
-		{
-			return null;
-		}
 	}
 	
 	public static Degree get( Integer functionID )
@@ -58,8 +58,17 @@ public abstract class DegreeDictionary
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		Degree degree = ( Degree ) session.createQuery( "from Degree where id='" + functionID.toString() + "'" ).list().get( 0 );
-		session.getTransaction().commit();
-		return degree;
+		try
+		{
+			session.getTransaction().commit();
+			return degree;
+		}
+		catch( Exception e )
+		{
+			session.getTransaction().rollback();
+			return null;
+		}
+		
 	}
 	
 	@SuppressWarnings( "unchecked" )

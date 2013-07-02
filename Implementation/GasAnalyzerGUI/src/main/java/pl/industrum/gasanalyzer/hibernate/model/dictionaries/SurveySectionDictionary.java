@@ -24,9 +24,13 @@ public abstract class SurveySectionDictionary
 	
 	public static Integer update( Integer id, String name )
 	{
-		try
+		SurveySection section = SurveySectionDictionary.get( id );
+		if( section == null )
 		{
-			SurveySection section = SurveySectionDictionary.get( id );
+			return null;
+		}
+		else
+		{
 			section.setName( name );
 			
 			Session session = Hibernate.getSessionFactory().getCurrentSession();
@@ -36,11 +40,6 @@ public abstract class SurveySectionDictionary
 			//TODO reindexing table
 			return section.getId();
 		}
-		catch( Exception e )
-		{
-			return null;
-		}
-		
 	}
 	
 	public static void delete( Integer id )
@@ -59,8 +58,16 @@ public abstract class SurveySectionDictionary
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		SurveySection section = ( SurveySection ) session.createQuery( "from SurveySection where id='" + sectionID.toString() + "'" ).list().get( 0 );
-		session.getTransaction().commit();
-		return section;
+		try
+		{
+			session.getTransaction().commit();
+			return section;
+		}
+		catch( Exception e )
+		{
+			session.getTransaction().rollback();
+			return null;
+		}
 	}
 	
 	@SuppressWarnings( "unchecked" )

@@ -35,9 +35,13 @@ public abstract class FunctionDictionary
 	
 	public static Integer update( Integer id, String name )
 	{
-		try
+		Function function = FunctionDictionary.get( id );
+		if( function == null )
 		{
-			Function function = FunctionDictionary.get( id );
+			return null;
+		}
+		else
+		{
 			function.setName( name );
 	
 			Session session = Hibernate.getSessionFactory().getCurrentSession();
@@ -47,10 +51,6 @@ public abstract class FunctionDictionary
 			//TODO reindexing table
 			return function.getId();
 		}
-		catch( Exception e )
-		{
-			return null;
-		}
 	}
 	
 	public static Function get( Integer functionID )
@@ -58,8 +58,16 @@ public abstract class FunctionDictionary
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		Function function = ( Function ) session.createQuery( "from Function where id='" + functionID.toString() + "'" ).list().get( 0 );
-		session.getTransaction().commit();
-		return function;
+		try
+		{
+			session.getTransaction().commit();
+			return function;
+		}
+		catch( Exception e )
+		{
+			session.getTransaction().rollback();
+			return null;
+		}
 	}
 	
 	@SuppressWarnings( "unchecked" )
