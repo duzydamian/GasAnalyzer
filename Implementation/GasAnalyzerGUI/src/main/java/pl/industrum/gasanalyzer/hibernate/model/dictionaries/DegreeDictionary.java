@@ -57,9 +57,9 @@ public abstract class DegreeDictionary
 	{
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		Degree degree = ( Degree ) session.createQuery( "from Degree where id='" + functionID.toString() + "'" ).list().get( 0 );
 		try
 		{
+			Degree degree = ( Degree ) session.createQuery( "from Degree where id='" + functionID.toString() + "'" ).list().get( 0 );
 			session.getTransaction().commit();
 			return degree;
 		}

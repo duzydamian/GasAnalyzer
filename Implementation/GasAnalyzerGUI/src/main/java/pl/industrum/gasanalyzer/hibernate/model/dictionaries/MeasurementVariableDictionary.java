@@ -83,9 +83,9 @@ public abstract class MeasurementVariableDictionary
 	{
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		MeasurementVariable variable = ( MeasurementVariable ) session.createQuery( "from MeasurementVariable where id='" + variableID.toString() + "'" ).list().get( 0 );
 		try
 		{
+			MeasurementVariable variable = ( MeasurementVariable ) session.createQuery( "from MeasurementVariable where id='" + variableID.toString() + "'" ).list().get( 0 );
 			session.getTransaction().commit();
 			return variable;
 		}

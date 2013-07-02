@@ -82,9 +82,9 @@ public abstract class MeasurementDimensionDictionary
 	{
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		MeasurementDimension dimension = ( MeasurementDimension ) session.createQuery( "from MeasurementDimension where id='" + dimensionID.toString() + "'" ).list().get( 0 );
 		try
 		{
+			MeasurementDimension dimension = ( MeasurementDimension ) session.createQuery( "from MeasurementDimension where id='" + dimensionID.toString() + "'" ).list().get( 0 );
 			session.getTransaction().commit();
 			return dimension;
 		}

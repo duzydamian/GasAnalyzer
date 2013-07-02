@@ -57,9 +57,9 @@ public abstract class SurveySectionDictionary
 	{
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
-		SurveySection section = ( SurveySection ) session.createQuery( "from SurveySection where id='" + sectionID.toString() + "'" ).list().get( 0 );
 		try
 		{
+			SurveySection section = ( SurveySection ) session.createQuery( "from SurveySection where id='" + sectionID.toString() + "'" ).list().get( 0 );
 			session.getTransaction().commit();
 			return section;
 		}
