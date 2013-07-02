@@ -138,7 +138,14 @@ public class NewSurvey extends Dialog
 			
 			public void modifyText( ModifyEvent arg0 )
 			{
-				validateName();
+				try
+				{
+					validateName();
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 		
@@ -185,7 +192,14 @@ public class NewSurvey extends Dialog
 			
 			public void modifyText( ModifyEvent arg0 )
 			{
-				validateUser();
+				try
+				{
+					validateUser();
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 
@@ -224,10 +238,17 @@ public class NewSurvey extends Dialog
 
 			public void modifyText( ModifyEvent arg0 )
 			{
-				isPlaceSelected = validatePlace();
-				refreshListSurveyObject( avaiblePlaces.get( listSurveyPlace.getSelectionIndex() ).getId() );
-				listSurveyObject.setEnabled( isPlaceSelected );
-				btnNewSurveyObject.setEnabled( isPlaceSelected );
+				try
+				{
+					isPlaceSelected = validatePlace();
+					refreshListSurveyObject( avaiblePlaces.get( listSurveyPlace.getSelectionIndex() ).getId() );
+					listSurveyObject.setEnabled( isPlaceSelected );
+					btnNewSurveyObject.setEnabled( isPlaceSelected );
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 
@@ -243,9 +264,11 @@ public class NewSurvey extends Dialog
 				NewSurveyPlace newSurveyPlace = new NewSurveyPlace( getParent()
 						.getShell(), SWT.NONE );
 				Place place = newSurveyPlace.open();
-
-				refreshListSurveyPlace();
-				listSurveyPlace.select( avaiblePlaces.indexOf( place ) );
+				if( place!= null)
+				{
+					refreshListSurveyPlace();
+					listSurveyPlace.select( avaiblePlaces.indexOf( place ) );
+				}
 			}
 		} );
 		
@@ -264,7 +287,14 @@ public class NewSurvey extends Dialog
 			
 			public void modifyText( ModifyEvent arg0 )
 			{
-				validateObject();
+				try
+				{
+					validateObject();
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 
@@ -301,7 +331,14 @@ public class NewSurvey extends Dialog
 			
 			public void modifyText( ModifyEvent arg0 )
 			{
-				validateLoad();
+				try
+				{
+					validateLoad();
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 		
@@ -323,7 +360,14 @@ public class NewSurvey extends Dialog
 		{			
 			public void modifyText( ModifyEvent arg0 )
 			{
-				validateSpecialConditions();
+				try
+				{
+					validateSpecialConditions();
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 		new Label(surveyForm, SWT.NONE);
@@ -346,7 +390,14 @@ public class NewSurvey extends Dialog
 			
 			public void modifyText( ModifyEvent arg0 )
 			{
-				validateComment();
+				try
+				{
+					validateComment();
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 		new Label(surveyForm, SWT.NONE);
@@ -484,7 +535,8 @@ public class NewSurvey extends Dialog
 		{
 			setFormFieldError( lblSurveyObject, listSurveyObject, icoSurveyObject );
 			return false;
-		} else
+		}
+		else
 		{
 			setFormFieldOK( lblSurveyObject, listSurveyObject, icoSurveyObject );
 			return true;
@@ -496,7 +548,8 @@ public class NewSurvey extends Dialog
 		if ( textSurveyLoad.getText().isEmpty() | textSurveyLoad.getText() == null )
 		{
 			setFormFieldWarning( lblSurveyLoad, textSurveyLoad, icoSurveyLoad );
-		} else
+		}
+		else
 		{
 			setFormFieldOK( lblSurveyLoad, textSurveyLoad, icoSurveyLoad );
 		}
