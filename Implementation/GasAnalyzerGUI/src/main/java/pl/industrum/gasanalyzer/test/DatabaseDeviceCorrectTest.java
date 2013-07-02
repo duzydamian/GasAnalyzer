@@ -54,6 +54,10 @@ public class DatabaseDeviceCorrectTest extends Test
 				e.printStackTrace();
 				messageDialog.open();
 			}
-		}		
+		}
+		else
+		{
+			setPassed();
+		}
 	}
 }

@@ -42,6 +42,7 @@ public class DatabaseConnectionTest extends Test
 		}
 		catch(Exception e)
 		{
+			setFailed();
 			e.printStackTrace();
 			messageDialog.open();
 		}

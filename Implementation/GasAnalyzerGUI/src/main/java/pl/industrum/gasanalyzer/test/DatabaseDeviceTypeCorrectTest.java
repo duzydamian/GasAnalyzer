@@ -43,7 +43,7 @@ public class DatabaseDeviceTypeCorrectTest extends Test
 				{
 					if( DeviceTypeDictionary.update( deviceType.ordinal(), deviceType.name(), null ) == null)
 					{
-						DeviceTypeDictionary.update( deviceType.ordinal(), deviceType.name(), null );
+						DeviceTypeDictionary.add( deviceType.ordinal(), deviceType.name(), null );
 					}
 				}
 				
@@ -56,6 +56,10 @@ public class DatabaseDeviceTypeCorrectTest extends Test
 				e.printStackTrace();
 				messageDialog.open();
 			}
-		}		
+		}
+		else
+		{
+			setPassed();
+		}
 	}
 }

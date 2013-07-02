@@ -57,6 +57,9 @@ public class DatabaseMeasurementVariableCorrectTest extends Test
 				messageDialog.open();
 			}
 		}
-		
+		else
+		{
+			setPassed();
+		}
 	}
 }
