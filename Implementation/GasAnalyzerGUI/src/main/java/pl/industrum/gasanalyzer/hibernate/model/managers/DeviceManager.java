@@ -52,16 +52,23 @@ public abstract class DeviceManager
 	public static Integer updateDevice( Integer deviceID, Integer deviceTypeID, String name, Integer address )
 	{
 		Device device = DeviceManager.getDevice( deviceID );
-		device.setDeviceType( DeviceTypeDictionary.get( deviceTypeID ) );
-		device.setName( name );
-		device.setAddress( address.intValue() );
-
-		Session session = Hibernate.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		session.update( device );
-		session.getTransaction().commit();
-		
-		return device.getId();
+		if( device == null )
+		{
+			return null;
+		}
+		else
+		{
+			device.setDeviceType( DeviceTypeDictionary.get( deviceTypeID ) );
+			device.setName( name );
+			device.setAddress( address.intValue() );
+	
+			Session session = Hibernate.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			session.update( device );
+			session.getTransaction().commit();
+			
+			return device.getId();
+		}
 	}
 	
 	public static Device getDevice( Integer deviceID )
@@ -69,8 +76,16 @@ public abstract class DeviceManager
 		Session session = Hibernate.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
 		Device device = ( Device  ) session.createQuery( "from Device where id='" + deviceID.toString() + "'" ).list().get( 0 );
-		session.getTransaction().commit();
-		return device;
+		try
+		{
+			session.getTransaction().commit();
+			return device;
+		}
+		catch( Exception e )
+		{
+			session.getTransaction().rollback();
+			return null;
+		}
 	}
 	
 	public static Device getDeviceByAddress( Integer deviceAddress )
