@@ -37,15 +37,22 @@ public abstract class MeasurementVariableDictionary
 	
 	public static Integer update( Integer id, String name )
 	{
-		MeasurementVariable variable = MeasurementVariableDictionary.get( id );
-		variable.setName( name );
-		
-		Session session = Hibernate.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		session.saveOrUpdate( variable );
-		session.getTransaction().commit();
-		//TODO reindexing table
-		return variable.getId();
+		try
+		{
+			MeasurementVariable variable = MeasurementVariableDictionary.get( id );
+			variable.setName( name );
+			
+			Session session = Hibernate.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			session.update( variable );
+			session.getTransaction().commit();
+			//TODO reindexing table
+			return variable.getId();
+		}
+		catch( Exception e )
+		{
+			return null;
+		}
 	}
 	
 	public static void delete( Integer id )

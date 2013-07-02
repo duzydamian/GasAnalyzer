@@ -35,15 +35,22 @@ public abstract class DegreeDictionary
 	
 	public static Integer update(  Integer id, String name )
 	{
-		Degree degree = DegreeDictionary.get( id );
-		degree.setName( name );
-
-		Session session = Hibernate.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		session.update( degree );
-		session.getTransaction().commit();
-		//TODO reindexing table
-		return degree.getId();
+		try
+		{
+			Degree degree = DegreeDictionary.get( id );
+			degree.setName( name );
+	
+			Session session = Hibernate.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			session.update( degree );
+			session.getTransaction().commit();
+			//TODO reindexing table
+			return degree.getId();
+		}
+		catch( Exception e )
+		{
+			return null;
+		}
 	}
 	
 	public static Degree get( Integer functionID )

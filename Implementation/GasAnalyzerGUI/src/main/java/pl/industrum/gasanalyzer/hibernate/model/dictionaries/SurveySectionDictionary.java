@@ -24,15 +24,23 @@ public abstract class SurveySectionDictionary
 	
 	public static Integer update( Integer id, String name )
 	{
-		SurveySection section = SurveySectionDictionary.get( id );
-		section.setName( name );
+		try
+		{
+			SurveySection section = SurveySectionDictionary.get( id );
+			section.setName( name );
+			
+			Session session = Hibernate.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			session.update( section );
+			session.getTransaction().commit();
+			//TODO reindexing table
+			return section.getId();
+		}
+		catch( Exception e )
+		{
+			return null;
+		}
 		
-		Session session = Hibernate.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		session.update( section );
-		session.getTransaction().commit();
-		//TODO reindexing table
-		return section.getId();
 	}
 	
 	public static void delete( Integer id )
