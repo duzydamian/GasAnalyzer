@@ -82,6 +82,8 @@ public class NewSurveyPlace extends Dialog
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
 		shell.setSize( 260, 195 );
 		shell.setText( getText() );
+		shell.setImage( UsefulImage.ADD.getImage() );
+		
 		shell.setLayout( new GridLayout( 4, false ) );
 
 		lblName = new Label( shell, SWT.RIGHT );

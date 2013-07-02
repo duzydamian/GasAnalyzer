@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
 
 import pl.industrum.gasanalyzer.gui.GasAnalyzerGUI;
+import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class NetworkScan extends Dialog
 {
@@ -58,6 +59,8 @@ public class NetworkScan extends Dialog
 		shell = new Shell( getParent(), getStyle() );
 		shell.setSize( 400, 80 );
 		shell.setText( getText() );
+		shell.setImage( UsefulImage.FIND.getImage() );
+		
 		shell.setLayout(new FillLayout(SWT.VERTICAL));
 		
 		lblWait = new Label(shell, SWT.NONE);

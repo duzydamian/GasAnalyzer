@@ -32,6 +32,7 @@ import pl.industrum.gasanalyzer.model.ApplicationUser;
 import pl.industrum.gasanalyzer.model.MeasuredObject;
 import pl.industrum.gasanalyzer.model.Place;
 import pl.industrum.gasanalyzer.model.Survey;
+import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class OpenSurvey extends Dialog
 {
@@ -100,6 +101,7 @@ public class OpenSurvey extends Dialog
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
 		shell.setSize( 600, 440 );
 		shell.setText( getText() );
+		shell.setImage( UsefulImage.OPEN_SURVEY.getImage() );
 		
 		surveyFrameData = new GridData( GridData.FILL, GridData.CENTER, true,
 				false );

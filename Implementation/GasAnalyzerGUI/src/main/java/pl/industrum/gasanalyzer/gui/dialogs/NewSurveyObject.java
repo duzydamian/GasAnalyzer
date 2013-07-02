@@ -78,6 +78,8 @@ public class NewSurveyObject extends Dialog
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
 		shell.setSize( 255, 135 );
 		shell.setText( getText() );
+		shell.setImage( UsefulImage.ADD.getImage() );
+		
 		shell.setLayout( new GridLayout( 4, false ) );
 
 		lblName = new Label( shell, SWT.RIGHT );

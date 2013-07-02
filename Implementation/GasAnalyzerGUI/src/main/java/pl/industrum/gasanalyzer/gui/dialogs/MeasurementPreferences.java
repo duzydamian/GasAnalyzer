@@ -27,6 +27,7 @@ import pl.industrum.gasanalyzer.hibernate.model.dictionaries.MeasurementVariable
 import pl.industrum.gasanalyzer.i18n.Messages;
 import pl.industrum.gasanalyzer.model.Device;
 import pl.industrum.gasanalyzer.model.MeasurementVariable;
+import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class MeasurementPreferences extends Dialog
 {
@@ -88,6 +89,8 @@ public class MeasurementPreferences extends Dialog
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
 		shell.setSize( 400, 300 );
 		shell.setText( getText() );
+		shell.setImage( UsefulImage.PREFERENCES.getImage() );
+		
 		shell.setLayout( new GridLayout( 5, false ) );
 
 		table = new Table( shell, SWT.FULL_SELECTION | SWT.HIDE_SELECTION

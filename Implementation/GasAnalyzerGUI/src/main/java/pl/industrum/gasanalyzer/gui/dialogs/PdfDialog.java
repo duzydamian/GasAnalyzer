@@ -32,6 +32,7 @@ import pl.industrum.gasanalyzer.model.Place;
 import pl.industrum.gasanalyzer.model.Survey;
 import pl.industrum.gasanalyzer.report.PDFGenerator;
 import pl.industrum.gasanalyzer.types.UsefulColor;
+import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class PdfDialog extends Dialog
 {
@@ -116,6 +117,8 @@ public class PdfDialog extends Dialog
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
 		shell.setSize( 450, 470 );
 		shell.setText( getText() );
+		shell.setImage( UsefulImage.PDF.getImage() );
+		
 		shell.setLayout( new GridLayout( 3, false ) );
 
 		lblFilePath = new Label( shell, SWT.NONE );

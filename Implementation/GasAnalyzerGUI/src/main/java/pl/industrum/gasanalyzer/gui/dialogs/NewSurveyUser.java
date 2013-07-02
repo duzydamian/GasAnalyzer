@@ -96,6 +96,8 @@ public class NewSurveyUser extends Dialog
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
 		shell.setSize( 339, 200 );
 		shell.setText( getText() );
+		shell.setImage( UsefulImage.ADD.getImage() );
+		
 		shell.setLayout( new GridLayout( 4, false ) );
 
 		lblTitle = new Label( shell, SWT.NONE );

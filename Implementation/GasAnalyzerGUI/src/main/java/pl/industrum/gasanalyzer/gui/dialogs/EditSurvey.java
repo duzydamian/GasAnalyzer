@@ -118,6 +118,7 @@ public class EditSurvey extends Dialog
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
 		shell.setSize( 600, 440 );
 		shell.setText( getText() );
+		shell.setImage( UsefulImage.EDIT.getImage() );
 		
 		surveyFrameData = new GridData( GridData.FILL, GridData.CENTER, true,
 				false );

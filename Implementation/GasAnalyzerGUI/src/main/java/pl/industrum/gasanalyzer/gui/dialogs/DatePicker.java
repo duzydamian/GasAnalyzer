@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import pl.industrum.gasanalyzer.i18n.Messages;
+import pl.industrum.gasanalyzer.types.UsefulImage;
 
 public class DatePicker extends Dialog
 {
@@ -64,6 +65,8 @@ public class DatePicker extends Dialog
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
 		shell.setSize( 450, 300 );
 		shell.setText( getText() );
+		shell.setImage( UsefulImage.CALENDAR.getImage() );
+		
 		shell.setLayout( new GridLayout( 1, false ) );
 
 		calendar = new DateTime( shell, SWT.CALENDAR | SWT.BORDER );
