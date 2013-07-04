@@ -149,14 +149,13 @@ public class About extends Dialog
 		compositeLogos = new Composite( shell, SWT.NONE );
 		compositeLogos.setLayout( new FillLayout( SWT.HORIZONTAL ) );
 
-		imiueLogo = new Label( compositeLogos, SWT.NONE );
-		imiueLogo.setAlignment( SWT.CENTER );
+		polslLogo = new Label( compositeLogos, SWT.CENTER );
+		polslLogo.setImage( UsefulImage.POLSL_LOGO.getImage() );
+		
+		imiueLogo = new Label( compositeLogos, SWT.CENTER );
 		imiueLogo.setImage( UsefulImage.IMIUE_LOGO.getImage() );
 
 		zkiwpLogo = new Label( compositeLogos, SWT.CENTER );
-		zkiwpLogo.setImage( UsefulImage.ZKIWP_LOGO.getImage() );
-
-		polslLogo = new Label( compositeLogos, SWT.CENTER );
-		polslLogo.setImage( UsefulImage.POLSL_LOGO.getImage() );
+		zkiwpLogo.setImage( UsefulImage.ZKIWP_LOGO.getImage() );		
 	}
 }
