@@ -102,6 +102,7 @@ public class SendExceptionCatched extends Dialog
 		styledText.append( exceptionToSend.toString() + "\n" );				
 		if( exceptionToSend.getMessage() != null)
 			styledText.append( exceptionToSend.getMessage() + "\n" );
+		
 		for( StackTraceElement element: exceptionToSend.getStackTrace() )
 		{
 			styledText.append( element.toString() + "\n" );

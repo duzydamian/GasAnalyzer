@@ -41,7 +41,7 @@ public class EmailSystem
 	}
 	
 	public void sendBugNotification(){
-		openMailClient( new String[]{ "duzydamian@gmail.com", "bananowy.grzesiu@gmail.com" }, "[GasAnalyzer] Propozycja", "Twoja propozycja" );
+		openMailClient( new String[]{ "duzydamian@gmail.com", "bananowy.grzesiu@gmail.com" }, "[GasAnalyzer] Błąd", "Opis znalezionego przez Ciebie błędu" );
 	}
 	
 	public void openMailClient(String to, String subject,String body)
