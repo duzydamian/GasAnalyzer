@@ -97,13 +97,19 @@ public class NewSurveyPlace extends Dialog
 			
 			public void modifyText( ModifyEvent arg0 )
 			{
-				validateName();
+				try
+				{
+					validateName();
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 		
 		icoName = new Label(shell, SWT.NONE);
 		icoName.setImage( null );
-//////////////////////////////////
 		lblCity = new Label( shell, SWT.RIGHT );
 		lblCity.setText( Messages.getString( "NewSurveyPlace.lblCity.text" ) ); //$NON-NLS-1$
 
@@ -115,13 +121,19 @@ public class NewSurveyPlace extends Dialog
 			
 			public void modifyText( ModifyEvent arg0 )
 			{
-				validateCity();
+				try
+				{
+					validateCity();
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 		
 		icoCity = new Label(shell, SWT.NONE);
 		icoCity.setImage( null );
-///////////////////////////////////
 		lblPostCode = new Label( shell, SWT.RIGHT );
 		lblPostCode.setText( Messages.getString( "NewSurveyPlace.lblPostCode.text" ) ); //$NON-NLS-1$
 
@@ -133,13 +145,20 @@ public class NewSurveyPlace extends Dialog
 			
 			public void modifyText( ModifyEvent arg0 )
 			{
-				validatePostCode();
+				try
+				{
+					validatePostCode();
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 		
 		icoPostCode = new Label(shell, SWT.NONE);
 		icoPostCode.setImage( null );
-//////////////////////////////////////////////////////////////
+		
 		lblAddress = new Label( shell, SWT.RIGHT );
 		lblAddress.setText( Messages.getString( "NewSurveyPlace.lblAddress.text" ) ); //$NON-NLS-1$
 
@@ -151,7 +170,14 @@ public class NewSurveyPlace extends Dialog
 			
 			public void modifyText( ModifyEvent arg0 )
 			{
-				validateAddress();
+				try
+				{
+					validateAddress();
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 		

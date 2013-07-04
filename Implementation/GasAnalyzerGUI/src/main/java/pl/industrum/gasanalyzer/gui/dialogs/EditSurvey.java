@@ -142,7 +142,14 @@ public class EditSurvey extends Dialog
 			
 			public void modifyText( ModifyEvent arg0 )
 			{
-				validateName();
+				try
+				{
+					validateName();
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 		
@@ -189,7 +196,14 @@ public class EditSurvey extends Dialog
 			
 			public void modifyText( ModifyEvent arg0 )
 			{
-				validateUser();
+				try
+				{
+					validateUser();
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 
@@ -228,10 +242,17 @@ public class EditSurvey extends Dialog
 
 			public void modifyText( ModifyEvent arg0 )
 			{
-				isPlaceSelected = validatePlace();
-				refreshListSurveyObject( avaiblePlaces.get( listSurveyPlace.getSelectionIndex() ).getId() );
-				listSurveyObject.setEnabled( isPlaceSelected );
-				btnNewSurveyObject.setEnabled( isPlaceSelected );
+				try
+				{
+					isPlaceSelected = validatePlace();
+					refreshListSurveyObject( avaiblePlaces.get( listSurveyPlace.getSelectionIndex() ).getId() );
+					listSurveyObject.setEnabled( isPlaceSelected );
+					btnNewSurveyObject.setEnabled( isPlaceSelected );
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 
@@ -268,7 +289,14 @@ public class EditSurvey extends Dialog
 			
 			public void modifyText( ModifyEvent arg0 )
 			{
-				validateObject();
+				try
+				{
+					validateObject();
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 
@@ -305,7 +333,14 @@ public class EditSurvey extends Dialog
 			
 			public void modifyText( ModifyEvent arg0 )
 			{
-				validateLoad();
+				try
+				{
+					validateLoad();
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 		
@@ -328,7 +363,14 @@ public class EditSurvey extends Dialog
 			
 			public void modifyText( ModifyEvent arg0 )
 			{
-				validateSpecialConditions();
+				try
+				{
+					validateSpecialConditions();
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 		new Label(surveyForm, SWT.NONE);
@@ -347,11 +389,17 @@ public class EditSurvey extends Dialog
 		gd_styledTextComment.heightHint = 71;
 		styledTextComment.setLayoutData( gd_styledTextComment );
 		styledTextComment.addModifyListener( new ModifyListener()
-		{
-			
+		{			
 			public void modifyText( ModifyEvent arg0 )
 			{
-				validateComment();
+				try
+				{
+					validateComment();
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 		new Label(surveyForm, SWT.NONE);

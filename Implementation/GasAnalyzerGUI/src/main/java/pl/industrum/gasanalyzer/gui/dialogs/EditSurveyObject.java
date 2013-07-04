@@ -100,7 +100,14 @@ public class EditSurveyObject extends Dialog
 		{			
 			public void modifyText( ModifyEvent arg0 )
 			{
-				loadSurveyObjects();
+				try
+				{
+					loadSurveyObjects();
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 
@@ -113,7 +120,14 @@ public class EditSurveyObject extends Dialog
 		{			
 			public void modifyText( ModifyEvent arg0 )
 			{
-				loadSurveyObjectData( avaibleSurveyObjects.get( comboAllSurveyObject.getSelectionIndex() ) );
+				try
+				{
+					loadSurveyObjectData( avaibleSurveyObjects.get( comboAllSurveyObject.getSelectionIndex() ) );
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 		
@@ -128,7 +142,14 @@ public class EditSurveyObject extends Dialog
 			
 			public void modifyText( ModifyEvent arg0 )
 			{
-				validateName();
+				try
+				{
+					validateName();
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 		
@@ -146,7 +167,14 @@ public class EditSurveyObject extends Dialog
 			
 			public void modifyText( ModifyEvent arg0 )
 			{
-				validateDesciption();
+				try
+				{
+					validateDesciption();
+				}
+				catch( Exception e )
+				{
+					e.printStackTrace();
+				}
 			}
 		} );
 		
@@ -234,7 +262,8 @@ public class EditSurveyObject extends Dialog
 		{
 			setFormFieldError( lblName, textName, icoName );
 			return false;
-		} else
+		}
+		else
 		{
 			setFormFieldOK( lblName, textName, icoName );
 			return true;
@@ -247,7 +276,8 @@ public class EditSurveyObject extends Dialog
 		{
 			setFormFieldWarning( lblDesciption, textDesciption, icoDesciption );
 			return false;
-		} else
+		}
+		else
 		{
 			setFormFieldOK( lblDesciption, textDesciption, icoDesciption );
 			return true;
