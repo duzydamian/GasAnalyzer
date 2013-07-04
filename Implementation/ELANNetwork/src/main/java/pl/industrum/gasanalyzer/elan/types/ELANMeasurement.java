@@ -58,8 +58,17 @@ public class ELANMeasurement
 	
 	public String doubleAsStringRet()
 	{
-		nf.setMaximumFractionDigits(precision);
-	    nf.setMinimumFractionDigits(precision);
-	    return nf.format(new BigDecimal(value).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue()).replace(".", ",");
+		if(precision != null)
+		{
+			nf.setMaximumFractionDigits(precision);
+		    nf.setMinimumFractionDigits(precision);
+		    return nf.format(new BigDecimal(value).setScale(precision, BigDecimal.ROUND_HALF_DOWN).doubleValue()).replace(".", ",");
+		}
+		else
+		{
+			nf.setMaximumFractionDigits(2);
+		    nf.setMinimumFractionDigits(2);
+		    return nf.format(new BigDecimal(value).setScale(2, BigDecimal.ROUND_HALF_DOWN).doubleValue()).replace(".", ",");
+		}
 	}
 }
