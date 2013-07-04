@@ -86,6 +86,8 @@ public class ELANConnection
 		super();
 		this.is = null;
 		this.os = null;
+		
+		listPorts();
 	}
 	
 	/**
@@ -221,6 +223,20 @@ public class ELANConnection
 		{
 			CommPortIdentifier portIdentifier = portEnum.nextElement();
 			ports.add(portIdentifier.getName());
+		}
+		return ports;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static Vector<String> vectorPortsOnlySerial()
+	{
+		Vector<String> ports = new Vector<String>();
+		Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
+		while (portEnum.hasMoreElements())
+		{
+			CommPortIdentifier portIdentifier = portEnum.nextElement();
+			if( portIdentifier.getPortType() == CommPortIdentifier.PORT_SERIAL )
+				ports.add(portIdentifier.getName());
 		}
 		return ports;
 	}

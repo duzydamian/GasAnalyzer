@@ -289,7 +289,7 @@ public abstract class DeviceTree extends Composite
 
 	public void refreshTree()
 	{
-		for( String port: ELANConnection.vectorPorts() )
+		for( String port: ELANConnection.vectorPortsOnlySerial() )
 		{
 			boolean toAdd = true;
 			for( TreeItem item: deviceTree.getItems() )
