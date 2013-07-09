@@ -2,7 +2,7 @@
 %Część ta~zawiera wstępne informacje o~realizowanym projekcie. Zebrano w~nim wszystko to~co było dostępne zanim student przystąpił do~realizacji informatycznej części projektu. Opisano stanowisko laboratoryjne na~którym powstał projekt.
 
 \subsection{Geneza}
-Tematem projektu, którego dotyczy to~sprawozdanie jest: Gas Analyzer". Pomysł na~projekt pojawił~się w~wyniku nawiązania przez nas współpracy z~Zakładem Kotłów i Wytwornic Pary, a~dokładnie Panem Tomaszem Kressem.
+Tematem projektu, którego dotyczy to~sprawozdanie jest: Gas Analyzer". Pomysł na~projekt pojawił~się w~wyniku nawiązania przez nas współpracy z~Zakładem Kotłów i~Wytwornic Pary, a~dokładnie Panem Tomaszem Kressem.
 
 \subsection{Temat}
 Głównymi celami pracy było napisanie oprogramowania umożliwiającego gromadzenie danych pomiarowych z~kilku urządzeń firmy Siemens.
@@ -18,7 +18,7 @@ Na~potrzeby realizacji projektu stworzono stanowisko laboratoryjne, którego sch
 \item ULTRAMAT 23.
 \end{itemize}
 \indent
-\indent Komputery na, których powstała wersja rozwojowa projekty pracowały na systemach operacyjnych Linux Ubuntu w~wersji 32 oraz 64~bitowej. Do~połączenia komputera z~urządzeniem ULTRAMAT~23 zastosowano izolowany konwerter~USB do~RS-232/422/485, moduł ATC-850 jest automatycznie wykrywany i~instalowany jako standardowy port~COM. Stosowane w~tej fazie projektu urządzenie pomiarowe potrafiło mierzyć zawartość $ CO_2 $, $ CO $, $ O_2 $ oraz $ NO_2 $ ??
+\indent Komputery na, których powstała wersja rozwojowa projekty pracowały na systemach operacyjnych Linux Ubuntu w~wersji 32 oraz 64~bitowej. Do~połączenia komputera z~urządzeniem ULTRAMAT~23 zastosowano izolowany konwerter~USB do~RS-232/422/485, moduł ATC-850 jest automatycznie wykrywany i~instalowany jako standardowy port~COM. Stosowane w~tej fazie projektu urządzenie pomiarowe potrafiło mierzyć zawartość $ CO $, $ CO_2 $, $ NO $ oraz $ O_2 $.
 
 \subsubsection{Stanowisko docelowe}
 \begin{figure}[!htb] 	\centering 	\includegraphics[width=0.8\textwidth]{images/schemat2} 	\caption{Schemat stanowiska docelowego} \label{schemat2} \end{figure} 
@@ -38,7 +38,7 @@ Docelowo zrealizowany projekt ma być uruchamiany na~stanowisku, którego schema
 \hline Urządzenie & Wielkości mierzone \\ 
 \hline ULTRAMAT~6 & $ NH_3 [vpm] $ \\ 
 \hline ULTRAMAT~23 & $ CH_4 [\%], CO [\%], CO_2 [\%], O_2 [\%] $ \\ 
-\hline ULTRAMAT~23 & $  $ \\ 
+\hline ULTRAMAT~23 & $ CO [ppm], CO_2 [\%], NO [ppm], O_2 [\%] $ \\ 
 \hline ULTRAMAT~23 & $  $ \\ 
 \hline 
 \end{tabular} 
@@ -47,17 +47,30 @@ Docelowo zrealizowany projekt ma być uruchamiany na~stanowisku, którego schema
 \end{table}
 
 \subsection{Analiza tematu}
-Analiza tematu polegała przede wszystkim na zapoznaniu się z~narzędziami programistycznymi do~tworzenia oprogramowania sterownika oraz wizualizacji.
-Poznanie tych podstaw pozwoliło dobrać język odpowiedni do~realizacji poszczególnych zadań.
+Analiza tematu polegała przede wszystkim na zapoznaniu się z~dokumentacjami urządzeń \cite{u23,u6}. Szczególnie istotnym, a w~zasadzie najważniejszym punktem całej analizy były interfejsy i~protokoły dostępne w obu typach urządzeń oraz w ewentualnych kolejnych urządzeniach tego producenta.
+Analiza pozwoliła wytypować do dalszej analizy dwa protokoły:
+\begin{enumerate}
+\item PROFIBUS-DP/-PA
+\item ELAN Network
+\end{enumerate}
+Szczegółowa analiza rozwiązań opartych o oba protokoły komunikacyjne w dokumentacjach producenta \cite{elan,step7,comm} pozwoliła ustalić, że w~przypadku PROFIBUSA można zastosować sterownik przemysłowy wyposażony w odpowiednie złącze komunikacyjne lub rozszerzony o~odpowiedni moduł.
+Poznanie tych podstaw pozwoliło dobrać technologię odpowiednią do~realizacji projektu zgodnie z~założeniami. Ostatecznie wybór padł na ELAN Network oraz stworzenie własnego oprogramowania w Javie.
 
 \subsection{Założenia}
-%Stworzone oprogramowanie dla Robota Fishertechnik ma działać na sterownikach firmy Siemens oraz ma zostać stworzone przy użyciu środowiska Step 7. Funkcjonalności robota, jakie mają wchodzić w~skład projektu, to:
-Oprogramowanie do zbierania danych pomiarowych powinno zostać stworzone przy użyciu technologii pozwalającej działać na~różnych systemach operacyjnych bez~skomplikowanych zabiegów.Funkcjonalności wchodzące w~skład projektu,~to:
+Oprogramowanie do zbierania danych pomiarowych powinno zostać stworzone przy użyciu technologii pozwalającej działać na~różnych systemach operacyjnych bez~skomplikowanych zabiegów. Funkcjonalności wchodzące w~skład projektu,~to:
 \begin{itemize}
+\item wykorzystanie jednego z dostępnych w urządzeniach protokołów,
+\item automatyczne wykrywanie podłączonych urządzeń,
+\item zarządzanie użytkownikami, tytułami naukowymi, miejscami, obiektami itd.
 \item wizualizacja bieżących pomiarów,
-\item generowanie raportu z pomiaru jako plik arkusza kalkulacyjnego,
-\item generowanie raportu z pomiaru jako plik do wydruku z wynikami np. format~PDF,
-\item .
+\item wykrywanie i sygnalizacja problemów z urządzeniem,
+\item zapisywanie bieżących pomiarów ze wszystkich urządzeń jednocześnie do~bazy danych,
+\item regulowany krok zapisu pomiarów do~bazy,
+\item możliwość dodania komentarza do~zapisywanego pomiaru,
+\item generowanie raportu z~pomiaru jako plik arkusza kalkulacyjnego,
+\item generowanie raportu z~pomiaru jako plik do wydruku z~wynikami np. format~PDF,
+\item konfiguracja nazwa urządzeń widocznych w aplikacji,
+\item ustawianie precyzji pomiarów, tzn. określenie ilość miejsc po~przecinku dla danej wielkości mierzonej.
 \end{itemize}
 \indent
 \indent Powyżej zostały wymienione założenia podstawowe, jednak autorzy nie~wykluczają zrealizowania dodatkowych zadań, które nie~zostały zamieszczone w~pierwotnej koncepcji realizacji projektu.
@@ -73,7 +86,7 @@ Realizacja projektu została podzielona na następujące etapy:
 \item Przedstawienie projektu i~ewentualne korekty.
 \end{itemize}
 \indent
-\indent Powyższy plan pracy stanowił dla autorów wyznacznik kolejnych działań. Jednak powszechnie wiadomo, że w~praktyce poszczególne punkty są~wymienne i~wpływają na siebie wzajemnie.
+\indent Powyższy plan pracy stanowił dla autorów wyznacznik kolejnych działań. Jednak powszechnie wiadomo, że w~praktyce poszczególne punkty są~wymienne i~wpływają na siebie wzajemnie. Dodatkowo na potrzeby realizacji projektu powstał szczegółowy plan wraz z~terminami oraz osobami odpowiedzialnymi za poszczególne zadania przedstawiony w~Tabeli~\ref{tab:harmonogram}
 
 \begin{table}[h]
 \centering
