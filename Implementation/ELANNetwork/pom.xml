@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>pl.industrum.gasanalyzer.elan</groupId> 
 	<artifactId>ELANNetwork</artifactId>
-	<version>0.0.8</version>
+	<version>0.1.0</version>
 	<packaging>jar</packaging>
 	<name>ELAN Network</name>
 	<description>Aplikacja dostępowa do sieci analizatorów składu gazów.</description>
@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>pl.industrum.gasanalyzer</groupId>
 		<artifactId>GasAnalyzer</artifactId>
-		<version>0.0.7</version>
+		<version>0.1.0</version>
 	</parent>		
 	
 	<properties>
