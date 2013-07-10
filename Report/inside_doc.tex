@@ -12,7 +12,6 @@
         stringstyle=\color{BurntOrange}
         }
 \section{Specyfikacja wewnętrzna}
-\subsection{Oprogramowanie}
 Oprogramowanie zostało stworzone w~całości Javie. Dla~ułatwienia kompilacji, zarządzanie zależnościami oraz wersjami zastosowano Apache Maven, które jest narzędziem automatyzującym budowę oprogramowania.
 Najważniejszymi bibliotekami wykorzystywanymi w~projekcie są:
 \begin{enumerate}
@@ -30,7 +29,7 @@ Framework do realizacji warstwy dostępu do danych (ang. persistance layer). Zap
 \item dom4j \newline
 dom4j to kolejny projekt typu open-source. Jego API oparte jest na interfejsach. Korzysta z parsera SAX. Jego motywacja jest podobna jak JDOM: prostsze i~lżejsze od~DOM API, stworzone specjalnie dla języka Java. W~projekcie wykorzystywany do~odczytu oraz zapisu pliku zawierającego konfigurację urządzeń oraz precyzję pomiarów.
 \end{enumerate}
-
+\newpage
 Maven umożliwia stworzenie profili, które wykonują różne zadania lub pozwalają rozróżnić odrębne niezależne przebiegi kompilacji. W~naszym projekcie wykorzystaliśmy je do~pobrania i~dołączenia do~pliku końcowego biblioteki SWT w wersji dla wybranego systemu operacyjnego i~architektury. Dostępne profile Mavena:
 \begin{enumerate}
 \item win32 -- Windows 32-bitowy
@@ -69,7 +68,6 @@ Struktura projektu w formie diagramu:
 \label{projectSchema}
  \end{figure}
 
-\subsection{Specyfikacja zewnętrzna}
 \subsection{Baza danych}
 W~programie wykorzystujemy bazę PostgreSQL. Do obsługi w~aplikacji wykorzystujemy omówioną już wcześniej bibliotekę Hibernate. Schemat bazy danych został stworzony w~pgDesignerze i~wygląda jak na Rysunku~\ref{databaseSchema}.
 \begin{figure}[!htb] 	
