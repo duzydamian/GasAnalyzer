@@ -21,7 +21,7 @@ Na~potrzeby realizacji projektu stworzono stanowisko laboratoryjne, którego sch
 \indent Komputery na, których powstała wersja rozwojowa projekty pracowały na systemach operacyjnych Linux Ubuntu w~wersji 32 oraz 64~bitowej. Do~połączenia komputera z~urządzeniem ULTRAMAT~23 zastosowano izolowany konwerter~USB do~RS-232/422/485, moduł ATC-850 jest automatycznie wykrywany i~instalowany jako standardowy port~COM. Stosowane w~tej fazie projektu urządzenie pomiarowe potrafiło mierzyć zawartość $ CO $, $ CO_2 $, $ NO $ oraz $ O_2 $.
 
 \subsubsection{Stanowisko docelowe}
-\begin{figure}[!htb] 	\centering 	\includegraphics[width=0.8\textwidth]{images/schemat2} 	\caption{Schemat stanowiska docelowego} \label{schemat2} \end{figure} 
+\begin{figure}[!htb] 	\centering 	\includegraphics[width=0.7\textwidth]{images/schemat2} 	\caption{Schemat stanowiska docelowego} \label{schemat2} \end{figure} 
 Docelowo zrealizowany projekt ma być uruchamiany na~stanowisku, którego schemat przedstawia Rysunek~\ref{schemat2}. Składa się ono~z:
 \begin{itemize}
 \item Komputera,
@@ -47,13 +47,13 @@ Docelowo zrealizowany projekt ma być uruchamiany na~stanowisku, którego schema
 \end{table}
 
 \subsection{Analiza tematu}
-Analiza tematu polegała przede wszystkim na zapoznaniu się z~dokumentacjami urządzeń \cite{u23,u6}. Szczególnie istotnym, a w~zasadzie najważniejszym punktem całej analizy były interfejsy i~protokoły dostępne w obu typach urządzeń oraz w ewentualnych kolejnych urządzeniach tego producenta.
+Analiza tematu polegała przede wszystkim na zapoznaniu się z~dokumentacjami urządzeń \cite{u23,u6}. Szczególnie istotnym, a w~zasadzie najważniejszym punktem całej analizy były interfejsy i~protokoły dostępne w obu typach urządzeń oraz w ewentualnych kolejnych urządzeniach tego producenta. \\ \newline
 Analiza pozwoliła wytypować do dalszej analizy dwa protokoły:
 \begin{enumerate}
 \item PROFIBUS-DP/-PA
 \item ELAN Network
 \end{enumerate}
-Szczegółowa analiza rozwiązań opartych o oba protokoły komunikacyjne w dokumentacjach producenta \cite{elan,step7,comm} pozwoliła ustalić, że w~przypadku PROFIBUSA można zastosować sterownik przemysłowy wyposażony w odpowiednie złącze komunikacyjne lub rozszerzony o~odpowiedni moduł.
+Szczegółowa analiza rozwiązań opartych o oba protokoły komunikacyjne w dokumentacjach producenta \cite{elan,step7,comm} pozwoliła ustalić, że w~przypadku PROFIBUSA można zastosować sterownik przemysłowy wyposażony w odpowiednie złącze komunikacyjne lub rozszerzony o~odpowiedni moduł. Niestety jest to rozwiązanie drogie i~mało elastyczne. Teoretycznie funkcjonują na rynku przejściówki PROFIBUS~$ \Leftrightarrow $~USB, ale nie~udało nam~się znaleźć niczego aktualnego i~godnego rozważań. Najistotniejszym punktem analizy był protokół ELAN Network, dostępna do~niego dokumentacja \cite{elan} uświadomiła nam, że spełnia wszystkie nasze wymagania, a sprzęt potrzebny do uruchomienia jest tani i~ogólnodostępny. Własna implementacja tego protokołu na podstawie dokumentacji i~testów pozwala na~pełną elastyczność i dopasowanie do naszych potrzeb.
 Poznanie tych podstaw pozwoliło dobrać technologię odpowiednią do~realizacji projektu zgodnie z~założeniami. Ostatecznie wybór padł na ELAN Network oraz stworzenie własnego oprogramowania w Javie.
 
 \subsection{Założenia}
@@ -64,13 +64,13 @@ Oprogramowanie do zbierania danych pomiarowych powinno zostać stworzone przy u�
 \item zarządzanie użytkownikami, tytułami naukowymi, miejscami, obiektami itd.
 \item wizualizacja bieżących pomiarów,
 \item wykrywanie i sygnalizacja problemów z urządzeniem,
-\item zapisywanie bieżących pomiarów ze wszystkich urządzeń jednocześnie do~bazy danych,
+\item zapisywanie bieżących pomiarów ze wszystkich urządzeń jednocześnie,
 \item regulowany krok zapisu pomiarów do~bazy,
 \item możliwość dodania komentarza do~zapisywanego pomiaru,
 \item generowanie raportu z~pomiaru jako plik arkusza kalkulacyjnego,
 \item generowanie raportu z~pomiaru jako plik do wydruku z~wynikami np. format~PDF,
 \item konfiguracja nazwa urządzeń widocznych w aplikacji,
-\item ustawianie precyzji pomiarów, tzn. określenie ilość miejsc po~przecinku dla danej wielkości mierzonej.
+\item ustawianie precyzji pomiarów dla danej wielkości mierzonej.
 \end{itemize}
 \indent
 \indent Powyżej zostały wymienione założenia podstawowe, jednak autorzy nie~wykluczają zrealizowania dodatkowych zadań, które nie~zostały zamieszczone w~pierwotnej koncepcji realizacji projektu.
@@ -90,7 +90,7 @@ Realizacja projektu została podzielona na następujące etapy:
 
 \begin{table}[h]
 \centering
-\begin{tabular}{|p{0.15\textwidth}|p{0.15\textwidth}|p{0.7\textwidth}|}
+\begin{tabular}{|p{0.15\textwidth}|p{0.1\textwidth}|p{0.75\textwidth}|}
 \hline \textbf{Termin} & \textbf{Osoba} & \textbf{Zadanie} \\ 
 \hline\hline 11.03 -- 17.03 & Wszyscy & Wybór tematu. \\ 
 \hline 18.03 -- 20.03 & Wszyscy & Określenie celu i~zakresu, przygotowanie harmonogramu, podział zadań. \\ 
