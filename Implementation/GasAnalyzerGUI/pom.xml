@@ -4,13 +4,13 @@
 	<groupId>pl.industrum.gasanalyzer.gui</groupId>
 	<artifactId>GasAnalyzerGUI</artifactId>
 	<name>Gas Analyzer GUI</name>
-	<version>0.0.8</version>
+	<version>0.1.0</version>
 	<description>Aplikacja dostępowa do sieci analizatorów składu gazów.</description>		
 
 	<parent>
 		<groupId>pl.industrum.gasanalyzer</groupId>
 		<artifactId>GasAnalyzer</artifactId>
-		<version>0.0.7</version>
+		<version>0.1.0</version>
 	</parent>
 
 	<build>
@@ -146,7 +146,7 @@
 		<dependency>
 			<groupId>pl.industrum.gasanalyzer.elan</groupId>
 			<artifactId>ELANNetwork</artifactId>
-			<version>0.0.8</version>
+			<version>0.1.0</version>
 		</dependency>		
 
 <!-- Hibernate and required library -->    	
