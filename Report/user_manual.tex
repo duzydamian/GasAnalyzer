@@ -14,10 +14,79 @@
 \section{Instrukcja użytkownika}
 %\subsection{Specyfikacja zewnętrzna}
 
-\begin{figure}[!htb] 	\centering 	\includegraphics[width=0.5\textwidth]{images/splashScreen.png} \caption{Okno ładowania} \label{template} \end{figure}
+\subsection{Ekrany powitalne}
 
-\subsubsection{Ekran powitalny}
-Bezpośrednio po~uruchomieniu wizualizacji użytkownik zobaczy ekran powitalny taki jak na Rysunku~\ref{main} zawierający informacje o~
+\noindent Po uruchomieniu aplikacji pierwszym widocznym oknem, będzie ekran powitalny (Rys.~\ref{splash_screen}). U~jego dołu wyświetlony jest przebieg kontroli systemu wykonywanej każdorazowo przy~próbie włączenia programu. Podczas testu sprawdzane są:
+\begin{enumerate}
+\item istnienie poprawnej bazy danych i~możliwość połączenia,
+\item istnienie portów szeregowych,
+\item dostęp do wszystkich potrzebnych sterowników.
+\end{enumerate}
+\noindent W~razie potrzeby automatycznie uzupełniane~są słowniki konieczne dla poprawnego działania aplikacji.
+
+\begin{figure}[!htb]
+\centering 		
+  \subfloat[Windows]{\includegraphics[width=0.45\textwidth]{images/splashScreenW}}   
+  \hspace{2mm}          
+  \subfloat[Linux]{\includegraphics[width=0.45\textwidth]{images/splashScreenL}}
+\caption{Okno ładowania} 	
+\label{splash_screen}
+\end{figure}
+
+\noindent W~przypadku wykrycia braku elementów niezbędnych do poprawnego działania programu wyświetlony zostanie odpowiedni komunikat (Rys.~\ref{dbError} i Rys.~\ref{rxtxError}).
+
+\begin{figure}[!htb]
+\centering 		
+  \subfloat[Windows]{\includegraphics[width=0.35\textwidth]{images/dbErrorW}}    
+  \hspace{2mm}
+  \subfloat[Linux]{\includegraphics[width=0.35\textwidth]{images/dbErrorL}}
+\caption{Komunikat o błędzie łączenia do bazy danych} 	
+\label{dbError}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering 		
+  \subfloat[Windows]{\includegraphics[width=0.45\textwidth]{images/rxtxErrorW}}    
+  \hspace{2mm}
+  \subfloat[Linux]{\includegraphics[width=0.45\textwidth]{images/rxtxErrorL}}
+\caption{Okno błędu braku biblioteki RXTX} 	
+\label{rxtxError}
+\end{figure}
+
+\noindent Po wykonaniu wszystkich testów i~sprawdzeniu poprawności konfiguracji systemu użytkownik zostaje przeniesiony do głównego okna aplikacji (Rys.~\ref{main}). Bezpośrednio po uruchomieniu większość funkcji jest nieaktywna. W~celu ich uaktywnienia konieczne jest utworzenie bądź wczytanie istniejącego pomiaru. Operacje te są opisane w~dalszej części instrukcji. W~tym momencie można zaobserwować budowę programu. Na~górze okna widoczne są menu.
+\begin{itemize}
+\item Menu ,,Plik'': umożliwia rozpoczęcie (,,Nowy pomiar'') i~wczytanie poprzedniego (,,Otwórz pomiar"'') pomiaru oraz wyłączenie aplikacji (,,Wyjście'').
+\item Menu ,,Edycja'': umożlwia edycję wszelkich parametrów pomiaru. Zaliczają się do nich:
+\begin{itemize}
+\item ,,Edytuj prowadzących pomiar'': umożliwia edycję danych o~osobach przeprowadzających pomiar. Prócz danych personalnych przechowywane są informacje o tytule naukowym i~pełnionej funkcji (Rys.~\ref{editUser}),
+
+\begin{figure}[!htb]
+\centering 		
+  \subfloat[Windows]{\includegraphics[width=0.45\textwidth]{images/editUserW}}    
+  \hspace{2mm}
+  \subfloat[Linux]{\includegraphics[width=0.45\textwidth]{images/editUserL}}
+\caption{Okno edycji danych użytkownika} 	
+\label{editUser}
+\end{figure}
+
+\item ,,Edytuj tytuły'': umożliwia edycję tytułów naukowych (Rys.~\ref{editUser}),
+\item ,,Edytuj funkcje'': umożliwia edycję funkcji, które są przypisane użytkownikom pomiaru np. ,,prowadzący pomiar'', ,,obserwator'', ,,kontroler'', ,,student'' (Rys.~\ref{editUser}),
+\item ,,Edytuj miejsca'': umożliwia edycję informacji o miejscu, w którym odbywa się pomiar (Rys.~\ref{editUser}),
+\item ,,Edytuj obiekty'': umożliwia edycję obiektów będących przedmiotem pomiaru (Rys.~\ref{editUser}),
+\end{itemize}
+\item Menu ,,Pomiar'':
+\item Menu ,,Sieć'':
+\item Menu ,,Pomoc'':
+\end{itemize}
+
+\begin{tikzpicture}
+\node[color=black,draw=white,fill=uwaga,shape=rectangle,rounded corners=0.5ex,
+text width=36em, text centered] at (4,0) 
+{
+\textbf{UWAGA}\linebreak
+W~celu wykonania pomiaru konieczne jest uzupełnienie informacji o~minimum jednym użytkowniku oraz o~przynajmniej jednym obiekcie będącym przedmiotem pomiaru. W~ramach jednego miejsca może istnieć wiele obiektów.
+};
+\end{tikzpicture}
 
 \begin{figure}[!htb]
 \centering 		
