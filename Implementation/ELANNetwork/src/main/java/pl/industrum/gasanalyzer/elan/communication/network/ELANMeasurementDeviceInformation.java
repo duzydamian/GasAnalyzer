@@ -116,7 +116,9 @@ public class ELANMeasurementDeviceInformation implements Iterable<ELANVariableDi
 	{
 		for( ELANVariableDimensionPrecisionTrio precisionTrio: measuredVariables )
 		{
-			precisionTrio.setPrecision( measurementPrecisionMap.get( precisionTrio.getVariable().getPrintable() ) );
+			Integer precision = measurementPrecisionMap.get( precisionTrio.getVariable().getPrintable() );
+			if ( precision != null)
+				precisionTrio.setPrecision( precision );
 		}
 	}
 }
