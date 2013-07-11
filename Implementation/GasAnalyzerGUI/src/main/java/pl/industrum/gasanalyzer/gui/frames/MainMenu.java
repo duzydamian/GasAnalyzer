@@ -206,11 +206,11 @@ public abstract class MainMenu extends Menu
 		Menu menuNetwork = new Menu( mntmNetwork );
 		mntmNetwork.setMenu( menuNetwork );
 
-		MenuItem mntmConnect = new MenuItem( menuNetwork, SWT.CASCADE );
-		mntmConnect.setText( Messages.getString( "MainMenu.Connect" ) ); //$NON-NLS-1$
-		
-		MenuItem mntmDisconnect = new MenuItem( menuNetwork, SWT.CASCADE );
-		mntmDisconnect.setText( Messages.getString( "MainMenu.Disconnect" ) ); //$NON-NLS-1$
+//		MenuItem mntmConnect = new MenuItem( menuNetwork, SWT.CASCADE );
+//		mntmConnect.setText( Messages.getString( "MainMenu.Connect" ) ); //$NON-NLS-1$
+//		
+//		MenuItem mntmDisconnect = new MenuItem( menuNetwork, SWT.CASCADE );
+//		mntmDisconnect.setText( Messages.getString( "MainMenu.Disconnect" ) ); //$NON-NLS-1$
 		
 		MenuItem mntmRefresh = new MenuItem( menuNetwork, SWT.NONE );
 		mntmRefresh.setText( Messages.getString( "MainMenu.Refresh" ) ); //$NON-NLS-1$

@@ -141,7 +141,26 @@ public class XlsDialog extends Dialog
 				{ "*.xls" } );
 				String path = fileDialog.open();
 				if ( path != null )
+				{
+					if( !path.endsWith( ".xls" ) )
+					{
+						int indexOf = path.lastIndexOf( "." );
+						if ( indexOf == -1 )
+						{
+							path = path.substring( 0, path.length() );
+						}
+						else
+						{
+							path = path.substring( 0, indexOf );
+						}
+						
+						path += ".xls";
+					}
+
 					textFilePath.setText( path );
+					textFilePath.getParent().setFocus();
+					textFilePath.setFocus();
+				}
 			}
 		} );
 		btnBrowse.setText( Messages.getString( "XlsDialog.btnBrowse.text" ) ); //$NON-NLS-1$
