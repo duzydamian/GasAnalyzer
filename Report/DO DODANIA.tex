@@ -20,6 +20,8 @@
 \usepackage{titlesec}
 \usepackage{lipsum}
 \usepackage{morefloats}
+\usepackage{caption}
+\usepackage{subcaption}
 
 \begin{document}
 
@@ -237,6 +239,29 @@
   \subfloat[Linux]{\includegraphics[width=0.45\textwidth]{images/suggestionL}}
 \caption{Okno wysyłanie sugestii poprzez email} 	
 \label{suggestion}
+\end{figure}
+
+Test ikon na Rysunku~\ref{icons:add}
+\begin{figure}[!htb]
+\centering
+\begin{tabular}{cc}
+\hline \begin{subfigure}[b]{0.2\textwidth} 
+			\includegraphics[width=\textwidth]{images/add}
+            \caption{Dodawanie}
+            \label{icons:add} 
+       \end{subfigure} &  
+	   \begin{subfigure}[b]{0.2\textwidth} 
+			\includegraphics[width=\textwidth]{images/about}
+            \caption{O programie}
+            \label{icons:about} 
+       \end{subfigure} &  \\              
+%\hline  &  &  &  &  \\ 
+%\hline  &  &  &  &  \\ 
+%\hline  &  &  &  &  \\ 
+%\hline 
+\end{tabular}  		
+\caption{Ikony wykorzystywane w aplikacji} 	
+\label{icons}
 \end{figure}
 
 \end{document}

@@ -43,7 +43,7 @@ Maven umożliwia stworzenie profili, które wykonują różne zadania lub pozwal
 Struktura projektu w formie diagramu:
 \begin{figure}[!htb] 	
 \centering 	
-\begin{tikzpicture}[node distance=2cm]
+\begin{tikzpicture}[node distance=1.1cm]
     \node (GasAnalyzer) [abstract, rectangle split, rectangle split parts=2]
         {
             \textbf{GasAnalyzer}
@@ -60,8 +60,8 @@ Struktura projektu w formie diagramu:
             \textbf{GasAnalyzerGUI}
             \nodepart{second}wersja 0.1.0
         };    
-    \draw[myarrow] (ELANNetwork.north) -- ++(0,0.8) -| (GasAnalyzer.south);
-    \draw[line] (ELANNetwork.north) -- ++(0,0.8) -| (GasAnalyzerGUI.north); 
+    \draw[myarrow] (ELANNetwork.north) -- ++(0,0.1) -| (GasAnalyzer.south);
+    \draw[line] (ELANNetwork.north) -- ++(0,0.1) -| (GasAnalyzerGUI.north); 
         
 \end{tikzpicture}
 \caption{Struktura projektu} 
@@ -72,7 +72,7 @@ Struktura projektu w formie diagramu:
 W~programie wykorzystujemy bazę PostgreSQL. Do obsługi w~aplikacji wykorzystujemy omówioną już wcześniej bibliotekę Hibernate. Schemat bazy danych został stworzony w~pgDesignerze i~wygląda jak na Rysunku~\ref{databaseSchema}.
 \begin{figure}[!htb] 	
 \centering 	
-\includegraphics[width=0.95\textwidth]{images/database} 
+\includegraphics[width=0.9\textwidth]{images/database} 
 \caption{Schemat bazy danych} 
 \label{databaseSchema}
  \end{figure}
