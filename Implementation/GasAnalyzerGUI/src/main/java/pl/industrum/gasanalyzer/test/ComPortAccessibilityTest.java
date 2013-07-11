@@ -41,7 +41,7 @@ public class ComPortAccessibilityTest extends Test
 			}
 			else
 			{
-				setFailed();
+				setPassed();
 				messageDialog.open();
 			}
 		}

@@ -55,7 +55,33 @@
 
 \noindent Po wykonaniu wszystkich testów i~sprawdzeniu poprawności konfiguracji systemu użytkownik zostaje przeniesiony do głównego okna aplikacji (Rys.~\ref{main}). Bezpośrednio po uruchomieniu większość funkcji jest nieaktywna. W~celu ich uaktywnienia konieczne jest utworzenie bądź wczytanie istniejącego pomiaru. Operacje te są opisane w~dalszej części instrukcji. W~tym momencie można zaobserwować budowę programu. Na~górze okna widoczne są menu.
 \begin{itemize}
-\item Menu ,,Plik'': umożliwia rozpoczęcie (,,Nowy pomiar'') i~wczytanie poprzedniego (,,Otwórz pomiar"'') pomiaru oraz wyłączenie aplikacji (,,Wyjście'').
+\item Menu ,,Plik'': umożliwia wykonanie podstawowych akcji niezbędnych podczas codziennego użytkowania programu tj.~utworzenie i~otworzenie pomiaru oraz wyłączenie programu. Dostępne są następujące funkcjonalności:
+\begin{itemize}
+\item ,,Nowy pomiar'': umożliwia utworzenie nowego pomiaru (Rys.~\ref{newSurveyFilled}),
+
+\begin{figure}[!htb]
+\centering 		
+  \subfloat[Windows]{\includegraphics[width=0.45\textwidth]{images/newSurveyFilledW}}    
+  \hspace{2mm}
+  \subfloat[Linux]{\includegraphics[width=0.45\textwidth]{images/newSurveyFilledL}}
+\caption{Okno dodawania pomiaru po prawidłowym wypełnieniu} 	
+\label{newSurveyFilled}
+\end{figure}
+
+\item ,,Otwórz pomiar'': umożliwia otworzenie i~kontynuowanie poprzedio utworzonego pomiaru (Rys.~\ref{openSurvey}),
+
+\begin{figure}[!htb]
+\centering 		
+  \subfloat[Windows]{\includegraphics[width=0.45\textwidth]{images/openSurveyW}}    
+  \hspace{2mm}
+  \subfloat[Linux]{\includegraphics[width=0.45\textwidth]{images/openSurveyL}}
+\caption{Okno otwierania pomiaru} 	
+\label{openSurvey}
+\end{figure}
+
+\item ,,Wyjście'': pozwala na opuszczenie aplikacji.
+\end{itemize}
+
 \item Menu ,,Edycja'': umożlwia edycję wszelkich parametrów pomiaru. Zaliczają się do nich:
 \begin{itemize}
 \item ,,Edytuj prowadzących pomiar'': umożliwia edycję danych o~osobach przeprowadzających pomiar. Prócz danych personalnych przechowywane są informacje o tytule naukowym i~pełnionej funkcji (Rys.~\ref{editUser}),
@@ -69,18 +95,85 @@
 \label{editUser}
 \end{figure}
 
-\item ,,Edytuj tytuły'': umożliwia edycję tytułów naukowych (Rys.~\ref{editUser}),
-\item ,,Edytuj funkcje'': umożliwia edycję funkcji, które są przypisane użytkownikom pomiaru np. ,,prowadzący pomiar'', ,,obserwator'', ,,kontroler'', ,,student'' (Rys.~\ref{editUser}),
-\item ,,Edytuj miejsca'': umożliwia edycję informacji o miejscu, w którym odbywa się pomiar (Rys.~\ref{editUser}),
-\item ,,Edytuj obiekty'': umożliwia edycję obiektów będących przedmiotem pomiaru (Rys.~\ref{editUser}),
+\item ,,Edytuj tytuły'': umożliwia edycję tytułów naukowych (Rys.~\ref{editTitle}),
+
+\begin{figure}[!htb]
+\centering 		
+  \subfloat[Windows]{\includegraphics[width=0.45\textwidth]{images/editTitleW}}    
+  \hspace{2mm}
+  \subfloat[Linux]{\includegraphics[width=0.45\textwidth]{images/editTitleL}}
+\caption{Okno edycji tytułów naukowych} 	
+\label{editTitle}
+\end{figure}
+
+\item ,,Edytuj funkcje'': umożliwia edycję funkcji, które są przypisane użytkownikom pomiaru np. ,,prowadzący pomiar'', ,,obserwator'', ,,kontroler'', ,,student'' (Rys.~\ref{editFunction}),
+
+\begin{figure}[!htb]
+\centering 		
+  \subfloat[Windows]{\includegraphics[width=0.45\textwidth]{images/editfFunctionW}}    
+  \hspace{2mm}
+  \subfloat[Linux]{\includegraphics[width=0.45\textwidth]{images/editfFunctionL}}
+\caption{Okno edycji funkcji} 	
+\label{editFunction}
+\end{figure}
+
+\item ,,Edytuj miejsca'': umożliwia edycję informacji o miejscu, w którym odbywa się pomiar (Rys.~\ref{editPlace}),
+
+\begin{figure}[!htb]
+\centering 		
+  \subfloat[Windows]{\includegraphics[width=0.45\textwidth]{images/editPlaceW}}    
+  \hspace{2mm}
+  \subfloat[Linux]{\includegraphics[width=0.45\textwidth]{images/editPlaceL}}
+\caption{Okno edycji miejsc} 	
+\label{editPlace}
+\end{figure}
+
+\item ,,Edytuj obiekty'': umożliwia edycję obiektów będących przedmiotem pomiaru (Rys.~\ref{editObject}).
+
+\begin{figure}[!htb]
+\centering 		
+  \subfloat[Windows]{\includegraphics[width=0.45\textwidth]{images/editObjectW}}    
+  \hspace{2mm}
+  \subfloat[Linux]{\includegraphics[width=0.45\textwidth]{images/editObjectL}}
+\caption{Okno edycji obiektów} 	
+\label{editObject}
+\end{figure}
+
 \end{itemize}
-\item Menu ,,Pomiar'':
-\item Menu ,,Sieć'':
+\item Menu ,,Pomiar'': staje się aktywne po utworzeniu lub otworzeniu pomiaru i~nawiązaniu połączenia z~wybranym koncentratorem. Umożliwia konfigurację parametrów aktualnie prowadzonego pomiaru. Daje on następujące możliwości:
+\begin{itemize}
+\item ,,Edytuj urządzenia'': umożliwia edycję parametrów urządzeń podłączonych do sieci tj. nazwa i~typ urządzenia oraz precyzja pomiaru poszczególnych składników.
+
+\begin{tikzpicture}
+\node[color=black,draw=red,fill=red!30,shape=rectangle,rounded corners=0.5ex,
+text width=36em, text centered] at (4,0) 
+{
+\textbf{UWAGA}\linebreak
+W~celu wykonania pomiaru konieczne jest uzupełnienie informacji o~minimum jednym użytkowniku oraz o~przynajmniej jednym obiekcie będącym przedmiotem pomiaru. W~ramach jednego miejsca może istnieć wiele obiektów.
+};
+\end{tikzpicture}
+
+\item ,,Preferencje'': umożliwia edycję informacji o aktualnie trwającym pomiarze.
+
+\begin{figure}[!htb]
+\centering 		
+  \subfloat[Windows]{\includegraphics[width=0.45\textwidth]{images/editSurveyW}}    
+  \hspace{2mm}
+  \subfloat[Linux]{\includegraphics[width=0.45\textwidth]{images/editSurveyL}}
+\caption{Okno edycji preferencji aktualnego pomiaru} 	
+\label{editSurvey}
+\end{figure}
+
+\end{itemize}
+\item Menu ,,Sieć'': jest to obecnie 
+\begin{itemize}
+\item ,,Odśwież'':
+\end{itemize}
 \item Menu ,,Pomoc'':
 \end{itemize}
 
 \begin{tikzpicture}
-\node[color=black,draw=white,fill=uwaga,shape=rectangle,rounded corners=0.5ex,
+\node[color=black,draw=red,fill=red!30,shape=rectangle,rounded corners=0.5ex,
 text width=36em, text centered] at (4,0) 
 {
 \textbf{UWAGA}\linebreak

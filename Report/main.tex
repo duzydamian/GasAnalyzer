@@ -20,6 +20,7 @@
 \usepackage{titlesec}
 \usepackage{lipsum}
 \usepackage{tikz}
+\usetikzlibrary{positioning,shapes,shadows,arrows}
 \definecolor{uwaga}{HTML}{E59C9C}
 
 \hypersetup{
@@ -50,6 +51,12 @@
 \def\kons{Konsultant: mgr inż. Tomasz Kress}
 
 \begin{document}
+\tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=blue!40, drop shadow,
+        text centered, anchor=north, text=white, text width=3cm]
+\tikzstyle{comment}=[rectangle, draw=black, rounded corners, fill=green, drop shadow,
+        text centered, anchor=north, text=white, text width=3cm]
+\tikzstyle{myarrow}=[->, >=open triangle 90, thick]
+\tikzstyle{line}=[-, thick]
 \lstset{backgroundcolor=\color{white}, boxpos=c, captionpos=b}
 \lstset{numbers=left, stepnumber=1, numbersep=10pt, frame=single}
 \lstset{frameround=tttt}
