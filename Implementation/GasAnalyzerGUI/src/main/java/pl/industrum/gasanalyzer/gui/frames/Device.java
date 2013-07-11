@@ -334,10 +334,13 @@ public abstract class Device extends Composite
 			itemPrevious.setText( "Więcej..." );
 		}		
 		
-		for (int i=0; i<columnsHistory.length; i++)
+		if ( tableHistory.getColumnCount() == 0 )
 		{
-			TableColumn column = new TableColumn (tableHistory, SWT.NONE);
-			column.setText (columnsHistory [i]);
+			for (int i=0; i<columnsHistory.length; i++)
+			{
+				TableColumn column = new TableColumn (tableHistory, SWT.NONE);
+				column.setText (columnsHistory [i]);
+			}
 		}
 		
 		for (int i=0; i<columnsHistory.length; i++)

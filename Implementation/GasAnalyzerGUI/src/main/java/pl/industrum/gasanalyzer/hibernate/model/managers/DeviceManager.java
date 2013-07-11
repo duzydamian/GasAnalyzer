@@ -25,6 +25,22 @@ public abstract class DeviceManager
 		return device.getId();
 	}
 	
+	public static Integer addDevice( Integer id, Integer deviceTypeID, String name, Integer address )
+	{
+		Device device = new Device();
+		device.setId( id );
+		device.setDeviceType( DeviceTypeDictionary.get( deviceTypeID ) );
+		device.setName( name );
+		device.setAddress( address.intValue() );
+		
+		Session session = Hibernate.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		session.save( device );
+		session.getTransaction().commit();
+		
+		return device.getId();
+	}
+	
 	public static void deleteDevice( Integer deviceID )
 	{
 		Device device = DeviceManager.getDevice( deviceID );

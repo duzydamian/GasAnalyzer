@@ -39,11 +39,12 @@ public class DatabaseDeviceCorrectTest extends Test
 			{
 				System.out.println( "Run dictionary repair from test: " + this.getName() );
 				
-				DeviceManager.deleteAllDevices();
-				
 				for( int i=1; i<13; i++ )
 				{
-					DeviceManager.addDevice( 1 , "Device "+i, i );
+					if ( DeviceManager.updateDevice( i, 1 , "Device "+i, i ) == null )
+					{
+						DeviceManager.addDevice( i, 1 , "Device "+i, i );
+					}
 				}
 				
 				setPassed();

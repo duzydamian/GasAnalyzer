@@ -8,6 +8,7 @@ import java.io.PrintStream;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 
+import pl.industrum.gasanalyzer.elan.communication.network.ELANNetwork;
 import pl.industrum.gasanalyzer.gui.dialogs.SendExceptionCatched;
 
 /**
@@ -22,6 +23,8 @@ public class GasAnalyzerGUI
 	private static String AppVersion;
 	private static String RXTXVersion;
 	private static String NativeRXTXVersion;
+	private static GasAnalyzerMainWindow window;
+	private static SplashScreen splashScreen;
 
 	public GasAnalyzerGUI()
 	{
@@ -64,24 +67,29 @@ public class GasAnalyzerGUI
 						
 			if ( !develop )
 			{	
-				SplashScreen splashScreen = new SplashScreen();
+				splashScreen = new SplashScreen();
 				splashScreen.open();
 				if ( splashScreen.isAllTestComplete() )
 				{				
-					GasAnalyzerMainWindow window = new GasAnalyzerMainWindow();
+					window = new GasAnalyzerMainWindow();
 					window.open();
 				}
 			}
 			else
 			{
-				GasAnalyzerMainWindow window = new GasAnalyzerMainWindow();
-				window.open();
+				window = new GasAnalyzerMainWindow();
+				window.open();				
 			}
 			
 		}		
 		catch ( Exception e )
 		{
 			e.printStackTrace();
+			for( ELANNetwork iter: window.getConnectionWrapper() )
+			{				
+				iter.stopAlarming();
+				iter.getConnection().disconnect();
+			}
 			SendExceptionCatched sendExceptionCatched = new SendExceptionCatched(new Shell(), SWT.NONE, e );
 			sendExceptionCatched.open();
 		}
