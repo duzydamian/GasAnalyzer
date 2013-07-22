@@ -226,6 +226,7 @@ public abstract class MainMenu extends Menu
 	//_________________Help___________________________________________________		
 		MenuItem mntmHelp = new MenuItem( this, SWT.CASCADE );
 		mntmHelp.setText( Messages.getString( "MainMenu.Help" ) ); //$NON-NLS-1$
+		mntmHelp.setImage( UsefulImage.HELP.getImage() );
 
 		Menu menuHelp = new Menu( mntmHelp );
 		mntmHelp.setMenu( menuHelp );

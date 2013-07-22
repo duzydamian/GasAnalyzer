@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Vector;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -47,7 +48,7 @@ public abstract class DeviceTree extends Composite
 	private Image imageDisconnect;
 	private Image imageConnect;
 	private Button btnSetMeasurementComment;
-	private Label lblMeasurementComment;
+	private CLabel lblMeasurementComment;
 	private Text textMeasurementComment;
 	private Label lblSeconds;
 	private Button btnStartStop;
@@ -229,6 +230,7 @@ public abstract class DeviceTree extends Composite
 				} );
 		
 		btnStartStop = new Button(this, SWT.NONE);
+		btnStartStop.setImage( UsefulImage.START.getImage() );
 		btnStartStop.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnStartStop.setText(Messages.getString("DeviceTree.btnStart.text")); //$NON-NLS-1$
 		btnStartStop.addSelectionListener( new SelectionAdapter()
@@ -238,7 +240,8 @@ public abstract class DeviceTree extends Composite
 				if ( started )
 				{
 					stopSurveyAlarming();
-					btnStartStop.setText(Messages.getString("DeviceTree.btnStart.text")); //$NON-NLS-1$
+					btnStartStop.setImage( UsefulImage.START.getImage() );
+					btnStartStop.setText(Messages.getString("DeviceTree.btnStart.text")); //$NON-NLS-1$					
 					btnOk.setEnabled( false );
 					textMeasurementComment.setEnabled( false );
 					btnSetMeasurementComment.setEnabled( false );
@@ -247,7 +250,8 @@ public abstract class DeviceTree extends Composite
 				else
 				{
 					startSurveyAlarming(surveyStep.getSelection());
-					btnStartStop.setText(Messages.getString("DeviceTree.btnStop.text")); //$NON-NLS-1$
+					btnStartStop.setImage( UsefulImage.STOP.getImage() );
+					btnStartStop.setText(Messages.getString("DeviceTree.btnStop.text")); //$NON-NLS-1$					
 					btnOk.setEnabled( true );
 					textMeasurementComment.setEnabled( true );
 					btnSetMeasurementComment.setEnabled( true );
@@ -256,9 +260,10 @@ public abstract class DeviceTree extends Composite
 			}
 		} );
 
-		lblMeasurementComment = new Label( this, SWT.NONE );
+		lblMeasurementComment = new CLabel( this, SWT.NONE );
 		lblMeasurementComment.setText( Messages
 				.getString( "DeviceTree.lblMeasurementComment.text" ) ); //$NON-NLS-1$
+		lblMeasurementComment.setImage( UsefulImage.COMMENT.getImage() );
 		lblMeasurementComment.setLayoutData( new GridData( SWT.LEFT, SWT.FILL, true,
 				false, 6, 1 ) );
 

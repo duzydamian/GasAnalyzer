@@ -13,6 +13,7 @@ public enum UsefulImage
 {
 	APPLICATION( "/pl/industrum/gasanalyzer/gui/application.png" ),
 	ABOUT_STAR( "/pl/industrum/gasanalyzer/gui/about.png" ),
+	HELP( "/pl/industrum/gasanalyzer/gui/help.png" ),
 	NEW_MAIL( "/pl/industrum/gasanalyzer/gui/mail.png" ),
 	SEND_MAIL( "/pl/industrum/gasanalyzer/gui/mail_send.png" ),
 	SHUTDOWN( "/pl/industrum/gasanalyzer/gui/shutdown.png" ),
@@ -25,6 +26,9 @@ public enum UsefulImage
 	CALENDAR( "/pl/industrum/gasanalyzer/gui/calendar.png" ),
 	CONNECT( "/pl/industrum/gasanalyzer/gui/connect.png" ),
 	DISCONNECT( "/pl/industrum/gasanalyzer/gui/disconnect.png" ),
+	START( "/pl/industrum/gasanalyzer/gui/run.png" ),
+	STOP( "/pl/industrum/gasanalyzer/gui/stop.png" ),
+	COMMENT( "/pl/industrum/gasanalyzer/gui/comment.png" ),
 	ADD( "/pl/industrum/gasanalyzer/gui/add.png" ),
 	EDIT( "/pl/industrum/gasanalyzer/gui/edit.png" ),
 	INDUSTRUM_LOGO( "/pl/industrum/gasanalyzer/gui/SKNIndustrumLogo.png" ),
