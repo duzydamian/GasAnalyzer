@@ -1,7 +1,13 @@
 \section{Podsumowanie}
-
 \subsection{Perspektywy rozwoju}
-Projekt jest bardzo perspektywiczny głównie dlatego, że w bieżącej części została zaimplementowana tylko znikoma część protokołu ELAN, a co za tym idzie można cały proces pomiarowy uskutecznić, uprościć oraz zautomatyzować w jeszcze większym stopniu.
+W~obecnej wersji programu zaimplementowana została zaledwie niewielka cześć protokołu ELAN. Uwaga ta dotyczy zarówno komunikacji z~innymi niż dostępne dla celów projektowych analizatorów, jak również samej funkcjonalności sieci. Ponieważ zaobserwowano pewne wady protokołu, opisane dalej, zdecydowano się na zmianę sposobu komunikacji i~wyeliminowanie kolizji poprzez zmianę struktury sieci na Master - Slave. Jest to duża zmiana wymagająca dwustronnej komunikacji, która na chwilę obecną nie była potrzebna. \\ 
+\\
+Kiedy będzie możliwa dwustronna komunikacja, możliwe będzie wydawanie poleceń analizatorom, co może okazać się niezbędne podczas specyficznych pomiarów. \\
+Największą planowaną zmianą jest rozbudowa oprogramowania o~funkcjonalności związane ze sterowaniem dodatkowymi urządzeniami. Kusząca wydaje się możliwość sterowania pracą pomp oraz zdalna zmiana kanałów przepływu.
 
 \subsection{Wnioski}
-Głównymi celami pracy było napisanie oprogramowania gromadzącego dane z urządzeń pomiarowych.
+Nadrzędnym celem projektu było stworzenie oprogramowania gromadzącego i~zapisującego dane z~analizatorów spalin firmy Siemens. Urządzenia te są wyposażone w~dwa interfejsy komunikacyjne, w~tym sugerowany przez producenta interfejs protokołu Profibus. Zdecydowano się jednak na zastosowanie zupełnie innego rozwiązania wykorzystującego interfejs sieci ELAN. Firma Siemens nie zaleca stosowania tego rozwiązania, ponieważ ELAN jest protokołem diagnostycznym, jednak można go w~bardzo prosty sposób połączyć w~sieć z~komputerem klasy PC stosując jedynie prosty konwerter napięć, co drastycznie obniżyło koszty projektu. Zupełnie niespodziewanie udało się zaobserwować kilka wartych wspomnienia zjawisk.
+\\ \\
+Przede wszystkim protokół ELAN wydaje się być mało wydajny. Z~krótkiej obserwacji popełnionej podczas testowania oprogramowania wynika, że w~sieci występuje bardzo wiele kolizji, a~protokół jest zaprojektowany w~taki sposób, że o~wystąpieniu kolizji pragnie poinformować pozostałych użytkowników sieci. Wywołuje to wiele niepotrzebnego ruchu w~sieci.
+\\ \\
+Mimo tej niewielkiej wady, która zostanie całkowicie wyeliminowana wraz z~pojawieniem się kolejnej wersji oprogramowania, protokół ELAN posiada nieocenioną zaletę. Okazuje się, że analizatory firmy Siemens zgłaszają swoją gotowość do wykonywania pomiarów za~pośrednictwem sieci dużo później niż wyświetlają stosowną informację na ekranie. Po~poinformowaniu użytkownika, poprzez wyłączenie na wyświetlaczu ikon wykrzyknika, analizator wykonuje jeszcze szereg czynności konfiguracyjnych, o~których przebiegu informuje wysyłając stosowny pakiet przez sieć. Ponieważ ELAN jest stworzona do dostarczania informacji diagnostycznych, można się spodziewać, że dane wysyłane z~użyciem protokołu Profibus byłyby zgodne z~informacją wyświetlaną na wyświetlaczu, a~więc zaobserwowany problem nie zostałby wykryty. Rozbieżność czasowa jest duża i może wynosić nawet 15~-~30~min.
