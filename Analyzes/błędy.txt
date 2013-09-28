@@ -1,0 +1,5 @@
+Zasilanie mostka poza tolerancją.
+
+Przpełnienie przetwornia A/C.
+
+Napięcie źródła IR poza tolerancją.
