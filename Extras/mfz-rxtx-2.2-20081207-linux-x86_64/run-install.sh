@@ -14,7 +14,7 @@ then
 fi
 
 echo "Installing Cloudhopper RXTX Build to JAVA_HOME=${JAVA_HOME}"
-export HWVER=$(uname -i)
+export HWVER=$(uname -m)
 
 if [ $HWVER = "x86_64" ]
 then

@@ -46,7 +46,7 @@
 					<archive>
 						<manifest>
 							<mainClass>
-								pl.industrum.gasanalyzer.simulator.ELANDeviceSimulator
+								pl.industrum.gasanalyzer.simulator.SimpleDevice
 							</mainClass>
                      <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 						</manifest>
