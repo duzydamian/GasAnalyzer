@@ -21,6 +21,8 @@
   <modules>
     <module>ELANNetwork</module>
     <module>GasAnalyzerGUI</module>
+    <module>ELANDeviceSimulator</module>
+    <module>ELANNetworkAnalyzer</module>
   </modules>
 
 	<build>

@@ -1,0 +1,159 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>pl.industrum.gasanalyzer.simulator</groupId>
+	<artifactId>ELANDeviceSimulator</artifactId>
+	<name>ELAN Device Simulator</name>
+	<version>0.0.1</version>
+	<description>Aplikacja symulująca działanie analizatorów składu gazów.</description>		
+
+	<parent>
+		<groupId>pl.industrum.gasanalyzer</groupId>
+		<artifactId>GasAnalyzer</artifactId>
+		<version>0.1.0</version>
+	</parent>
+
+	<build>
+	<plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.3.1</version>
+            <configuration>
+               <archive>
+                  <manifest>
+                     <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                  </manifest>
+                  <manifestEntries>
+                     <Implementation-Build>${buildNumber}</Implementation-Build>
+                     <Project-Version>${project.parent.version}</Project-Version>
+                  </manifestEntries>
+               </archive>
+            </configuration>
+         </plugin>			
+            <plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>					
+					<archive>
+						<manifest>
+							<mainClass>
+								pl.industrum.gasanalyzer.simulator.ELANDeviceSimulator
+							</mainClass>
+                     <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+                    <manifestEntries>
+                        <Implementation-Build>${buildNumber}</Implementation-Build>
+                        <Project-Version>${project.parent.version} </Project-Version>
+                    </manifestEntries>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>
+							jar-with-dependencies
+						</descriptorRef>
+					</descriptorRefs>
+					<finalName>ELANDeviceSimulator-${project.activeProfiles[0].id}-${project.parent.version}</finalName>
+				</configuration>
+			</plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9</version>
+        <configuration>
+			<skip>true</skip>
+        </configuration>
+      </plugin>			
+		</plugins>
+	</build>
+	
+<profiles>	
+		<profile>
+			<id>win32</id>
+			<dependencies>
+				<dependency>
+			        <groupId>org.eclipse.swt</groupId>
+			        <artifactId>org.eclipse.swt.win32.win32.x86</artifactId>
+			        <version>4.2.1</version>
+	    		</dependency>		
+			</dependencies>
+		</profile>
+		
+		<profile>
+			<id>win64</id>
+			<dependencies>
+				<dependency>
+			        <groupId>org.eclipse.swt</groupId>
+			        <artifactId>org.eclipse.swt.win32.win32.x86_64</artifactId>
+			        <version>4.2.1</version>
+	    		</dependency>
+			</dependencies>
+		</profile>
+
+		<profile>
+			<id>lin32</id>
+			<dependencies>
+				<dependency>
+			        <groupId>org.eclipse.swt</groupId>
+			        <artifactId>org.eclipse.swt.gtk.linux.x86</artifactId>
+			        <version>4.2.1</version>
+	    		</dependency>
+			</dependencies>
+		</profile>
+		
+		<profile>
+			<id>lin64</id>
+			<dependencies>
+				<dependency>
+			        <groupId>org.eclipse.swt</groupId>
+			        <artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
+			        <version>4.2.1</version>
+	    		</dependency>
+			</dependencies>
+		</profile>
+		
+		<profile>
+			<id>mac32</id>
+			<dependencies>
+				<dependency>
+			        <groupId>org.eclipse.swt</groupId>
+			        <artifactId>org.eclipse.swt.cocoa.macosx</artifactId>
+			        <version>4.2.1</version>
+	    		</dependency>
+			</dependencies>
+		</profile>
+		
+		<profile>
+			<id>mac64</id>
+			<dependencies>
+				<dependency>
+			        <groupId>org.eclipse.swt</groupId>
+			        <artifactId>org.eclipse.swt.cocoa.macosx.x86_64</artifactId>
+			        <version>4.2.1</version>
+	    		</dependency>
+			</dependencies>
+		</profile>								
+</profiles> 
+	
+	<dependencies>
+		<dependency>
+			<groupId>pl.industrum.gasanalyzer.elan</groupId>
+			<artifactId>ELANNetwork</artifactId>
+			<version>0.1.0</version>
+		</dependency>				    
+	</dependencies>
+	
+	<repositories>
+	    <repository>
+	        <id>swt-repo</id>
+	        <url>https://swt-repo.googlecode.com/svn/repo/</url>
+	    </repository>
+	</repositories>
+</project>

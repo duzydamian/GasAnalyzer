@@ -103,8 +103,11 @@ public class ELANCommunication
 	/**
 	 * Write one frame to network
 	 */
-	public void writeFrame()
+	public void writeFrame(Queue<Integer> frame)
 	{
-		
+		for( Integer value: frame )
+		{
+			elanConnection.write( value );
+		}
 	}
 }
