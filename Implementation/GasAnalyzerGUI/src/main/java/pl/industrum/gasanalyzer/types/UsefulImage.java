@@ -40,8 +40,7 @@ public enum UsefulImage
 	FIND( "/pl/industrum/gasanalyzer/gui/find.png" ),
 	WARNING( "/pl/industrum/gasanalyzer/gui/warning.png" ),
 	ERROR( "/pl/industrum/gasanalyzer/gui/remove.png" ),
-	UNKNOWN( "/pl/industrum/gasanalyzer/gui/unknown.png" ),
-	GRAY_DISCONNECT( "");	
+	UNKNOWN( "/pl/industrum/gasanalyzer/gui/unknown.png" );	
 
 	String imagePath;
 

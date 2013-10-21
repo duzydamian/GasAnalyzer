@@ -129,7 +129,7 @@ public abstract class DeviceTree extends Composite
 												Device deviceByAddress = DeviceManager.getDeviceByAddress( device.getDeviceAddress() );
 												TreeItem itemTreeItem = new TreeItem( treeItem, SWT.COLOR_GRAY );
 												itemTreeItem.setText( deviceByAddress.getName() + " [" + deviceByAddress.getDeviceType().getType() + "]" );
-												itemTreeItem.setImage( UsefulImage.GRAY_DISCONNECT.getImage() );
+												itemTreeItem.setImage( UsefulImage.UNKNOWN.getImage() );
 												HashMap<String, Integer> measurementPrecisionMap = new HashMap<String, Integer>();
 												for( Device deviceFromDB: devicesFromDatabaseWithPrecision )
 												{
