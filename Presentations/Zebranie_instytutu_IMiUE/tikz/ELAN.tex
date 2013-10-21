@@ -1,0 +1,61 @@
+\begin{figure}[htbp]
+ \centering
+        \tikzstyle{background grid}=[draw, black!50,step=.25cm]
+	\begin{tikzpicture}[scale=0.2]%, show background grid]
+	\tikzset{
+    	mynode/.style={rectangle,rounded corners,draw=black, top color=white, bottom color=yellow!50,very thick, inner sep=1em, minimum size=3em, 		text centered, text width=3.3cm},
+    	mynodemini/.style={rectangle,rounded corners,draw=black, top color=white, bottom color=yellow!50,very thick, inner sep=.5em, text centered},    	
+	    myarrow/.style={->, >=latex', shorten >=1pt, thick},
+	    myline/.style={-, =latex', shorten >=1pt, rounded corners, ultra thick},
+	    mylabel/.style={text width=7em, text centered} 
+	} 
+	\node[mynode] (plc) {Komputer \\ przemysłowy C6925};  
+	\node [left=of plc] (laptop) {\includegraphics[width=3cm]{images/laptop}};
+	\node[below=2cm of plc] (dummy) {}; 
+	\node[mynode, left=of dummy] (io) {Wyspa EK1100 z~zestawem modułów IO};  	 	 	
+ 	\node[mynodemini, left=of io] (io2) {EL1004};
+ 	\node[mynodemini, above=2mm of io2] (io1) {EL4132};  	
+ 	\node[mynodemini, above=2mm of io1] (io0) {EK1100};
+ 	\node[mynodemini, below=2mm of io2] (io3) {EL2004}; 	 	
+ 	\node[mynodemini, below=2mm of io3] (io4) {EL2004};
+ 	\node[mynodemini, below=2mm of io4] (io5) {EL3102};
+ 	\node [fit=(io0) (io1) (io2) (io3) (io4) (io5)] (fit) {};  
+ 	%\draw [decorate, xshift=-20pt,line width=4pt] (fit.south east) -- (fit.north east);
+	\draw [decorate,decoration={brace, mirror,amplitude=10pt}, line width=1pt] (fit.south east) -- (fit.north east);
+	
+	\node[mynode, right=of dummy] (naped) {Napęd\\serwomechnizmów AX5203};
+	\node[below=2cm of naped] (dummy2) {}; 
+	\node[mynode, left=of dummy2, text width=4cm](silnik1){Silnik \\ AM3021-0C00-0000};
+	\node[mynode, right=of dummy2, text width=4cm](silnik2){Silnik \\ AM3021-0C40-0000};
+	
+	\draw[myline,black,dotted] (fit.east) ++(0.4, 0) -- (io.west);
+	\draw[myline,blue] (laptop.east) -- ++(-1, 0) -- (plc.west);
+	
+	\draw[myline,purple] (io0.south) -- (io1.north);	
+	\draw[myline,purple] (io1.south) -- (io2.north);
+	\draw[myline,purple] (io2.south) -- (io3.north);		
+	\draw[myline,purple] (io3.south) -- (io4.north);
+	\draw[myline,purple] (io4.south) -- (io5.north);
+	
+	\draw[myline,yellow] (plc.south) -- (naped.north);	
+	\draw[myline,yellow] (io.east) -- (naped.west);	
+
+	\draw[myline, green, bend right=10] (naped.south) to (silnik1.north);
+	\draw[myline, orange, bend left=10] (naped.south) to (silnik1.north);	
+	\draw[myline, green, bend right=10] (naped.south) to (silnik2.north);
+	\draw[myline, orange, bend left=10] (naped.south) to (silnik2.north);	
+	%\draw[<->, >=latex', shorten >=2pt, shorten <=2pt, bend right=45, thick, dashed] 
+    %(io.south) to node[auto, swap] {Competition}(naped.south); 
+    
+	\draw [fill=blue!5, thick] (5.75,1.5) rectangle (9,-3);
+
+    \draw [purple, line width=6] (6,1) -- (6.5,1); \node[text width=2cm] at (7.65,0.7) {EtherCAT (E-bus)};    
+    \draw [yellow, line width=6] (6,0) -- (6.5,0); \node[text width=2cm] at (7.65,-0.3) {EtherCAT (skrętka)};
+    \draw [blue, line width=6] (6,-1) -- (6.5,-1); \node at (7.5,-1) {Ethernet};
+    \draw [black, line width=6] (6,-1.5) -- (6.5,-1.5); \node at (7.5,-1.5) {Zasilanie};
+    \draw [green, line width=6] (6,-2) -- (6.25,-2); \draw [orange, line width=6] (6.25,-2) -- (6.5,-2); 
+    \node [text width=2cm] at (7.75,-2.25) {Sterowanie silnikiem};    
+\end{tikzpicture} 
+\caption{Schemat stanowiska typu CP.}
+\label{stanowisko:cp}
+\end{figure}
