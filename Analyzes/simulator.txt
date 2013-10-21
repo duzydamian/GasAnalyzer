@@ -1,0 +1,2 @@
+sudo ln -s /dev/pts/6 /dev/ttyUSB6
+sudo ln -s /dev/pts/5 /dev/ttyUSB5
