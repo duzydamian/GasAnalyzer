@@ -85,6 +85,7 @@ public class SimpleDevice
 			while( true )
 			{
 				communication.writeFrame( randFrame() );
+				//frame cyclic every 10s
 				Thread.sleep( 10000 );
 			}			
 		}

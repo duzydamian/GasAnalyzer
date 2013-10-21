@@ -61,3 +61,6 @@ proguard/
 
 # Maven output folder
 target/
+
+# Ignore binary from pts
+Implementation/ELANDeviceSimulator/src/main/c/pts/tty0tty
