@@ -3,7 +3,9 @@
  */
 package pl.industrum.gasanalyzer.simulator;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
@@ -32,6 +34,28 @@ public class SimpleDevice
 	 */
 	public static void main( String[] args )
 	{			
+		Runtime runtime = Runtime.getRuntime();
+		long totalMemory = runtime.totalMemory();
+		long freeMemory = runtime.freeMemory();
+		long maxMemory = runtime.maxMemory();
+		int availableProcessors = runtime.availableProcessors();
+		try
+		{
+			Process exec = runtime.exec( "/home/duzydamian/Pulpit/tty0tty-1.2/pts/tty0tty" );
+			
+			 BufferedReader in = new BufferedReader(  
+                     new InputStreamReader(exec.getInputStream()));  
+			 String line = null;  
+			 while ((line = in.readLine()) != null) {  
+			     System.out.println(line);  
+			 } 
+		}
+		catch ( IOException e1 )
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		Vector<String> vectorPortsOnlySerial = ELANConnection.vectorPortsOnlySerial();
 		int iterator = 0;
 		for( String port: vectorPortsOnlySerial )
