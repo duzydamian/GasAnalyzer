@@ -1,0 +1,31 @@
+\section{Opis protokołu ELAN}
+
+ELAN (Economical Local Area Network)
+
+max 12 urządzeń  // up to 12 devices
+
+Obsługiwane analizatory firmy SIEMENS // Valid for the SIEMENS analyzers:
+\begin{itemize}
+\item ULTRAMAT 6
+\item OXYMAT 6 / OXYMAT 61
+\item CALOMAT 6
+\item ULTRAMAT 23
+\end{itemize}
+
+\subsection{Analiza statystyczna protokołu}
+TCS -- Rozmiar transmitowanego znaku (ang. transmitted char size)\\
+CS -- rozmiar znaku (ang. char size)\\
+SpB -- bit stopu (ang. Stop bit) \\
+StB -- bit startu (ang. Start bit)
+$$TCS = CS + StB + SpB= 8+1+1=10 [b]$$
+CPS -- liczba znaków na sekundę (ang. chars per second) \\
+CBR -- znakowa szybkość transmisji (ang. char baud rate) \\
+BR -- szybkość transmisji (ang. baud rate) \\
+Szybkość transmisji wg dokumentacji: 9600 bps (bitów na sekundę)
+$$CBR=BR/TCS=9600/10=960 [cps]$$
+
+\subsection{Ramka}
+\input{tikz/frame} %
+
+\subsection{Topologia}
+\input{tikz/topology} %
