@@ -4,15 +4,15 @@
 \tikzstyle{background grid}=[draw, black!50,step=.25cm]
 	\begin{tikzpicture}[scale=1]%, show background grid]
 	\tikzset{
-    	mynode/.style={rectangle,rounded corners,draw=black, top color=white, bottom color=yellow!50,very thick, inner sep=0.5em, minimum size=2em, 		text centered, text width=2.8cm},
+    	mynode/.style={rectangle,rounded corners,draw=black, top color=white, bottom color=yellow!50,very thick, inner sep=0.5em, minimum size=2em, 		text centered, text width=3.3cm},
 	    myarrow/.style={->, >=latex', shorten >=1pt, thick},
 	    myline/.style={-, =latex', shorten >=1pt, rounded corners, ultra thick},
 	    mylabel/.style={text width=7em, text centered} 
 	} 
-	\node[mynode] (atc) {Konwerter RS485 $\Leftrightarrow$ USB};  
+	\node[mynode] (atc) {Konwerter RS232$\Leftrightarrow$RS485 USB$\Leftrightarrow$RS485 Ethernet$\Leftrightarrow$RS485};  
 	\node [left=of atc] (laptop) {\includegraphics[width=3cm]{images/laptop}};
 
-	\node[mynode, below=2cm of atc] (device2) {Urządzenie 2};
+	\node[mynode, below=1.5cm of atc] (device2) {Urządzenie 2};
 	\node[mynode, left=of device2] (device1) {Urządzenie 1};  	 	 	
 	\node[mynode, right=of device2] (device12) {Urządzenie 12};	
 
@@ -28,6 +28,6 @@
     \draw [blue, line width=6] (-4.5,-4.5) -- (-4,-4.5); \node at (-3.5,-4.5) {USB};
     \draw [black, line width=6] (-2,-4.5) -- (-1.5,-4.5); \node at (-0.8,-4.5) {RS-485};
 \end{tikzpicture} 
-\caption{Przykładowa topologia sieci.}
+\caption{Topologia sieci.}
 \label{elan:topologia}
 \end{figure}

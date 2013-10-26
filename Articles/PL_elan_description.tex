@@ -1,16 +1,29 @@
 \section{Opis protokołu ELAN}
 
-ELAN (Economical Local Area Network)
-
-max 12 urządzeń  // up to 12 devices
-
-Obsługiwane analizatory firmy SIEMENS // Valid for the SIEMENS analyzers:
+ELAN (ang. Economical Local Area Network), czyli ekonomiczna sieć lokalna został wprowadzony przez firmę SIEMENS w swoich analizatorach składu gazu. Protokół ten według twórców został wprowadzony jako ekonomiczny interfejs szeregowy do transmisji wartości mierzonych pomiędzy analizatorami oraz prostej komunikacji z komputerami PC dla celów testowych i serwisowych.
+Zostało wprowadzone ograniczenie maksymalnej liczby urządzeń pracujących w sieci do 14 (2 urządzenia kontrolne/komputery oraz do 12 analizatorów). Obsługiwane analizatory firmy SIEMENS:
 \begin{itemize}
 \item ULTRAMAT 6
 \item OXYMAT 6 / OXYMAT 61
 \item CALOMAT 6
 \item ULTRAMAT 23
 \end{itemize}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|}
+\hline Poziom & RS485 \\ 
+\hline Szybkość transmisji & 9600 \\ 
+\hline Bity danych & 8 \\ 
+\hline Bit startu & 1 \\ 
+\hline Bit stopu & 1 \\ 
+\hline Kontrola parzystości & nie \\ 
+\hline no ECHO &  \\ 
+\hline 
+\end{tabular} 
+\caption{Parametry interfejsu}
+\label{tab:parametry}
+\end{table}
 
 \subsection{Analiza statystyczna protokołu}
 TCS -- Rozmiar transmitowanego znaku (ang. transmitted char size)\\
@@ -25,7 +38,9 @@ Szybkość transmisji wg dokumentacji: 9600 bps (bitów na sekundę)
 $$CBR=BR/TCS=9600/10=960 [cps]$$
 
 \subsection{Ramka}
+Każda ramka w sieci  wygląda ogólnie jak na Rysunku~\ref{elan:ramka}
 \input{tikz/frame} %
 
 \subsection{Topologia}
+Jak już zostało to opisane wcześniej w sieci może pracować do 12 analizatorów oraz komputer co zostało predstawione na Rysunku~\ref{elan:topologia}.
 \input{tikz/topology} %

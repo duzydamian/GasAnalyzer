@@ -78,11 +78,22 @@
 #1\ignorespaces
 }
 
+%\begin{abstract}
+\thispagestyle{plain}
+\pagenumbering{Roman}
+\noindent Damian KARBOWIAK, Grzegorz POWAŁA \\
+Opiekun naukowy: dr inż Jacek STÓJ
+\input{PL_abstract}
+\input{EN_abstract}
+%\end{abstract}
+
+\pagenumbering{arabic}
 \tableofcontents
 \addtocontents{toc}{\protect\vspace*{.05\baselineskip}}
 \clearpage
 
 \include{PL_elan_description} %
+\include{PL_gas_analyzer} %
 \include{bibliography} %
 
 \section{Spis rysunków, tablic i kodów źródłowych}
