@@ -44,12 +44,21 @@ Komunikacja została oparta na następujących założeniach:
 %$$CBR=BR/TCS=9600/10=960 [cps]$$
 
 \subsection{Ramka}
-Każda ramka w sieci  wygląda ogólnie jak na Rysunku~\ref{elan:ramka}. W pierwszej wersji, aktualnie zrealizowanej przez autorów obsługiwane są jedynie ramki rozgłoszeniowe.
+Każda ramka w sieci wygląda ogólnie jak na Rysunku~\ref{elan:ramka}. W pierwszej wersji, aktualnie zrealizowanej przez autorów obsługiwane są jedynie ramki rozgłoszeniowe, wykorzystujące komendę 'k', 2.
 \input{tikz/frame} %
-
-\subsection{Topologia}
-Jak już zostało to opisane wcześniej w sieci może pracować do 12 analizatorów oraz komputer co zostało przedstawione na Rysunku~\ref{elan:topologia}. Urządzenia pomiarowe podłączone są, w przypadku zrealizowanego stanowiska, do konwertera RS485 $\Leftrightarrow$ USB.
-\input{tikz/topology} %
 
 \subsection{Tryb rozgłoszeniowy}
 W aktualnej wersji projektu twórcy wykorzystują dostępny standardowo w protokole tryb rozgloszeniowy (ang. broadcast). W trybie tym każdy analizator automatycznie i~cyklicznie, co 500 ms, transmituje wszystkie swoje aktualne wartości zmierzone do pozostałych urządzeń.
+
+\subsection{Komendy}
+Wszystkie komendy dostępne w protokole składają się z dwóch znaków. Szczegółowe informacje odnośnie obu znaków to:
+\begin{itemize}
+\item Pierwszy znak: litera ASCII
+\item Drugi znak: liczba z zakresu 1 do 255 (01H do FFH)
+\item Komendy do ustawiania/zapisu wartości zaczynają się z dużych liter ('A' do 'Z')
+\item Komendy do odczytu rozpoczynają się z małych liter ('a' to 'z')
+\end{itemize}
+Wykonana komenda odpowiada z ta samą komenda. Jeżeli komenda nie jest akceptowana przez urządzenie to w~odpowiedzi jest ustawiany piąty bit w polu CCS, a w polu danych umieszczana jest szczegółowa informacja o powodzie odrzucenia komendy.
+\subsection{Topologia}
+Jak już zostało to opisane wcześniej w sieci może pracować do 12 analizatorów oraz komputer co zostało przedstawione na Rysunku~\ref{elan:topologia}. Urządzenia pomiarowe podłączone są, w przypadku zrealizowanego stanowiska, do konwertera RS485 $\Leftrightarrow$ USB.
+\input{tikz/topology} %

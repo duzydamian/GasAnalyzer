@@ -13,29 +13,30 @@
 	\node[bottom color=gray!50, mynodemini, below=of start.213, text width=1cm] (dle) {DLE (10H)};	
 	\node[bottom color=gray!50, mynodemini, right=of dle, text width=1cm] (soh) {SOH (01H)};  
 	
-	\node[bottom color=yellow!50, mynode, right=of start, text width=6.3cm] (used_data) {USED DATA};
-	\node[bottom color=yellow!50, mynodemini, below=of used_data.190] (ud1) {TA};  	 
+	\node[bottom color=yellow!50, mynode, right=of start, text width=5.8cm] (used_data) {USED DATA};
+	\node[bottom color=yellow!50, mynodemini, below=of used_data.191] (ud1) {TA};  	 
 	\node[bottom color=yellow!50, mynodemini, right=of ud1] (ud2) {SA};
 	\node[bottom color=yellow!50, mynodemini, right=of ud2] (ud3) {CCS};
 	\node[bottom color=yellow!50, mynodemini, right=of ud3] (ud4) {CS};
-	\node[bottom color=yellow!50, mynodemini, right=of ud4] (ud5) {Komenda};
+	\node[bottom color=yellow!50, mynodemini, right=of ud4] (ud5) {CMD};
 	\node[bottom color=yellow!50, mynodemini, right=of ud5] (ud6) {Dane};			
 
 	\node [fit=(ud1) (ud2) (ud3) (ud4) (ud5) (ud6)] (fit) {};  
  	%\draw [decorate, xshift=-20pt,line width=4pt] (fit.south east) -- (fit.north east);
-	\draw [decorate,decoration={brace,amplitude=10pt}, line width=1pt] (fit.south east) -- (fit.south west);		
+	\draw [decorate,decoration={brace,amplitude=10pt}, line width=1pt] (fit.south east) ++(-0.1,0) -- (fit.south west);		
 	\node[mylabel, below=4mm of fit] (fits) {max. 68 characters, 10H zawsze podwojone};
 			
-	\node[bottom color=gray!50, mynode, right=of used_data, text width=2.2cm] (eot) {End of \\ transmission};
-	\node[bottom color=gray!50, mynodemini, below=of eot.222, text width=1cm] (dle2) {DLE (10H)};
-	\node[bottom color=gray!50, mynodemini, right=of dle2, text width=1cm] (etx) {ETX (03H)}; 	 
+	\node[bottom color=gray!50, mynode, right=of used_data, text width=3.1cm] (eot) {End of transmission};
+	\node[bottom color=gray!50, mynodemini, below=of eot.208, text width=1.45cm] (dle2) {DLE (10H)};
+	\node[bottom color=gray!50, mynodemini, right=of dle2, text width=1.45cm] (etx) {ETX (03H)}; 	 
 	
 	\node[bottom color=gray!50, mynode, right=of eot] (crc16) {CRC16};
 	
-	\node[mylabel, below=2cm of soh] (dal) {TA -- Target Address};
-	\node[mylabel, right=of dal] (sal) {SA -- Source Address};
-	\node[mylabel, right=of sal] (padl) {Pad. -- Payload};
-	\node[mylabel, right=of padl, text width=4cm] (fcsl) {FCS -- Frame Check Sequance (CRC)};			
+	\node[mylabel, below=1.5cm of soh, text width=4.5cm] (tal) {TA -- adres docelowy \\ (ang. Target Address)};
+	\node[mylabel, right=of tal, text width=4.5cm] (sal) {SA -- adres źródłowy (ang. Source Address)};
+	\node[mylabel, right=of sal, text width=4.8cm] (ccsl) {CCS -- zbiorczy stan kanału \\ (ang. Collective Channel State)};
+	\node[mylabel, below=of tal, text width=4.5cm] (csl) {CS -- stan kanału \\ (ang. Channel State)};			
+	\node[mylabel, right=of csl, text width=4.5cm] (cmdl) {CMD -- Komenda \\ (ang. Command)};				
 	
 \end{tikzpicture} 
 \caption{Ramka w protokole ELAN.}
