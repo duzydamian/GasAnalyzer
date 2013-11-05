@@ -18,7 +18,7 @@
 	\node[bottom color=blue!40, mynode, text width=2cm, right=of c] (d) {Budowanie migawki}; 
 	\node[bottom color=cyan!40, mynode, text width=12cm, below=1cm of elanNetwork] (rxtx) {Biblioteka RXTX}; 
 	\node[bottom color=cyan!40, mynode, text width=12cm, below=1cm of rxtx] (conv) {Konwerter RS485 $\Leftrightarrow$ USB};   		
-	\node[bottom color=cyan!40, mynode, text width=12cm, below=1cm of conv] (devices) {Warstwa urządzeń};	
+	\node[bottom color=cyan!40, mynode, text width=12cm, below=1cm of conv] (devices) {Urządzenia pomiarowe};	
 
 	\draw[myarrow] (gui.south) -- (elanNetwork.north) node [midway,black] {Przetworzone dane};
 	\draw[myarrow] (elanNetwork.south) -- (rxtx.north) node [midway,black] {Odczyt bajtów};	
