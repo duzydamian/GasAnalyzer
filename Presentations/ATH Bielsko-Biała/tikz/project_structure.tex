@@ -1,0 +1,33 @@
+\tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=blue!40, drop shadow,
+        text centered, anchor=north, text=white, text width=3.5cm]
+\tikzstyle{comment}=[rectangle, draw=black, rounded corners, fill=green, drop shadow,
+        text centered, anchor=north, text=white, text width=4cm]
+\tikzstyle{myarrow}=[->, >=open triangle 90, thick]
+\tikzstyle{line}=[-, thick]
+
+\begin{figure}[!htb] 	
+\centering 	
+\begin{tikzpicture}[scale=1, node distance=0.75cm]
+    \node (GasAnalyzer) [abstract, rectangle split, rectangle split parts=2]
+        {
+            \textbf{GasAnalyzer}
+            \nodepart{second}wersja 0.1.0
+        };
+	\node (AuxNode01) [text width=2cm, below=of GasAnalyzer] {};
+    \node (ELANNetwork) [abstract, rectangle split, rectangle split parts=2, left=of AuxNode01]
+        {
+            \textbf{ELANNetwork}
+            \nodepart{second}wersja 0.1.0
+        };
+    \node (GasAnalyzerGUI) [abstract, rectangle split, rectangle split parts=2, right=of AuxNode01]
+        {
+            \textbf{GasAnalyzerGUI}
+            \nodepart{second}wersja 0.1.0
+        };    
+    \draw[myarrow] (ELANNetwork.north) -- ++(0,0.1) -| (GasAnalyzer.south);
+    \draw[line] (ELANNetwork.north) -- ++(0,0.1) -| (GasAnalyzerGUI.north); 
+        
+\end{tikzpicture}
+\caption{Struktura projektu} 
+\label{projectSchema}
+ \end{figure}
