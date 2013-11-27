@@ -1,9 +1,7 @@
-\begin{figure}[htbp]
- \centering
-        \tikzstyle{background grid}=[draw, black!50,step=.25cm]
-	\begin{tikzpicture}[node distance=2mm, auto]%, show background grid]
+\resizebox{260pt}{!}{
+	\begin{tikzpicture}[node distance=2mm,auto]
 	\tikzset{
-    	mynode/.style={rectangle,rounded corners,draw=black, top color=white, very thick, inner sep=4mm, 		text centered,font=\footnotesize},
+    	mynode/.style={rectangle,rounded corners,draw=black, top color=white, very thick, inner sep=3mm, 		text centered,font=\footnotesize},
 	    myarrow/.style={ <->, shorten >=1pt, line width=1mm},
 	    myarrow1/.style={ ->, line width=0.4mm},	    
    	    myarrow2/.style={ ->, shorten >=1mm, line width=0.4mm},
@@ -11,14 +9,14 @@
 	    mylabel/.style={text centered, font=\scriptsize\bfseries} 
 	} 
 	\node[bottom color=cyan!40, mynode, text width=12cm] (gui) {Graficzny interfejs użytkownika};  
-	\node[bottom color=cyan!40, mynode, text width=12cm, text height=2.5cm, below=1cm of gui] (elanNetwork) {Moduł ELAN Network}; 
+	\node[bottom color=cyan!40, mynode, text width=12cm, text height=2.5cm, below=.75cm of gui] (elanNetwork) {Moduł ELAN Network}; 
 	\node[bottom color=blue!40, mynode, text width=2cm, below=3cm of gui.173] (a) {Detekcja ramek}; 
 	\node[bottom color=blue!40, mynode, text width=2cm, right=of a] (b) {Weryfikacja ramek}; 
 	\node[bottom color=blue!40, mynode, text width=2cm, right=of b] (c) {Parsowanie ramek}; 	
 	\node[bottom color=blue!40, mynode, text width=2cm, right=of c] (d) {Budowanie migawki}; 
-	\node[bottom color=cyan!40, mynode, text width=12cm, below=1cm of elanNetwork] (rxtx) {Biblioteka RXTX}; 
-	\node[bottom color=cyan!40, mynode, text width=12cm, below=1cm of rxtx] (conv) {Konwerter RS485 $\Leftrightarrow$ USB};   		
-	\node[bottom color=cyan!40, mynode, text width=12cm, below=1cm of conv] (devices) {Urządzenia pomiarowe};	
+	\node[bottom color=cyan!40, mynode, text width=12cm, below=.75cm of elanNetwork] (rxtx) {Biblioteka RXTX}; 
+	\node[bottom color=cyan!40, mynode, text width=12cm, below=.75cm of rxtx] (conv) {Konwerter RS485 $\Leftrightarrow$ USB};   		
+	\node[bottom color=cyan!40, mynode, text width=12cm, below=.75cm of conv] (devices) {Urządzenia pomiarowe};	
 
 	\draw[myarrow] (gui.south) -- (elanNetwork.north) node [midway,black] {Przetworzone dane};
 	\draw[myarrow] (elanNetwork.south) -- (rxtx.north) node [midway,black] {Odczyt bajtów};	
@@ -29,7 +27,5 @@
 	\draw[myarrow1] (c) -- (d);	
 	\draw[myarrow2] (c.north) -- (elanNetwork.north) node [midway,black] {};
 	\draw[myarrow3] (d.north) -- (elanNetwork.north) node [midway,black] {};
-\end{tikzpicture} 
-\caption{Struktura aplikacji.}
-\label{appSchema}
-\end{figure}
+\end{tikzpicture}
+}

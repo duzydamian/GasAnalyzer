@@ -4,10 +4,8 @@
         text centered, anchor=north, text=white, text width=4cm]
 \tikzstyle{myarrow}=[->, >=open triangle 90, thick]
 \tikzstyle{line}=[-, thick]
-
-\begin{figure}[!htb] 	
-\centering 	
-\begin{tikzpicture}[scale=1, node distance=0.75cm]
+\resizebox{\linewidth}{!}{
+\begin{tikzpicture}[scale=1, node distance=1.75cm]
     \node (GasAnalyzer) [abstract, rectangle split, rectangle split parts=2]
         {
             \textbf{GasAnalyzer}
@@ -28,6 +26,4 @@
     \draw[line] (ELANNetwork.north) -- ++(0,0.1) -| (GasAnalyzerGUI.north); 
         
 \end{tikzpicture}
-\caption{Struktura projektu} 
-\label{projectSchema}
- \end{figure}
+}
