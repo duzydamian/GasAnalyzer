@@ -108,9 +108,18 @@ public class SimpleDevice
 		{
 			while( true )
 			{
-				communication.writeFrame( randFrame() );
-				//frame cyclic every 10s
-				Thread.sleep( 10000 );
+				communication.writeFrame( randFrame(32, 4) );
+				//frame cyclic every 500ms
+				Thread.sleep( 500 );
+				communication.writeFrame( randFrame(64, 2) );
+				//frame cyclic every 500ms
+				Thread.sleep( 500 );
+				communication.writeFrame( randFrame(80, 3) );
+				//frame cyclic every 500ms
+				Thread.sleep( 500 );
+				communication.writeFrame( randFrame(176, 29) );
+				//frame cyclic every 500ms
+				Thread.sleep( 500 );
 			}			
 		}
 		catch ( InterruptedException e )
@@ -122,7 +131,7 @@ public class SimpleDevice
 		connection.disconnect();
 	}
 
-	private static Queue<Integer> randFrame()
+	private static Queue<Integer> randFrame(int deviceAdress, int elanMeasuredVariable)
 	{
 		Random r = new Random();
 		double nextDouble = r.nextDouble();
@@ -136,7 +145,7 @@ public class SimpleDevice
 		//dest adr
 		frame.add( 240 );
 		//src ard
-		frame.add( 32 );		
+		frame.add( deviceAdress);		
 		//collective state
 		frame.add( 0 );
 		//channel state
@@ -153,7 +162,7 @@ public class SimpleDevice
 		frame.add( 0 );
 		frame.add( 10 );
 		frame.add( 0 );
-		frame.add( 2 );
+		frame.add( elanMeasuredVariable );
 		frame.add( 0 );
 		for( char ch: s2.toCharArray() )
 		{
