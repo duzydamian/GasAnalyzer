@@ -120,6 +120,7 @@ public abstract class MeasurementSnapshotManager
 		session.beginTransaction();
 		String query = "from MeasurementSnapshot snapshot where";
 		query += " snapshot.survey.id = " + surveyID.toString();
+		query += " order by timestamp ASC";
 		List<MeasurementSnapshot> snapshots = ( List<MeasurementSnapshot> )session.createQuery( query ).list();
 		session.getTransaction().commit();
 		return snapshots;
