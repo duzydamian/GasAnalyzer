@@ -150,6 +150,8 @@ public abstract class XLSGenerator
         
         int i = 1;
         HSSFRow dataRow;
+        HSSFCellStyle cs = workbook.createCellStyle();
+        HSSFDataFormat df = workbook.createDataFormat();
 		for( MeasurementSnapshot snapshot: MeasurementSnapshotManager.getAllMeasurementSnapshots( survey.getId() ) )
 		{	
 			currColumn = 1;
@@ -170,9 +172,7 @@ public abstract class XLSGenerator
 				for( Object measurement: measurementSet.getMeasurementsSorted() )
 				{
 					if ( !( ( Measurement )measurement  ).getMeasurementVariable().getName().equalsIgnoreCase( "Process preassure" ) )
-					{
-						HSSFCellStyle cs = workbook.createCellStyle();
-				        HSSFDataFormat df = workbook.createDataFormat();
+					{						
 				        Integer precision = thisDevice.getMeasurementPrecisionMap().get( ( ( Measurement )measurement ).getMeasurementVariable().getName() );
 				        if( precision == null )
 				        {
