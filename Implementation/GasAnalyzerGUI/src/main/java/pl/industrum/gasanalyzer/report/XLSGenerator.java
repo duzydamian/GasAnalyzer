@@ -4,7 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Vector;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -101,6 +103,8 @@ public abstract class XLSGenerator
         Integer currRow = 0;
         Integer currColumn = 2;
         
+        HashMap<String, HashMap<String, HSSFCellStyle>> columnStyles = new HashMap<String, HashMap<String,HSSFCellStyle>>();
+        
         //Add devices names
         MeasurementSnapshot snapshotForHeader = MeasurementSnapshotManager.getLastMeasurementSnapshot( survey.getId() );
 		for( Object set: snapshotForHeader.getMeasurementSetsSorted() )
@@ -112,6 +116,8 @@ public abstract class XLSGenerator
 	        rowhead.createCell( currColumn + 1 ).setCellValue( measurementSet.getDevice().getName() );
 	        currColumn += ( measurementSet.getMeasurements().size() - 1 );
 			
+	        columnStyles.put( measurementSet.getDevice().getName(), new HashMap<String,HSSFCellStyle>(0));
+	        
 			progressIncrement();
 		}
 		
@@ -124,10 +130,19 @@ public abstract class XLSGenerator
         currRow = 1;
         currColumn = 2;
 		
-		//Add measurement variables and dimension names
+		//Add measurement variables, dimension names, precision for variables per device
+        XmlParser xml = new XmlParser( DeviceManager.getAllDevices() );
+        Vector<Device> devicesFromDatabaseWithPrecision = xml.getDevicesFromDatabaseWithPrecision();
+        
         for( Object set: snapshotForHeader.getMeasurementSetsSorted() )
 		{
 			MeasurementSet measurementSet = ( MeasurementSet )set;
+			Device thisDevice = null;
+			for( Device device: devicesFromDatabaseWithPrecision )
+			{
+				if( device.getId() == measurementSet.getDevice().getId() )
+					thisDevice = device;
+			}
 			for( Object measurement: measurementSet.getMeasurementsSorted() )
 			{
 				if ( !( ( Measurement )measurement  ).getMeasurementVariable().getName().equalsIgnoreCase( "Process preassure" ) )
@@ -135,6 +150,17 @@ public abstract class XLSGenerator
 					currColumn++;
 					rowVariable.createCell( currColumn ).setCellValue( ( ( Measurement )measurement  ).getMeasurementVariable().getName() );
 					rowDimension.createCell( currColumn ).setCellValue( ( ( Measurement )measurement  ).getMeasurementDimension().getName() );
+					
+			        Integer precision = thisDevice.getMeasurementPrecisionMap().get( ( ( Measurement )measurement ).getMeasurementVariable().getName() );
+			        if( precision == null )
+			        {
+			        	precision = 2;
+			        }
+					
+			        HSSFDataFormat df = workbook.createDataFormat();
+					( columnStyles.get( measurementSet.getDevice().getName() ) ).put( ( ( Measurement )measurement  ).getMeasurementVariable().getName(), workbook.createCellStyle() );
+					columnStyles.get( measurementSet.getDevice().getName() ).get( ( ( Measurement )measurement  ).getMeasurementVariable().getName() ).setDataFormat( df.getFormat( getPrecisionFormat( precision ) ) );
+
 					progressIncrement();
 				}					
 			}
@@ -145,19 +171,14 @@ public abstract class XLSGenerator
         currRow = 3;
         currColumn = 1;
         
-        XmlParser xml = new XmlParser( DeviceManager.getAllDevices() );
-		Vector<Device> devicesFromDatabaseWithPrecision = xml.getDevicesFromDatabaseWithPrecision();
-        
         int i = 1;
         HSSFRow dataRow;
-        HSSFCellStyle cs = workbook.createCellStyle();
-        HSSFDataFormat df = workbook.createDataFormat();
 		for( MeasurementSnapshot snapshot: MeasurementSnapshotManager.getAllMeasurementSnapshots( survey.getId() ) )
 		{	
 			currColumn = 1;
 			dataRow = measurementSheet.createRow( currRow ); currRow++;
 			
-			dataRow.createCell( currColumn ).setCellValue( String.valueOf( i ) ); currColumn++;
+			dataRow.createCell( currColumn ).setCellValue( i ); currColumn++;
 			dataRow.createCell( currColumn ).setCellValue( hourFormater.format( snapshot.getTimestamp() ) ); currColumn++;
 			
 			for( Object set: snapshot.getMeasurementSetsSorted() )
@@ -173,15 +194,8 @@ public abstract class XLSGenerator
 				{
 					if ( !( ( Measurement )measurement  ).getMeasurementVariable().getName().equalsIgnoreCase( "Process preassure" ) )
 					{						
-				        Integer precision = thisDevice.getMeasurementPrecisionMap().get( ( ( Measurement )measurement ).getMeasurementVariable().getName() );
-				        if( precision == null )
-				        {
-				        	precision = 2;
-				        }
-				        cs.setDataFormat( df.getFormat( getPrecisionFormat( precision ) ) );
-						
 				        HSSFCell new_cell = dataRow.createCell( currColumn );
-						new_cell.setCellStyle(cs);
+						new_cell.setCellStyle(columnStyles.get( thisDevice.getName() ).get( ( ( Measurement )measurement  ).getMeasurementVariable().getName() ));
 						new_cell.setCellValue( (double)( ( Measurement )measurement  ).getValue() );
 						
 						currColumn++;
