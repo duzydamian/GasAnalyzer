@@ -152,7 +152,7 @@ public class NewSurveyUserTitle extends Dialog
 	{
 		boolean isValid = true;
 		
-		isValid = validateName();
+		isValid &= validateName();
 		
 		return isValid;
 	}

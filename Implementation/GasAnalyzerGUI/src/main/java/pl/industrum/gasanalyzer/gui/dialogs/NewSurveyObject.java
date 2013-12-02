@@ -188,9 +188,9 @@ public class NewSurveyObject extends Dialog
 	{
 		boolean isValid = true;
 		
-		isValid = validateName();
+		isValid &= validateName();
 		
-		isValid = validateDesciption();
+		isValid &= validateDesciption();
 		
 		return isValid;
 	}

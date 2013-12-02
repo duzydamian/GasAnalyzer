@@ -581,15 +581,15 @@ public class NewSurvey extends Dialog
 	{
 		boolean isValid = true;
 
-		isValid = validateName();
+		isValid &= validateName();
 		
-		isValid = validateDate();
+		isValid &= validateDate();
 
-		isValid = validateUser();
+		isValid &= validateUser();
 		
-		isValid = validatePlace();
+		isValid &= validatePlace();
 		
-		isValid = validateObject();
+		isValid &= validateObject();
 
 		validateLoad();
 		

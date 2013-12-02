@@ -148,10 +148,11 @@ public class PdfDialog extends Dialog
 			@Override
 			public void widgetSelected( SelectionEvent arg0 )
 			{
-				FileDialog fileDialog = new FileDialog( getParent(), SWT.NONE );
+				FileDialog fileDialog = new FileDialog( getParent(), SWT.SAVE );
 				fileDialog.setText( "Wybierz plik" );
 				fileDialog.setFilterExtensions( new String[]
 				{ "*.pdf" } );
+				fileDialog.setOverwrite( true );
 				String path = fileDialog.open();
 				if ( path != null )
 				{

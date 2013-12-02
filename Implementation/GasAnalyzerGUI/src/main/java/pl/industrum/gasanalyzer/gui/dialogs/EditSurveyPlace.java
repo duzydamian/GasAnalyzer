@@ -319,13 +319,13 @@ public class EditSurveyPlace extends Dialog
 	{
 		boolean isValid = true;
 		
-		isValid = validateName();
+		isValid &= validateName();
 		
-		isValid = validateCity();
+		isValid &= validateCity();
 		
-		isValid = validatePostCode();
+		isValid &= validatePostCode();
 		
-		isValid = validateAddress();
+		isValid &= validateAddress();
 		
 		return isValid;
 	}

@@ -273,14 +273,16 @@ public class NewSurveyUser extends Dialog
 		result = ApplicationUserManager.getApplicationUser( ApplicationUserManager.addApplicationUser( functionID, degreeID, textName.getText(), textSurname.getText() ) );
 	}
 
-	private void validateTitle()
+	private boolean validateTitle()
 	{
 		if ( textTitle.getText().isEmpty() | textTitle.getText() == null )
 		{
-			setFormFieldWarning( lblTitle, textTitle, icoTitle );
+			setFormFieldError( lblTitle, textTitle, icoTitle );
+			return false;
 		} else
 		{
 			setFormFieldOK( lblTitle, textTitle, icoTitle );
+			return true;
 		}
 	}
 	
@@ -310,27 +312,29 @@ public class NewSurveyUser extends Dialog
 		}
 	}
 	
-	private void validateFunction()
+	private boolean validateFunction()
 	{
 		if ( textFunction.getText().isEmpty() | textFunction.getText() == null )
 		{
-			setFormFieldWarning( lblFunction, textFunction, icoFunction );
+			setFormFieldError( lblFunction, textFunction, icoFunction );
+			return false;
 		} else
 		{
 			setFormFieldOK( lblFunction, textFunction, icoFunction );
+			return true;
 		}
 	}
 	private boolean validateAll()
 	{
 		boolean isValid = true;
 
-		validateTitle();
+		isValid &= validateTitle();
 		
-		isValid = validateName();
+		isValid &= validateName();
 
-		isValid = validateSurname();
+		isValid &= validateSurname();
 
-		validateFunction();
+		isValid &= validateFunction();
 		
 		return isValid;
 	}
@@ -342,6 +346,7 @@ public class NewSurveyUser extends Dialog
 		textField.setBackground( UsefulColor.RED_ERROR.getColor() );
 	}
 
+	@SuppressWarnings( "unused" )
 	private void setFormFieldWarning( Label label, Control textField, Label ico )
 	{
 		ico.setImage( UsefulImage.WARNING.getImage() );
