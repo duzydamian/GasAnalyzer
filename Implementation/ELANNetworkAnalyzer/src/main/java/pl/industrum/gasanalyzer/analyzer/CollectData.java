@@ -3,16 +3,17 @@
  */
 package pl.industrum.gasanalyzer.analyzer;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
-
-import pl.industrum.gasanalyzer.elan.communication.ELANCommunication;
-import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
 
 /**
  * @author duzydamian (Damian Karbowiak)
@@ -20,8 +21,15 @@ import pl.industrum.gasanalyzer.elan.communication.ELANConnection;
  */
 public class CollectData
 {
+	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "HH:mm:ss:SS dd/MM/yyyy", Locale.getDefault() );
 
 	static boolean timeout;
+	public static File frameFile;
+	static BufferedWriter frameOutput; 
+	public static File hexFile;
+	static BufferedWriter hexOutput; 
+	public static File intFile;
+	static BufferedWriter intOutput; 
 	/**
 	 * 
 	 */
@@ -38,7 +46,39 @@ public class CollectData
 		timeout = false;
 		Timer timer = new Timer("Reading time");
 		TimeIsUp timeIsUp = new TimeIsUp();
-				
+		
+		try
+		{
+			frameFile = new File( "frame.log" );
+			frameOutput = new BufferedWriter(new FileWriter(frameFile));
+			frameOutput.write( dateFormater.format( new Date() ) );
+			frameOutput.newLine();
+			frameOutput.write( "------------------------------------------" );
+			frameOutput.newLine();
+			frameOutput.flush();
+			
+			hexFile = new File( "hexData.log" );
+			hexOutput = new BufferedWriter(new FileWriter(hexFile));
+			hexOutput.write( dateFormater.format( new Date() ) );
+			hexOutput.newLine();
+			hexOutput.write( "------------------------------------------" );
+			hexOutput.newLine();
+			hexOutput.flush();
+			
+			intFile = new File( "intData.log" );			
+			intOutput = new BufferedWriter(new FileWriter(intFile));
+			intOutput.write( dateFormater.format( new Date() ) );
+			intOutput.newLine();
+			intOutput.write( "------------------------------------------" );
+			intOutput.newLine();
+			intOutput.flush();
+		}
+		catch ( IOException e )
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		for( String port: vectorPortsOnlySerial )
 		{
 			System.out.println( iterator + " : " + port );
@@ -66,33 +106,30 @@ public class CollectData
 		ELANConnection connection = new ELANConnection();
 		try
 		{
-			connection.connect( vectorPortsOnlySerial.get( value ),  new Observer()
+			connection.connect( vectorPortsOnlySerial.get( value ));
+			ELANCommunication communication = new ELANCommunication( connection );		
+			timer.schedule( timeIsUp, 50000 );
+
+			//int dataPart;
+			//while(!timeout)
+			while (System.in.available() != 0)
 			{
-				
-				public void update( Observable o, Object arg )
-				{
-					// TODO Auto-generated method stub
-				}
-			});
+				//dataPart = connection.read();
+				Queue<Integer> readFrame = communication.readFrame();
+				System.out.println( readFrame );
+			}
+			timer.cancel();
+			timeIsUp.cancel();
+			connection.disconnect();
+			frameOutput.close();
+			hexOutput.close();
+			intOutput.close();
 		}
 		catch ( Exception e )
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		ELANCommunication communication = new ELANCommunication( connection );		
-		timer.schedule( timeIsUp, 50000 );
-
-		//int dataPart;
-		while(!timeout)
-		{
-			//dataPart = connection.read();
-			Queue<Integer> readFrame = communication.readFrame();
-			System.out.println( readFrame );
-		}
-		timer.cancel();
-		timeIsUp.cancel();
-		connection.disconnect();
 	}
 	
 	static class TimeIsUp extends TimerTask
