@@ -100,6 +100,25 @@ public class CollectData
 			}
 		}
 		while ( !( value >= 0  && value <= vectorPortsOnlySerial.size()-1) );
+		clearSystemIn();
+		
+		System.out.println( "0: Czasowy" );
+		System.out.println( "1: Ciągły (do naciśnięcia dowolnego klawisza)" );
+		int valueMode = 0;
+		
+		do
+		{
+			System.out.println( "W jakim trybie uruchomić ? [0 lub 1]" );
+						
+			try
+			{
+				valueMode = System.in.read() - 48;
+			} catch ( IOException e )
+			{
+				e.printStackTrace();
+			}
+		}
+		while ( !( valueMode >= 0  && valueMode <= 1) );
 		
 		System.out.println( "Próbuję połączyć z " + vectorPortsOnlySerial.get( value ) );
 		
@@ -112,10 +131,11 @@ public class CollectData
 
 			//int dataPart;
 			//while(!timeout)
-			while (System.in.available() != 0)
+			clearSystemIn();
+			while (System.in.available() == 0)
 			{
 				//dataPart = connection.read();
-				Queue<Integer> readFrame = communication.readFrame();
+				Queue<Integer> readFrame = null;// = communication.readFrame();
 				System.out.println( readFrame );
 			}
 			timer.cancel();
@@ -132,6 +152,21 @@ public class CollectData
 		}
 	}
 	
+	private static void clearSystemIn()
+	{
+		try
+		{
+			while (System.in.available() != 0)
+			{
+				System.in.read();
+			}
+		}
+		catch ( IOException e )
+		{
+			e.printStackTrace();
+		}
+	}
+
 	static class TimeIsUp extends TimerTask
 	{
 		public void run()
