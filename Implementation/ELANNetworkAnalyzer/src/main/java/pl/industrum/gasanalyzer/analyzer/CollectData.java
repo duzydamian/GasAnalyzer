@@ -135,7 +135,7 @@ public class CollectData
 			while (System.in.available() == 0)
 			{
 				//dataPart = connection.read();
-				Queue<Integer> readFrame = null;// = communication.readFrame();
+				Queue<Integer> readFrame  = communication.readFrame();
 				System.out.println( readFrame );
 			}
 			timer.cancel();
