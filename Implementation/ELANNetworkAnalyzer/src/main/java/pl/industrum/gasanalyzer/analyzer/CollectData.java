@@ -5,6 +5,7 @@ package pl.industrum.gasanalyzer.analyzer;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -24,6 +25,7 @@ public class CollectData
 	private static SimpleDateFormat dateFormater = new SimpleDateFormat( "HH:mm:ss:SS dd/MM/yyyy", Locale.getDefault() );
 
 	static boolean timeout;
+	static File archiveDirectory;
 	public static File frameFile;
 	static BufferedWriter frameOutput; 
 	public static File hexFile;
@@ -49,23 +51,33 @@ public class CollectData
 		
 		try
 		{
+			archiveDirectory = new File( "archive" );			
+			if ( !archiveDirectory.exists() )
+				archiveDirectory.mkdir();
+			
 			frameFile = new File( "frame.log" );
+			if ( frameFile.exists() )
+			{
+				archive("frame", frameFile);
+			}
+				
+			hexFile = new File( "hexData.log" );
+			intFile = new File( "intData.log" );			
+			
 			frameOutput = new BufferedWriter(new FileWriter(frameFile));
 			frameOutput.write( dateFormater.format( new Date() ) );
 			frameOutput.newLine();
 			frameOutput.write( "------------------------------------------" );
 			frameOutput.newLine();
 			frameOutput.flush();
-			
-			hexFile = new File( "hexData.log" );
+						
 			hexOutput = new BufferedWriter(new FileWriter(hexFile));
 			hexOutput.write( dateFormater.format( new Date() ) );
 			hexOutput.newLine();
 			hexOutput.write( "------------------------------------------" );
 			hexOutput.newLine();
 			hexOutput.flush();
-			
-			intFile = new File( "intData.log" );			
+									
 			intOutput = new BufferedWriter(new FileWriter(intFile));
 			intOutput.write( dateFormater.format( new Date() ) );
 			intOutput.newLine();
@@ -132,7 +144,7 @@ public class CollectData
 			//int dataPart;
 			//while(!timeout)
 			clearSystemIn();
-			while (System.in.available() == 0)
+			while ( ( valueMode == 1 & System.in.available() == 0 ) | ( valueMode == 0 & !timeout ) )
 			{
 				//dataPart = connection.read();
 				Queue<Integer> readFrame  = communication.readFrame();
@@ -152,6 +164,33 @@ public class CollectData
 		}
 	}
 	
+	private static void archive(final String name, File file)
+	{
+		FileFilter filter = new FileFilter()
+		{
+			
+			public boolean accept( File arg0 )
+			{
+				if ( arg0.getName().startsWith( name ))
+					return true;
+				else
+					return false;
+			}
+		};
+		String lastNameNumber = "";
+		
+		if( archiveDirectory.listFiles( filter ).length > 1 )
+		{
+			String lastName = archiveDirectory.listFiles()[archiveDirectory.listFiles( filter ).length-1].getName();
+			lastNameNumber = lastName.substring( lastName.lastIndexOf( "e" )+1, lastName.lastIndexOf( "." ) );
+			//TODO implementacja inkrementacji !
+		}
+		else if ( archiveDirectory.listFiles( filter ).length == 1 )
+			lastNameNumber = "2";
+		File frameFileArchived = new File( "archive"+File.separator+name+lastNameNumber+".log" );	
+		file.renameTo( frameFileArchived );
+	}
+
 	private static void clearSystemIn()
 	{
 		try
