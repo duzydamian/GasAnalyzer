@@ -552,16 +552,27 @@ public class EditSurvey extends Dialog
 		}
 	}
 	
+	@SuppressWarnings( "deprecation" )
 	private boolean validateDate()
 	{
-		if ( txtSurveyDate.getData() == null )
+		try
 		{
+			Date date = dateFormater.parse( txtSurveyDate.getText() );
+			if ( txtSurveyDate.getText().isEmpty() | txtSurveyDate.getText() == null | date.getYear() < 90)
+			{			
+				setFormFieldError( lblSurveyDate, txtSurveyDate, icoSurveyDate );
+				return false;
+			} else
+			{
+				setFormFieldOK( lblSurveyDate, txtSurveyDate, icoSurveyDate );
+				return true;
+			}
+		}
+		catch ( ParseException e )
+		{
+			e.printStackTrace();
 			setFormFieldError( lblSurveyDate, txtSurveyDate, icoSurveyDate );
-			return false;
-		} else
-		{
-			setFormFieldOK( lblSurveyDate, txtSurveyDate, icoSurveyDate );
-			return true;
+			return false;			
 		}
 	}
 	

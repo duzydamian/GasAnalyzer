@@ -409,6 +409,7 @@ public class EditSurveyUser extends Dialog
 		textField.setBackground( UsefulColor.RED_ERROR.getColor() );
 	}
 
+	@SuppressWarnings( "unused" )
 	private void setFormFieldWarning( Label label, Control textField, Label ico )
 	{
 		ico.setImage( UsefulImage.WARNING.getImage() );

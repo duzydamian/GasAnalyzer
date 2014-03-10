@@ -51,10 +51,10 @@ public class SplashScreen
 		gc.drawText("Gas Analyzer", 10, 10);
 		gc.setFont(new Font(display, "Arial", 12, SWT.BOLD));
 		gc.drawText("Autorzy: Damian Karbowiak & Grzegorz Powała", 10, 40);
-		gc.drawImage( UsefulImage.INDUSTRUM_LOGO.getImage(), (image.getBounds().width/2 - UsefulImage.INDUSTRUM_LOGO.getImage().getBounds().width/2), 55);
-		gc.drawImage( UsefulImage.POLSL_LOGO.getImage(), 10, UsefulImage.INDUSTRUM_LOGO.getImage().getBounds().height+55 );
-		gc.drawImage( UsefulImage.IMIUE_LOGO.getImage(), (image.getBounds().width/2 - UsefulImage.IMIUE_LOGO.getImage().getBounds().width/2), UsefulImage.INDUSTRUM_LOGO.getImage().getBounds().height+55 );
-		gc.drawImage( UsefulImage.ZKIWP_LOGO.getImage(), (image.getBounds().width - UsefulImage.ZKIWP_LOGO.getImage().getBounds().width)-10, UsefulImage.INDUSTRUM_LOGO.getImage().getBounds().height+55 );
+		gc.drawImage( UsefulImage.INDUSTRUM_LOGO.getImage(), (image.getBounds().width/2 - UsefulImage.INDUSTRUM_LOGO.getImage().getBounds().width/2), 60);
+		gc.drawImage( UsefulImage.POLSL_LOGO.getImage(), 10, UsefulImage.INDUSTRUM_LOGO.getImage().getBounds().height+60 );
+		gc.drawImage( UsefulImage.IMIUE_LOGO.getImage(), (image.getBounds().width/2 - UsefulImage.IMIUE_LOGO.getImage().getBounds().width/2), UsefulImage.INDUSTRUM_LOGO.getImage().getBounds().height+60 );
+		gc.drawImage( UsefulImage.ZKIWP_LOGO.getImage(), (image.getBounds().width - UsefulImage.ZKIWP_LOGO.getImage().getBounds().width)-10, UsefulImage.INDUSTRUM_LOGO.getImage().getBounds().height+60 );
 		gc.dispose();
 		
 		splash = new Shell(SWT.ON_TOP);

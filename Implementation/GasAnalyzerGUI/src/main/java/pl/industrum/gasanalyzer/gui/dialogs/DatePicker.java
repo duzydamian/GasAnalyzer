@@ -79,7 +79,7 @@ public class DatePicker extends Dialog
 			@SuppressWarnings( "deprecation" )
 			public void widgetSelected( SelectionEvent e )
 			{
-				result = new Date( calendar.getYear(), calendar.getMonth(), calendar.getDay(), 12, 0 );
+				result = new Date( calendar.getYear()-1900, calendar.getMonth(), calendar.getDay(), 12, 0 );				
 				shell.close();
 			}
 		} );
