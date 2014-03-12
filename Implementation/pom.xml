@@ -23,6 +23,7 @@
     <module>GasAnalyzerGUI</module>
     <module>ELANDeviceSimulator</module>
     <module>ELANNetworkAnalyzer</module>
+    <module>ELANNetworkTimeAnalyzer</module>
   </modules>
 
 	<build>
