@@ -1,0 +1,35 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=0.9]
+\begin{axis}[
+		x=3cm,
+		ybar stacked, bar width=\baselineskip,
+%		grid=major,
+		ymin=0,ymax=110, 
+		ylabel={Wykorzystanie [\%]},
+		yticklabels={0, 20, 40, 60, 80, 100},
+		xtick=data,
+		xticklabel style={text centered, text width=2.5cm},
+	    xticklabels={Odpytywanie w~przedziale czasowym,Nadawanie Master/Slave,EtherCAT},
+	    enlarge x limits=0.2,
+		every node near coord/.style={font=\tiny},
+	    ]  
+	    
+\addplot[fill=gray!50] coordinates
+{(1,2) (2,20) (3,0)};
+\addplot[fill=yellow!50] coordinates
+{(1,0) (2,0) (3,80)};
+\addplot[fill=gray!80] coordinates
+{(1,3) (2,10) (3,0)};
+\addplot[fill=yellow!80] coordinates
+{(1,0) (2,0) (3,17)};
+
+\node[above] at ($(axis cs:1,5)$) {2-5\%};
+\node[above] at ($(axis cs:2,30)$) {20-30\%};
+\node[above] at ($(axis cs:3,96)$) {90-97\%};
+\end{axis}
+
+\end{tikzpicture}
+\caption{Współczynnik wykorzystania kanału transmisyjnego \\ w Ethernecie (dwa pierwsze wykresy od lewej strony) i EtherCAT.}
+\label{etherCAT:wykorzystanie}
+\end{figure}
