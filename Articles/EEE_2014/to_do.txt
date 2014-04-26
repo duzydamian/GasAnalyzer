@@ -1,0 +1,11 @@
+tytuł:
+Aplikacja systemu pomiarowego do analizy składu spalin opartego o sieć ELAN
+
+autorzy:
+Damian KARBOWIAK, Grzegorz POWAŁA
+
+kluczowe;
+ELAN, Siemens, pomiar, analizator gazów
+
+ Mgr inż., Politechnika Śląska, Instytut Informatyki, Wydział Automatyki, Elektroniki i Informatyki, damian.karbowiak@polsl.pl 
+ Mgr inż., Politechnika Śląska, Instytut Informatyki, Wydział Automatyki, Elektroniki i Informatyki, grzegorz.powala@polsl.pl

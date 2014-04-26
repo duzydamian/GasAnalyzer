@@ -1,0 +1,133 @@
+%\documentclass[a4paper,12pt]{report}
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,12pt]{book}
+\usepackage{polski}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[top=2.5cm, bottom=2.5cm, left=3cm, right=2.5cm]{geometry}
+\usepackage[justification=centering]{caption}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{ifthen}
+\usepackage{a4wide}
+\usepackage{fullpage}
+\usepackage{verbatim}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{hyperref}
+\usepackage{subfig}
+\usepackage{listings}
+\usepackage{mdwlist}
+\usepackage{titlesec}
+\usepackage{lipsum}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage[clock]{ifsym}
+\usepackage{clock}
+\usepackage{amsmath}
+\usepackage{cite}
+
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usetikzlibrary{automata,positioning,shapes,shadows,arrows,backgrounds,trees,fit,calc,decorations.pathreplacing,decorations.markings}
+
+\hypersetup{
+%	bookmarks=true,
+	pdftitle={ELAN},
+	pdfauthor={Damian Karbowiak, Grzegorz Powała},
+	pdfsubject={ELAN},
+	pdfkeywords={Politechnika Śląska ELAN},
+	colorlinks=true,
+	linkcolor=black,
+	citecolor=black,
+	urlcolor=black
+	}
+	
+\let\subsubsubsection\paragraph
+%\setcounter{secnumdepth}{6} % subsubparagraph ???
+% that is, subsubsubsubsubsection :-)
+\setcounter{secnumdepth}{4}
+
+\newcommand{\tytul}{Projekt i realizacja stanowiska laboratoryjnego do badania zależności czasowych w sieci EtherCAT}
+\newcommand{\data}{\today}
+\newcommand{\promotor}{dr~inż. Jacek Stój}
+\newcommand{\autor}{inż. Damian Karbowiak}
+\newcommand{\konsultant}{}
+
+\titlespacing{\section}{1cm}{*4}{*1.5}
+\titlespacing{\subsection}{1cm}{*4}{*1.5}
+\titlespacing{\subsubsection}{1cm}{*4}{*1.5}
+
+\setitemize{itemsep=0pt, topsep=2pt}
+\setenumerate{itemsep=0pt, topsep=2pt}
+
+\linespread{1.3}
+
+\begin{document}
+
+\lstset{backgroundcolor=\color{white}, boxpos=c, captionpos=b}
+\lstset{numbers=left, stepnumber=1, numbersep=10pt, frame=single}
+\lstset{frameround=tttt}
+\renewcommand{\lstlistlistingname}{\vspace*{-13mm}}
+\renewcommand{\listfigurename}{\vspace*{-13mm}}
+%\renewcommand*\l@figure[2]{\indent}
+\renewcommand{\listtablename}{\vspace*{-13mm}}
+\renewcommand*{\refname}{\vspace*{-13mm}}
+\renewcommand{\lstlistingname}{Kod źródłowy} 
+
+\newcommand{\rowstyle}[1]{\gdef\currentrowstyle{#1}%
+#1\ignorespaces
+}
+
+%\begin{abstract}
+\thispagestyle{plain}
+\pagenumbering{Roman}
+\noindent Damian KARBOWIAK, Grzegorz POWAŁA \\
+Politechnika Śląska, Wydział Automatyki, Elektroniki i Informatyki, Instytut informatyki, Damian.Karbowiak@polsl.pl
+Opiekun naukowy: dr inż Jacek STÓJ
+Politechnika Śląska, Wydział Automatyki, Elektroniki i Informatyki, Instytut informatyki, jacek.stoj@polsl.pl
+\input{PL_abstract}
+\input{EN_abstract}
+%\end{abstract}
+
+\pagenumbering{arabic}
+\tableofcontents
+\addtocontents{toc}{\protect\vspace*{.05\baselineskip}}
+\clearpage
+
+\include{introduction} %
+\include{PL_elan_description} %
+\include{PL_gas_analyzer} %
+\include{summation} %
+\include{bibliography} %
+
+\section{Spis rysunków, tablic i kodów źródłowych}
+\subsection{Spis rysunków}
+\newlength{\fig}
+\settowidth{\fig}{Rysunek\,99:~}
+\renewcommand*\numberline[1]{\llap{\makebox[\fig][l]{Rysunek\,#1:~}}}
+\makeatletter
+\renewcommand*\l@figure[2]{\leftskip\fig\noindent#1\par}
+\renewcommand*\l@figure{\@dottedtocline{1}{3cm}{0cm}}
+\makeatother
+\listoffigures
+
+\subsection{Spis tablic}
+%\renewcommand*\numberline[1]{Tablica\,#1: \indent}
+\settowidth{\fig}{Tablica\,99:~}
+\renewcommand*\numberline[1]{\llap{\makebox[\fig][l]{Tablica\,#1:~}}}
+\makeatletter
+\renewcommand*\l@table[2]{\leftskip\fig\noindent#1\par}
+\renewcommand*\l@table{\@dottedtocline{1}{2.8cm}{0cm}}
+\makeatother
+\listoftables
+\subsection{Spis kodów źródłowych}
+\settowidth{\fig}{Kod źródłowy,99:~}
+\renewcommand*\numberline[1]{\llap{\makebox[\fig][l]{Kod źródłowy\,#1:~}}}
+%\renewcommand*\numberline[1]{Kod źródłowy\,#1:\indent}
+\makeatletter
+\renewcommand*\l@lstlisting[2]{\leftskip\fig\noindent#1\par}
+\renewcommand*\l@lstlisting{\@dottedtocline{1}{4.1cm}{0cm}}
+\makeatother
+\lstlistoflistings
+
+\end{document}
