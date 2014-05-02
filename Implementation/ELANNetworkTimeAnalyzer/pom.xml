@@ -1,0 +1,109 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>pl.industrum.gasanalyzer.timeanalyzer</groupId> 
+	<artifactId>ELANNetworkTimeAnalyzer</artifactId>
+	<version>0.0.1</version>
+	<packaging>jar</packaging>
+	<name>ELAN Network Time Analyzer</name>
+	<description>Aplikacja do analizy czasu wymiany danych krążących w sieci ELAN.</description>
+	
+	<parent>
+		<groupId>pl.industrum.gasanalyzer</groupId>
+		<artifactId>GasAnalyzer</artifactId>
+		<version>0.1.0</version>
+	</parent>		
+	
+	<properties>
+    <gasanalyzer.version>${project.parent.version}</gasanalyzer.version>
+    <gasanalyzer.config.path>${project.parent.basedir}</gasanalyzer.config.path>
+    </properties>
+    
+   <build>
+    <plugins>
+    <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.3.1</version>
+            <configuration>
+               <archive>
+                  <manifest>
+                     <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                  </manifest>
+                  <manifestEntries>
+                     <Implementation-Build>${buildNumber}</Implementation-Build>
+                     <Project-Version>${project.parent.version}</Project-Version>
+                  </manifestEntries>
+               </archive>
+            </configuration>
+         </plugin>			
+            <plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>					
+					<archive>
+						<manifest>
+							<mainClass>
+								pl.industrum.gasanalyzer.timeanalyzer.TimeAnalyze
+							</mainClass>
+                     <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+                    <manifestEntries>
+                        <Implementation-Build>${buildNumber}</Implementation-Build>
+                        <Project-Version>${project.parent.version} </Project-Version>
+                    </manifestEntries>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>
+							jar-with-dependencies
+						</descriptorRef>
+					</descriptorRefs>
+					<finalName>ELANNetworkTimeAnalyzer-${project.activeProfiles[0].id}-${project.parent.version}</finalName>
+				</configuration>
+			</plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9</version>
+        <configuration>
+          <javadocVersion>1.6</javadocVersion>
+          <encoding>UTF-8</encoding>
+          <show>private</show>
+          <skip>false</skip>
+          <author>true</author>
+          <splitindex>true</splitindex>
+          <use>true</use>
+          <version>true</version>
+          <noindex>false</noindex>
+          <nonavbar>false</nonavbar>
+          <notree>false</notree>
+          <nodeprecated>false</nodeprecated>
+     	  <nodeprecatedlist>false</nodeprecatedlist>
+          <reportOutputDirectory>${project.basedir}</reportOutputDirectory>
+          <destDir>doc_mvn</destDir>     
+          <sourcepath>src/test/java:src/main/java</sourcepath>  
+          <links>
+          	<link>http://download.oracle.com/javase/6/docs/api/</link>
+            <link>http://users.frii.com/jarvi/rxtx/doc/</link>
+          </links> 
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
+	<dependencies>		
+		<dependency>
+			<groupId>pl.industrum.gasanalyzer.elan</groupId>
+			<artifactId>ELANNetwork</artifactId>
+			<version>0.1.0</version>
+		</dependency>				    
+	</dependencies>
+</project>
