@@ -21,6 +21,54 @@
     
    <build>
     <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.3.1</version>
+            <configuration>
+               <archive>
+                  <manifest>
+                     <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                  </manifest>
+                  <manifestEntries>
+                     <Implementation-Build>${buildNumber}</Implementation-Build>
+                     <Project-Version>${project.parent.version}</Project-Version>
+                  </manifestEntries>
+               </archive>
+            </configuration>
+         </plugin>			
+            <plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>					
+					<archive>
+						<manifest>
+							<mainClass>
+								pl.industrum.gasanalyzer.analyzer.CollectData
+							</mainClass>
+                     <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+                    <manifestEntries>
+                        <Implementation-Build>${buildNumber}</Implementation-Build>
+                        <Project-Version>${project.parent.version} </Project-Version>
+                    </manifestEntries>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>
+							jar-with-dependencies
+						</descriptorRef>
+					</descriptorRefs>
+					<finalName>ELANNetworkAnalyzer-${project.activeProfiles[0].id}-${project.parent.version}</finalName>
+				</configuration>
+			</plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
@@ -53,9 +101,9 @@
   
 	<dependencies>		
 		<dependency>
-			<groupId>pl.industrum.gasanalyzer.elan</groupId>
-			<artifactId>ELANNetwork</artifactId>
-			<version>0.1.0</version>
-		</dependency>				    
+			<groupId>org.rxtx</groupId>
+			<artifactId>rxtx</artifactId>
+			<version>2.2pre2</version>
+		</dependency>			    
 	</dependencies>
 </project>

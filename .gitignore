@@ -64,3 +64,6 @@ target/
 
 # Other ignores
 lista Snippetów
+
+# Ignore binary from pts
+Implementation/ELANDeviceSimulator/src/main/c/pts/tty0tty

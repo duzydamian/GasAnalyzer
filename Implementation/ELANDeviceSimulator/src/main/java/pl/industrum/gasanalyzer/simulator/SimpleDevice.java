@@ -3,7 +3,9 @@
  */
 package pl.industrum.gasanalyzer.simulator;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
@@ -32,6 +34,28 @@ public class SimpleDevice
 	 */
 	public static void main( String[] args )
 	{			
+		Runtime runtime = Runtime.getRuntime();
+		long totalMemory = runtime.totalMemory();
+		long freeMemory = runtime.freeMemory();
+		long maxMemory = runtime.maxMemory();
+		int availableProcessors = runtime.availableProcessors();
+		try
+		{
+			Process exec = runtime.exec( "/home/duzydamian/Pulpit/tty0tty-1.2/pts/tty0tty" );
+			
+			 BufferedReader in = new BufferedReader(  
+                     new InputStreamReader(exec.getInputStream()));  
+			 String line = null;  
+			 while ((line = in.readLine()) != null) {  
+			     System.out.println(line);  
+			 } 
+		}
+		catch ( IOException e1 )
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		Vector<String> vectorPortsOnlySerial = ELANConnection.vectorPortsOnlySerial();
 		int iterator = 0;
 		for( String port: vectorPortsOnlySerial )
@@ -84,8 +108,18 @@ public class SimpleDevice
 		{
 			while( true )
 			{
-				communication.writeFrame( randFrame() );
-				Thread.sleep( 10000 );
+				communication.writeFrame( randFrame(32, 4) );
+				//frame cyclic every 500ms
+				Thread.sleep( 500 );
+				communication.writeFrame( randFrame(64, 2) );
+				//frame cyclic every 500ms
+				Thread.sleep( 500 );
+				communication.writeFrame( randFrame(80, 3) );
+				//frame cyclic every 500ms
+				Thread.sleep( 500 );
+				communication.writeFrame( randFrame(176, 29) );
+				//frame cyclic every 500ms
+				Thread.sleep( 500 );
 			}			
 		}
 		catch ( InterruptedException e )
@@ -97,7 +131,7 @@ public class SimpleDevice
 		connection.disconnect();
 	}
 
-	private static Queue<Integer> randFrame()
+	private static Queue<Integer> randFrame(int deviceAdress, int elanMeasuredVariable)
 	{
 		Random r = new Random();
 		double nextDouble = r.nextDouble();
@@ -111,7 +145,7 @@ public class SimpleDevice
 		//dest adr
 		frame.add( 240 );
 		//src ard
-		frame.add( 32 );		
+		frame.add( deviceAdress);		
 		//collective state
 		frame.add( 0 );
 		//channel state
@@ -128,7 +162,7 @@ public class SimpleDevice
 		frame.add( 0 );
 		frame.add( 10 );
 		frame.add( 0 );
-		frame.add( 2 );
+		frame.add( elanMeasuredVariable );
 		frame.add( 0 );
 		for( char ch: s2.toCharArray() )
 		{
