@@ -14,7 +14,58 @@
 	</parent>
 
 	<build>
+		<!-- GIT COMMIT ID PLUGIN CONFIGURATION -->
+
+        <!-- SKIP SETTING UP FILTERING LIKE THIS IF YOU USE THE GENERATE FILE MODE :-) -->
+        <!--<resources>
+            <resource>
+                <directory>src/main/resources/*/*</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
+        -->
 	<plugins>
+	<!-- GIT info plugin with configuration add by DK -->
+		 <plugin>
+          <groupId>pl.project13.maven</groupId>
+          <artifactId>git-commit-id-plugin</artifactId>
+          <version>2.1.9</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>revision</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+			<prefix>git</prefix>
+			<dotGitDirectory>${project.basedir}/../../.git</dotGitDirectory>
+--			<generateGitPropertiesFile>true</generateGitPropertiesFile>
+			<generateGitPropertiesFilename>src/main/resources/pl/industrum/gasanalyzer/git.properties</generateGitPropertiesFilename>
+			<dateFormat>HH:mm:ss dd-MM-yyyy</dateFormat>
+			<verbose>true</verbose>
+			<excludeProperties>
+				<excludeProperty>git.remote.origin.url</excludeProperty>
+				<excludeProperty>git.build.user.email</excludeProperty>
+				<excludeProperty>git.commit.user.email</excludeProperty>
+				<excludeProperty>git.commit.message.full</excludeProperty>
+				<excludeProperty>git.commit.message.short</excludeProperty>
+				<excludeProperty>git.commit.id.abbrev</excludeProperty>
+            </excludeProperties>      
+            <gitDescribe>
+              <skip>false</skip>
+              <always>false</always>
+              <abbrev>7</abbrev>
+              <dirty>-DEV</dirty>
+              <forceLongFormat>false</forceLongFormat>
+            </gitDescribe>
+          </configuration>
+        </plugin>
+        
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jar-plugin</artifactId>

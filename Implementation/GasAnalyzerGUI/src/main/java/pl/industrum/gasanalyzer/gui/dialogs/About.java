@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 
 import pl.industrum.gasanalyzer.gui.EmailSystem;
+import pl.industrum.gasanalyzer.gui.GitRepositoryState;
 import pl.industrum.gasanalyzer.i18n.Messages;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
@@ -33,6 +34,16 @@ public class About extends Dialog
 	private Link linkGrzegorzPowala;
 	private Label lblProjectWebsite;
 	private Link linkProjectWebsite;
+	private Label lblBranch;
+	private Label lblBranchName;
+	private Label lblCommitUser;
+	private Label lblCommitUserName;
+	private Label lblCommitTime;
+	private Label lblCommitTimeValue;
+	private Label lblBuildUser;
+	private Label lblBuildUserName;
+	private Label lblBuildTime;
+	private Label lblBuildTimeValue;	
 	private Composite compositeLogos;
 	private Label imiueLogo;
 	private Label zkiwpLogo;
@@ -77,7 +88,7 @@ public class About extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 600, 407 );
+		shell.setSize( 600, 650 );
 		shell.setText( getText() );
 		shell.setImage( UsefulImage.ABOUT_STAR.getImage() );
 		
@@ -98,8 +109,7 @@ public class About extends Dialog
 		lblAuthors.setText( Messages.getString("About.lblAutorzy.text") ); //$NON-NLS-1$
 
 		lblDamianKarbowiak = new Label( grpInformation, SWT.NONE );
-		lblDamianKarbowiak
-				.setText( "Damian Karbowiak" );
+		lblDamianKarbowiak.setText( "Damian Karbowiak" );
 		
 		linkDamianKarbowiak = new Link(grpInformation, SWT.NONE);
 		linkDamianKarbowiak.setText("<a>duzydamian@gmail.com</a>");
@@ -130,12 +140,18 @@ public class About extends Dialog
 	        }
 	    });
 		
+		//new Label(grpInformation, SWT.HORIZONTAL | SWT.SEPARATOR );
+		//new Label(grpInformation, SWT.HORIZONTAL | SWT.SEPARATOR );
+		//new Label(grpInformation, SWT.HORIZONTAL | SWT.SEPARATOR );
+		
+		GitRepositoryState repositoryState = new GitRepositoryState();		
+		
 		lblProjectWebsite = new Label(grpInformation, SWT.NONE);
 		lblProjectWebsite.setText(Messages.getString("About.lblStronaProjektu.text")); //$NON-NLS-1$
 		
 		linkProjectWebsite = new Link(grpInformation, SWT.NONE);
 		linkProjectWebsite.setText("<a href=\"https://github.com/duzydamian/GasAnalyzer/\">GitHub</a>");
-		linkProjectWebsite.addSelectionListener(new SelectionAdapter()
+		linkProjectWebsite.addSelectionListener(new SelectionAdapter()			
 		{
 	        @Override
 	        public void widgetSelected(SelectionEvent e)
@@ -144,8 +160,38 @@ public class About extends Dialog
 	               Program.launch( e.text );
 	        }
 	    });
+		new Label(grpInformation, SWT.NONE);		
+		
+		lblBranch = new Label( grpInformation, SWT.NONE );
+		lblBranch.setText( "Gałąź" );
+		lblBranchName = new Label( grpInformation, SWT.NONE );
+		lblBranchName.setText( repositoryState.getBranch() );
 		new Label(grpInformation, SWT.NONE);
 
+		lblCommitUser = new Label( grpInformation, SWT.NONE );
+		lblCommitUser.setText( "Autor ostatniej zmiany:" );
+		lblCommitUserName = new Label( grpInformation, SWT.NONE );
+		lblCommitUserName.setText( repositoryState.getCommitUserName() );
+		new Label(grpInformation, SWT.NONE);
+		
+		lblCommitTime = new Label( grpInformation, SWT.NONE );
+		lblCommitTime.setText( "Data ostatniej zmiany:" );
+		lblCommitTimeValue = new Label( grpInformation, SWT.NONE );
+		lblCommitTimeValue.setText( repositoryState.getCommitTime() );
+		new Label(grpInformation, SWT.NONE);		
+		
+		lblBuildUser = new Label( grpInformation, SWT.NONE );
+		lblBuildUser.setText( "Autor kompilacji:" );
+		lblBuildUserName = new Label( grpInformation, SWT.NONE );
+		lblBuildUserName.setText( repositoryState.getBuildUserName() );
+		new Label(grpInformation, SWT.NONE);
+		
+		lblBuildTime = new Label( grpInformation, SWT.NONE );
+		lblBuildTime.setText( "Data kompilacji:" );
+		lblBuildTimeValue = new Label( grpInformation, SWT.NONE );
+		lblBuildTimeValue.setText( repositoryState.getBuildTime() );
+		new Label(grpInformation, SWT.NONE);
+		
 		compositeLogos = new Composite( shell, SWT.NONE );
 		compositeLogos.setLayout( new FillLayout( SWT.HORIZONTAL ) );
 
