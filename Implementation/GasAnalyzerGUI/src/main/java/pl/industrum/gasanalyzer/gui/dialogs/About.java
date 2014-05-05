@@ -36,18 +36,23 @@ public class About extends Dialog
 	private Link linkProjectWebsite;
 	private Label lblBranch;
 	private Label lblBranchName;
+	private Label lblVersion;
+	private Label lblVersionValue;
 	private Label lblCommitUser;
 	private Label lblCommitUserName;
 	private Label lblCommitTime;
 	private Label lblCommitTimeValue;
+	private Label lblCommitId;
+	private Label lblCommitIdValue;
 	private Label lblBuildUser;
 	private Label lblBuildUserName;
 	private Label lblBuildTime;
-	private Label lblBuildTimeValue;	
+	private Label lblBuildTimeValue;
 	private Composite compositeLogos;
 	private Label imiueLogo;
 	private Label zkiwpLogo;
 	private Label polslLogo;
+	private GitRepositoryState repositoryState;
 
 	/**
 	 * Create the dialog.
@@ -144,7 +149,7 @@ public class About extends Dialog
 		//new Label(grpInformation, SWT.HORIZONTAL | SWT.SEPARATOR );
 		//new Label(grpInformation, SWT.HORIZONTAL | SWT.SEPARATOR );
 		
-		GitRepositoryState repositoryState = new GitRepositoryState();		
+		repositoryState = new GitRepositoryState();		
 		
 		lblProjectWebsite = new Label(grpInformation, SWT.NONE);
 		lblProjectWebsite.setText(Messages.getString("About.lblStronaProjektu.text")); //$NON-NLS-1$
@@ -168,6 +173,12 @@ public class About extends Dialog
 		lblBranchName.setText( repositoryState.getBranch() );
 		new Label(grpInformation, SWT.NONE);
 
+		lblVersion = new Label( grpInformation, SWT.NONE );
+		lblVersion.setText( "Wersja" );
+		lblVersionValue = new Label( grpInformation, SWT.NONE );
+		lblVersionValue.setText( repositoryState.getDescribe() );
+		new Label(grpInformation, SWT.NONE);
+		
 		lblCommitUser = new Label( grpInformation, SWT.NONE );
 		lblCommitUser.setText( "Autor ostatniej zmiany:" );
 		lblCommitUserName = new Label( grpInformation, SWT.NONE );
@@ -190,6 +201,12 @@ public class About extends Dialog
 		lblBuildTime.setText( "Data kompilacji:" );
 		lblBuildTimeValue = new Label( grpInformation, SWT.NONE );
 		lblBuildTimeValue.setText( repositoryState.getBuildTime() );
+		new Label(grpInformation, SWT.NONE);
+		
+		lblCommitId= new Label( grpInformation, SWT.NONE );
+		lblCommitId.setText( "Commit ID" );
+		lblCommitIdValue = new Label( grpInformation, SWT.NONE );
+		lblCommitIdValue.setText( repositoryState.getCommitId() );
 		new Label(grpInformation, SWT.NONE);
 		
 		compositeLogos = new Composite( shell, SWT.NONE );

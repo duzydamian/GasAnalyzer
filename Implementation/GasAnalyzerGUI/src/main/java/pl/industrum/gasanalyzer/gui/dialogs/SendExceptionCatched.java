@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import pl.industrum.gasanalyzer.gui.EmailSystem;
+import pl.industrum.gasanalyzer.gui.GitRepositoryState;
 import pl.industrum.gasanalyzer.i18n.Messages;
 import pl.industrum.gasanalyzer.types.UsefulImage;
 
@@ -33,6 +34,7 @@ public class SendExceptionCatched extends Dialog
 	private Button btnOk;
 	private StyledText styledText;
 	private Label lblBlaBla;
+	private GitRepositoryState repositoryState;
 
 	/**
 	 * Create the dialog.
@@ -74,7 +76,7 @@ public class SendExceptionCatched extends Dialog
 	private void createContents()
 	{
 		shell = new Shell( getParent(), getStyle() | SWT.DIALOG_TRIM );
-		shell.setSize( 490, 370 );
+		shell.setSize( 550, 440 );
 		shell.setText( getText() );
 		shell.setImage( UsefulImage.SEND_MAIL.getImage() );
 		
@@ -99,6 +101,19 @@ public class SendExceptionCatched extends Dialog
 		styledText.append( "Tutaj mozesz dodać coś od siebie");
 		styledText.append( "\n\n__________________________________________________________" + 
 							"\n(Proszę nie usuwać poniższego fragmentu, może on być pomocny przy rozwiązywaniu problemu)\n" );
+		
+		repositoryState = new GitRepositoryState();
+		styledText.append( "\nInformacja o wersji itd.:\n" );
+		styledText.append( "Gałąź:		" + repositoryState.getBranch() + "\n" );
+		styledText.append( "Commit ID:	" + repositoryState.getCommitId() + "\n" );
+		styledText.append( "Wersja:		" + repositoryState.getDescribe() + "\n" );
+		styledText.append( "Autor ostatniej zmiany:	" + repositoryState.getCommitUserName() + "\n" );
+		styledText.append( "Data ostatniej zmiany:	" + repositoryState.getCommitTime() + "\n" );
+		styledText.append( "Autor kompilacji:	" + repositoryState.getBuildUserName() + "\n" );
+		styledText.append( "Data kompilacji:	" + repositoryState.getBuildTime() + "\n" );		
+		
+		styledText.append( "\nTreść przechwyconego wyjątku:\n" );
+		
 		styledText.append( exceptionToSend.toString() + "\n" );				
 		if( exceptionToSend.getMessage() != null)
 			styledText.append( exceptionToSend.getMessage() + "\n" );

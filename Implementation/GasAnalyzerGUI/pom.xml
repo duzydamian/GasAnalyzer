@@ -29,7 +29,7 @@
         </resources>
         -->
 	<plugins>
-	<!-- GIT info plugin with configuration add by DK -->
+<!-- GIT info plugin with configuration add by DK -->      
 		 <plugin>
           <groupId>pl.project13.maven</groupId>
           <artifactId>git-commit-id-plugin</artifactId>
@@ -44,7 +44,7 @@
           <configuration>
 			<prefix>git</prefix>
 			<dotGitDirectory>${project.basedir}/../../.git</dotGitDirectory>
---			<generateGitPropertiesFile>true</generateGitPropertiesFile>
+			<generateGitPropertiesFile>true</generateGitPropertiesFile>
 			<generateGitPropertiesFilename>src/main/resources/pl/industrum/gasanalyzer/git.properties</generateGitPropertiesFilename>
 			<dateFormat>HH:mm:ss dd-MM-yyyy</dateFormat>
 			<verbose>true</verbose>
@@ -60,12 +60,33 @@
               <skip>false</skip>
               <always>false</always>
               <abbrev>7</abbrev>
-              <dirty>-DEV</dirty>
-              <forceLongFormat>false</forceLongFormat>
+<!--               <dirty>-DEV</dirty> -->
+              <forceLongFormat>true</forceLongFormat>
             </gitDescribe>
           </configuration>
         </plugin>
-        
+<!-- Pare version for file name -->
+	 	<plugin>
+	        <groupId>org.codehaus.mojo</groupId>
+	        <artifactId>build-helper-maven-plugin</artifactId>
+	        <version>1.7</version>
+	        <executions>
+	          <execution>
+	            <id>regex-property</id>
+	            <goals>
+	              <goal>regex-property</goal>
+	            </goals>
+	            <configuration>
+	              <name>parsedVersion</name>
+<!-- 	              <value>${git.commit.id.describe}</value> -->
+					<value>v0.1.0-71-g8f24fb8</value>
+	              <regex>^v([_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*)-g[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*</regex>
+	              <replacement>$1</replacement>
+	            </configuration>
+	          </execution>
+	        </executions>
+	      </plugin>	
+<!-- Advanced JAR building -->
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jar-plugin</artifactId>
@@ -103,15 +124,17 @@
 						</manifest>
                     <manifestEntries>
                         <Implementation-Build>${buildNumber}</Implementation-Build>
-                        <Project-Version>${project.parent.version} </Project-Version>
+                        <Project-Version>${project.version} </Project-Version>
                     </manifestEntries>
 					</archive>
 					<descriptorRefs>
 						<descriptorRef>
-							jar-with-dependencies
-						</descriptorRef>
+							jar-with-dependencies							
+						</descriptorRef>					
 					</descriptorRefs>
-					<finalName>GasAnalyzer-${project.activeProfiles[0].id}-${project.parent.version}</finalName>
+					<appendAssemblyId>false</appendAssemblyId>
+<!-- 					<finalName>GasAnalyzer-${project.activeProfiles[0].id}-${project.parent.version}</finalName> -->
+					<finalName>GasAnalyzer-${parsedVersion}-${project.activeProfiles[0].id}</finalName>
 				</configuration>
 			</plugin>
       <plugin>
