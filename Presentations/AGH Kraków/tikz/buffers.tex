@@ -1,0 +1,93 @@
+\tikzstyle{background grid}=[draw, black!50,step=.25cm]
+\newcounter{wavenum}
+\newcounter{iter}
+
+\setlength{\unitlength}{1cm}
+
+% advance clock one cycle, not to be called directly
+\newcommand*{\clki}[1]{
+  \draw[white] (t_cur) -- ++(#1,0) node[time] (t_cur) {};
+}
+
+\newcommand*{\bitvector}[3]{
+  \draw[fill=#3] (t_cur) -- ++( .1, .3) -- ++(#2-.2,0) -- ++(.1, -.3)
+                         -- ++(-.1,-.3) -- ++(.2-#2,0) -- cycle;
+  \path (t_cur) -- node[anchor=mid] {#1} ++(#2,0) node[time] (t_cur) {};
+}
+
+% \known{val}{length}
+\newcommand*{\known}[2][]{
+    \bitvector{#1}{#2}{white}
+}
+
+% \unknown{length}
+\newcommand*{\unknown}[2][]{
+    \bitvector{#1}{#2}{black!30}
+}
+
+% \bit{1 or 0}{length}
+\newcommand*{\bit}[2]{
+  \draw (t_cur) -- ++(0,.6*#1-.3) -- ++(#2,0) -- ++(0,.3-.6*#1)
+    node[time] (t_cur) {};
+}
+\newcommand*{\lbl}[2]{
+ \path (t_cur) -- node[time] {} ++(#2-.2,0) node[anchor=mid] (t_cur) {#1} ++(.2,0) node[time] (t_cur) {};
+}
+
+% \nextwave{name}
+\newcommand{\nextwave}[1]{
+  \path (0,\value{wavenum}) node[left=0.5cm] {#1} node[time] (t_cur) {};
+  \addtocounter{wavenum}{-1}
+}
+
+\newcommand{\nr}{
+	$\Rightarrow$
+}
+
+\newcommand{\ur}{
+	$\circlearrowleft$
+}
+
+% \clk{name}{period}
+\newcommand{\clk}[2]{
+    \nextwave{#1}
+    \FPeval{\res}{(\wavewidth+1)/#2}
+    \FPeval{\reshalf}{#2/2}
+    \foreach \t in {1,2,...,\res}{
+        \bit{\reshalf}{1}
+        \bit{\reshalf}{0}
+    }
+}
+    
+% \begin{wave}[clkname]{num_waves}{clock_cycles}
+\newenvironment{wave}[3][]{
+  \begin{tikzpicture}[draw=black, yscale=.7,xscale=1]%, show background grid]
+    \tikzstyle{time}=[coordinate]
+    \setlength{\unitlength}{1cm}
+    \def\wavewidth{#3}
+    \setcounter{wavenum}{0}
+    \nextwave{#1}
+    \def\myarray{1,5,1}
+    %\foreach \t in {0,1,...,\wavewidth}{
+    \foreach \i / \x in {0/1.5, 1/2, 2/1.25, 3/2.5, 4/.75, 5/1, 6/1.75} {
+      \draw[dotted] (t_cur) +(0,.1) node[above] {$t_\i$} -- ++(0,.4-#2);
+      \clki{\x};
+    }
+    \draw[->, >=latex', shorten >=1pt, thick] (-.4,-3.5) -- (-.4,0);
+    \draw[->, >=latex', shorten >=1pt, thick] (-.4,-3.5) -- (10,-3.5);
+}
+{\end{tikzpicture}}
+
+\begin{wave}{4}{15}
+ \nextwave{Bufor 1}  \lbl{\nr}{0} \known{.5} \lbl{}{1} \unknown{.5} \lbl{\ur}{1.5} \unknown{.5} \lbl{}{.75} \unknown{.5} \lbl{}{2} \unknown{.5} \lbl{}{1.25} \known{.5}
+ \nextwave{Bufor 2}  \known{.5} \lbl{}{1} \known{.5} \lbl{}{1.5} \known{.5} \lbl{\nr}{.75} \known{.5} \lbl{}{2} \unknown{.5} \lbl{\nr}{1.25} \known{.5}
+ \nextwave{Bufor 3} \known{.5} \lbl{\nr}{1} \known{.5}	\lbl{}{1.5} \unknown{.5} \lbl{}{.75} \unknown{.5} \lbl{\ur}{2} \unknown{.5} \lbl{}{1.25} \known{.5}
+\end{wave}
+
+$t_0$ -- nadejście pomiaru z urządzenia 1 \\
+$t_1$ -- nadejście pomiaru z urządzenia 3 \\
+$t_2$ -- nadejście pomiaru z urządzenia 1 \\
+$t_3$ -- nadejście pomiaru z urządzenia 2 \\
+$t_4$ -- nadejście pomiaru z urządzenia 3 \\
+$t_5$ -- Migawka, czyli zapis wszystkich buforów do bazy \\
+$t_6$ -- nadejście pomiaru z urządzenia 2 

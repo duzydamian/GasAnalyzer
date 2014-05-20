@@ -1,0 +1,223 @@
+\documentclass[ucs]{beamer}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usetikzlibrary{automata,positioning,shapes,shadows,arrows,backgrounds,trees,fit,calc,decorations.pathreplacing,decorations.markings}
+
+\usetheme{Ilmenau}
+%\usetheme{PaloAlto}
+
+\title[Gas Analyzer]{Aplikacja systemu pomiarowego do analizy składu spalin opartego o sieć ELAN}
+%\subtitle{Gas Analyzer}
+
+\author[D. Karbowiak, G. Powała]{Mgr inż. Damian Karbowiak  \and Mgr inż. Grzegorz Powała}
+\institute[Politechnika Śl.]{\large Politechnika Śląska \\\vspace{0.75cm} \includegraphics[height=0.2\textheight]{images/PolslLogo} }
+\date{Kraków, \today}
+       
+\setbeamertemplate{footline}[frame number]
+\useoutertheme{infolines}
+ 
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Istota pomiarów}
+Opisać dlaczego i po co takie pomiary
+\end{frame}
+
+\begin{frame}
+\frametitle{Historia}
+\vspace{-2mm}
+\begin{itemize}
+\setlength{\itemsep}{0pt}
+\setlength{\parskip}{0pt}
+\setlength{\parsep}{0pt}
+\item \underline{22 luty 2013} \\
+Kontakt mailowy ze strony mgr inż. Tomasz Kress
+\item \underline{28 luty 2013} \\
+Pierwsze spotkanie w celu omówienia problemu i zadania
+\item \underline{21 marzec 2013} \\
+Wypożyczenie Ultramatu 23 i rozpoczęcie współpracy oraz realizacji projektu
+\item \underline{kwiecień -- czerwiec 2013} \\
+Realizacja projektu
+\item \underline{wrzesień 2013} \\
+Finalizacja pierwszej części i podstawowej wersji projektu
+\item \underline{23 październik 2013} \\
+Prezentacja na zebraniu Instytutu Maszyn i Urządzeń Energetycznych
+\item \underline{25 listopad 2013} \\
+Pierwsze testy w warunkach przemysłowych -- Elektrownia Ostrołęka
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Gas Analyzer - geneza}
+\begin{enumerate}
+\setlength{\itemsep}{5pt}
+\setlength{\parskip}{5pt}
+\setlength{\parsep}{5pt}
+\item Realizacja pomiarów przemysłowych
+\item Wykorzystywanie kilku analizatorów firmy SIEMENS
+\item Zapisywanie pomiarów w tabelce na kartce
+\item Ograniczona częstotliwość pomiarów
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Przykładowy wynik pomiarów}
+\begin{center}
+\includegraphics[width=0.99\textheight]{images/IMG_4559}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Przykładowa kartka z pomiarem}
+\begin{center}
+\includegraphics[width=0.99\textheight]{images/IMG_4562}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Gas Analyzer - realizacja}
+\begin{enumerate}
+\item Wykorzystanie protokołu komunikacyjnego ELAN
+\item Możliwość podłączenia do 12 analizatorów firmy SIEMENS:
+\begin{itemize}
+\item ULTRAMAT 6
+\item OXYMAT 6 / OXYMAT 61
+\item CALOMAT 6
+\item ULTRAMAT 23
+\end{itemize}
+\item Automatyczny odczyt stanu urządzeń
+\item Możliwość archiwizacji pomiarów z dowolnym interwałem czasowym, z~rozdzielczością co sekundę
+\item Automatyczne wykrywanie urządzeń i wielkości mierzonych
+\item Konfigurowalna precyzja pomiarów (wyświetlanie i raporty)
+\item Generowanie raportów do PDF oraz XLS
+\item Niskie koszty uruchomienia
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{ELAN -- Podłączenie}
+\input{tikz/ELAN}
+\end{frame}
+
+\begin{frame}
+\frametitle{Struktura projektu}
+\input{tikz/project_structure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Struktura aplikacji}
+\begin{center}
+\input{tikz/app_structure}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{ELAN Network zasada działania buforów}
+\input{tikz/buffers}
+\end{frame}
+
+\begin{frame}
+\frametitle{Podgląd sieci}
+\includegraphics[width=0.99\textwidth]{images/detailNetworkW}
+\end{frame}
+
+\begin{frame}
+\frametitle{Podgląd urządzenia}
+\includegraphics[width=0.99\textwidth]{images/detailDeviceW}
+\end{frame}
+
+\begin{frame}
+\frametitle{Przykładowy raport PDF}
+\begin{center}
+\includegraphics[width=0.9\textwidth]{images/pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Przykładowy raport XLS}
+\begin{center}
+\includegraphics[width=0.99\textwidth]{images/xls}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Współpraca}
+\begin{center}
+\begin{tabular}{cccccc}
+\includegraphics[width=0.1\textwidth]{images/AEiILogo} &
+\includegraphics[width=0.1\textwidth]{images/IILogo} &
+\includegraphics[width=0.25\textwidth]{images/SKNIndustrumLogo} &
+\includegraphics[width=0.1\textwidth]{images/WISiELogo} &
+\includegraphics[width=0.1\textwidth]{images/IMIUELogo} &
+\includegraphics[width=0.1\textwidth]{images/ZKiWPLogo} \\ 
+\end{tabular} 
+\end{center}
+
+\begin{enumerate}
+\setlength{\itemsep}{3pt}
+\setlength{\parskip}{3pt}
+\setlength{\parsep}{3pt}
+\item Wydział Automatyki, Elektroniki i Informatyki
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\setlength{\parskip}{3pt}
+\setlength{\parsep}{3pt}
+\item Instytut Informatyki
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\setlength{\parskip}{3pt}
+\setlength{\parsep}{3pt}
+\item Koło Naukowe Przemysłowych Zastosowań Informatyki ,,Industrum''
+\\ mgr inż. Damian Karbowiak
+\\ mgr inż. Grzegorz Powała
+\end{itemize}
+\end{itemize}
+\item  Wydział Inżynierii Środowiska i Energetyki
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\setlength{\parskip}{3pt}
+\setlength{\parsep}{3pt}
+\item Instytut Maszyn i Urządzeń Energetycznych
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\setlength{\parskip}{3pt}
+\setlength{\parsep}{3pt}
+\item Zakład Kotłów i Wytwornic Pary
+\\ mgr inż. Tomasz Kress
+\end{itemize}
+\end{itemize}
+\end{enumerate}
+\end{frame}
+
+\section{Podsumowanie}
+\begin{frame}
+\frametitle{Wnioski}
+\begin{itemize}
+\setlength{\itemsep}{5pt}
+\setlength{\parskip}{5pt}
+\setlength{\parsep}{5pt}
+\item Brak determinizmu (CSMA$\backslash$CD)
+\item Wystarczające (statystycznie) parametry czasowe
+\item Niski koszt rozwiązania
+\item Przenośność i łatwość rozbudowy aplikacji
+\item Zaobserwowane nieścisłości w działaniu analizatorów (dodatkowe informacje dostarczane przez interfejs diagnostyczny)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Podsumowanie oraz pytania}
+Dziękujemy za uwagę.
+\\\vspace{2cm}
+Czas na pytania.
+\\\vspace{2cm}
+mgr inż. Damian Karbowiak -- Damian.Karbowiak@polsl.pl\\
+mgr inż. Grzegorz Powała  -- Grzegorz.Powala@polsl.pl
+\end{frame}
+
+\end{document}
