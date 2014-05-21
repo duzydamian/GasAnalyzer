@@ -8,15 +8,15 @@
    	    myarrow3/.style={ ->, shorten >=4mm, line width=0.4mm},   	    
 	    mylabel/.style={text centered, font=\scriptsize\bfseries} 
 	} 
-	\node[bottom color=cyan!40, mynode, text width=12cm] (gui) {Graficzny interfejs użytkownika};  
-	\node[bottom color=cyan!40, mynode, text width=12cm, text height=2.5cm, below=.75cm of gui] (elanNetwork) {Moduł ELAN Network}; 
-	\node[bottom color=blue!40, mynode, text width=2cm, below=3cm of gui.173] (a) {Detekcja ramek}; 
-	\node[bottom color=blue!40, mynode, text width=2cm, right=of a] (b) {Weryfikacja ramek}; 
-	\node[bottom color=blue!40, mynode, text width=2cm, right=of b] (c) {Parsowanie ramek}; 	
-	\node[bottom color=blue!40, mynode, text width=2cm, right=of c] (d) {Budowanie migawki}; 
-	\node[bottom color=cyan!40, mynode, text width=12cm, below=.75cm of elanNetwork] (rxtx) {Biblioteka RXTX}; 
-	\node[bottom color=cyan!40, mynode, text width=12cm, below=.75cm of rxtx] (conv) {Konwerter RS485 $\Leftrightarrow$ USB};   		
-	\node[bottom color=cyan!40, mynode, text width=12cm, below=.75cm of conv] (devices) {Urządzenia pomiarowe};	
+	\node[bottom color=blue!60, mynode, text width=12cm] (gui) {Graficzny interfejs użytkownika};  
+	\node[bottom color=blue!60, mynode, text width=12cm, text height=2.5cm, below=.75cm of gui] (elanNetwork) {Moduł ELAN Network}; 
+	\node[bottom color=gray!40, mynode, text width=2cm, below=3cm of gui.173] (a) {Detekcja ramek}; 
+	\node[bottom color=gray!40, mynode, text width=2cm, right=of a] (b) {Weryfikacja ramek}; 
+	\node[bottom color=gray!40, mynode, text width=2cm, right=of b] (c) {Parsowanie ramek}; 	
+	\node[bottom color=gray!40, mynode, text width=2cm, right=of c] (d) {Budowanie migawki}; 
+	\node[bottom color=blue!60, mynode, text width=12cm, below=.75cm of elanNetwork] (rxtx) {Biblioteka RXTX}; 
+	\node[bottom color=blue!60, mynode, text width=12cm, below=.75cm of rxtx] (conv) {Konwerter RS485 $\Leftrightarrow$ USB};   		
+	\node[bottom color=blue!60, mynode, text width=12cm, below=.75cm of conv] (devices) {Urządzenia pomiarowe};	
 
 	\draw[myarrow] (gui.south) -- (elanNetwork.north) node [midway,black] {Przetworzone dane};
 	\draw[myarrow] (elanNetwork.south) -- (rxtx.north) node [midway,black] {Odczyt bajtów};	
